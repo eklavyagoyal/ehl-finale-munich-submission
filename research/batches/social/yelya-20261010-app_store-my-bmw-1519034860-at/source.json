@@ -7,16 +7,16 @@
   "channel": "app_store",
   "title": "My BMW (App Store 1519034860) customer reviews, AT storefront",
   "locator": "https://apps.apple.com/at/app/id1519034860",
-  "collected_at": "2026-10-10T15:15:03Z",
+  "collected_at": "2026-10-10T16:41:33Z",
   "collector": "yelya",
   "is_example": false,
-  "normalized_record_count": 408,
+  "normalized_record_count": 285,
   "sampling": {
     "method": "App Store reviews, newest first, all available up to the scraper limit; scrapers/app_reviews.py",
     "query": null,
-    "date_start": "2020-12-03",
+    "date_start": "2024-01-01",
     "date_end": "2026-09-27",
-    "retrieved_count": 408,
+    "retrieved_count": 285,
     "complete": false,
     "limitations": [
       "Apple's public review feed exposes only the ~500 most recent reviews per storefront; it also skips the occasional empty page, so a few reviews can be missing.",
@@ -31,7 +31,7 @@
   },
   "artifact": {
     "path": "outputs/warehouse/fact_review.parquet",
-    "sha256": "b488e36c78d9d069c92ea65415d1bec3cee774f36714d12728db92fb19f43152"
+    "sha256": "0e98a956bfc0371e6f20d26b4d539b6b32388b4b30e38fc8701eff9096a36e8b"
   },
   "export_permissions": {
     "git": null,

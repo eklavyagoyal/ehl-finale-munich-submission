@@ -2,9 +2,9 @@
 
 - **source_id:** `yelya-20261010-google_play-my-bmw-row-fr`
 - **dataset_key:** `google_play:de.bmw.connected.mobile20.row:FR`
-- **channel:** google_play · **collector:** yelya · **collected:** 2026-10-10T15:15:03Z
-- **records:** 2000 (one per original review/comment; no claims extracted)
-- **content dates:** 2021-06-02 to 2026-09-29
+- **channel:** google_play · **collector:** yelya · **collected:** 2026-10-10T16:41:33Z
+- **records:** 1063 (one per original review/comment; no claims extracted)
+- **content dates:** 2024-01-01 to 2026-09-29
 - **review status:** pending · **export permissions:** unresolved (git and external LLM)
 
 ## Sampling

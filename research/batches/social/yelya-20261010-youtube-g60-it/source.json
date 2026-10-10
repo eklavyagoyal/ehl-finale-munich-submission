@@ -7,16 +7,16 @@
   "channel": "youtube",
   "title": "YouTube comments under BMW 5 Series (G60) review videos, IT search market",
   "locator": "https://www.googleapis.com/youtube/v3/",
-  "collected_at": "2026-10-10T15:40:45Z",
+  "collected_at": "2026-10-10T16:41:57Z",
   "collector": "yelya",
   "is_example": false,
-  "normalized_record_count": 2738,
+  "normalized_record_count": 2016,
   "sampling": {
     "method": "YouTube Data API: search.list (relevance, 10 per query, region IT, language it), title filter for the vehicle, then commentThreads newest first, up to 3 pages of 100 threads per video plus the replies the API includes; scrapers/youtube_comments.py",
     "query": "BMW Serie 5 G60 prova | BMW i5 prova su strada | BMW Serie 5 2024 recensione",
-    "date_start": "2023-10-18",
+    "date_start": "2024-01-01",
     "date_end": "2026-09-21",
-    "retrieved_count": 2738,
+    "retrieved_count": 2016,
     "complete": false,
     "limitations": [
       "Market is the search market (region + relevance language), not the commenter's location.",
@@ -34,7 +34,7 @@
   },
   "artifact": {
     "path": "outputs/warehouse/fact_video_comment.parquet",
-    "sha256": "0d572bfa02a4a8ebf3cebca56e1788cf9dc74616adf9d7290aa105794aeb4995"
+    "sha256": "3e6ffaf0de54a5ef691a59fdad8cda7b3b6438f9d36158ffd10dcd864b5ec057"
   },
   "export_permissions": {
     "git": null,

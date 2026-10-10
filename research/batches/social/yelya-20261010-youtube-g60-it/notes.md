@@ -2,9 +2,9 @@
 
 - **source_id:** `yelya-20261010-youtube-g60-it`
 - **dataset_key:** `youtube:comments`
-- **channel:** youtube · **collector:** yelya · **collected:** 2026-10-10T15:40:45Z
-- **records:** 2738 (one per original review/comment; no claims extracted)
-- **content dates:** 2023-10-18 to 2026-09-21
+- **channel:** youtube · **collector:** yelya · **collected:** 2026-10-10T16:41:57Z
+- **records:** 2016 (one per original review/comment; no claims extracted)
+- **content dates:** 2024-01-01 to 2026-09-21
 - **review status:** pending · **export permissions:** unresolved (git and external LLM)
 
 ## Sampling

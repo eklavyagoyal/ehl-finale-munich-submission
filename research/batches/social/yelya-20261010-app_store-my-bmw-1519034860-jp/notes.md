@@ -2,9 +2,9 @@
 
 - **source_id:** `yelya-20261010-app_store-my-bmw-1519034860-jp`
 - **dataset_key:** `app_store:1519034860:JP`
-- **channel:** app_store · **collector:** yelya · **collected:** 2026-10-10T15:15:03Z
-- **records:** 421 (one per original review/comment; no claims extracted)
-- **content dates:** 2021-04-04 to 2026-10-05
+- **channel:** app_store · **collector:** yelya · **collected:** 2026-10-10T16:41:33Z
+- **records:** 284 (one per original review/comment; no claims extracted)
+- **content dates:** 2024-01-01 to 2026-10-05
 - **review status:** pending · **export permissions:** unresolved (git and external LLM)
 
 ## Sampling

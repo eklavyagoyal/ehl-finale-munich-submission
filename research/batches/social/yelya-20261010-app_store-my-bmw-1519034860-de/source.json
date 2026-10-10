@@ -7,14 +7,14 @@
   "channel": "app_store",
   "title": "My BMW (App Store 1519034860) customer reviews, DE storefront",
   "locator": "https://apps.apple.com/de/app/id1519034860",
-  "collected_at": "2026-10-10T15:15:03Z",
+  "collected_at": "2026-10-10T16:41:33Z",
   "collector": "yelya",
   "is_example": false,
   "normalized_record_count": 500,
   "sampling": {
     "method": "App Store reviews, newest first, all available up to the scraper limit; scrapers/app_reviews.py",
     "query": null,
-    "date_start": "2026-09-18",
+    "date_start": "2024-01-01",
     "date_end": "2026-10-09",
     "retrieved_count": 500,
     "complete": false,
@@ -31,7 +31,7 @@
   },
   "artifact": {
     "path": "outputs/warehouse/fact_review.parquet",
-    "sha256": "b488e36c78d9d069c92ea65415d1bec3cee774f36714d12728db92fb19f43152"
+    "sha256": "0e98a956bfc0371e6f20d26b4d539b6b32388b4b30e38fc8701eff9096a36e8b"
   },
   "export_permissions": {
     "git": null,
