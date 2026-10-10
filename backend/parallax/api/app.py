@@ -1,5 +1,6 @@
 """FastAPI application. Run: `uvicorn parallax.api.app:app --reload --port 8000`."""
 
+import hashlib
 import hmac
 
 from fastapi import FastAPI, Request
@@ -70,11 +71,16 @@ async def access_log(request: Request, call_next):
 @app.middleware("http")
 async def bearer_auth(request: Request, call_next):
     """Registered last, so it runs first: unauthenticated calls are rejected (and still access-logged)."""
-    token = get_settings().api_token
+    settings = get_settings()
+    token, cli_hash = settings.api_token, settings.cli_token_sha256
     path = request.url.path
-    if token and request.method != "OPTIONS" and path.startswith("/api") and not path.startswith(OPEN_PREFIXES):
+    if (token or cli_hash) and request.method != "OPTIONS" and path.startswith("/api") and not path.startswith(OPEN_PREFIXES):
         supplied = request.headers.get("authorization", "")
-        if not hmac.compare_digest(supplied.encode(), f"Bearer {token}".encode()):
+        bearer = supplied[7:] if supplied.startswith("Bearer ") else ""
+        ok = bool(token) and hmac.compare_digest(supplied.encode(), f"Bearer {token}".encode())
+        if not ok and cli_hash and bearer:
+            ok = hmac.compare_digest(hashlib.sha256(bearer.encode()).hexdigest(), cli_hash.lower())
+        if not ok:
             return JSONResponse({"detail": "missing or invalid bearer token"}, status_code=401)
     return await call_next(request)
 
