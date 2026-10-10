@@ -172,6 +172,16 @@ def test_condense_and_vehicles(client, drafted):
     assert vehicles["active"] == "bmw:G60" and any(v["status"] == "active" for v in vehicles["items"])
 
 
+def test_council_validation(client, drafted):
+    run = client.post("/api/agents/council-validation", json={"requirement_ids": drafted}).json()
+    done = wait_for(client, run["id"])
+    assert done["status"] == "completed", done
+    result = done["progress"]["result"]
+    assert result["T2_reliability"]["owner_verdict_agreement"] is not None
+    assert result["T3_discrimination"]["mean_budget_decoys"] is not None
+    assert set(result["T4_alignment"]["mean_budget_by_requirement"]) == set(drafted)
+
+
 def test_pipeline_and_signals(client, drafted):
     stages = client.get("/api/pipeline").json()
     assert [s["key"] for s in stages["stages"]] == ["sources", "processing", "signals", "experts", "decision"]

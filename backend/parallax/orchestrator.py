@@ -97,6 +97,10 @@ def launch(run_id: uuid.UUID) -> threading.Thread:
         from parallax import signals
 
         target = signals.execute
+    elif kind == "council_validation":
+        from parallax import council_validation
+
+        target = council_validation.execute
     else:
         target = execute_validation if kind == "validation" else execute
     thread = threading.Thread(target=target, args=(run_id,), name=f"parallax-run-{str(run_id)[:8]}", daemon=True)

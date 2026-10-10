@@ -134,7 +134,7 @@ def validate_persona(session: Session, llm: LLMClient, agent: Agent, run_id: uui
                   "reason": agent.spec.get("validation", {}).get("note", "No independent reference data.")}
     else:
         reference = reference_values(session, agent.spec["validation"]["reference"])
-        attributes = sorted(reference)[:20]
+        attributes = sorted(reference)[:80]  # all EU (37) and most US (103) attributes; small n made rho noisy
         if len(attributes) < thresholds["min_attributes"]:
             result = {"status": "not_validated", "path": path, "reason":
                       f"Only {len(attributes)} reference attributes available (need {thresholds['min_attributes']}); "

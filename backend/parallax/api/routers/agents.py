@@ -85,6 +85,25 @@ def set_active(agent_id: str, body: ActiveIn, session: Session = Depends(get_ses
     return row(agent)
 
 
+class CouncilValidationIn(BaseModel):
+    requirement_ids: list[str]
+    persona_engine: str = "direct"
+
+
+@router.post("/council-validation", summary="T2 reliability, T3 decoy discrimination, T4 evidence alignment (background run)")
+def council_validation(body: CouncilValidationIn, session: Session = Depends(get_session, scope="function"),
+                       who: str = Depends(actor)):
+    from parallax import council_validation as cv
+
+    try:
+        run = cv.start(session, who, body.requirement_ids, body.persona_engine)
+    except ValueError as error:
+        raise HTTPException(400, str(error))
+    session.commit()
+    launch(run.id)
+    return row(run)
+
+
 class ValidateIn(BaseModel):
     agent_ids: list[str] | None = None
     include_examples: bool = False
