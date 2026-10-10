@@ -8,11 +8,12 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useLlmCalls, useRun } from "@/lib/api/hooks";
 import type { LlmCall, RequirementDetail } from "@/lib/api/types";
-import { agentLabel, fmtDateTime, fmtTime, humanize, STAGE_LABEL, stanceTone } from "@/lib/format";
+import { agentLabel, fmtDateTime, humanize, STAGE_LABEL, stanceTone } from "@/lib/format";
 import { cn } from "cn";
 
 import { useRequirementContext } from "./context";
 import { FlowView } from "./flow-view";
+import { CallDetail } from "./call-records";
 import { type Lane, LaneDetail } from "./lane-detail";
 
 const ACTIVE = new Set(["queued", "running"]);
@@ -46,6 +47,7 @@ export function SimulationTab() {
   const calls = useLlmCalls(runId, id, live);
 
   const model = useMemo(() => buildLanes(detail, calls.data ?? [], runId), [detail, calls.data, runId]);
+  const linked = useMemo(() => new Set((detail?.evidence ?? []).map((e) => e.record_id)), [detail]);
   const [view, setView] = useState<"lanes" | "flow">("lanes");
 
   if (!runId) {
@@ -101,6 +103,8 @@ export function SimulationTab() {
           decisions={detail?.decisions ?? []}
           title={detail?.requirement.title ?? ""}
           live={live}
+          requirementId={id}
+          linked={linked}
         />
       )}
 
@@ -124,7 +128,7 @@ export function SimulationTab() {
                   {group.title} <span className="font-normal text-muted-foreground/70">{group.lanes.length}</span>
                 </h3>
                 {group.lanes.map((lane) => (
-                  <LaneRow key={lane.id} lane={lane} position={model.position} />
+                  <LaneRow key={lane.id} lane={lane} position={model.position} requirementId={id} linked={linked} />
                 ))}
               </section>
             ))}
@@ -165,7 +169,17 @@ export function SimulationTab() {
   );
 }
 
-function LaneRow({ lane, position }: { lane: Lane; position: Map<number, number> }) {
+function LaneRow({
+  lane,
+  position,
+  requirementId,
+  linked,
+}: {
+  lane: Lane;
+  position: Map<number, number>;
+  requirementId: string;
+  linked: Set<string>;
+}) {
   const xs = lane.calls.map((c) => position.get(c.id) ?? 0);
   const first = Math.min(...xs);
   const last = Math.max(...xs);
@@ -200,23 +214,23 @@ function LaneRow({ lane, position }: { lane: Lane; position: Map<number, number>
         {lane.calls.map((call) => {
           const verify = call.purpose === "research_verification" || call.agent_id === "agent:verifier";
           return (
-            <Tooltip key={call.id}>
-              <TooltipTrigger asChild>
-                <span
+            <HoverCard key={call.id} openDelay={80} closeDelay={120}>
+              <HoverCardTrigger asChild>
+                <button
+                  type="button"
                   className={cn(
                     "absolute top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full",
                     verify ? "size-2.5 border-[1.5px] border-blue-600 bg-background" : "size-1.5 bg-blue-600",
                     call.status !== "ok" && "bg-red-500",
                   )}
                   style={{ left: `${position.get(call.id) ?? 0}%` }}
-                  aria-label={`${humanize(call.purpose)} call`}
+                  aria-label={`${humanize(call.purpose)} call, saw ${call.input_record_ids.length} records`}
                 />
-              </TooltipTrigger>
-              <TooltipContent>
-                {humanize(call.purpose)} · {call.model} · {call.input_tokens + call.output_tokens} tokens · {call.latency_ms} ms ·{" "}
-                {fmtTime(call.created_at)}
-              </TooltipContent>
-            </Tooltip>
+              </HoverCardTrigger>
+              <HoverCardContent side="top" className="w-72 text-xs">
+                <CallDetail call={call} requirementId={requirementId} linked={linked} />
+              </HoverCardContent>
+            </HoverCard>
           );
         })}
       </div>

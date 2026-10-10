@@ -20,6 +20,7 @@ import {
   UserCheck,
   Wrench,
 } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ import type { Decision, LlmCall } from "@/lib/api/types";
 import { actorLabel, fmtDateTime, humanize } from "@/lib/format";
 import { cn } from "cn";
 
+import { allRecordsHref, recordHref } from "./call-records";
 import { type Lane, LaneDetail } from "./lane-detail";
 
 const W = 1000;
@@ -108,12 +110,16 @@ export function FlowView({
   decisions,
   title,
   live,
+  requirementId,
+  linked,
 }: {
   lanes: Lane[];
   calls: LlmCall[];
   decisions: Decision[];
   title: string;
   live: boolean;
+  requirementId: string;
+  linked: Set<string>;
 }) {
   const layout = useMemo(() => buildLayout(lanes), [lanes]);
   const sorted = useMemo(() => [...calls].sort((a, b) => a.created_at.localeCompare(b.created_at) || a.id - b.id), [calls]);
@@ -189,7 +195,21 @@ export function FlowView({
         {latest && (
           <span className="truncate">
             <span className="text-foreground">{actorLabel(latest.agent_id)}</span> · {humanize(latest.purpose)} · {latest.model} ·{" "}
-            {latest.input_tokens + latest.output_tokens} tokens · {fmtDateTime(latest.created_at)}
+            {latest.input_tokens + latest.output_tokens} tokens · {fmtDateTime(latest.created_at)} ·{" "}
+            {latest.input_record_ids.length > 0 ? (
+              <Link
+                href={
+                  latest.input_record_ids.length === 1
+                    ? recordHref(requirementId, latest.input_record_ids[0], linked)
+                    : allRecordsHref(latest.input_record_ids)
+                }
+                className="text-foreground underline-offset-4 hover:underline"
+              >
+                saw {latest.input_record_ids.length} record{latest.input_record_ids.length === 1 ? "" : "s"}
+              </Link>
+            ) : (
+              "saw no records"
+            )}
           </span>
         )}
       </div>
