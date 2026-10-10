@@ -57,8 +57,13 @@ export function isSynthetic(source: { is_example?: boolean | null; origin?: stri
   return !!source && (source.is_example === true || source.origin === "synthetic");
 }
 
-export function llmPermission(value: boolean | null | undefined): string {
-  return value === true ? "yes" : value === false ? "no" : "unknown";
+// The backend sends a source to an external model only when it is accepted AND external_llm is true.
+export function llmPermission(value: boolean | null | undefined, reviewStatus?: string | null): string {
+  if (value === false) return "no";
+  if (value !== true) return "unknown";
+  if (reviewStatus === "accepted") return "yes";
+  if (reviewStatus === "rejected") return "no, rejected";
+  return "once accepted";
 }
 
 export interface Interpretation {

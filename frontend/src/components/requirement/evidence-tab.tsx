@@ -1,9 +1,13 @@
 "use client";
 
+import { cn } from "cn";
+import { useEffect } from "react";
+
 import { ChannelIcon, InterpretationBadge, QuoteText, SourceHoverCard, StreamBadge, SyntheticBadge } from "@/components/provenance";
 import { EmptyState } from "@/components/states";
 import { ToneBadge } from "@/components/tone-badge";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { useHash } from "@/hooks/use-hash";
 import { useLlmCalls } from "@/lib/api/hooks";
 import type { EvidenceLink } from "@/lib/api/types";
 import { actorLabel } from "@/lib/format";
@@ -14,6 +18,11 @@ import { useRequirementContext } from "./context";
 export function EvidenceTab() {
   const { id, detail, runId } = useRequirementContext();
   const calls = useLlmCalls(runId, id, false);
+  const hash = useHash();
+  const loaded = Boolean(detail);
+  useEffect(() => {
+    if (loaded && hash.startsWith("rec-")) document.getElementById(hash)?.scrollIntoView({ block: "center" });
+  }, [hash, loaded]);
   if (!detail) return null;
   const evidence = detail.evidence;
 
@@ -68,7 +77,7 @@ export function EvidenceTab() {
                   {channelLabel(channel)} <span className="text-muted-foreground/60">{items.length}</span>
                 </h3>
                 {items.map((item) => (
-                  <EvidenceRow key={item.id} item={item} seenBy={seenBy.get(item.record_id)} />
+                  <EvidenceRow key={item.id} item={item} seenBy={seenBy.get(item.record_id)} active={hash === `rec-${item.record_id}`} />
                 ))}
               </div>
             ))}
@@ -78,12 +87,15 @@ export function EvidenceTab() {
   );
 }
 
-function EvidenceRow({ item, seenBy }: { item: EvidenceLink; seenBy?: Set<string> }) {
+function EvidenceRow({ item, seenBy, active }: { item: EvidenceLink; seenBy?: Set<string>; active: boolean }) {
   const record = item.record;
   return (
     <div
       id={`rec-${item.record_id}`}
-      className="grid scroll-mt-24 grid-cols-[minmax(0,1fr)_230px] gap-6 rounded-md border-b border-border/60 px-2 py-3 text-sm target:bg-amber-50/70 dark:target:bg-amber-950/40"
+      className={cn(
+        "grid scroll-mt-24 grid-cols-[minmax(0,1fr)_230px] gap-6 rounded-md border-b border-border/60 px-2 py-3 text-sm transition-colors",
+        active && "bg-amber-50/70 dark:bg-amber-950/40",
+      )}
     >
       <div className="flex min-w-0 flex-col gap-2">
         <QuoteText text={record.translation_en ?? record.text} quote={item.quote} verified={item.quote_verified} />

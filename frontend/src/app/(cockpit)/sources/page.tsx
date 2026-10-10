@@ -228,7 +228,7 @@ function Overview() {
             <span>
               <ToneBadge tone={REVIEW_TONE[r.review_status] ?? "muted"}>{r.review_status}</ToneBadge>
             </span>
-            <span className="text-xs text-muted-foreground">to OpenAI: {llmPermission(r.external_llm)}</span>
+            <span className="text-xs text-muted-foreground">to OpenAI: {llmPermission(r.external_llm, r.review_status)}</span>
             <span className="text-right tabular-nums">{r.records}</span>
           </div>
         ))}

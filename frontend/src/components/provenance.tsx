@@ -86,7 +86,7 @@ export function SourceFacts({ source }: { source: SourceSummary }) {
         </Fact>
       )}
       <Fact label="Review">{source.review_status}</Fact>
-      <Fact label="May go to OpenAI">{llmPermission(source.external_llm)}</Fact>
+      <Fact label="May go to OpenAI">{llmPermission(source.external_llm, source.review_status)}</Fact>
     </dl>
   );
 }
