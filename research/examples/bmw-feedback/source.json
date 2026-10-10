@@ -1,0 +1,13 @@
+{
+  "document_type": "source", "schema_version": "1.0",
+  "source_id": "example-bmw-feedback", "dataset_key": "example:bmw-feedback:F70",
+  "stream": "bmw", "channel": "bmw_feedback",
+  "title": "SYNTHETIC feedback demonstrating multiple classification rows",
+  "locator": "data/EXAMPLE_feedback.xlsx", "collected_at": "2026-10-10T10:00:00Z",
+  "collector": "example", "is_example": true, "normalized_record_count": 1,
+  "sampling": {"method": "Synthetic fixture", "query": null, "date_start": null, "date_end": null, "retrieved_count": 2, "complete": true, "limitations": ["Invented example; not a BMW finding."]},
+  "provenance": {"origin": "synthetic", "verification": "unverified", "notes": "Two invented spreadsheet rows classify one invented feedback item."},
+  "artifact": {"path": null, "sha256": null},
+  "export_permissions": {"git": true, "external_llm": true, "notes": "Synthetic fixture only."},
+  "review_status": "pending"
+}

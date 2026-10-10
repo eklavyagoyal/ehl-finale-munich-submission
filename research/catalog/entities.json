@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "entities": [
+    {"entity_id": "bmw:F70", "type": "vehicle_model", "label": "F70", "target": true},
+    {"entity_id": "bmw:G60", "type": "vehicle_model", "label": "G60", "target": true},
+    {"entity_id": "bmw:G70", "type": "vehicle_model", "label": "G70", "target": true},
+    {"entity_id": "bmw:G68", "type": "vehicle_model", "label": "G68", "target": false},
+    {"entity_id": "bmw:G60_G68", "type": "vehicle_group", "label": "G60/G68 combined", "target": false, "members": ["bmw:G60", "bmw:G68"]},
+    {"entity_id": "bmw:brand", "type": "brand", "label": "BMW", "target": false}
+  ]
+}

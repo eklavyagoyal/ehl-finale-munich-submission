@@ -1,0 +1,13 @@
+{
+  "document_type": "source", "schema_version": "1.0",
+  "source_id": "example-bmw-study", "dataset_key": "example:bmw-study:2025",
+  "stream": "bmw", "channel": "bmw_customer_study",
+  "title": "SYNTHETIC survey metric with unknown denominator",
+  "locator": "data/EXAMPLE_study.xlsx", "collected_at": "2026-10-10T10:00:00Z",
+  "collector": "example", "is_example": true, "normalized_record_count": 1,
+  "sampling": {"method": "Synthetic fixture", "query": null, "date_start": null, "date_end": null, "retrieved_count": 1, "complete": true, "limitations": ["Invented value; sample size unavailable."]},
+  "provenance": {"origin": "synthetic", "verification": "unverified", "notes": "Demonstrates a numeric value, not a review."},
+  "artifact": {"path": null, "sha256": null},
+  "export_permissions": {"git": true, "external_llm": true, "notes": "Synthetic fixture only."},
+  "review_status": "pending"
+}

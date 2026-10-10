@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "status": "proposed_seed_vocabulary_not_findings",
+  "features": [
+    {"feature_key": "remote_climate_scheduling", "label": "Schedule remote climate control", "area": "climate"},
+    {"feature_key": "remote_vehicle_locking", "label": "Lock the vehicle remotely", "area": "vehicle_access"},
+    {"feature_key": "charging_route_planning", "label": "Plan routes with charging stops", "area": "navigation"}
+  ]
+}

@@ -41,3 +41,7 @@ docs/
 | Which vehicle/market has which data? | [datasets/README.md](datasets/README.md#coverage-at-a-glance) |
 | How do BMW PMs actually prioritize? | [bmw-pm-interview/](bmw-pm-interview/bmw-product-manager-groundwork.md) |
 | What does the car offer today (standard vs optional)? | [datasets/option-lists/](datasets/option-lists/) |
+
+## Research collection handoff
+
+Use [the data contract](research-data-contract.md) and [agent prompt index](../research/README.md) to prepare consistent, source-linked BMW, competitor, and social evidence batches.

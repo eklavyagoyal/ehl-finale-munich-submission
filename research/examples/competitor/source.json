@@ -1,0 +1,13 @@
+{
+  "document_type": "source", "schema_version": "1.0",
+  "source_id": "example-competitor", "dataset_key": "example:competitor:specification",
+  "stream": "competitors", "channel": "manufacturer_website",
+  "title": "SYNTHETIC competitor specification; no real vehicle identified",
+  "locator": "https://example.com/vehicle/specification", "collected_at": "2026-10-10T10:00:00Z",
+  "collector": "example", "is_example": true, "normalized_record_count": 1,
+  "sampling": {"method": "Synthetic fixture", "query": null, "date_start": null, "date_end": null, "retrieved_count": 1, "complete": true, "limitations": ["Invented specification; no actual competitor comparison."]},
+  "provenance": {"origin": "synthetic", "verification": "unverified", "notes": "A real export must identify the vehicle and verify applicable market, model year, and trim."},
+  "artifact": {"path": null, "sha256": null},
+  "export_permissions": {"git": true, "external_llm": true, "notes": "Synthetic fixture only."},
+  "review_status": "pending"
+}
