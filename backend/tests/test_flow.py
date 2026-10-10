@@ -143,3 +143,10 @@ def test_open_gates_block_approval_and_pm_overrides_stick(client, drafted):
 
     trail = client.get(f"/api/requirements/{rid}/audit").json()
     assert any(e["action"] == "requirement.priority" and e["actor_id"] == "code:rank" for e in trail)
+
+
+def test_records_market_filter_and_coverage_matrix(client, drafted):
+    records = client.get("/api/records", params={"market": "US", "channel": "bmw_feedback", "limit": 1})
+    assert records.status_code == 200 and records.json()["total"] == 8
+    matrix = client.get("/api/coverage").json()["records_by_channel_market"]
+    assert {"stream": "bmw", "channel": "bmw_feedback", "market": "US", "records": 8} in matrix
