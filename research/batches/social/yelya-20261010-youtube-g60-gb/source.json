@@ -1,0 +1,45 @@
+{
+  "document_type": "source",
+  "schema_version": "1.0",
+  "source_id": "yelya-20261010-youtube-g60-gb",
+  "dataset_key": "youtube:comments",
+  "stream": "social",
+  "channel": "youtube",
+  "title": "YouTube comments under BMW 5 Series (G60) review videos, GB search market",
+  "locator": "https://www.googleapis.com/youtube/v3/",
+  "collected_at": "2026-10-10T15:40:45Z",
+  "collector": "yelya",
+  "is_example": false,
+  "normalized_record_count": 4217,
+  "sampling": {
+    "method": "YouTube Data API: search.list (relevance, 10 per query, region GB, language en), title filter for the vehicle, then commentThreads newest first, up to 3 pages of 100 threads per video plus the replies the API includes; scrapers/youtube_comments.py",
+    "query": "BMW 5 Series G60 review | BMW i5 review UK | BMW 520i review",
+    "date_start": "2023-05-04",
+    "date_end": "2026-10-10",
+    "retrieved_count": 4217,
+    "complete": false,
+    "limitations": [
+      "Market is the search market (region + relevance language), not the commenter's location.",
+      "27 videos selected by search relevance and a title pattern; not a random sample of owners.",
+      "Up to 3 pages of comment threads per video; replies beyond the 5 the API returns per thread are missing.",
+      "Videos whose language tags all differ from the market language were dropped.",
+      "Reply/thread links, like counts and video titles are kept in the warehouse but have no field in schema v1 source_fields.",
+      "subject_id bmw:G60 also covers Touring (G61), i5 and M5 videos."
+    ]
+  },
+  "provenance": {
+    "origin": "third_party",
+    "verification": "provenance_checked",
+    "notes": "Collected with scrapers/youtube_comments.py (spec docs/specs/youtube-scraper.md). Commenter names and channel ids are not stored."
+  },
+  "artifact": {
+    "path": "outputs/warehouse/fact_video_comment.parquet",
+    "sha256": "0d572bfa02a4a8ebf3cebca56e1788cf9dc74616adf9d7290aa105794aeb4995"
+  },
+  "export_permissions": {
+    "git": null,
+    "external_llm": null,
+    "notes": "Unresolved: scraped third-party review text; keep out of Git and external LLMs until decided."
+  },
+  "review_status": "pending"
+}

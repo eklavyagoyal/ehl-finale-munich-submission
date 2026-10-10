@@ -1,0 +1,42 @@
+{
+  "document_type": "source",
+  "schema_version": "1.0",
+  "source_id": "yelya-20261010-google_play-my-bmw-row-nl",
+  "dataset_key": "google_play:de.bmw.connected.mobile20.row:NL",
+  "stream": "social",
+  "channel": "google_play",
+  "title": "My BMW (Google Play de.bmw.connected.mobile20.row) customer reviews, NL storefront",
+  "locator": "https://play.google.com/store/apps/details?id=de.bmw.connected.mobile20.row&gl=NL",
+  "collected_at": "2026-10-10T15:15:03Z",
+  "collector": "yelya",
+  "is_example": false,
+  "normalized_record_count": 1176,
+  "sampling": {
+    "method": "Google Play reviews, newest first, all available up to the scraper limit; scrapers/app_reviews.py",
+    "query": null,
+    "date_start": "2020-07-30",
+    "date_end": "2026-10-04",
+    "retrieved_count": 1176,
+    "complete": false,
+    "limitations": [
+      "Google Play filters reviews mainly by language; the storefront country is a weak market signal.",
+      "Market is the storefront country, not the reviewer's residence.",
+      "Reviews concern the companion app, not a specific vehicle model; subject_ids stay empty until the catalog has an app entity."
+    ]
+  },
+  "provenance": {
+    "origin": "third_party",
+    "verification": "provenance_checked",
+    "notes": "Collected with scrapers/app_reviews.py from the public Google Play review endpoints. DimXxxID values are this warehouse's surrogate keys (see scrapers/warehouse.py), resolved into markets."
+  },
+  "artifact": {
+    "path": "outputs/warehouse/fact_review.parquet",
+    "sha256": "b488e36c78d9d069c92ea65415d1bec3cee774f36714d12728db92fb19f43152"
+  },
+  "export_permissions": {
+    "git": null,
+    "external_llm": null,
+    "notes": "Unresolved: scraped third-party review text; keep out of Git and external LLMs until decided."
+  },
+  "review_status": "pending"
+}
