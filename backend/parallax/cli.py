@@ -11,6 +11,7 @@
   serve                   start the API (uvicorn)
   serve-prod              container entrypoint: migrate, sync agents, serve on 0.0.0.0:$PORT
   push-research PATH      zip a research folder and upload it to a deployed backend
+  smoke [--full]          check a deployed backend end to end (token from PARALLAX_REMOTE_TOKEN in .env)
 """
 
 import argparse
@@ -54,6 +55,63 @@ def _model_check() -> dict:
             "available_gpt": sorted(m for m in available if m.startswith(("gpt-", "o")) and "realtime" not in m)[:60]}
 
 
+def _smoke(url: str, token: str | None, actor: str, full: bool) -> int:
+    """The frontend's critical path against a deployed backend. Prints PASS/FAIL per step, never the token."""
+    import httpx
+
+    base = url.rstrip("/")
+    headers = {"X-Actor": actor, **({"Authorization": f"Bearer {token}"} if token else {})}
+    client = httpx.Client(base_url=base, headers=headers, timeout=60)
+    failures = 0
+
+    def check(name: str, ok: bool, detail: str = "") -> None:
+        nonlocal failures
+        failures += not ok
+        print(f"{'PASS' if ok else 'FAIL'}  {name}  {detail}", flush=True)
+
+    r = httpx.get(f"{base}/api/health", timeout=20)
+    check("health (open)", r.status_code == 200, str(r.status_code))
+    check("auth enforced", httpx.get(f"{base}/api/meta", timeout=20).status_code == 401)
+    check("openapi public", httpx.get(f"{base}/api/openapi.json", timeout=20).status_code == 200)
+    meta = client.get("/api/meta")
+    check("meta with token", meta.status_code == 200, f"{meta.status_code}" + (" (set PARALLAX_REMOTE_TOKEN in backend/.env)" if meta.status_code == 401 else ""))
+    if meta.status_code != 200:
+        return 1
+    m = meta.json()
+    print(f"      llm_mode={m['llm_mode']} engine={m['persona_engine']} counts={m['counts']}")
+    models = client.get("/api/llm/models").json()
+    check("models available", not models.get("missing") and not models.get("error"), str(models.get("missing") or models.get("error") or ""))
+    personas = client.get("/api/agents", params={"kind": "market_persona"}).json()
+    departments = client.get("/api/agents", params={"kind": "department"}).json()
+    check("roster", len([a for a in personas if a["active"]]) == 12 and len([a for a in departments if a["active"]]) >= 6,
+          f"{len(personas)} personas, {len(departments)} departments")
+    for path in ("/api/tasks", "/api/requirements", "/api/coverage", "/api/audit", "/api/learning/decisions", "/api/themes"):
+        r = client.get(path)
+        check(f"GET {path}", r.status_code == 200, str(r.status_code))
+    reqs = client.get("/api/requirements").json()
+    if reqs:
+        detail = client.get(f"/api/requirements/{reqs[0]['id']}")
+        check("requirement detail", detail.status_code == 200 and "scores" in detail.json(), reqs[0]["id"])
+    else:
+        print("      no requirements yet (ingest data, build themes, draft)")
+    if full and reqs:
+        run = client.post("/api/simulations", json={"requirement_ids": [reqs[0]["id"]]}).json()
+        print(f"      run {run['id']} started", flush=True)
+        status = "queued"
+        for _ in range(240):
+            status = client.get(f"/api/simulations/{run['id']}").json()["run"]["status"]
+            if status not in ("queued", "running"):
+                break
+            time.sleep(5)
+        check("simulation", status == "completed", status)
+        results = client.get(f"/api/simulations/{run['id']}/results").json()["requirements"][reqs[0]["id"]]
+        check("simulation outputs", bool(results["persona_responses"] and results["department_memos"] and results["recommendation"]),
+              f"{len(results['persona_responses'])} persona, {len(results['department_memos'])} dept, "
+              f"{len(results['votes'])} votes")
+    print(f"{'OK' if not failures else str(failures) + ' FAILED'}  {base}")
+    return 0 if not failures else 1
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="parallax", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -84,9 +142,13 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("serve-prod")
     p = sub.add_parser("push-research")
     p.add_argument("path", type=Path, help="research folder with schema.json, catalog/, decision-model.json, batches/")
-    p.add_argument("--url", required=True, help="backend base URL, e.g. https://parallax-api.dehlwes.net")
-    p.add_argument("--token", default=os.environ.get("PARALLAX_REMOTE_TOKEN"), help="bearer token (or PARALLAX_REMOTE_TOKEN)")
+    p.add_argument("--url", default=None, help="backend base URL (default PARALLAX_REMOTE_URL)")
+    p.add_argument("--token", default=None, help="bearer token (default PARALLAX_REMOTE_TOKEN from .env)")
     p.add_argument("--actor", default="pm:cli")
+    p = sub.add_parser("smoke")
+    p.add_argument("--url", default=None)
+    p.add_argument("--full", action="store_true", help="also run one simulation (real LLM cost in openai mode)")
+    p.add_argument("--actor", default="pm:smoke")
     args = parser.parse_args(argv)
     settings = get_settings()
     actor = "system:cli"
@@ -112,9 +174,13 @@ def main(argv: list[str] | None = None) -> int:
         uvicorn.run("parallax.api.app:app", host="0.0.0.0", port=int(os.environ.get("PORT", "8000")),
                     proxy_headers=True, forwarded_allow_ips="*")
         return 0
+    if args.command == "smoke":
+        return _smoke(args.url or settings.remote_url, settings.remote_token, args.actor, args.full)
     if args.command == "push-research":
         import httpx
 
+        args.url = args.url or settings.remote_url
+        args.token = args.token or settings.remote_token
         root = args.path.resolve()
         if not (root / "schema.json").exists():
             print(f"{root} has no schema.json", file=sys.stderr)

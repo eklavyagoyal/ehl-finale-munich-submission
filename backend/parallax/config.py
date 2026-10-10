@@ -54,6 +54,10 @@ class Settings(BaseSettings):
 
     var_dir: Path = BACKEND_ROOT / "var"
 
+    # Client side (CLI talking to a deployed backend): keep the token in backend/.env, never in chat or git.
+    remote_url: str = "https://parallax.dehlwes.net"
+    remote_token: str | None = None
+
     @field_validator("database_url")
     @classmethod
     def _psycopg_driver(cls, value: str) -> str:
