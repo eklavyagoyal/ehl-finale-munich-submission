@@ -1,0 +1,1110 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:nhtsa:lexus_es_7:11675800": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11646961": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11618299": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11579388": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11561627": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11536140": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11524227": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11512648": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11484664": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11475224": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking",
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11451094": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11436392": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11434058": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11424038": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11422553": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11398718": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "overall_quality_ownership",
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11397149": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety",
+    "overall_quality_ownership",
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11388706": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11377378": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11352893": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11350581": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11324871": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11321470": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11316235": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11311741": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11301891": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11300692": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11258618": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety",
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11176665": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11389408": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11351807": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11325135": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11269690": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11208885": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "interior_design_quality"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11754220": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling",
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11749126": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11724316": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11722630": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11717319": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11690117": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11661006": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11658801": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11650906": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11644276": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11637338": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11628965": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11625472": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11623187": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11621021": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11617524": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11616875": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11613630": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11616708": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11490257": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11482490": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11459820": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11438783": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11373985": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11753522": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11705688": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11696345": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11690558": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11670339": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11667413": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11660590": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11655075": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11653468": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11651071": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11648324": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11638542": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11638251": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11635739": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11635078": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11633336": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11625611": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11623443": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11623153": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11621107": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11619395": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11614921": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11609052": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11607992": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11585513": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11575480": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11571847": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11537243": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11616651": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11503312": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11497278": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11466993": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11461331": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11433575": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11402986": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11769496": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11769447": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11761769": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11743826": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11711049": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11690047": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11669591": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11631883": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11609902": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11580659": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11543932": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11508592": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11500625": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety",
+    "overall_quality_ownership",
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11454211": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11493219": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11476385": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11753602": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11750663": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11724137": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11718537": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11698670": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11697669": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership",
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11592612": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11579911": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11562632": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11524577": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11494236": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11517607": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "hmi_infotainment",
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11721935": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11712623": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11710622": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11631157": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11614553": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11611602": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11587600": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11576863": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "seats_comfort"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11556838": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11766393": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11736701": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11721821": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "overall_quality_ownership",
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11720752": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:lexus_es_7:11703004": {
+   "vehicle_key": "lexus_es_7",
+   "themes": [
+    "overall_quality_ownership",
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  }
+ },
+ "claims": {}
+}

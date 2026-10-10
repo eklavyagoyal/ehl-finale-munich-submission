@@ -1,0 +1,26 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:eu_challengers-E0010": {
+   "record_id": "eu_challengers-E0010",
+   "kind": "equipment",
+   "market": "EU",
+   "brand": "Volvo",
+   "model": "ES90",
+   "generation": "ES90 1st gen (2025-)",
+   "trim_scope": "Ultra (UK, as tested)",
+   "feature": "F10_ventilated_front_seats",
+   "theme": "seats_comfort",
+   "availability": "unknown",
+   "value": "Ventilated front seats fitted to the Ultra long-term test car",
+   "source_type": "press_review",
+   "url": "https://www.carwow.co.uk/volvo/es90/news/10992/volvo-es90-long-term-review-darren-cassey-first-impressions",
+   "as_of": "2026-07",
+   "evidence_tier": "B",
+   "notes": "Standard/optional status not stated",
+   "agent": "eu_challengers",
+   "exact_excerpt": null
+  }
+ },
+ "claims": {}
+}

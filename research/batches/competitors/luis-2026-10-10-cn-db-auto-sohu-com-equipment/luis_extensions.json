@@ -1,0 +1,26 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:cn_nev-E0057": {
+   "record_id": "cn_nev-E0057",
+   "kind": "equipment",
+   "market": "CN",
+   "brand": "Zeekr",
+   "model": "007",
+   "generation": "007 1st gen (2024-)",
+   "trim_scope": "all",
+   "feature": "F17_rear_space",
+   "theme": "space_practicality",
+   "availability": "standard",
+   "value": "wheelbase 2,925 mm; 4,858/1,900/1,450 mm",
+   "source_type": "press_review",
+   "url": "https://db.auto.sohu.com/model_7250",
+   "as_of": "2026-10",
+   "evidence_tier": "B",
+   "notes": "Sohu Auto model database page.",
+   "agent": "cn_nev",
+   "exact_excerpt": null
+  }
+ },
+ "claims": {}
+}

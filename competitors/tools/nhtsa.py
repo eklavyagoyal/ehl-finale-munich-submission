@@ -4,6 +4,7 @@ NHTSA complaints are the one customer channel measured the same way for every ve
 so they give a like-for-like comparison of *what goes wrong* (almost all are defects).
 
 Writes:
+  data/nhtsa/<vehicle_key>.json  raw API complaints incl. narrative, VIN removed (gitignored originals)
   nhtsa_us_complaints.csv      one row per complaint x theme (no complaint text, ODI number for lookup)
   nhtsa_us_theme_profile.csv   complaints per vehicle x theme, with share of the vehicle's complaints
 
@@ -94,8 +95,11 @@ def themes_for(components: str, summary: str) -> list[str]:
 def main() -> None:
     model_cache = {}
     rows = []
+    raw_dir = ROOT.parent / "data" / "nhtsa"
+    raw_dir.mkdir(parents=True, exist_ok=True)
     for key, (label, make, years, inc, exc) in VEHICLES.items():
         seen = set()
+        raw = []
         for year in years:
             if (make, year) not in model_cache:
                 res = get("/products/vehicle/models", modelYear=year, make=make, issueType="c")["results"]
@@ -110,6 +114,9 @@ def main() -> None:
                     if key == "mb_eqe_v295" and re.search(r"\bsuv\b", summary.lower()):
                         continue  # NHTSA mixes EQE sedan and EQE SUV in some buckets
                     seen.add(odi)
+                    query = {"make": make, "model": model, "modelYear": year}
+                    raw.append({**{k: v for k, v in c.items() if k != "vin"}, "query": query,
+                                "query_url": f"{API}/complaints/complaintsByVehicle?{urllib.parse.urlencode(query)}"})
                     for theme in themes_for(c.get("components") or "", summary):
                         rows.append({
                             "vehicle_key": key, "vehicle": label, "make": make, "nhtsa_model": model, "model_year": year,
@@ -120,6 +127,7 @@ def main() -> None:
                 time.sleep(0.2)
             print(f"{label} MY{year}: models {models}")
         print(f"  -> {len(seen)} complaints")
+        (raw_dir / f"{key}.json").write_text(json.dumps(raw, ensure_ascii=False, indent=1))
 
     with (ROOT / "nhtsa_us_complaints.csv").open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(rows[0]))

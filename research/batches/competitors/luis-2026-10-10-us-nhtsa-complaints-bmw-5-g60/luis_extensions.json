@@ -1,0 +1,426 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:nhtsa:bmw_5_g60:11734926": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11716484": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "adas_parking",
+    "ride_handling",
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11715870": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11698655": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11653127": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11650048": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11650140": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11644735": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11626816": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11622477": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11622507": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11620205": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11607948": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "connectivity_app_digital",
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11639714": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11625407": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11625223": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "adas_parking",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11622466": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11620068": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11735764": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11735810": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11734453": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11733119": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11704372": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "overall_quality_ownership",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11688366": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11686791": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11686161": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11673828": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11646396": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11639213": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11631427": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11629951": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11629241": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11621364": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership",
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11614008": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11608006": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11591979": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11573600": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11572560": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11737970": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11733992": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11762662": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11761269": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "interior_design_quality"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11733770": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11729663": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11729328": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "powertrain_performance",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11722386": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "powertrain_performance",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11721496": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11594543": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:bmw_5_g60:11746960": {
+   "vehicle_key": "bmw_5_g60",
+   "themes": [
+    "adas_parking",
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  }
+ },
+ "claims": {}
+}

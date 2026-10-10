@@ -2,7 +2,7 @@
 
 Which vehicles the 5 Series successor competes with in **EU, US and China**, and what their customers and the press say about them. All findings use the **same theme axis as BMW's own feedback**, so BMW and competitors can be compared theme by theme.
 
-Collected on 2026-10-10 by 8 web-research agents plus 1 classification run over BMW's G60 verbatims. Data, schema and scripts are in [`/competitors`](../../competitors/README.md).
+Collected on 2026-10-10 by 8 web-research agents plus 1 classification run over BMW's G60 verbatims. Data, schema and scripts are in [`/competitors`](../../competitors/README.md). The same data in the team's research data contract (76 validated batches under `research/batches/competitors/`) is described in [`competitors/contract/README.md`](../../competitors/contract/README.md).
 
 ## At a glance
 

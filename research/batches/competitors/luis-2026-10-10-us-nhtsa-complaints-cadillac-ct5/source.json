@@ -1,0 +1,43 @@
+{
+  "document_type": "source",
+  "schema_version": "1.0",
+  "source_id": "luis-2026-10-10-us-nhtsa-complaints-cadillac-ct5",
+  "dataset_key": "nhtsa:complaints",
+  "stream": "competitors",
+  "channel": "other",
+  "title": "US · NHTSA owner complaints · Cadillac CT5",
+  "locator": "https://api.nhtsa.gov/complaints/complaintsByVehicle",
+  "collected_at": "2026-10-10T16:15:22Z",
+  "collector": "luis (Claude Code research agents, run luis-competitors-2026-10-10)",
+  "is_example": false,
+  "normalized_record_count": 109,
+  "sampling": {
+    "method": "NHTSA complaints API (complaintsByVehicle) for every NHTSA model name matching the vehicle, model years 2020-2027; all returned complaints, deduplicated by ODI number. Script: competitors/tools/nhtsa.py",
+    "query": "make=CADILLAC; model regex=^CT5; exclude=$^; model years 2020-2027",
+    "date_start": "2020-06-23",
+    "date_end": "2026-10-04",
+    "retrieved_count": 109,
+    "complete": true,
+    "limitations": [
+      "Complaints are self-reported and almost all describe defects; volume scales with fleet size and age.",
+      "NHTSA model buckets are noisy (e.g. EQE sedan and SUV share buckets; complaints mentioning 'SUV' were dropped).",
+      "Narratives are NHTSA's published text (public domain); 17-character VIN-like tokens were replaced.",
+      "A complaint filed for several vehicles appears once per vehicle batch (dedup_key = ODI number + vehicle)."
+    ]
+  },
+  "provenance": {
+    "origin": "official",
+    "verification": "provenance_checked",
+    "notes": "Fetched directly from api.nhtsa.gov by competitors/tools/nhtsa.py; raw JSON kept in data/nhtsa/."
+  },
+  "artifact": {
+    "path": "data/nhtsa/cadillac_ct5.json",
+    "sha256": "4e2d2646c1a460311e29c86669b0bb6623c70c453ea272c5dff07347deeb1e11"
+  },
+  "export_permissions": {
+    "git": true,
+    "external_llm": null,
+    "notes": "Stored on branch luis-competitors by the collector's decision. External LLM use not decided by the team yet."
+  },
+  "review_status": "pending"
+}

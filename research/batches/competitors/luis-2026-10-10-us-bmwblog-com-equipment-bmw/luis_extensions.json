@@ -1,0 +1,26 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:bmw_baseline_outlook-E0023": {
+   "record_id": "bmw_baseline_outlook-E0023",
+   "kind": "equipment",
+   "market": "US",
+   "brand": "BMW",
+   "model": "5 Series",
+   "generation": "G60",
+   "trim_scope": "530i (entry), MY2027",
+   "feature": "F02_hud",
+   "theme": "hmi_infotainment",
+   "availability": "optional",
+   "value": "Head-up display in the Premium Package (with interior camera and remote start)",
+   "source_type": "press_review",
+   "url": "https://www.bmwblog.com/2026/07/14/2027-bmw-5-series-price-specs-changes/",
+   "as_of": "2026-07",
+   "evidence_tier": "B",
+   "notes": "Package price for 530i not stated on the page. cars.com MY2027 i5 eDrive40 lists Premium Package at $2,250. 2023 US press release also places 'BMW Curved Display with Head-Up Display' in Premium and Executive Packages.",
+   "agent": "bmw_baseline_outlook",
+   "exact_excerpt": null
+  }
+ },
+ "claims": {}
+}
