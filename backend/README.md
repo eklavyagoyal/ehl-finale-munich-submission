@@ -20,7 +20,7 @@ cp .env.example .env                   # add OPENAI_API_KEY, set PARALLAX_LLM_MO
 .venv/bin/python -m parallax.cli seed
 .venv/bin/python -m parallax.cli ingest ../research/batches     # research branch checkout
 .venv/bin/python -m parallax.cli themes
-.venv/bin/python -m parallax.cli serve --reload                 # http://127.0.0.1:8000/docs
+.venv/bin/python -m parallax.cli serve --reload                 # http://127.0.0.1:8000/api/docs
 ```
 
 **Mock mode.** `PARALLAX_LLM_MODE=mock` is the default. It runs the whole pipeline offline with deterministic fake outputs, for UI work and tests.

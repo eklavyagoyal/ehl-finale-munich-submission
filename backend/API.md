@@ -1,6 +1,6 @@
 # Parallax API: frontend contract
 
-Base URL: `http://127.0.0.1:8000` for real data, or `http://127.0.0.1:8001` for the synthetic demo database (`backend/scripts/demo_db.sh serve`). The full machine-readable spec is [`openapi.json`](openapi.json), and the interactive docs are at `/docs` while the server runs.
+Base URL: `http://127.0.0.1:8000` for real data, or `http://127.0.0.1:8001` for the synthetic demo database (`backend/scripts/demo_db.sh serve`). The full machine-readable spec is [`openapi.json`](openapi.json), and the interactive docs are at `/api/docs` while the server runs.
 
 **Identity.** Send `X-Actor: pm:<name>` on every request. The backend audits every request, including reads.
 

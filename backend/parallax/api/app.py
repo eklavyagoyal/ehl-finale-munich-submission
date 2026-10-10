@@ -15,11 +15,16 @@ from parallax.audit import record_event
 from parallax.config import get_settings
 from parallax.db import get_engine, session_scope
 
-UNLOGGED_PREFIXES = ("/api/health", "/docs", "/redoc", "/openapi.json")
+# Everything public lives under /api so the app can share one host with the frontend (frontend "/", API "/api").
+UNLOGGED_PREFIXES = ("/api/health", "/api/docs", "/api/openapi.json")
+OPEN_PREFIXES = ("/api/health", "/api/docs", "/api/openapi.json")
 
 app = FastAPI(
     title="Parallax API",
     version=__version__,
+    docs_url="/api/docs",
+    redoc_url=None,
+    openapi_url="/api/openapi.json",
     description=(
         "Backend for Parallax, a multi-agent decision workflow for BMW successor-vehicle requirements. "
         "Send `X-Actor: pm:<name>` with every request; human-only actions require a `pm:` actor."
@@ -67,7 +72,7 @@ async def bearer_auth(request: Request, call_next):
     """Registered last, so it runs first: unauthenticated calls are rejected (and still access-logged)."""
     token = get_settings().api_token
     path = request.url.path
-    if token and request.method != "OPTIONS" and path.startswith("/api") and not path.startswith("/api/health"):
+    if token and request.method != "OPTIONS" and path.startswith("/api") and not path.startswith(OPEN_PREFIXES):
         supplied = request.headers.get("authorization", "")
         if not hmac.compare_digest(supplied.encode(), f"Bearer {token}".encode()):
             return JSONResponse({"detail": "missing or invalid bearer token"}, status_code=401)
