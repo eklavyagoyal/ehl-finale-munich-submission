@@ -52,6 +52,7 @@ research/
       claims.jsonl                      optional
   prompts/synthesize.md
 scripts/validate_research.py
+scripts/build_research_context.py
 outputs/research/<run-id>/               generated context and analysis; ignored
 ```
 
@@ -59,7 +60,7 @@ Each collector owns their batch directories. The orchestrator owns catalog revie
 
 Keep source originals unchanged and record their relative path and SHA-256 when available. Originals are already excluded from Git by this repository. Commit contracts, permitted normalized exports, and small reviewable results. If BMW content cannot be committed, retain it locally or in existing authorized shared storage and commit a manifest/reference. `export_permissions.git` and `.external_llm` are separate: true means confirmed for that destination, false means disallowed, null means unresolved. Metadata does not enforce authorization; review and exporters must respect it. Git access does not establish permission for an external model upload.
 
-The package contains the contract, validator, synthetic templates, and agent prompts. Real source ingestion and the LLM context exporter are the next implementation steps.
+The package contains the contract, validator, offline context exporter, synthetic templates, agent prompts, and an [integration checklist](../research/INTEGRATION.md). Real source ingestion, reviewed competitor-match integration, model inference, and the PM decision/audit workflow are the next implementation steps.
 
 ## Minimum collection handoff
 
@@ -158,26 +159,29 @@ Request one small representative batch per teammate, validate it, fix unclear ma
 4. Review claims separately. Add feature vocabulary/aliases as needed; revalidate changes.
 5. Rebuild the context snapshot and retain prior run outputs.
 
-Validation does not verify truth, authorization, artifact hashes, semantic duplicates, namespace quality, quote entailment, or competitor applicability. Those require review. The validator is a local command; CI and the context exporter are follow-on steps after the pilot. No database, queue, vector store, or agent framework is required initially.
+Validation does not verify truth, authorization, artifact hashes, semantic duplicates, namespace quality, quote entailment, or competitor applicability. Those require review. The validator and exporter are local commands; CI can follow after the pilot. No database, queue, vector store, or agent framework is required initially.
 
 ## Feeding the initial large-context LLM
 
 A full packet is a reasonable first experiment if it fits the selected model's usable budget. A long-context study found position-dependent retrieval performance on the models/tasks it tested; that motivates evaluating our chosen model rather than assuming its advertised window guarantees recall ([Lost in the Middle](https://arxiv.org/abs/2307.03172)).
 
-Prepare `outputs/research/<run-id>/context.json` with these logical sections:
+Build `outputs/research/<run-id>/context.json` using the commands in [research/README.md](../research/README.md). The local exporter validates its inputs, retains all three target models, and creates these logical sections without making a model request:
 
 | Section | Contents |
 | --- | --- |
-| `run_manifest` | Run/time, Git commit plus dirty-file hashes, schema/catalog/prompt versions, exact input hashes, model/version/settings when selected, omitted inputs/reasons |
-| `scope` | Target models, markets, horizon, unresolved app/model mappings |
-| `coverage` | Code-computed counts by channel/kind/model/market/dates; dedup rules, selected snapshots, missing strata, partial collections |
+| `run_manifest` | Run/time, Git commit, dirty-state flag, schema version, exact consumed input/code hashes; model initially null |
+| `scope` | All three target models, horizon, no market filter; unresolved mappings remain on records |
+| `coverage` | Code-computed channel/kind/scope counts, unresolved subjects/markets, exclusions, superseded snapshots and omitted claims; sampling notes remain on sources |
 | `sources` | Accepted, permitted, non-example manifests |
 | `records` | Latest accepted observations with IDs, original text, units |
 | `claims` | Accepted extractions for retained record snapshots |
-| `comparison_context` | Sourced competitor mappings and limitations |
+| `feature_frequency` | Distinct parent-review counts by feature and by comparable collection cohort |
+| `comparison_context` | Explicitly pending; comparison sidecars need separate review and are not automatically ingested |
 | `decision_policy` | Criteria/gates labeled as proposed assumptions |
 
 Default eligibility: accepted source, `is_example == false`, and `export_permissions.external_llm == true`. Include only accepted claims for included records. An accepted source does not approve its generated claims. Report exclusions; fail when nothing eligible remains. Anonymous provenance can enter only as explicitly reviewed weak evidence, with limitations retained, never as verified BMW evidence.
+
+Use `--demo` only for synthetic fixtures; it excludes real sources and marks the packet as a demo. Each run creates a new file under ignored `outputs/research/`, never overwriting an earlier snapshot. An optional `--max-bytes` limit rejects oversized packets without truncation. Stable identity deduplication is automatic; cross-dataset reposts or inconsistent namespaces still need review. Frequency cohorts preserve dataset, channel, subject/market scope and sampling method/query, and pool retained observations across collection windows with those same attributes. Narrative notes and competitor-match sidecars must be reviewed separately.
 
 Compute counts in code. Distinguish observations, original classification rows if known, claim rows, unique feature-mentioning reviews, and known sample bases. Within-channel frequency is `unique reviews mentioning feature / eligible reviews in the same cohort`, with window and selection rules. It is not customer prevalence. Deduplicate overlapping queries. Source diversity means provenance/channel groups rather than downloaded files.
 
@@ -236,8 +240,8 @@ PMs must be able to edit, approve, reject, and challenge proposals. Keep evidenc
 2. Obtain dimension dictionaries and extraction provenance; keep unresolved fields explicit.
 3. Review pilot mappings, identifiers, units, and permissions before scaling.
 4. Collect additional batches with completeness/query notes.
-5. Implement the deterministic exporter, assemble the first packet, and run citation/recall checks with the selected LLM.
-6. Build one model/market demo with the eight requirement fields, PM actions, and an audit trail; retain open effort/timing questions.
+5. Use the deterministic exporter to assemble the first packet and run citation/recall checks with the selected LLM.
+6. Keep all three models available in the demo with separate market/cohort views. Build the eight requirement fields, PM actions, and an audit trail; retain open effort/timing questions and make sparse coverage explicit.
 7. Calibrate anchors/weights and present the reviewed shortlist with future assumptions and uncertainty/sensitivity.
 
-The contract is ready to pilot. Real ingestion, dimension resolution, a context exporter, and a real ranking depend on teammate outputs and have not been fabricated here.
+The contract and offline exporter are ready to pilot. Real ingestion, dimension resolution, reviewed matches and a real ranking depend on teammate outputs and have not been fabricated here.

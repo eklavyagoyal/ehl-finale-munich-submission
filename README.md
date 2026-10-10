@@ -12,7 +12,7 @@ Give each workstream its prompt:
 - [Competitor research agent](research/prompts/agent-competitors.md)
 - [Social and app-review agent](research/prompts/agent-social.md)
 
-First collect one representative batch per workstream. Review scope and mappings before scaling, then build the context exporter and a PM-reviewed successor-vehicle demo for one model and market.
+First collect one representative batch per workstream. Review scope and mappings before scaling, then use the offline context exporter. Keep F70, G60, and G70 in scope, with evidence separated by model and market. Follow the [orchestrator checklist](research/INTEGRATION.md) to prepare the first synthesis and PM review.
 
 ## Checks
 
@@ -20,6 +20,7 @@ With Python and `uv` available, run from the repository root:
 
 ```sh
 uv run --with 'jsonschema[format]==4.26.0' python scripts/validate_research.py research/examples
+uv run --with 'jsonschema[format]==4.26.0' python scripts/build_research_context.py research/examples --demo
 uv run --with 'jsonschema[format]==4.26.0' python -m unittest discover -s tests -v
 ```
 

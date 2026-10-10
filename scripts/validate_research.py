@@ -1,6 +1,7 @@
 """Validate research batches, record identity, and claim references."""
 
 import argparse
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -42,21 +43,31 @@ def parse_json(text, location):
         raise ValueError(f"{location}: invalid JSON") from error
 
 
-def json_file(path):
-    return parse_json(path.read_text(encoding="utf-8"), path)
+def json_file(path, fingerprints=None):
+    raw = path.read_bytes()
+    document = parse_json(raw.decode("utf-8"), path)
+    if fingerprints is not None:
+        fingerprints[path] = hashlib.sha256(raw).hexdigest()
+    return document
 
 
-def json_lines(path):
-    with path.open(encoding="utf-8") as stream:
-        for number, line in enumerate(stream, 1):
+def json_lines(path, fingerprints=None):
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for number, raw in enumerate(stream, 1):
+            digest.update(raw)
+            line = raw.decode("utf-8")
             location = f"{path}:{number}"
             if not line.strip():
                 raise ValueError(f"{location}: blank JSONL line")
             yield parse_json(line, location), location
+    if fingerprints is not None:
+        fingerprints[path] = digest.hexdigest()
 
 
-def catalog_ids(path, entries_key, id_key):
-    document = json_file(path)
+def catalog_ids(path, entries_key, id_key, document=None):
+    if document is None:
+        document = json_file(path)
     if not isinstance(document, dict) or not isinstance(document.get(entries_key), list):
         raise ValueError(f"{path}: catalog must contain an {entries_key} array")
     identifiers = set()
@@ -70,8 +81,10 @@ def catalog_ids(path, entries_key, id_key):
     return identifiers
 
 
-def validate_batches(batch_root):
-    schema = json_file(ROOT / "research/schema.json")
+def load_batches(batch_root):
+    """Return validated documents and hashes of the exact bytes parsed."""
+    fingerprints = {}
+    schema = json_file(ROOT / "research/schema.json", fingerprints)
     Draft202012Validator.check_schema(schema)
     checker = FormatChecker()
     validators = {
@@ -81,8 +94,12 @@ def validate_batches(batch_root):
         )
         for kind in ("source", "record", "claim")
     }
-    entity_ids = catalog_ids(ROOT / "research/catalog/entities.json", "entities", "entity_id")
-    feature_keys = catalog_ids(ROOT / "research/catalog/features.json", "features", "feature_key")
+    catalogs = {}
+    for name, id_key in (("entities", "entity_id"), ("features", "feature_key")):
+        path = ROOT / f"research/catalog/{name}.json"
+        catalogs[name] = json_file(path, fingerprints)
+    entity_ids = catalog_ids(ROOT / "research/catalog/entities.json", "entities", "entity_id", catalogs["entities"])
+    feature_keys = catalog_ids(ROOT / "research/catalog/features.json", "features", "feature_key", catalogs["features"])
 
     def check(document, kind, location):
         errors = list(validators[kind].iter_errors(document))
@@ -100,7 +117,7 @@ def validate_batches(batch_root):
         raise ValueError(f"{batch_root}: JSONL file outside a recognized batch")
     sources, records, claims = {}, {}, []
     for path in manifests:
-        source = json_file(path)
+        source = json_file(path, fingerprints)
         check(source, "source", path)
         source_id = source["source_id"]
         if source_id in sources:
@@ -112,7 +129,7 @@ def validate_batches(batch_root):
             raise ValueError(f"{path}: sampling date range is reversed")
         sources[source_id] = source
         count, dedup_keys = 0, set()
-        for record, location in json_lines(path.parent / "records.jsonl"):
+        for record, location in json_lines(path.parent / "records.jsonl", fingerprints):
             check(record, "record", location)
             if record["source_id"] != source_id:
                 raise ValueError(f"{location}: record belongs to a different source")
@@ -137,7 +154,7 @@ def validate_batches(batch_root):
             raise ValueError(f"{path}: normalized_record_count does not match records.jsonl")
         claim_path = path.parent / "claims.jsonl"
         if claim_path.exists():
-            for claim, location in json_lines(claim_path):
+            for claim, location in json_lines(claim_path, fingerprints):
                 check(claim, "claim", location)
                 claims.append((claim, location, source_id))
 
@@ -154,7 +171,18 @@ def validate_batches(batch_root):
         if any(quote not in original for quote in claim["quotes"]):
             raise ValueError(f"{location}: quote is not an exact substring of original evidence")
         claim_ids.add(claim["claim_id"])
-    return len(sources), len(records), len(claims)
+    return {
+        "sources": sources,
+        "records": records,
+        "claims": {claim["claim_id"]: claim for claim, _, _ in claims},
+        "catalogs": catalogs,
+        "fingerprints": fingerprints,
+    }
+
+
+def validate_batches(batch_root):
+    documents = load_batches(batch_root)
+    return tuple(len(documents[kind]) for kind in ("sources", "records", "claims"))
 
 
 def main():
