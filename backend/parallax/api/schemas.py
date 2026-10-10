@@ -96,10 +96,48 @@ class RatingOut(Out):
 class EvidenceRecordOut(Out):
     text: str | None
     translation_en: str | None
+    language: str | None = None
     markets: list[str]
     subject_ids: list[str]
     source_id: str
     locator: dict[str, Any]
+    content_date: str | None = None
+    record_kind: str | None = None
+
+
+class SourceSummaryOut(Out):
+    """Where the evidence comes from: stream (bmw/competitors/social), channel, collector, origin, review, LLM permission."""
+    source_id: str
+    stream: str
+    channel: str
+    title: str
+    collector: str
+    collected_at: datetime | None
+    dataset_key: str
+    origin: str | None
+    verification: str | None
+    review_status: str
+    external_llm: bool | None
+    is_example: bool
+    sampling_method: str | None
+    sampling_complete: bool | None
+    limitations: list[Any]
+
+
+class ClaimSummaryOut(Out):
+    """Who interpreted the record: human, LLM (model + run) or BMW's own VFC classification."""
+    claim_id: str
+    feature_key: str | None
+    feature_label: str
+    claim_type: str
+    summary: str
+    quotes: list[Any]
+    review_status: str
+    derived_from_bmw_labels: bool
+    producer_method: str | None
+    producer_name: str | None
+    producer_version: str | None
+    producer_run_id: str | None
 
 
 class EvidenceOut(Out):
@@ -113,6 +151,8 @@ class EvidenceOut(Out):
     added_by: str
     created_at: datetime
     record: EvidenceRecordOut
+    source: SourceSummaryOut | None = None
+    claims: list[ClaimSummaryOut] = []
 
 
 class SynthesisRowOut(Out):

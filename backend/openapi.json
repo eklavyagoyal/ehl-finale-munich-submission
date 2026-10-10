@@ -646,6 +646,46 @@
     }
    }
   },
+  "/api/sources/{source_id}": {
+   "get": {
+    "tags": [
+     "evidence"
+    ],
+    "summary": "One source with provenance, sampling, permissions and claim counts",
+    "operationId": "get_source_api_sources__source_id__get",
+    "parameters": [
+     {
+      "name": "source_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Source Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/sources/{source_id}/review": {
    "post": {
     "tags": [
@@ -3085,6 +3125,111 @@
     ],
     "title": "ClaimReviewIn"
    },
+   "ClaimSummaryOut": {
+    "properties": {
+     "claim_id": {
+      "type": "string",
+      "title": "Claim Id"
+     },
+     "feature_key": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Feature Key"
+     },
+     "feature_label": {
+      "type": "string",
+      "title": "Feature Label"
+     },
+     "claim_type": {
+      "type": "string",
+      "title": "Claim Type"
+     },
+     "summary": {
+      "type": "string",
+      "title": "Summary"
+     },
+     "quotes": {
+      "items": {},
+      "type": "array",
+      "title": "Quotes"
+     },
+     "review_status": {
+      "type": "string",
+      "title": "Review Status"
+     },
+     "derived_from_bmw_labels": {
+      "type": "boolean",
+      "title": "Derived From Bmw Labels"
+     },
+     "producer_method": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Producer Method"
+     },
+     "producer_name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Producer Name"
+     },
+     "producer_version": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Producer Version"
+     },
+     "producer_run_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Producer Run Id"
+     }
+    },
+    "type": "object",
+    "required": [
+     "claim_id",
+     "feature_key",
+     "feature_label",
+     "claim_type",
+     "summary",
+     "quotes",
+     "review_status",
+     "derived_from_bmw_labels",
+     "producer_method",
+     "producer_name",
+     "producer_version",
+     "producer_run_id"
+    ],
+    "title": "ClaimSummaryOut",
+    "description": "Who interpreted the record: human, LLM (model + run) or BMW's own VFC classification."
+   },
    "CriterionOut": {
     "properties": {
      "criterion": {
@@ -3505,6 +3650,24 @@
      },
      "record": {
       "$ref": "#/components/schemas/EvidenceRecordOut"
+     },
+     "source": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/SourceSummaryOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "claims": {
+      "items": {
+       "$ref": "#/components/schemas/ClaimSummaryOut"
+      },
+      "type": "array",
+      "title": "Claims",
+      "default": []
      }
     },
     "type": "object",
@@ -3546,6 +3709,17 @@
       ],
       "title": "Translation En"
      },
+     "language": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Language"
+     },
      "markets": {
       "items": {
        "type": "string"
@@ -3568,6 +3742,28 @@
       "additionalProperties": true,
       "type": "object",
       "title": "Locator"
+     },
+     "content_date": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Content Date"
+     },
+     "record_kind": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Record Kind"
      }
     },
     "type": "object",
@@ -5034,6 +5230,134 @@
      "notes"
     ],
     "title": "SourceReviewIn"
+   },
+   "SourceSummaryOut": {
+    "properties": {
+     "source_id": {
+      "type": "string",
+      "title": "Source Id"
+     },
+     "stream": {
+      "type": "string",
+      "title": "Stream"
+     },
+     "channel": {
+      "type": "string",
+      "title": "Channel"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "collector": {
+      "type": "string",
+      "title": "Collector"
+     },
+     "collected_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Collected At"
+     },
+     "dataset_key": {
+      "type": "string",
+      "title": "Dataset Key"
+     },
+     "origin": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Origin"
+     },
+     "verification": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Verification"
+     },
+     "review_status": {
+      "type": "string",
+      "title": "Review Status"
+     },
+     "external_llm": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "External Llm"
+     },
+     "is_example": {
+      "type": "boolean",
+      "title": "Is Example"
+     },
+     "sampling_method": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Sampling Method"
+     },
+     "sampling_complete": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Sampling Complete"
+     },
+     "limitations": {
+      "items": {},
+      "type": "array",
+      "title": "Limitations"
+     }
+    },
+    "type": "object",
+    "required": [
+     "source_id",
+     "stream",
+     "channel",
+     "title",
+     "collector",
+     "collected_at",
+     "dataset_key",
+     "origin",
+     "verification",
+     "review_status",
+     "external_llm",
+     "is_example",
+     "sampling_method",
+     "sampling_complete",
+     "limitations"
+    ],
+    "title": "SourceSummaryOut",
+    "description": "Where the evidence comes from: stream (bmw/competitors/social), channel, collector, origin, review, LLM permission."
    },
    "SpecIn": {
     "properties": {

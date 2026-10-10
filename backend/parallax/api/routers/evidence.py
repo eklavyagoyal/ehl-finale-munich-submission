@@ -15,6 +15,7 @@ from parallax.api.common import actor, human_actor, not_found, row
 from parallax.config import get_settings
 from parallax.db import get_session
 from parallax.llm.gate import check_records
+from parallax.provenance import source_summary
 from parallax.models import Claim, IngestRun, Record, Source, Theme
 
 router = APIRouter(prefix="/api", tags=["evidence"])
@@ -87,6 +88,31 @@ def list_sources(stream: str | None = None, channel: str | None = None, review_s
     if review_status:
         query = query.where(Source.review_status == review_status)
     return [row(s) for s in session.scalars(query.order_by(Source.source_id)).all()]
+
+
+@router.get("/sources/{source_id}", summary="One source with provenance, sampling, permissions and claim counts")
+def get_source(source_id: str, session: Session = Depends(get_session)):
+    source = session.get(Source, source_id)
+    if source is None:
+        raise not_found("source", source_id)
+    records = session.scalar(select(func.count()).select_from(Record).where(Record.source_id == source_id,
+                                                                           Record.superseded_by.is_(None)))
+    claim_rows = session.execute(
+        select(Claim.review_status, Claim.derived, func.count()).join(Record, Record.record_id == Claim.record_id)
+        .where(Record.source_id == source_id).group_by(Claim.review_status, Claim.derived)
+    ).all()
+    from collections import Counter
+
+    producer_counts = Counter(
+        (p.get("method"), p.get("name")) for p in session.scalars(
+            select(Claim.producer).join(Record, Record.record_id == Claim.record_id).where(Record.source_id == source_id))
+    )
+    producers = [(m, nm, n) for (m, nm), n in producer_counts.most_common()]
+    return {
+        "source": row(source), "summary": source_summary(source), "records": records,
+        "claims": [{"review_status": s, "derived_from_bmw_labels": d, "count": n} for s, d, n in claim_rows],
+        "claim_producers": [{"method": m, "name": nm, "count": n} for m, nm, n in producers],
+    }
 
 
 class SourceReviewIn(BaseModel):

@@ -11,6 +11,7 @@ from parallax import decisions
 from parallax import requirements as reqs
 from parallax.agents.drafter import draft_requirements
 from parallax.api.common import actor, human_actor, not_found, row
+from parallax.provenance import claims_for, sources_for
 from parallax.api.schemas import AuditEventOut, DecisionResultOut, RequirementDetailOut, RequirementOut
 from parallax.audit import record_event
 from parallax.config import get_settings
@@ -126,14 +127,20 @@ def detail(requirement_id: str, session: Session = Depends(get_session)):
         CriterionRating.requirement_id == requirement_id, in_scope | (CriterionRating.rater_type == "pm"),
     )).all()
     policy = active_policy(session).document
+    sources = sources_for(session, {rec.source_id for _, rec in evidence})
+    claims = claims_for(session, {rec.record_id for _, rec in evidence}, requirement.feature_key)
     return {
         "requirement": summary(requirement, session),
         "gates": reqs.current_gates(session, requirement_id),
         "scores": compute(policy, list(ratings)),
         "ratings": [row(r) for r in ratings],
-        "evidence": [{**row(link), "record": {"text": rec.text_original, "translation_en": rec.translation_en,
-                                              "markets": rec.markets, "subject_ids": rec.subject_ids,
-                                              "source_id": rec.source_id, "locator": rec.locator}}
+        "evidence": [{**row(link),
+                      "record": {"text": rec.text_original, "translation_en": rec.translation_en, "language": rec.language,
+                                 "markets": rec.markets, "subject_ids": rec.subject_ids, "source_id": rec.source_id,
+                                 "locator": rec.locator, "content_date": rec.content_date.isoformat() if rec.content_date else None,
+                                 "record_kind": rec.record_kind},
+                      "source": sources.get(rec.source_id),
+                      "claims": claims.get(rec.record_id, [])}
                      for link, rec in evidence],
         "latest_run_id": str(run_id) if run_id else None,
         "synthesis": next((row(s) for s in latest(Synthesis)), None),
