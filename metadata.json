@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KA1ANRGSK49BTY30EFDQ7Q",
+  "strategy": "manual-commit",
+  "branch": "luis-competitors",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "competitors/tools/nhtsa.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 62,
+    "cache_creation_tokens": 114159,
+    "cache_read_tokens": 11566423,
+    "output_tokens": 64166,
+    "api_call_count": 31,
+    "subagent_tokens": {
+      "input_tokens": 12,
+      "cache_creation_tokens": 28512,
+      "cache_read_tokens": 2480224,
+      "output_tokens": 11392,
+      "api_call_count": 5
+    }
+  }
+}
