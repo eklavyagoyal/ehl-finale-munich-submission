@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 
 import { RebuildSignalsButton, DraftSelectedDialog } from "@/components/generate-dialog";
 import { PageHeader } from "@/components/page-header";
 import { ChannelIcon } from "@/components/provenance";
 import { ErrorState, LoadingRows } from "@/components/states";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { useHash } from "@/hooks/use-hash";
 import { useMeta, useRequirements, useSignals } from "@/lib/api/hooks";
 import type { Requirement, Signal, SignalKind } from "@/lib/api/types";
 import { fmtCount } from "@/lib/format";
@@ -27,8 +29,19 @@ const MIX = [
 ] as const;
 
 export default function SignalsPage() {
+  return (
+    <Suspense fallback={<LoadingRows />}>
+      <SignalsView />
+    </Suspense>
+  );
+}
+
+// ?market=US|EU|CN|all picks the market; #sig-<feature_key> highlights one signal (links from a requirement's origin).
+function SignalsView() {
+  const params = useSearchParams();
+  const initial = params.get("market");
   const { data: meta } = useMeta();
-  const [market, setMarket] = useState<string | null>("US");
+  const [market, setMarket] = useState<string | null>(initial === "all" ? null : (initial ?? "US"));
   const markets: (string | null)[] = [...(meta?.markets ?? ["US", "EU", "CN"]), null];
 
   return (
@@ -143,6 +156,11 @@ function SignalColumn({
   requirementFor: (s: Signal) => Requirement | undefined;
 }) {
   const { data, error, isLoading } = useSignals(market, kind, 15);
+  const hash = useHash();
+  const found = !!data?.items.some((s) => `sig-${s.feature_key}` === hash);
+  useEffect(() => {
+    if (found) document.getElementById(hash)?.scrollIntoView({ block: "center" });
+  }, [found, hash]);
   return (
     <section className="flex min-w-0 flex-col">
       <h2 className="flex items-baseline gap-2 border-b pb-2.5 text-[13px] font-medium">
@@ -154,17 +172,36 @@ function SignalColumn({
       {data && data.items.length === 0 && <p className="py-3 text-[13px] text-muted-foreground">None in this market.</p>}
       <ul>
         {data?.items.map((s) => (
-          <SignalRow key={s.feature_key} signal={s} checked={selected.has(s.feature_key)} onToggle={() => onToggle(s)} requirement={requirementFor(s)} />
+          <SignalRow
+            key={s.feature_key}
+            signal={s}
+            checked={selected.has(s.feature_key)}
+            onToggle={() => onToggle(s)}
+            requirement={requirementFor(s)}
+            active={hash === `sig-${s.feature_key}`}
+          />
         ))}
       </ul>
     </section>
   );
 }
 
-function SignalRow({ signal: s, checked, onToggle, requirement }: { signal: Signal; checked: boolean; onToggle: () => void; requirement?: Requirement }) {
+function SignalRow({
+  signal: s,
+  checked,
+  onToggle,
+  requirement,
+  active,
+}: {
+  signal: Signal;
+  checked: boolean;
+  onToggle: () => void;
+  requirement?: Requirement;
+  active: boolean;
+}) {
   const drafted = s.has_requirement || !!requirement;
   return (
-    <li className="flex gap-2.5 border-b border-border/60 py-3">
+    <li id={`sig-${s.feature_key}`} className={cn("-mx-2 flex scroll-mt-24 gap-2.5 rounded-md border-b border-border/60 px-2 py-3", active && "bg-amber-50/70 dark:bg-amber-950/40")}>
       <input
         type="checkbox"
         checked={checked}

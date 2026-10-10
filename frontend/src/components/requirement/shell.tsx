@@ -17,6 +17,7 @@ import { cn } from "cn";
 import { useRequirementContext } from "./context";
 import { DecisionDialog } from "./decision-dialog";
 import { EditDialog } from "./edit-dialog";
+import { OriginTrail } from "./origin-trail";
 import { RunProgress } from "./run-progress";
 
 export function RequirementShell({ children }: { children: React.ReactNode }) {
@@ -57,6 +58,7 @@ export function RequirementShell({ children }: { children: React.ReactNode }) {
               <DecisionDialog />
             </div>
           </div>
+          <OriginTrail requirement={requirement} />
           <RunProgress runId={runId} />
 
           <nav aria-label="Requirement views" className="-ml-2.5 mt-4 flex flex-wrap gap-1">

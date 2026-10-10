@@ -9,7 +9,7 @@ import { EmptyState, ErrorState, LoadingRows } from "@/components/states";
 import { ToneBadge } from "@/components/tone-badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { type RequirementQuery, useMeta, useRequirements } from "@/lib/api/hooks";
-import { fmtRange, fmtScore, humanize, statusTone } from "@/lib/format";
+import { fmtRange, fmtScore, humanize, stanceTone, statusTone } from "@/lib/format";
 import { cn } from "cn";
 
 const SORTS: { value: NonNullable<RequirementQuery["sort"]>; label: string }[] = [
@@ -33,6 +33,7 @@ export default function RequirementsPage() {
   return (
     <>
       <PageHeader crumbs={[{ label: "G60" }, { label: "Decision" }]} />
+      <p className="mt-1 text-[13px] text-muted-foreground">What goes into the successor?</p>
 
       <div className="-ml-2.5 mt-2 flex flex-wrap items-center gap-1">
         <FilterPill active={!status} onClick={() => setStatus(undefined)} label="All" count={all.data?.length} />
@@ -62,7 +63,7 @@ export default function RequirementsPage() {
             <span>Requirement</span>
             <span>Market</span>
             <span>Score · range</span>
-            <span>Evidence</span>
+            <span>AI recommends</span>
             <span>Status</span>
           </div>
           {error && <ErrorState error={error} />}
@@ -71,7 +72,7 @@ export default function RequirementsPage() {
             <EmptyState title="No requirements yet">
               Requirements exist once evidence is imported. Draft them from the signals in{" "}
               <Link href="/signals" className="text-foreground underline-offset-4 hover:underline">
-                Sources
+                Signals
               </Link>
               .
             </EmptyState>
@@ -93,7 +94,13 @@ export default function RequirementsPage() {
                 <ScoreBar low={r.score_low} high={r.score_high} />
                 <span className="text-xs text-muted-foreground tabular-nums">{fmtRange(r.score_low, r.score_high)}</span>
               </span>
-              <span className="text-[13px] text-muted-foreground">{humanize(r.evidence_level)}</span>
+              <span>
+                {r.ai_recommendation ? (
+                  <ToneBadge tone={stanceTone(r.ai_recommendation)}>{humanize(r.ai_recommendation)}</ToneBadge>
+                ) : (
+                  <span className="text-[13px] text-muted-foreground">not run</span>
+                )}
+              </span>
               <span>
                 <ToneBadge tone={statusTone(r.status)}>{humanize(r.status)}</ToneBadge>
               </span>
