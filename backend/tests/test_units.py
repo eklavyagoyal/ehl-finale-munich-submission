@@ -86,3 +86,9 @@ def test_derived_claims_pair_labels_and_map_catalog():
     assert by_feature["seats"]["claim_type"] == "praise"
     assert all(c["quotes"][0] in records["r1"]["text_original"] for c in claims)
     assert derive_claims_from_labels(records, {"r1"}, features) == []
+
+
+def test_finding_id_normalization():
+    from parallax.signals import _norm_id
+
+    assert _norm_id("f1") == "F1" and _norm_id(" 2 ") == "F2" and _norm_id("F3") == "F3"

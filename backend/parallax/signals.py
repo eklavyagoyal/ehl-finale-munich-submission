@@ -105,6 +105,13 @@ EVERY review id to exactly one finding, or "other" if none fits. Never invent re
 {SAFETY}"""
 
 
+def _norm_id(value: str) -> str:
+    value = (value or "").strip().upper()
+    if value.isdigit():
+        value = f"F{value}"
+    return value
+
+
 def _lines(records: list[Record]) -> str:
     return "\n".join(f"- {r.record_id}: {(r.translation_en or r.text_original or '').replace(chr(10), ' ')[:500]}" for r in records)
 
@@ -130,9 +137,18 @@ def condense_theme(llm: LLMClient, theme: Theme, run_id: uuid.UUID) -> dict:
     out = llm.structured(CondenseOut, system=SYSTEM, user=head + _lines([records[r] for r in first]), model=settings.model_fast,
                          purpose="condense_signal", prompt_version=PROMPT_VERSION, agent_id="agent:condenser", run_id=run_id,
                          input_record_ids=first, mock=mock_condense, reasoning_effort="low")
-    drafts = {f.id: f for f in out.findings}
-    assigned = {a.record_id: a.finding_id for a in out.assignments if a.record_id in records}
-    catalog = "\n".join(f"{f.id}: {f.title} ({f.kind})" for f in out.findings)
+    drafts = {_norm_id(f.id): f for f in out.findings}
+    titles = {f.title.strip().lower(): _norm_id(f.id) for f in out.findings}
+
+    def resolve(value: str) -> str:
+        """Models sometimes answer with 'f1', '1' or the finding title instead of 'F1'."""
+        key = _norm_id(value)
+        if key in drafts:
+            return key
+        return titles.get(value.strip().lower(), "other")
+
+    assigned = {a.record_id: resolve(a.finding_id) for a in out.assignments if a.record_id in records}
+    catalog = "\n".join(f"{_norm_id(f.id)}: {f.title} ({f.kind})" for f in out.findings)
     for start in range(0, len(rest), ASSIGN_CHUNK):
         chunk = rest[start:start + ASSIGN_CHUNK]
 
@@ -143,7 +159,7 @@ def condense_theme(llm: LLMClient, theme: Theme, run_id: uuid.UUID) -> dict:
                               + _lines([records[r] for r in chunk]), model=settings.model_fast, purpose="condense_assign",
                               prompt_version=PROMPT_VERSION, agent_id="agent:condenser", run_id=run_id,
                               input_record_ids=chunk, mock=mock_assign, reasoning_effort="low")
-        assigned.update({a.record_id: a.finding_id for a in more.assignments if a.record_id in records})
+        assigned.update({a.record_id: resolve(a.finding_id) for a in more.assignments if a.record_id in records})
 
     members: dict[str, list[str]] = defaultdict(list)
     for rid in ids:
