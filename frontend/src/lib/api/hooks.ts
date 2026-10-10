@@ -197,24 +197,6 @@ export function useSource(id: string) {
   );
 }
 
-// Counts records per (channel, market) exactly as tagged; one small request per cell, limit=1.
-export function useGapMatrix(channels: string[], markets: string[]) {
-  return useSWR(
-    channels.length && markets.length ? ["gaps", channels.join(","), markets.join(",")] : null,
-    async () => {
-      const cells = await Promise.all(
-        channels.flatMap((channel) =>
-          markets.map(async (market) => {
-            const page = await unwrap<RecordPage>(api.GET("/api/records", { params: { query: { channel, market, limit: 1 } } }));
-            return [`${channel}|${market}`, page.total] as const;
-          }),
-        ),
-      );
-      return new Map<string, number>(cells);
-    },
-  );
-}
-
 export function useThemes(market: string | undefined) {
   return useSWR(["themes", market ?? "pooled"], () =>
     unwrap<ThemePage>(api.GET("/api/themes", { params: { query: { market, limit: 200 } } })),

@@ -353,6 +353,9 @@ export interface Coverage {
   records_by_channel: { stream: string; channel: string; review_status: string; external_llm: boolean; records: number }[];
   records_by_market: { market: string | null; records: number }[];
   claims: { review_status: string; derived_from_bmw_labels: boolean; claims: number }[];
+  // Channel x market counts in one response; a record tagged with two markets counts in both.
+  // Optional because older API builds do not return it.
+  records_by_channel_market?: { stream: string; channel: string; market: string; records: number }[];
   llm_rule: string;
 }
 

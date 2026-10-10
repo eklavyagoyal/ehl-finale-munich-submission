@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useCoverage, useGapMatrix, useMeta, useRecords, useSources, useThemes } from "@/lib/api/hooks";
+import { useCoverage, useMeta, useRecords, useSources, useThemes } from "@/lib/api/hooks";
 import type { Source, Theme } from "@/lib/api/types";
 import { fmtDateTime, humanize } from "@/lib/format";
 import { channelLabel, isSynthetic, llmPermission, STREAM_ORDER, streamLabel, toSummary } from "@/lib/provenance";
@@ -103,11 +103,6 @@ function Overview() {
   const { data: meta } = useMeta();
   const { data: sources } = useSources();
 
-  const channels = data ? [...new Set(data.records_by_channel.map((r) => r.channel))] : [];
-  const tagged = data ? data.records_by_market.map((m) => m.market).filter((m): m is string => !!m) : [];
-  const markets = [...new Set([...(meta?.markets ?? []), ...tagged])];
-  const gaps = useGapMatrix(channels, markets);
-
   if (error) return <ErrorState error={error} />;
   if (isLoading || !data) return <LoadingRows />;
   const total = data.records_by_channel.reduce((n, r) => n + r.records, 0);
@@ -119,18 +114,24 @@ function Overview() {
     );
   }
 
-  const streamOf = new Map(data.records_by_channel.map((r) => [r.channel, r.stream]));
-  const streams = [...new Set(data.records_by_channel.map((r) => r.stream))].sort(
+  // One request for the whole matrix: records_by_channel_market from /coverage.
+  const cells = data.records_by_channel_market;
+  const matrix = new Map((cells ?? []).map((c) => [`${c.channel}|${c.market}`, c.records]));
+  const channels = [...new Set([...data.records_by_channel.map((r) => r.channel), ...(cells ?? []).map((c) => c.channel)])];
+  const tagged = data.records_by_market.map((m) => m.market).filter((m): m is string => !!m);
+  const markets = [...new Set([...(meta?.markets ?? []), ...tagged])];
+  const streamOf = new Map([...(cells ?? []), ...data.records_by_channel].map((r) => [r.channel, r.stream]));
+  const streams = [...new Set(streamOf.values())].sort(
     (a, b) => (STREAM_ORDER.indexOf(a) + 99) % 99 - (STREAM_ORDER.indexOf(b) + 99) % 99,
   );
   const claims = data.claims.reduce((n, c) => n + c.claims, 0);
   const syntheticCount = (sources ?? []).filter(isSynthetic).length;
   const targetMarkets = meta?.markets ?? [];
   const missing =
-    gaps.data &&
+    cells &&
     streams.flatMap((stream) =>
       targetMarkets
-        .filter((market) => channels.filter((c) => streamOf.get(c) === stream).every((c) => (gaps.data!.get(`${c}|${market}`) ?? 0) === 0))
+        .filter((market) => channels.filter((c) => streamOf.get(c) === stream).every((c) => (matrix.get(`${c}|${market}`) ?? 0) === 0))
         .map((market) => `No ${streamLabel(stream)} records tagged ${market}`),
     );
 
@@ -200,7 +201,7 @@ function Overview() {
                         {channelLabel(channel)}
                       </Link>
                       {markets.map((market) => {
-                        const n = gaps.data?.get(`${channel}|${market}`);
+                        const n = cells ? (matrix.get(`${channel}|${market}`) ?? 0) : undefined;
                         return (
                           <span key={market} className="text-right tabular-nums">
                             {n === undefined ? (
@@ -224,7 +225,9 @@ function Overview() {
           </div>
         </div>
         <p className="mt-2 px-2 text-xs text-muted-foreground">
-          Counted exactly as tagged: a record tagged DE is not counted under EU. Click a number to see the records.
+          {cells
+            ? "Counted exactly as tagged: a record tagged DE is not counted under EU, a record with two markets counts in both. Click a number to see the records."
+            : "This API version does not return the market matrix yet."}
         </p>
       </section>
 
