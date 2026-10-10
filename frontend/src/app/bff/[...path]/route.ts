@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
 
 import { ACTOR_COOKIE, sanitizePm } from "@/lib/actor";
+import { SESSION_COOKIE, verifySession } from "@/lib/session";
 
 // Server-side proxy to the Parallax API. The browser only ever talks to /bff; the token stays here.
 // /bff/requirements and /bff/api/requirements both map to ${PARALLAX_API_URL}/api/requirements,
@@ -12,6 +13,10 @@ export const runtime = "nodejs";
 const SAFE_SEGMENT = /^[A-Za-z0-9._:~@-]+$/;
 
 async function proxy(request: NextRequest, context: RouteContext<"/bff/[...path]">) {
+  const jar = await cookies();
+  if (!verifySession(jar.get(SESSION_COOKIE)?.value)) {
+    return Response.json({ detail: "Sign in first" }, { status: 401 });
+  }
   const { path } = await context.params;
   const segments = path[0] === "api" ? path.slice(1) : path;
   if (segments.length === 0 || segments.some((s) => s === "." || s === ".." || !SAFE_SEGMENT.test(s))) {
@@ -31,7 +36,6 @@ async function proxy(request: NextRequest, context: RouteContext<"/bff/[...path]
   if (contentType) headers.set("content-type", contentType);
   const token = process.env.PARALLAX_API_TOKEN;
   if (token) headers.set("authorization", `Bearer ${token}`);
-  const jar = await cookies();
   headers.set("x-actor", `pm:${sanitizePm(jar.get(ACTOR_COOKIE)?.value)}`);
 
   const body = request.method === "GET" || request.method === "HEAD" ? undefined : await request.arrayBuffer();

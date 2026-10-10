@@ -1,6 +1,7 @@
 "use client";
 
 import { Settings } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -22,11 +23,26 @@ import { refreshAll, useMeta } from "@/lib/api/hooks";
 
 const NAME = /^[a-z0-9][a-z0-9_-]{0,31}$/;
 
-export function SettingsDialog({ pm, onPmChange }: { pm: string; onPmChange: (name: string) => void }) {
+export function SettingsDialog({
+  pm,
+  onPmChange,
+  canSignOut,
+}: {
+  pm: string;
+  onPmChange: (name: string) => void;
+  canSignOut: boolean;
+}) {
+  const router = useRouter();
   const { data: meta, error } = useMeta();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(pm);
   const [invalid, setInvalid] = useState(false);
+
+  async function signOut() {
+    await fetch("/auth/logout", { method: "POST" }).catch(() => null);
+    router.replace("/login");
+    router.refresh();
+  }
 
   function save() {
     const value = name.trim().toLowerCase();
@@ -108,6 +124,11 @@ export function SettingsDialog({ pm, onPmChange }: { pm: string; onPmChange: (na
         </div>
 
         <DialogFooter>
+          {canSignOut && (
+            <Button variant="ghost" className="mr-auto" onClick={signOut}>
+              Sign out
+            </Button>
+          )}
           <Button onClick={save}>Save</Button>
         </DialogFooter>
       </DialogContent>

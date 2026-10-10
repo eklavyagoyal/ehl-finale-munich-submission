@@ -18,7 +18,13 @@ export function ErrorState({ error }: { error: unknown }) {
     <div role="alert" className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900 dark:border-red-900 dark:bg-red-950 dark:text-red-100">
       <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden />
       <div className="space-y-0.5">
-        <p className="font-medium">{status ? `${status} · ${STATUS_HINT[status] ?? "Request failed"}` : "Request failed"}</p>
+        <p className="font-medium">
+          {status === 401 && detail === "Sign in first"
+            ? "Your session ended. Reload the page to sign in again."
+            : status
+              ? `${status} · ${STATUS_HINT[status] ?? "Request failed"}`
+              : "Request failed"}
+        </p>
         <p className="text-red-800/90 dark:text-red-200/90">{detail}</p>
       </div>
     </div>
