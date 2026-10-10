@@ -152,5 +152,7 @@ export async function buildThemes() {
 }
 
 export async function draftRequirements(market: string | null, limit: number) {
-  return unwrap<unknown>(api.POST("/api/requirements/draft", { body: { market, limit } }));
+  return unwrap<{ created: unknown[]; skipped_existing?: unknown[]; dropped_invalid_citations?: number }>(
+    api.POST("/api/requirements/draft", { body: { market, limit } }),
+  );
 }

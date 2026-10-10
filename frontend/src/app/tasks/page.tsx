@@ -9,9 +9,9 @@ import { GenerateDialog } from "@/components/generate-dialog";
 import { PageHeader } from "@/components/page-header";
 import { EmptyState, ErrorState, LoadingRows } from "@/components/states";
 import { Button } from "@/components/ui/button";
-import { refreshAll, startRun, useTasks } from "@/lib/api/hooks";
-import type { Task } from "@/lib/api/types";
-import { fmtScore, humanize, STAGE_LABEL } from "@/lib/format";
+import { refreshAll, startRun, useRequirements, useTasks } from "@/lib/api/hooks";
+import type { Requirement, Task } from "@/lib/api/types";
+import { fmtRange, fmtScore, humanize, STAGE_LABEL } from "@/lib/format";
 
 const GROUPS: { kind: string; title: string }[] = [
   { kind: "decide", title: "To decide" },
@@ -22,6 +22,8 @@ const GROUPS: { kind: string; title: string }[] = [
 
 export default function TasksPage() {
   const { data, error, isLoading } = useTasks();
+  const { data: requirements } = useRequirements();
+  const byId = new Map((requirements ?? []).map((r) => [r.id, r]));
 
   return (
     <>
@@ -47,7 +49,7 @@ export default function TasksPage() {
                   {group.title} <span className="ml-1 text-muted-foreground/60">{items.length}</span>
                 </h2>
                 {items.map((task, i) => (
-                  <TaskRow key={`${task.kind}-${task.requirement_id ?? task.run_id ?? i}`} task={task} />
+                  <TaskRow key={`${task.kind}-${task.requirement_id ?? task.run_id ?? i}`} task={task} requirement={byId.get(task.requirement_id ?? "")} />
                 ))}
               </section>
             );
@@ -57,7 +59,7 @@ export default function TasksPage() {
   );
 }
 
-function TaskRow({ task }: { task: Task }) {
+function TaskRow({ task, requirement }: { task: Task; requirement?: Requirement }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
 
@@ -83,7 +85,8 @@ function TaskRow({ task }: { task: Task }) {
         ? `${task.count ?? ""} source(s) pending`
         : [
             task.ai_recommendation && `AI: ${humanize(task.ai_recommendation)}`,
-            task.score != null && `score ${fmtScore(task.score)}`,
+            task.score != null &&
+              `score ${fmtScore(task.score)}${requirement ? ` (${fmtRange(requirement.score_low, requirement.score_high)})` : ""}`,
             task.failed_gates?.length ? `${task.failed_gates.length} gate failed` : null,
           ]
             .filter(Boolean)

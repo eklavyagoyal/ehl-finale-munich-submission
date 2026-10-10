@@ -38,8 +38,10 @@ export function GenerateDialog({ variant = "outline" }: { variant?: "outline" | 
     setError(null);
     try {
       await buildThemes();
-      await draftRequirements(market === "all" ? null : market, count);
-      toast.success("New requirement drafts are ready");
+      const result = await draftRequirements(market === "all" ? null : market, count);
+      const created = result?.created?.length ?? 0;
+      if (created > 0) toast.success(`${created} new requirement draft${created === 1 ? "" : "s"}`);
+      else toast.info("No new drafts: no strong signals without an existing requirement. Import more evidence first.");
       await refreshAll();
       setOpen(false);
     } catch (e) {

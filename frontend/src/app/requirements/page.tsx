@@ -60,8 +60,8 @@ export default function RequirementsPage() {
 
       <div className="mt-3 overflow-x-auto">
         <div className="min-w-[860px]">
-          <div className="grid grid-cols-[130px_minmax(0,1fr)_60px_150px_120px_120px] gap-4 px-2 py-2.5 text-xs text-muted-foreground">
-            <span>ID</span>
+          <div className="grid grid-cols-[150px_minmax(0,1fr)_60px_150px_120px_120px] gap-4 px-2 py-2.5 text-xs text-muted-foreground">
+            <span><span className="inline-block w-6">#</span>ID</span>
             <span>Requirement</span>
             <span>Market</span>
             <span>Score · range</span>
@@ -79,9 +79,12 @@ export default function RequirementsPage() {
             <Link
               key={r.id}
               href={`/requirements/${r.id}`}
-              className="grid grid-cols-[130px_minmax(0,1fr)_60px_150px_120px_120px] items-center gap-4 border-t border-border/60 px-2 py-3 hover:bg-muted/40"
+              className="grid grid-cols-[150px_minmax(0,1fr)_60px_150px_120px_120px] items-center gap-4 border-t border-border/60 px-2 py-3 hover:bg-muted/40"
             >
-              <span className="font-mono text-xs text-muted-foreground">{r.id}</span>
+              <span className="font-mono text-xs text-muted-foreground">
+                <span className="inline-block w-6 text-foreground/50">{r.priority_rank ? `#${r.priority_rank}` : ""}</span>
+                {r.id}
+              </span>
               <span className="truncate font-medium">{r.title}</span>
               <span className="text-[13px] text-muted-foreground">{r.market ?? "All"}</span>
               <span className="flex items-center gap-2">

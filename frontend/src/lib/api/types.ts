@@ -129,7 +129,7 @@ export interface Recommendation {
   run_id: string;
   recommendation: string;
   tally: { counts: Record<string, number>; reason?: string; gate_cap?: string | null };
-  minority_report: { agent_id?: string; vote?: string; rationale?: string }[];
+  minority_report: { judge?: string; agent_id?: string; vote?: string; rationale?: string }[];
   challenge: Challenge | null;
 }
 

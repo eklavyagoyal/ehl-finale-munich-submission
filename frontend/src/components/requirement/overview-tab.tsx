@@ -39,7 +39,8 @@ export function OverviewTab() {
           )}
         </div>
 
-        <Field label="Why it ranks here">
+        <Field label={r.priority_rank ? `Why it ranks #${r.priority_rank}` : "Why it ranks here"}>
+          {r.prioritization_rationale && <p className="max-w-2xl">{r.prioritization_rationale}</p>}
           {criteria.length === 0 ? (
             <p className="text-muted-foreground">No ratings yet. Run Parallax to score this requirement.</p>
           ) : (
@@ -122,6 +123,7 @@ export function OverviewTab() {
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-semibold tracking-tight tabular-nums">{fmtScore(scores.score_midpoint ?? r.score)}</span>
             <span className="text-muted-foreground tabular-nums">range {fmtRange(scores.score_low, scores.score_high)}</span>
+            {r.priority_rank && <span className="ml-auto text-muted-foreground tabular-nums">rank #{r.priority_rank}</span>}
           </div>
           <p className="mt-1 text-muted-foreground">
             Evidence {humanize(r.evidence_level).toLowerCase()}
@@ -139,6 +141,17 @@ export function OverviewTab() {
                   .join(" · ")}
                 {recommendation.tally.gate_cap && ` · capped: ${recommendation.tally.gate_cap}`}
               </p>
+              {recommendation.minority_report.length > 0 && (
+                <div className="mt-2 flex flex-col gap-1">
+                  <p className="text-[13px] text-muted-foreground">Dissent</p>
+                  {recommendation.minority_report.map((m, i) => (
+                    <p key={i} className="text-[13px]">
+                      <span className="font-medium">{actorLabel(m.judge ?? m.agent_id ?? "judge:?")}</span> · {humanize(m.vote ?? "")}
+                      {m.rationale && <span className="text-muted-foreground"> · {m.rationale}</span>}
+                    </p>
+                  ))}
+                </div>
+              )}
             </>
           ) : (
             <p className="text-muted-foreground">No run yet.</p>
