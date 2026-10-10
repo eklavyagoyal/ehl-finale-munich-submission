@@ -7,7 +7,7 @@ from typing import Literal
 
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from pydantic import BaseModel
-from sqlalchemy import func, or_, select
+from sqlalchemy import Text, func, or_, select
 from sqlalchemy.dialects.postgresql import array as pg_array
 from sqlalchemy.orm import Session
 
@@ -158,7 +158,7 @@ def list_records(feature_key: str | None = None, market: str | None = None, chan
     if feature_key:
         query = query.where(Record.record_id.in_(select(Claim.record_id).where(Claim.feature_key == feature_key)))
     if market:
-        query = query.where(Record.markets.op("@>")(pg_array([market])))  # array containment uses the GIN index
+        query = query.where(Record.markets.op("@>")(pg_array([market], type_=Text)))  # array containment uses the GIN index
     if channel:
         query = query.where(Source.channel == channel)
     if kind:
