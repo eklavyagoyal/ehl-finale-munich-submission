@@ -8,6 +8,8 @@ Base URL: `http://127.0.0.1:8000` for real data, or `http://127.0.0.1:8001` for 
 
 **Human-only actions.** Decisions, edits, gate overrides, evidence review, manual ratings and spec changes need a `pm:` actor. Any other actor gets 403.
 
+**Types.** Responses of the main endpoints are typed in the OpenAPI spec (`RequirementOut`, `RequirementDetailOut`, `TaskOut`, `RunDetailOut`, `LLMCallOut`, `AuditPageOut`, ...), so `openapi-typescript` generates them.
+
 **IDs.**
 - Requirements: `REQ-G60-0001`.
 - Agents: `persona:us-bev-early-adopter`, `dept:engineering`, `judge:1`, `agent:synthesizer`.
@@ -17,7 +19,7 @@ Base URL: `http://127.0.0.1:8000` for real data, or `http://127.0.0.1:8001` for 
 
 | Step | Call |
 | --- | --- |
-| 0. Sidebar "My tasks" | `GET /api/tasks`: `decide` / `simulate` / `running` / `review_evidence` items |
+| 0. Sidebar "My tasks" | `GET /api/tasks`: `decide` / `simulate` items carry `requirement_id`, `score`, `score_low`, `score_high`; `running` items carry `run_id`, `requirement_ids`, `stage`; `review_evidence` carries `count` |
 | 1. See what evidence exists | `GET /api/coverage` |
 | 2. Accept evidence (separate from approving requirements) | `POST /api/sources/{id}/review` or `POST /api/sources/review-bulk` |
 | 3. Build signals | `POST /api/themes/build`, then `GET /api/themes?market=US` |

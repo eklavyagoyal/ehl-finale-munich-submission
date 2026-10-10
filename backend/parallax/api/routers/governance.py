@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from parallax import __version__
 from parallax.api.common import actor, human_actor, row
+from parallax.api.schemas import AuditPageOut, TaskOut
 from parallax.config import get_settings
 from parallax.db import get_session
 from parallax.learning import agreement_stats
@@ -58,7 +59,7 @@ def llm_models():
     return _model_check()
 
 
-@router.get("/tasks", summary="What needs the PM now (sidebar 'My tasks')")
+@router.get("/tasks", summary="What needs the PM now (sidebar 'My tasks')", response_model=list[TaskOut])
 def tasks(session: Session = Depends(get_session)):
     from parallax.learning import latest_recommendation
     from parallax.models import Source
@@ -75,11 +76,12 @@ def tasks(session: Session = Depends(get_session)):
             kind, label = "simulate", f"Run Parallax on {req.id}"
         items.append({"kind": kind, "label": label, "requirement_id": req.id, "title": req.title, "market": req.market,
                       "ai_recommendation": rec.recommendation if rec else None, "score": req.score,
+                      "score_low": req.score_low, "score_high": req.score_high,
                       "failed_gates": [g for g, v in gates.items() if v == "fail"]})
     running = session.scalars(select(SimRun).where(SimRun.status.in_(["queued", "running"]))).all()
     for run in running:
         items.append({"kind": "running", "label": f"Run {str(run.id)[:8]} is {run.status}", "run_id": str(run.id),
-                      "stage": (run.progress or {}).get("stage")})
+                      "requirement_ids": list(run.requirement_ids or []), "stage": (run.progress or {}).get("stage")})
     pending_sources = session.scalar(select(func.count()).select_from(Source).where(Source.review_status == "pending"))
     if pending_sources:
         items.append({"kind": "review_evidence", "label": f"{pending_sources} evidence source(s) await review",
@@ -111,7 +113,8 @@ def put_policy(body: PolicyIn, session: Session = Depends(get_session), who: str
     return row(policy)
 
 
-@router.get("/audit", summary="Chronological audit trail (changes, decisions, AI actions, evidence, access)")
+@router.get("/audit", summary="Chronological audit trail (changes, decisions, AI actions, evidence, access)",
+            response_model=AuditPageOut)
 def audit(requirement_id: str | None = None, actor_id: str | None = None, category: str | None = None,
           entity_type: str | None = None, entity_id: str | None = None, since: datetime | None = None,
           include_access: bool = False, limit: int = Query(200, le=2000), offset: int = 0,

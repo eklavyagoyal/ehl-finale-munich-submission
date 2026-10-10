@@ -9,6 +9,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from parallax.api.common import actor, not_found, row
+from parallax.api.schemas import LLMCallOut, RunDetailOut, RunOut
 from parallax.db import get_session
 from parallax.models import (
     CriterionRating,
@@ -40,7 +41,8 @@ class SimulationIn(BaseModel):
     persona_engine: Literal["tinytroupe", "direct"] | None = None
 
 
-@router.post("", summary="Start a Parallax run (market twin || company twin -> research -> scoring -> synthesis -> vote)")
+@router.post("", summary="Start a Parallax run (market twin || company twin -> research -> scoring -> synthesis -> vote)",
+             response_model=RunOut)
 def start(body: SimulationIn, session: Session = Depends(get_session), who: str = Depends(actor)):
     try:
         run = create_run(session, requirement_ids=body.requirement_ids, actor_id=who, challenge=body.challenge,
@@ -52,7 +54,7 @@ def start(body: SimulationIn, session: Session = Depends(get_session), who: str 
     return row(run)
 
 
-@router.get("")
+@router.get("", response_model=list[RunOut])
 def list_runs(kind: str | None = None, limit: int = Query(50, le=200), session: Session = Depends(get_session)):
     query = select(SimRun)
     if kind:
@@ -60,7 +62,7 @@ def list_runs(kind: str | None = None, limit: int = Query(50, le=200), session: 
     return [row(r) for r in session.scalars(query.order_by(SimRun.created_at.desc()).limit(limit)).all()]
 
 
-@router.get("/{run_id}", summary="Run status, progress and step trace (poll this)")
+@router.get("/{run_id}", summary="Run status, progress and step trace (poll this)", response_model=RunDetailOut)
 def get_run(run_id: str, session: Session = Depends(get_session)):
     run = session.get(SimRun, _uuid(run_id))
     if run is None:
@@ -87,7 +89,8 @@ def results(run_id: str, session: Session = Depends(get_session)):
     return {"run": row(run), "requirements": out}
 
 
-@router.get("/{run_id}/llm-calls", summary="Every model call of the run: model, prompt version, input record IDs, tokens")
+@router.get("/{run_id}/llm-calls", summary="Every model call of the run: model, prompt version, input record IDs, tokens",
+            response_model=list[LLMCallOut])
 def llm_calls(run_id: str, include_payloads: bool = False, requirement_id: str | None = None, agent_id: str | None = None,
               session: Session = Depends(get_session)):
     query = select(LLMCall).where(LLMCall.run_id == _uuid(run_id))

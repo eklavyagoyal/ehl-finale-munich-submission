@@ -11,6 +11,7 @@ from parallax import decisions
 from parallax import requirements as reqs
 from parallax.agents.drafter import draft_requirements
 from parallax.api.common import actor, human_actor, not_found, row
+from parallax.api.schemas import AuditEventOut, DecisionResultOut, RequirementDetailOut, RequirementOut
 from parallax.audit import record_event
 from parallax.config import get_settings
 from parallax.db import get_session
@@ -47,7 +48,8 @@ def summary(requirement: Requirement, session: Session) -> dict:
     return data
 
 
-@router.get("", summary="Requirement list with the eight brief fields, gates and latest AI recommendation")
+@router.get("", summary="Requirement list with the eight brief fields, gates and latest AI recommendation",
+            response_model=list[RequirementOut])
 def list_requirements(status: str | None = None, market: str | None = None, feature_key: str | None = None,
                       sort: Literal["priority", "score", "created", "updated"] = "priority",
                       session: Session = Depends(get_session)):
@@ -97,7 +99,7 @@ class RequirementIn(BaseModel):
     rationale: str = "Created manually by PM"
 
 
-@router.post("", summary="PM creates a requirement manually")
+@router.post("", summary="PM creates a requirement manually", response_model=RequirementOut)
 def create(body: RequirementIn, session: Session = Depends(get_session), who: str = Depends(actor)):
     fields = body.model_dump(exclude={"rationale"})
     fields["target_model"] = get_settings().target_model
@@ -107,7 +109,8 @@ def create(body: RequirementIn, session: Session = Depends(get_session), who: st
     return summary(requirement, session)
 
 
-@router.get("/{requirement_id}", summary="Everything about one requirement, for the PM detail view")
+@router.get("/{requirement_id}", summary="Everything about one requirement, for the PM detail view",
+            response_model=RequirementDetailOut)
 def detail(requirement_id: str, session: Session = Depends(get_session)):
     requirement = session.get(Requirement, requirement_id)
     if requirement is None:
@@ -149,7 +152,7 @@ class EditIn(BaseModel):
     rationale: str
 
 
-@router.patch("/{requirement_id}", summary="PM edits requirement content (new version, audited)")
+@router.patch("/{requirement_id}", summary="PM edits requirement content (new version, audited)", response_model=RequirementOut)
 def edit(requirement_id: str, body: EditIn, session: Session = Depends(get_session), who: str = Depends(actor)):
     requirement = session.get(Requirement, requirement_id)
     if requirement is None:
@@ -169,7 +172,8 @@ class DecisionIn(BaseModel):
     challenge_question: str | None = Field(None, description="For 'challenge': what the agents should re-examine")
 
 
-@router.post("/{requirement_id}/decision", summary="PM approves, rejects, challenges or defers (approve needs all gates passed)")
+@router.post("/{requirement_id}/decision", summary="PM approves, rejects, challenges or defers (approve needs all gates passed)",
+             response_model=DecisionResultOut)
 def decide(requirement_id: str, body: DecisionIn, session: Session = Depends(get_session), who: str = Depends(actor)):
     requirement = session.get(Requirement, requirement_id)
     if requirement is None:
@@ -259,7 +263,8 @@ def versions(requirement_id: str, session: Session = Depends(get_session)):
         RequirementVersion.requirement_id == requirement_id).order_by(RequirementVersion.version)).all()]
 
 
-@router.get("/{requirement_id}/audit", summary="Chronological audit trail for one requirement")
+@router.get("/{requirement_id}/audit", summary="Chronological audit trail for one requirement",
+            response_model=list[AuditEventOut])
 def audit(requirement_id: str, include_access: bool = False, session: Session = Depends(get_session)):
     query = select(AuditEvent).where(AuditEvent.requirement_id == requirement_id)
     if not include_access:

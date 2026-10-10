@@ -75,7 +75,13 @@
       "description": "Successful Response",
       "content": {
        "application/json": {
-        "schema": {}
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/TaskOut"
+         },
+         "type": "array",
+         "title": "Response Tasks Api Tasks Get"
+        }
        }
       }
      }
@@ -319,7 +325,9 @@
       "description": "Successful Response",
       "content": {
        "application/json": {
-        "schema": {}
+        "schema": {
+         "$ref": "#/components/schemas/AuditPageOut"
+        }
        }
       }
      },
@@ -1438,7 +1446,13 @@
       "description": "Successful Response",
       "content": {
        "application/json": {
-        "schema": {}
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/RequirementOut"
+         },
+         "title": "Response List Requirements Api Requirements Get"
+        }
        }
       }
      },
@@ -1495,7 +1509,9 @@
       "description": "Successful Response",
       "content": {
        "application/json": {
-        "schema": {}
+        "schema": {
+         "$ref": "#/components/schemas/RequirementOut"
+        }
        }
       }
      },
@@ -1594,7 +1610,9 @@
       "description": "Successful Response",
       "content": {
        "application/json": {
-        "schema": {}
+        "schema": {
+         "$ref": "#/components/schemas/RequirementDetailOut"
+        }
        }
       }
      },
@@ -1660,7 +1678,9 @@
       "description": "Successful Response",
       "content": {
        "application/json": {
-        "schema": {}
+        "schema": {
+         "$ref": "#/components/schemas/RequirementOut"
+        }
        }
       }
      },
@@ -1728,7 +1748,9 @@
       "description": "Successful Response",
       "content": {
        "application/json": {
-        "schema": {}
+        "schema": {
+         "$ref": "#/components/schemas/DecisionResultOut"
+        }
        }
       }
      },
@@ -2031,7 +2053,13 @@
       "description": "Successful Response",
       "content": {
        "application/json": {
-        "schema": {}
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/AuditEventOut"
+         },
+         "title": "Response Audit Api Requirements  Requirement Id  Audit Get"
+        }
        }
       }
      },
@@ -2139,7 +2167,9 @@
       "description": "Successful Response",
       "content": {
        "application/json": {
-        "schema": {}
+        "schema": {
+         "$ref": "#/components/schemas/RunOut"
+        }
        }
       }
      },
@@ -2195,7 +2225,13 @@
       "description": "Successful Response",
       "content": {
        "application/json": {
-        "schema": {}
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/RunOut"
+         },
+         "title": "Response List Runs Api Simulations Get"
+        }
        }
       }
      },
@@ -2235,7 +2271,9 @@
       "description": "Successful Response",
       "content": {
        "application/json": {
-        "schema": {}
+        "schema": {
+         "$ref": "#/components/schemas/RunDetailOut"
+        }
        }
       }
      },
@@ -2357,7 +2395,13 @@
       "description": "Successful Response",
       "content": {
        "application/json": {
-        "schema": {}
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/LLMCallOut"
+         },
+         "title": "Response Llm Calls Api Simulations  Run Id  Llm Calls Get"
+        }
        }
       }
      },
@@ -2774,6 +2818,163 @@
     ],
     "title": "ActiveIn"
    },
+   "AuditEventOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "event_id": {
+      "type": "string",
+      "title": "Event Id"
+     },
+     "occurred_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Occurred At"
+     },
+     "category": {
+      "type": "string",
+      "title": "Category"
+     },
+     "actor_type": {
+      "type": "string",
+      "title": "Actor Type"
+     },
+     "actor_id": {
+      "type": "string",
+      "title": "Actor Id"
+     },
+     "action": {
+      "type": "string",
+      "title": "Action"
+     },
+     "entity_type": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Entity Type"
+     },
+     "entity_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Entity Id"
+     },
+     "requirement_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Requirement Id"
+     },
+     "run_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Run Id"
+     },
+     "before": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Before"
+     },
+     "after": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "After"
+     },
+     "rationale": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Rationale"
+     },
+     "meta": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Meta"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "event_id",
+     "occurred_at",
+     "category",
+     "actor_type",
+     "actor_id",
+     "action",
+     "entity_type",
+     "entity_id",
+     "requirement_id",
+     "run_id",
+     "before",
+     "after",
+     "rationale",
+     "meta"
+    ],
+    "title": "AuditEventOut"
+   },
+   "AuditPageOut": {
+    "properties": {
+     "total": {
+      "type": "integer",
+      "title": "Total"
+     },
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/AuditEventOut"
+      },
+      "type": "array",
+      "title": "Items"
+     }
+    },
+    "type": "object",
+    "required": [
+     "total",
+     "items"
+    ],
+    "title": "AuditPageOut"
+   },
    "Body_upload_ingest_api_ingest_upload_post": {
     "properties": {
      "file": {
@@ -2884,6 +3085,67 @@
     ],
     "title": "ClaimReviewIn"
    },
+   "CriterionOut": {
+    "properties": {
+     "criterion": {
+      "type": "string",
+      "title": "Criterion"
+     },
+     "weight": {
+      "type": "number",
+      "title": "Weight"
+     },
+     "score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Score"
+     },
+     "low": {
+      "type": "number",
+      "title": "Low"
+     },
+     "high": {
+      "type": "number",
+      "title": "High"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "raters": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Raters"
+     },
+     "rating_ids": {
+      "items": {
+       "type": "integer"
+      },
+      "type": "array",
+      "title": "Rating Ids"
+     }
+    },
+    "type": "object",
+    "required": [
+     "criterion",
+     "weight",
+     "score",
+     "low",
+     "high",
+     "status",
+     "raters",
+     "rating_ids"
+    ],
+    "title": "CriterionOut"
+   },
    "DecisionIn": {
     "properties": {
      "action": {
@@ -2919,6 +3181,176 @@
      "rationale"
     ],
     "title": "DecisionIn"
+   },
+   "DecisionOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "requirement_id": {
+      "type": "string",
+      "title": "Requirement Id"
+     },
+     "action": {
+      "type": "string",
+      "title": "Action"
+     },
+     "rationale": {
+      "type": "string",
+      "title": "Rationale"
+     },
+     "actor_id": {
+      "type": "string",
+      "title": "Actor Id"
+     },
+     "requirement_version": {
+      "type": "integer",
+      "title": "Requirement Version"
+     },
+     "recommendation_id": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Recommendation Id"
+     },
+     "ai_recommendation": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ai Recommendation"
+     },
+     "agreed_with_ai": {
+      "anyOf": [
+       {
+        "type": "boolean"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Agreed With Ai"
+     },
+     "followup_run_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Followup Run Id"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "requirement_id",
+     "action",
+     "rationale",
+     "actor_id",
+     "requirement_version",
+     "recommendation_id",
+     "ai_recommendation",
+     "agreed_with_ai",
+     "followup_run_id",
+     "created_at"
+    ],
+    "title": "DecisionOut"
+   },
+   "DecisionResultOut": {
+    "properties": {
+     "decision": {
+      "$ref": "#/components/schemas/DecisionOut"
+     },
+     "followup_run_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Followup Run Id"
+     },
+     "requirement": {
+      "$ref": "#/components/schemas/RequirementOut"
+     }
+    },
+    "type": "object",
+    "required": [
+     "decision",
+     "followup_run_id",
+     "requirement"
+    ],
+    "title": "DecisionResultOut"
+   },
+   "DepartmentMemoRowOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "run_id": {
+      "type": "string",
+      "title": "Run Id"
+     },
+     "agent_id": {
+      "type": "string",
+      "title": "Agent Id"
+     },
+     "agent_version": {
+      "type": "integer",
+      "title": "Agent Version"
+     },
+     "requirement_id": {
+      "type": "string",
+      "title": "Requirement Id"
+     },
+     "stance": {
+      "type": "string",
+      "title": "Stance"
+     },
+     "memo": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Memo"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "run_id",
+     "agent_id",
+     "agent_version",
+     "requirement_id",
+     "stance",
+     "memo",
+     "created_at"
+    ],
+    "title": "DepartmentMemoRowOut"
    },
    "DraftIn": {
     "properties": {
@@ -3018,6 +3450,137 @@
     ],
     "title": "EvidenceIn"
    },
+   "EvidenceOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "requirement_id": {
+      "type": "string",
+      "title": "Requirement Id"
+     },
+     "record_id": {
+      "type": "string",
+      "title": "Record Id"
+     },
+     "claim_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Claim Id"
+     },
+     "relation": {
+      "type": "string",
+      "title": "Relation"
+     },
+     "quote": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Quote"
+     },
+     "quote_verified": {
+      "type": "boolean",
+      "title": "Quote Verified"
+     },
+     "added_by": {
+      "type": "string",
+      "title": "Added By"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "record": {
+      "$ref": "#/components/schemas/EvidenceRecordOut"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "requirement_id",
+     "record_id",
+     "claim_id",
+     "relation",
+     "quote",
+     "quote_verified",
+     "added_by",
+     "created_at",
+     "record"
+    ],
+    "title": "EvidenceOut"
+   },
+   "EvidenceRecordOut": {
+    "properties": {
+     "text": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Text"
+     },
+     "translation_en": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Translation En"
+     },
+     "markets": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Markets"
+     },
+     "subject_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Subject Ids"
+     },
+     "source_id": {
+      "type": "string",
+      "title": "Source Id"
+     },
+     "locator": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Locator"
+     }
+    },
+    "type": "object",
+    "required": [
+     "text",
+     "translation_en",
+     "markets",
+     "subject_ids",
+     "source_id",
+     "locator"
+    ],
+    "title": "EvidenceRecordOut"
+   },
    "GateIn": {
     "properties": {
      "value": {
@@ -3040,6 +3603,54 @@
      "rationale"
     ],
     "title": "GateIn"
+   },
+   "GateOut": {
+    "properties": {
+     "value": {
+      "type": "string",
+      "title": "Value"
+     },
+     "owner": {
+      "type": "string",
+      "title": "Owner"
+     },
+     "reason": {
+      "type": "string",
+      "title": "Reason"
+     },
+     "reference": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reference"
+     },
+     "at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "value",
+     "owner",
+     "reason",
+     "reference",
+     "at"
+    ],
+    "title": "GateOut"
    },
    "HTTPValidationError": {
     "properties": {
@@ -3086,6 +3697,254 @@
      "path"
     ],
     "title": "IngestIn"
+   },
+   "LLMCallOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "run_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Run Id"
+     },
+     "agent_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Agent Id"
+     },
+     "requirement_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Requirement Id"
+     },
+     "purpose": {
+      "type": "string",
+      "title": "Purpose"
+     },
+     "provider": {
+      "type": "string",
+      "title": "Provider"
+     },
+     "model": {
+      "type": "string",
+      "title": "Model"
+     },
+     "prompt_version": {
+      "type": "string",
+      "title": "Prompt Version"
+     },
+     "prompt_sha256": {
+      "type": "string",
+      "title": "Prompt Sha256"
+     },
+     "input_record_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Input Record Ids"
+     },
+     "input_tokens": {
+      "type": "integer",
+      "title": "Input Tokens"
+     },
+     "output_tokens": {
+      "type": "integer",
+      "title": "Output Tokens"
+     },
+     "latency_ms": {
+      "type": "integer",
+      "title": "Latency Ms"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "error": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Error"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "request": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Request"
+     },
+     "response": {
+      "anyOf": [
+       {
+        "additionalProperties": true,
+        "type": "object"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Response"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "run_id",
+     "agent_id",
+     "requirement_id",
+     "purpose",
+     "provider",
+     "model",
+     "prompt_version",
+     "prompt_sha256",
+     "input_record_ids",
+     "input_tokens",
+     "output_tokens",
+     "latency_ms",
+     "status",
+     "error",
+     "created_at"
+    ],
+    "title": "LLMCallOut"
+   },
+   "PersonaResponseOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "run_id": {
+      "type": "string",
+      "title": "Run Id"
+     },
+     "agent_id": {
+      "type": "string",
+      "title": "Agent Id"
+     },
+     "agent_version": {
+      "type": "integer",
+      "title": "Agent Version"
+     },
+     "requirement_id": {
+      "type": "string",
+      "title": "Requirement Id"
+     },
+     "engine": {
+      "type": "string",
+      "title": "Engine"
+     },
+     "response_text": {
+      "type": "string",
+      "title": "Response Text"
+     },
+     "stance": {
+      "type": "string",
+      "title": "Stance"
+     },
+     "ssr_distribution": {
+      "items": {
+       "type": "number"
+      },
+      "type": "array",
+      "title": "Ssr Distribution"
+     },
+     "ssr_mean": {
+      "type": "number",
+      "title": "Ssr Mean"
+     },
+     "importance_0_5": {
+      "type": "number",
+      "title": "Importance 0 5"
+     },
+     "market_fit_0_5": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Market Fit 0 5"
+     },
+     "concerns": {
+      "items": {},
+      "type": "array",
+      "title": "Concerns"
+     },
+     "info_requests": {
+      "items": {},
+      "type": "array",
+      "title": "Info Requests"
+     },
+     "grounding_record_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Grounding Record Ids"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "run_id",
+     "agent_id",
+     "agent_version",
+     "requirement_id",
+     "engine",
+     "response_text",
+     "stance",
+     "ssr_distribution",
+     "ssr_mean",
+     "importance_0_5",
+     "market_fit_0_5",
+     "concerns",
+     "info_requests",
+     "grounding_record_ids",
+     "created_at"
+    ],
+    "title": "PersonaResponseOut"
    },
    "PolicyIn": {
     "properties": {
@@ -3189,6 +4048,283 @@
     ],
     "title": "RatingIn"
    },
+   "RatingOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "requirement_id": {
+      "type": "string",
+      "title": "Requirement Id"
+     },
+     "run_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Run Id"
+     },
+     "criterion": {
+      "type": "string",
+      "title": "Criterion"
+     },
+     "score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Score"
+     },
+     "low": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Low"
+     },
+     "high": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "High"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "rater_type": {
+      "type": "string",
+      "title": "Rater Type"
+     },
+     "rater_id": {
+      "type": "string",
+      "title": "Rater Id"
+     },
+     "rationale": {
+      "type": "string",
+      "title": "Rationale"
+     },
+     "evidence_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Evidence Ids"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "requirement_id",
+     "run_id",
+     "criterion",
+     "score",
+     "low",
+     "high",
+     "status",
+     "rater_type",
+     "rater_id",
+     "rationale",
+     "evidence_ids",
+     "created_at"
+    ],
+    "title": "RatingOut"
+   },
+   "RecommendationOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "run_id": {
+      "type": "string",
+      "title": "Run Id"
+     },
+     "requirement_id": {
+      "type": "string",
+      "title": "Requirement Id"
+     },
+     "recommendation": {
+      "type": "string",
+      "title": "Recommendation"
+     },
+     "tally": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Tally"
+     },
+     "minority_report": {
+      "items": {},
+      "type": "array",
+      "title": "Minority Report"
+     },
+     "challenge": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Challenge"
+     },
+     "score_snapshot": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Score Snapshot"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "run_id",
+     "requirement_id",
+     "recommendation",
+     "tally",
+     "minority_report",
+     "challenge",
+     "score_snapshot",
+     "created_at"
+    ],
+    "title": "RecommendationOut"
+   },
+   "RequirementDetailOut": {
+    "properties": {
+     "requirement": {
+      "$ref": "#/components/schemas/RequirementOut"
+     },
+     "gates": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/GateOut"
+      },
+      "type": "object",
+      "title": "Gates"
+     },
+     "scores": {
+      "$ref": "#/components/schemas/ScoresOut"
+     },
+     "ratings": {
+      "items": {
+       "$ref": "#/components/schemas/RatingOut"
+      },
+      "type": "array",
+      "title": "Ratings"
+     },
+     "evidence": {
+      "items": {
+       "$ref": "#/components/schemas/EvidenceOut"
+      },
+      "type": "array",
+      "title": "Evidence"
+     },
+     "latest_run_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Latest Run Id"
+     },
+     "synthesis": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/SynthesisRowOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "recommendation": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/RecommendationOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "votes": {
+      "items": {
+       "$ref": "#/components/schemas/VoteOut"
+      },
+      "type": "array",
+      "title": "Votes"
+     },
+     "persona_responses": {
+      "items": {
+       "$ref": "#/components/schemas/PersonaResponseOut"
+      },
+      "type": "array",
+      "title": "Persona Responses"
+     },
+     "department_memos": {
+      "items": {
+       "$ref": "#/components/schemas/DepartmentMemoRowOut"
+      },
+      "type": "array",
+      "title": "Department Memos"
+     },
+     "research": {
+      "items": {
+       "$ref": "#/components/schemas/ResearchRequestOut"
+      },
+      "type": "array",
+      "title": "Research"
+     },
+     "decisions": {
+      "items": {
+       "$ref": "#/components/schemas/DecisionOut"
+      },
+      "type": "array",
+      "title": "Decisions"
+     }
+    },
+    "type": "object",
+    "required": [
+     "requirement",
+     "gates",
+     "scores",
+     "ratings",
+     "evidence",
+     "latest_run_id",
+     "synthesis",
+     "recommendation",
+     "votes",
+     "persona_responses",
+     "department_memos",
+     "research",
+     "decisions"
+    ],
+    "title": "RequirementDetailOut"
+   },
    "RequirementIn": {
     "properties": {
      "title": {
@@ -3262,6 +4398,561 @@
      "description"
     ],
     "title": "RequirementIn"
+   },
+   "RequirementOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "target_model": {
+      "type": "string",
+      "title": "Target Model"
+     },
+     "market": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Market"
+     },
+     "feature_key": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Feature Key"
+     },
+     "theme_id": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Theme Id"
+     },
+     "title": {
+      "type": "string",
+      "title": "Title"
+     },
+     "description": {
+      "type": "string",
+      "title": "Description"
+     },
+     "customer_problem": {
+      "type": "string",
+      "title": "Customer Problem"
+     },
+     "acceptance_criteria": {
+      "items": {},
+      "type": "array",
+      "title": "Acceptance Criteria"
+     },
+     "evidence_level": {
+      "type": "string",
+      "title": "Evidence Level"
+     },
+     "evidence_level_explanation": {
+      "type": "string",
+      "title": "Evidence Level Explanation"
+     },
+     "assumptions": {
+      "items": {},
+      "type": "array",
+      "title": "Assumptions"
+     },
+     "uncertainties": {
+      "items": {},
+      "type": "array",
+      "title": "Uncertainties"
+     },
+     "planning_horizon": {
+      "type": "string",
+      "title": "Planning Horizon"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "priority_rank": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Priority Rank"
+     },
+     "score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Score"
+     },
+     "score_low": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Score Low"
+     },
+     "score_high": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Score High"
+     },
+     "prioritization_rationale": {
+      "type": "string",
+      "title": "Prioritization Rationale"
+     },
+     "suggested_next_action": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Suggested Next Action"
+     },
+     "kano_class": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Kano Class"
+     },
+     "kano_rationale": {
+      "type": "string",
+      "title": "Kano Rationale"
+     },
+     "benchmark_target": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Benchmark Target"
+     },
+     "version": {
+      "type": "integer",
+      "title": "Version"
+     },
+     "created_by": {
+      "type": "string",
+      "title": "Created By"
+     },
+     "last_run_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Last Run Id"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Updated At"
+     },
+     "gates": {
+      "additionalProperties": {
+       "type": "string"
+      },
+      "type": "object",
+      "title": "Gates"
+     },
+     "ai_recommendation": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ai Recommendation"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "target_model",
+     "market",
+     "feature_key",
+     "theme_id",
+     "title",
+     "description",
+     "customer_problem",
+     "acceptance_criteria",
+     "evidence_level",
+     "evidence_level_explanation",
+     "assumptions",
+     "uncertainties",
+     "planning_horizon",
+     "status",
+     "priority_rank",
+     "score",
+     "score_low",
+     "score_high",
+     "prioritization_rationale",
+     "suggested_next_action",
+     "kano_class",
+     "kano_rationale",
+     "benchmark_target",
+     "version",
+     "created_by",
+     "last_run_id",
+     "created_at",
+     "updated_at",
+     "gates",
+     "ai_recommendation"
+    ],
+    "title": "RequirementOut"
+   },
+   "ResearchRequestOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "run_id": {
+      "type": "string",
+      "title": "Run Id"
+     },
+     "requirement_id": {
+      "type": "string",
+      "title": "Requirement Id"
+     },
+     "requested_by": {
+      "type": "string",
+      "title": "Requested By"
+     },
+     "question": {
+      "type": "string",
+      "title": "Question"
+     },
+     "rationale": {
+      "type": "string",
+      "title": "Rationale"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "findings": {
+      "items": {},
+      "type": "array",
+      "title": "Findings"
+     },
+     "sources": {
+      "items": {},
+      "type": "array",
+      "title": "Sources"
+     },
+     "verification": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Verification"
+     },
+     "verdict": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Verdict"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Updated At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "run_id",
+     "requirement_id",
+     "requested_by",
+     "question",
+     "rationale",
+     "status",
+     "findings",
+     "sources",
+     "verification",
+     "verdict",
+     "created_at",
+     "updated_at"
+    ],
+    "title": "ResearchRequestOut"
+   },
+   "RunDetailOut": {
+    "properties": {
+     "run": {
+      "$ref": "#/components/schemas/RunOut"
+     },
+     "steps": {
+      "items": {
+       "$ref": "#/components/schemas/StepOut"
+      },
+      "type": "array",
+      "title": "Steps"
+     }
+    },
+    "type": "object",
+    "required": [
+     "run",
+     "steps"
+    ],
+    "title": "RunDetailOut"
+   },
+   "RunOut": {
+    "properties": {
+     "id": {
+      "type": "string",
+      "title": "Id"
+     },
+     "kind": {
+      "type": "string",
+      "title": "Kind"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "requirement_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Requirement Ids"
+     },
+     "config": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Config"
+     },
+     "parent_run_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Parent Run Id"
+     },
+     "challenge_question": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Challenge Question"
+     },
+     "requested_by": {
+      "type": "string",
+      "title": "Requested By"
+     },
+     "progress": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Progress"
+     },
+     "error": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Error"
+     },
+     "llm_calls": {
+      "type": "integer",
+      "title": "Llm Calls"
+     },
+     "input_tokens": {
+      "type": "integer",
+      "title": "Input Tokens"
+     },
+     "output_tokens": {
+      "type": "integer",
+      "title": "Output Tokens"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     },
+     "started_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Started At"
+     },
+     "finished_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Finished At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "kind",
+     "status",
+     "requirement_ids",
+     "config",
+     "parent_run_id",
+     "challenge_question",
+     "requested_by",
+     "progress",
+     "error",
+     "llm_calls",
+     "input_tokens",
+     "output_tokens",
+     "created_at",
+     "started_at",
+     "finished_at"
+    ],
+    "title": "RunOut"
+   },
+   "ScoresOut": {
+    "properties": {
+     "criteria": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/CriterionOut"
+      },
+      "type": "object",
+      "title": "Criteria"
+     },
+     "score_low": {
+      "type": "number",
+      "title": "Score Low"
+     },
+     "score_high": {
+      "type": "number",
+      "title": "Score High"
+     },
+     "score_midpoint": {
+      "type": "number",
+      "title": "Score Midpoint"
+     },
+     "unknown_criteria": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Unknown Criteria"
+     },
+     "uncertain_criteria": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Uncertain Criteria"
+     },
+     "formula": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Formula"
+     },
+     "note": {
+      "type": "string",
+      "title": "Note"
+     }
+    },
+    "type": "object",
+    "required": [
+     "criteria",
+     "score_low",
+     "score_high",
+     "score_midpoint",
+     "unknown_criteria",
+     "uncertain_criteria",
+     "formula",
+     "note"
+    ],
+    "title": "ScoresOut"
    },
    "SimulationIn": {
     "properties": {
@@ -3363,6 +5054,286 @@
     ],
     "title": "SpecIn"
    },
+   "StepOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "run_id": {
+      "type": "string",
+      "title": "Run Id"
+     },
+     "requirement_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Requirement Id"
+     },
+     "stage": {
+      "type": "string",
+      "title": "Stage"
+     },
+     "agent_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Agent Id"
+     },
+     "status": {
+      "type": "string",
+      "title": "Status"
+     },
+     "detail": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Detail"
+     },
+     "error": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Error"
+     },
+     "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Started At"
+     },
+     "finished_at": {
+      "anyOf": [
+       {
+        "type": "string",
+        "format": "date-time"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Finished At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "run_id",
+     "requirement_id",
+     "stage",
+     "agent_id",
+     "status",
+     "detail",
+     "error",
+     "started_at",
+     "finished_at"
+    ],
+    "title": "StepOut"
+   },
+   "SynthesisRowOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "run_id": {
+      "type": "string",
+      "title": "Run Id"
+     },
+     "requirement_id": {
+      "type": "string",
+      "title": "Requirement Id"
+     },
+     "content": {
+      "additionalProperties": true,
+      "type": "object",
+      "title": "Content"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "run_id",
+     "requirement_id",
+     "content",
+     "created_at"
+    ],
+    "title": "SynthesisRowOut"
+   },
+   "TaskOut": {
+    "properties": {
+     "kind": {
+      "type": "string",
+      "title": "Kind"
+     },
+     "label": {
+      "type": "string",
+      "title": "Label"
+     },
+     "requirement_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Requirement Id"
+     },
+     "requirement_ids": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Requirement Ids"
+     },
+     "title": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Title"
+     },
+     "market": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Market"
+     },
+     "ai_recommendation": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ai Recommendation"
+     },
+     "score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Score"
+     },
+     "score_low": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Score Low"
+     },
+     "score_high": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Score High"
+     },
+     "failed_gates": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Failed Gates"
+     },
+     "run_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Run Id"
+     },
+     "stage": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Stage"
+     },
+     "count": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Count"
+     }
+    },
+    "type": "object",
+    "required": [
+     "kind",
+     "label"
+    ],
+    "title": "TaskOut"
+   },
    "ThemeBuildIn": {
     "properties": {
      "target_model": {
@@ -3454,6 +5425,61 @@
      "type"
     ],
     "title": "ValidationError"
+   },
+   "VoteOut": {
+    "properties": {
+     "id": {
+      "type": "integer",
+      "title": "Id"
+     },
+     "run_id": {
+      "type": "string",
+      "title": "Run Id"
+     },
+     "requirement_id": {
+      "type": "string",
+      "title": "Requirement Id"
+     },
+     "agent_id": {
+      "type": "string",
+      "title": "Agent Id"
+     },
+     "model": {
+      "type": "string",
+      "title": "Model"
+     },
+     "vote": {
+      "type": "string",
+      "title": "Vote"
+     },
+     "rationale": {
+      "type": "string",
+      "title": "Rationale"
+     },
+     "key_points": {
+      "items": {},
+      "type": "array",
+      "title": "Key Points"
+     },
+     "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "title": "Created At"
+     }
+    },
+    "type": "object",
+    "required": [
+     "id",
+     "run_id",
+     "requirement_id",
+     "agent_id",
+     "model",
+     "vote",
+     "rationale",
+     "key_points",
+     "created_at"
+    ],
+    "title": "VoteOut"
    }
   }
  }
