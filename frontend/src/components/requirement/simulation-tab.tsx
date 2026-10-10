@@ -7,7 +7,7 @@ import { ToneBadge } from "@/components/tone-badge";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useLlmCalls, useRun } from "@/lib/api/hooks";
-import type { LlmCall, RequirementDetail } from "@/lib/api/types";
+import type { Decision, LlmCall, RequirementDetail } from "@/lib/api/types";
 import { agentLabel, fmtDateTime, humanize, STAGE_LABEL, stanceTone } from "@/lib/format";
 import { cn } from "cn";
 
@@ -109,62 +109,84 @@ export function SimulationTab() {
       )}
 
       {view === "lanes" && (
-        <div className="overflow-x-auto">
-          <div className="min-w-[860px]">
-            <div className="grid grid-cols-[230px_minmax(0,1fr)] gap-4">
-              <span />
-              <div className="relative h-5 text-[11px] text-muted-foreground">
-                {model.stages.map((s) => (
-                  <span key={s.stage} className="absolute -translate-x-1/2 whitespace-nowrap" style={{ left: `${s.center}%` }}>
-                    {STAGE_LABEL[s.stage] ?? humanize(s.stage)}
-                  </span>
+        <LanesView model={model} requirementId={id} linked={linked} decisions={detail?.decisions ?? []} live={live} empty={calls.data.length === 0} />
+      )}
+    </div>
+  );
+}
+
+// The table-like lane view: one row per agent, every model call a dot. Also used run-wide on the
+// Expert pipeline page, where requirementId is empty and record links go to the records view.
+export function LanesView({
+  model,
+  requirementId,
+  linked,
+  decisions,
+  live,
+  empty,
+}: {
+  model: ReturnType<typeof buildLanes>;
+  requirementId: string;
+  linked: Set<string>;
+  decisions: Decision[];
+  live: boolean;
+  empty: boolean;
+}) {
+  return (
+    <div className="overflow-x-auto">
+      <div className="min-w-[860px]">
+        <div className="grid grid-cols-[230px_minmax(0,1fr)] gap-4">
+          <span />
+          <div className="relative h-5 text-[11px] text-muted-foreground">
+            {model.stages.map((s) => (
+              <span key={s.stage} className="absolute -translate-x-1/2 whitespace-nowrap" style={{ left: `${s.center}%` }}>
+                {STAGE_LABEL[s.stage] ?? humanize(s.stage)}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {model.groups.map((group) => (
+          <section key={group.title} className="mt-3">
+            <h3 className="px-2 pb-1 text-xs font-medium text-foreground/70">
+              {group.title} <span className="font-normal text-muted-foreground/70">{group.lanes.length}</span>
+            </h3>
+            {group.lanes.map((lane) => (
+              <LaneRow key={lane.id} lane={lane} position={model.position} requirementId={requirementId} linked={linked} />
+            ))}
+          </section>
+        ))}
+
+        {decisions.length > 0 && (
+          <section className="mt-3">
+            <h3 className="px-2 pb-1 text-xs font-medium text-foreground/70">Human</h3>
+            <div className="grid h-7 grid-cols-[230px_minmax(0,1fr)] items-center gap-4 rounded-md px-2">
+              <span className="text-xs">Product manager</span>
+              <div className="relative h-full">
+                {decisions.map((d, i) => (
+                  <Tooltip key={d.id}>
+                    <TooltipTrigger asChild>
+                      <span
+                        className="absolute top-1/2 size-2.5 -translate-y-1/2 rounded-[2px] bg-foreground"
+                        style={{ left: `calc(${100 - i * 2}% - 10px)` }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {humanize(d.action)} · {fmtDateTime(d.created_at)} · “{d.rationale}”
+                    </TooltipContent>
+                  </Tooltip>
                 ))}
               </div>
             </div>
+          </section>
+        )}
 
-            {model.groups.map((group) => (
-              <section key={group.title} className="mt-3">
-                <h3 className="px-2 pb-1 text-xs font-medium text-foreground/70">
-                  {group.title} <span className="font-normal text-muted-foreground/70">{group.lanes.length}</span>
-                </h3>
-                {group.lanes.map((lane) => (
-                  <LaneRow key={lane.id} lane={lane} position={model.position} requirementId={id} linked={linked} />
-                ))}
-              </section>
-            ))}
-
-            {detail && detail.decisions.length > 0 && (
-              <section className="mt-3">
-                <h3 className="px-2 pb-1 text-xs font-medium text-foreground/70">Human</h3>
-                <div className="grid h-7 grid-cols-[230px_minmax(0,1fr)] items-center gap-4 rounded-md px-2">
-                  <span className="text-xs">Product manager</span>
-                  <div className="relative h-full">
-                    {detail.decisions.map((d, i) => (
-                      <Tooltip key={d.id}>
-                        <TooltipTrigger asChild>
-                          <span
-                            className="absolute top-1/2 size-2.5 -translate-y-1/2 rounded-[2px] bg-foreground"
-                            style={{ left: `calc(${100 - i * 2}% - 10px)` }}
-                          />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          {humanize(d.action)} · {fmtDateTime(d.created_at)} · “{d.rationale}”
-                        </TooltipContent>
-                      </Tooltip>
-                    ))}
-                  </div>
-                </div>
-              </section>
-            )}
-
-            {calls.data.length === 0 && (
-              <p className="px-2 py-6 text-sm text-muted-foreground">
-                {live ? "Waiting for the first model calls…" : "This run made no model calls for this requirement."}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
+        {empty && (
+          <p className="px-2 py-6 text-sm text-muted-foreground">
+            {live ? "Waiting for the first model calls…" : "This run made no model calls here."}
+          </p>
+        )}
+      </div>
     </div>
   );
 }
@@ -238,7 +260,7 @@ function LaneRow({
   );
 }
 
-function Legend({ kind, label }: { kind: "call" | "verify" | "pm"; label: string }) {
+export function Legend({ kind, label }: { kind: "call" | "verify" | "pm"; label: string }) {
   return (
     <span className="flex items-center gap-1.5">
       <span
@@ -287,7 +309,11 @@ function placeCalls(sorted: LlmCall[]) {
   return { position, stages };
 }
 
-function buildLanes(detail: RequirementDetail | undefined, calls: LlmCall[], runId: string | null) {
+export function buildLanes(
+  detail: Pick<RequirementDetail, "persona_responses" | "department_memos" | "votes"> | undefined,
+  calls: LlmCall[],
+  runId: string | null,
+) {
   const sorted = [...calls].sort((a, b) => a.created_at.localeCompare(b.created_at) || a.id - b.id);
   const { position, stages } = placeCalls(sorted);
 

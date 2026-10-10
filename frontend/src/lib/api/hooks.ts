@@ -108,12 +108,12 @@ export function useRequirement(id: string | undefined) {
   );
 }
 
-// Polls every 1.5 s while the run is queued or running, then stops.
+// Polls every 3 s while the run is queued or running, then stops.
 export function useRun(runId: string | null | undefined) {
   return useSWR(
     runId ? ["run", runId] : null,
     () => unwrap<RunDetail>(api.GET("/api/simulations/{run_id}", { params: { path: { run_id: runId! } } })),
-    { refreshInterval: (data) => (data && ACTIVE_RUN.has(data.run.status) ? 1500 : 0) },
+    { refreshInterval: (data) => (data && ACTIVE_RUN.has(data.run.status) ? 3000 : 0) },
   );
 }
 
@@ -128,7 +128,7 @@ export function useLlmCalls(runId: string | null | undefined, requirementId: str
       );
       return calls.map((c) => ({ ...c, agent_id: c.agent_id ?? "agent:unknown" })) as LlmCall[];
     },
-    { refreshInterval: live ? 1500 : 0 },
+    { refreshInterval: live ? 3000 : 0 },
   );
 }
 
