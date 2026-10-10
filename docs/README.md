@@ -25,9 +25,11 @@ docs/
 │       ├── F70-1-series.md
 │       ├── G60-5-series.md
 │       └── G70-7-series.md
-└── bmw-pm-interview/                  ← conversation with a BMW product manager
-    ├── conversation-with-bmw-prod-manager.md   ← raw notes
-    └── bmw-product-manager-groundwork.md       ← structured write-up
+├── bmw-pm-interview/                  ← conversation with a BMW product manager
+│   ├── conversation-with-bmw-prod-manager.md   ← raw notes
+│   └── bmw-product-manager-groundwork.md       ← structured write-up
+└── competitors/
+    └── README.md                      ← 5 Series competitor analysis (EU/US/CN), findings and caveats; data in /competitors
 ```
 
 ## Where to find what
@@ -41,3 +43,4 @@ docs/
 | Which vehicle/market has which data? | [datasets/README.md](datasets/README.md#coverage-at-a-glance) |
 | How do BMW PMs actually prioritize? | [bmw-pm-interview/](bmw-pm-interview/bmw-product-manager-groundwork.md) |
 | What does the car offer today (standard vs optional)? | [datasets/option-lists/](datasets/option-lists/) |
+| Who are the 5 Series competitors and how do they compare? | [competitors/README.md](competitors/README.md) |

@@ -1,0 +1,629 @@
+market,channel,theme,vehicle,basis,n_reviews,n_statements,share_likes,share_wants,share_difficult_to_use,share_defect,share_negative
+CN,owner,access_locking,Audi A6L (C8 L),web records,1,1,0.0,0.0,0.0,1.0,1.0
+CN,owner,access_locking,BMW 5 Series Li (G68),web records,4,4,0.0,0.25,0.5,0.25,0.75
+CN,owner,access_locking,Mercedes-Benz E-Class L (V214),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,owner,access_locking,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,0.0,0.0,1.0,0.0,1.0
+CN,owner,access_locking,Xiaomi SU7 (SU7 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,owner,access_locking,Zeekr 007 (007 1st gen (2024-)),web records,2,2,0.0,0.0,0.5,0.5,1.0
+CN,owner,adas_parking,Audi A6L (C8 L),web records,2,2,1.0,0.0,0.0,0.0,0.0
+CN,owner,adas_parking,BMW 5 Series Li (G68),web records,7,9,0.56,0.0,0.33,0.11,0.44
+CN,owner,adas_parking,Luxeed S7 (S7 1st gen (2023-)),web records,15,18,0.83,0.0,0.17,0.0,0.17
+CN,owner,adas_parking,Mercedes-Benz E-Class L (V214),web records,2,2,1.0,0.0,0.0,0.0,0.0
+CN,owner,adas_parking,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,10,12,0.67,0.0,0.33,0.0,0.33
+CN,owner,adas_parking,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,12,13,1.0,0.0,0.0,0.0,0.0
+CN,owner,adas_parking,Xiaomi SU7 (SU7 1st gen (2024-)),web records,4,7,0.14,0.14,0.57,0.14,0.71
+CN,owner,adas_parking,Zeekr 007 (007 1st gen (2024-)),web records,11,14,0.79,0.07,0.14,0.0,0.14
+CN,owner,audio_acoustics,Audi A6L (C8 L),web records,5,5,0.2,0.0,0.8,0.0,0.8
+CN,owner,audio_acoustics,BMW 5 Series Li (G68),web records,10,10,0.3,0.0,0.7,0.0,0.7
+CN,owner,audio_acoustics,Luxeed S7 (S7 1st gen (2023-)),web records,1,1,0.0,0.0,1.0,0.0,1.0
+CN,owner,audio_acoustics,Mercedes-Benz E-Class L (V214),web records,6,6,0.5,0.0,0.5,0.0,0.5
+CN,owner,audio_acoustics,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,2,0.5,0.0,0.0,0.5,0.5
+CN,owner,audio_acoustics,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,owner,audio_acoustics,Xiaomi SU7 (SU7 1st gen (2024-)),web records,4,4,0.25,0.0,0.75,0.0,0.75
+CN,owner,audio_acoustics,Zeekr 007 (007 1st gen (2024-)),web records,3,3,0.33,0.0,0.67,0.0,0.67
+CN,owner,climate,Audi A6L (C8 L),web records,1,1,0.0,0.0,1.0,0.0,1.0
+CN,owner,climate,BMW 5 Series Li (G68),web records,1,1,0.0,0.0,0.0,1.0,1.0
+CN,owner,climate,Mercedes-Benz E-Class L (V214),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,owner,connectivity_app_digital,Audi A6L (C8 L),web records,2,2,0.5,0.0,0.0,0.5,0.5
+CN,owner,connectivity_app_digital,BMW 5 Series Li (G68),web records,7,9,0.33,0.44,0.22,0.0,0.22
+CN,owner,connectivity_app_digital,Luxeed S7 (S7 1st gen (2023-)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+CN,owner,connectivity_app_digital,Mercedes-Benz E-Class L (V214),web records,1,1,0.0,0.0,1.0,0.0,1.0
+CN,owner,connectivity_app_digital,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,2,0.5,0.5,0.0,0.0,0.0
+CN,owner,connectivity_app_digital,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,owner,connectivity_app_digital,Xiaomi SU7 (SU7 1st gen (2024-)),web records,5,5,0.8,0.0,0.2,0.0,0.2
+CN,owner,connectivity_app_digital,Zeekr 007 (007 1st gen (2024-)),web records,5,6,0.67,0.17,0.0,0.17,0.17
+CN,owner,equipment_value,Audi A6L (C8 L),web records,9,10,0.5,0.5,0.0,0.0,0.0
+CN,owner,equipment_value,BMW 5 Series Li (G68),web records,16,20,0.3,0.7,0.0,0.0,0.0
+CN,owner,equipment_value,Luxeed S7 (S7 1st gen (2023-)),web records,3,5,0.4,0.4,0.2,0.0,0.2
+CN,owner,equipment_value,Mercedes-Benz E-Class L (V214),web records,11,11,0.0,1.0,0.0,0.0,0.0
+CN,owner,equipment_value,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+CN,owner,equipment_value,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,4,4,0.5,0.0,0.5,0.0,0.5
+CN,owner,equipment_value,Xiaomi SU7 (SU7 1st gen (2024-)),web records,2,2,1.0,0.0,0.0,0.0,0.0
+CN,owner,equipment_value,Zeekr 007 (007 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,owner,exterior_design,Audi A6L (C8 L),web records,7,7,0.57,0.29,0.0,0.14,0.14
+CN,owner,exterior_design,Audi A6L (C9 L),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,owner,exterior_design,BMW 5 Series Li (G68),web records,5,5,0.4,0.6,0.0,0.0,0.0
+CN,owner,exterior_design,Luxeed S7 (S7 1st gen (2023-)),web records,7,7,0.71,0.0,0.29,0.0,0.29
+CN,owner,exterior_design,Mercedes-Benz E-Class L (V214),web records,9,9,0.78,0.11,0.0,0.11,0.11
+CN,owner,exterior_design,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,7,7,0.86,0.0,0.14,0.0,0.14
+CN,owner,exterior_design,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,3,3,1.0,0.0,0.0,0.0,0.0
+CN,owner,exterior_design,Xiaomi SU7 (SU7 1st gen (2024-)),web records,12,14,0.86,0.07,0.0,0.07,0.07
+CN,owner,exterior_design,Zeekr 007 (007 1st gen (2024-)),web records,7,7,0.86,0.0,0.14,0.0,0.14
+CN,owner,hmi_infotainment,Audi A6L (C8 L),web records,6,7,0.0,0.0,0.71,0.29,1.0
+CN,owner,hmi_infotainment,BMW 5 Series Li (G68),web records,5,6,0.17,0.33,0.5,0.0,0.5
+CN,owner,hmi_infotainment,Luxeed S7 (S7 1st gen (2023-)),web records,4,5,0.4,0.2,0.4,0.0,0.4
+CN,owner,hmi_infotainment,Mercedes-Benz E-Class L (V214),web records,6,6,0.5,0.0,0.33,0.17,0.5
+CN,owner,hmi_infotainment,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,6,9,0.89,0.0,0.0,0.11,0.11
+CN,owner,hmi_infotainment,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,2,2,1.0,0.0,0.0,0.0,0.0
+CN,owner,hmi_infotainment,Xiaomi SU7 (SU7 1st gen (2024-)),web records,6,8,0.5,0.12,0.38,0.0,0.38
+CN,owner,hmi_infotainment,Zeekr 007 (007 1st gen (2024-)),web records,7,12,0.5,0.17,0.33,0.0,0.33
+CN,owner,interior_design_quality,Audi A6L (C8 L),web records,8,9,0.44,0.0,0.0,0.56,0.56
+CN,owner,interior_design_quality,BMW 5 Series Li (G68),web records,14,15,0.47,0.0,0.47,0.07,0.53
+CN,owner,interior_design_quality,Luxeed S7 (S7 1st gen (2023-)),web records,2,2,0.0,0.0,0.5,0.5,1.0
+CN,owner,interior_design_quality,Mercedes-Benz E-Class L (V214),web records,14,17,0.41,0.0,0.18,0.41,0.59
+CN,owner,interior_design_quality,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,10,11,0.91,0.09,0.0,0.0,0.0
+CN,owner,interior_design_quality,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,3,3,0.67,0.33,0.0,0.0,0.0
+CN,owner,interior_design_quality,Xiaomi SU7 (SU7 1st gen (2024-)),web records,7,7,0.29,0.29,0.29,0.14,0.43
+CN,owner,interior_design_quality,Zeekr 007 (007 1st gen (2024-)),web records,5,5,0.8,0.0,0.2,0.0,0.2
+CN,owner,lighting_visibility,Audi A6L (C8 L),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,owner,lighting_visibility,BMW 5 Series Li (G68),web records,3,3,0.67,0.33,0.0,0.0,0.0
+CN,owner,lighting_visibility,Luxeed S7 (S7 1st gen (2023-)),web records,4,5,0.0,0.0,1.0,0.0,1.0
+CN,owner,lighting_visibility,Mercedes-Benz E-Class L (V214),web records,4,4,0.0,0.75,0.25,0.0,0.25
+CN,owner,lighting_visibility,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,1,2,0.5,0.0,0.5,0.0,0.5
+CN,owner,lighting_visibility,Xiaomi SU7 (SU7 1st gen (2024-)),web records,1,1,0.0,0.0,1.0,0.0,1.0
+CN,owner,lighting_visibility,Zeekr 007 (007 1st gen (2024-)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+CN,owner,overall_quality_ownership,Audi A6L (C8 L),web records,3,3,0.0,0.0,0.67,0.33,1.0
+CN,owner,overall_quality_ownership,Audi A6L (C9 L),web records,1,1,0.0,0.0,1.0,0.0,1.0
+CN,owner,overall_quality_ownership,BMW 5 Series Li (G68),web records,6,6,0.33,0.0,0.67,0.0,0.67
+CN,owner,overall_quality_ownership,Luxeed S7 (S7 1st gen (2023-)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+CN,owner,overall_quality_ownership,Mercedes-Benz E-Class L (V214),web records,3,3,0.67,0.0,0.0,0.33,0.33
+CN,owner,overall_quality_ownership,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+CN,owner,overall_quality_ownership,Xiaomi SU7 (SU7 1st gen (2024-)),web records,10,11,0.18,0.0,0.82,0.0,0.82
+CN,owner,overall_quality_ownership,Zeekr 007 (007 1st gen (2024-)),web records,5,5,0.8,0.0,0.2,0.0,0.2
+CN,owner,powertrain_performance,Audi A6L (C8 L),web records,14,14,0.21,0.0,0.79,0.0,0.79
+CN,owner,powertrain_performance,BMW 5 Series Li (G68),web records,15,17,0.47,0.06,0.47,0.0,0.47
+CN,owner,powertrain_performance,Luxeed S7 (S7 1st gen (2023-)),web records,3,3,0.33,0.0,0.67,0.0,0.67
+CN,owner,powertrain_performance,Mercedes-Benz E-Class L (V214),web records,6,6,0.33,0.0,0.67,0.0,0.67
+CN,owner,powertrain_performance,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,3,3,0.67,0.0,0.33,0.0,0.33
+CN,owner,powertrain_performance,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,3,3,0.67,0.0,0.33,0.0,0.33
+CN,owner,powertrain_performance,Xiaomi SU7 (SU7 1st gen (2024-)),web records,8,8,1.0,0.0,0.0,0.0,0.0
+CN,owner,powertrain_performance,Zeekr 007 (007 1st gen (2024-)),web records,5,5,0.8,0.2,0.0,0.0,0.0
+CN,owner,range_charging_efficiency,Audi A6L (C8 L),web records,2,2,0.0,0.5,0.5,0.0,0.5
+CN,owner,range_charging_efficiency,Audi A6L (C9 L),web records,1,1,0.0,0.0,1.0,0.0,1.0
+CN,owner,range_charging_efficiency,BMW 5 Series Li (G68),web records,10,10,0.5,0.0,0.5,0.0,0.5
+CN,owner,range_charging_efficiency,Luxeed S7 (S7 1st gen (2023-)),web records,3,4,0.75,0.0,0.25,0.0,0.25
+CN,owner,range_charging_efficiency,Mercedes-Benz E-Class L (V214),web records,5,5,0.4,0.0,0.6,0.0,0.6
+CN,owner,range_charging_efficiency,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,13,14,0.36,0.14,0.5,0.0,0.5
+CN,owner,range_charging_efficiency,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,8,9,1.0,0.0,0.0,0.0,0.0
+CN,owner,range_charging_efficiency,Xiaomi SU7 (SU7 1st gen (2024-)),web records,6,7,0.57,0.0,0.43,0.0,0.43
+CN,owner,range_charging_efficiency,Zeekr 007 (007 1st gen (2024-)),web records,14,19,0.79,0.05,0.16,0.0,0.16
+CN,owner,ride_handling,Audi A6L (C8 L),web records,7,7,0.57,0.0,0.29,0.14,0.43
+CN,owner,ride_handling,Audi A6L (C9 L),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,owner,ride_handling,BMW 5 Series Li (G68),web records,18,21,0.48,0.0,0.19,0.33,0.52
+CN,owner,ride_handling,Luxeed S7 (S7 1st gen (2023-)),web records,4,5,0.6,0.0,0.4,0.0,0.4
+CN,owner,ride_handling,Mercedes-Benz E-Class L (V214),web records,11,13,0.62,0.0,0.31,0.08,0.38
+CN,owner,ride_handling,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,4,5,0.8,0.0,0.2,0.0,0.2
+CN,owner,ride_handling,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,4,4,0.25,0.0,0.75,0.0,0.75
+CN,owner,ride_handling,Xiaomi SU7 (SU7 1st gen (2024-)),web records,10,15,0.33,0.07,0.6,0.0,0.6
+CN,owner,ride_handling,Zeekr 007 (007 1st gen (2024-)),web records,11,13,0.38,0.0,0.62,0.0,0.62
+CN,owner,safety,Audi A6L (C8 L),web records,1,1,0.0,0.0,0.0,1.0,1.0
+CN,owner,safety,Zeekr 007 (007 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,owner,seats_comfort,Audi A6L (C8 L),web records,5,5,0.0,0.0,1.0,0.0,1.0
+CN,owner,seats_comfort,BMW 5 Series Li (G68),web records,2,2,0.5,0.0,0.5,0.0,0.5
+CN,owner,seats_comfort,Luxeed S7 (S7 1st gen (2023-)),web records,1,1,0.0,1.0,0.0,0.0,0.0
+CN,owner,seats_comfort,Mercedes-Benz E-Class L (V214),web records,7,7,0.71,0.0,0.14,0.14,0.29
+CN,owner,seats_comfort,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,6,6,0.83,0.17,0.0,0.0,0.0
+CN,owner,seats_comfort,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,5,7,0.86,0.0,0.14,0.0,0.14
+CN,owner,seats_comfort,Xiaomi SU7 (SU7 1st gen (2024-)),web records,2,3,0.67,0.0,0.33,0.0,0.33
+CN,owner,seats_comfort,Zeekr 007 (007 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,owner,space_practicality,Audi A6L (C8 L),web records,9,9,0.33,0.0,0.67,0.0,0.67
+CN,owner,space_practicality,Audi A6L (C9 L),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,owner,space_practicality,BMW 5 Series Li (G68),web records,11,11,0.45,0.0,0.55,0.0,0.55
+CN,owner,space_practicality,Luxeed S7 (S7 1st gen (2023-)),web records,6,6,0.83,0.0,0.17,0.0,0.17
+CN,owner,space_practicality,Mercedes-Benz E-Class L (V214),web records,13,13,0.23,0.0,0.77,0.0,0.77
+CN,owner,space_practicality,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,5,6,0.17,0.0,0.83,0.0,0.83
+CN,owner,space_practicality,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,6,7,0.14,0.57,0.29,0.0,0.29
+CN,owner,space_practicality,Xiaomi SU7 (SU7 1st gen (2024-)),web records,3,4,0.0,0.0,1.0,0.0,1.0
+CN,owner,space_practicality,Zeekr 007 (007 1st gen (2024-)),web records,6,7,0.43,0.0,0.57,0.0,0.57
+CN,owner,unclassified,Audi A6L (C8 L),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,adas_parking,Audi A6L (C9 L),web records,1,1,0.0,0.0,1.0,0.0,1.0
+CN,press,adas_parking,BMW 5 Series Li (G68),web records,1,2,0.5,0.0,0.5,0.0,0.5
+CN,press,adas_parking,Mercedes-Benz E-Class L (V214),web records,1,2,0.5,0.0,0.5,0.0,0.5
+CN,press,adas_parking,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,adas_parking,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,adas_parking,Xiaomi SU7 (SU7 1st gen (2024-)),web records,1,5,0.4,0.2,0.4,0.0,0.4
+CN,press,adas_parking,Zeekr 007 (007 1st gen (2024-)),web records,1,1,0.0,0.0,1.0,0.0,1.0
+CN,press,audio_acoustics,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,audio_acoustics,Zeekr 007 (007 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,connectivity_app_digital,Audi A6L (C8 L),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,connectivity_app_digital,Xiaomi SU7 (SU7 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,equipment_value,Audi A6L (C8 L),web records,1,2,0.0,1.0,0.0,0.0,0.0
+CN,press,equipment_value,Audi A6L (C9 L),web records,1,2,0.5,0.5,0.0,0.0,0.0
+CN,press,equipment_value,Mercedes-Benz E-Class L (V214),web records,1,1,0.0,1.0,0.0,0.0,0.0
+CN,press,equipment_value,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,0.0,0.0,1.0,0.0,1.0
+CN,press,equipment_value,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,equipment_value,Xiaomi SU7 (SU7 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,exterior_design,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,exterior_design,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,hmi_infotainment,Audi A6L (C9 L),web records,1,2,1.0,0.0,0.0,0.0,0.0
+CN,press,hmi_infotainment,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,hmi_infotainment,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,1,2,1.0,0.0,0.0,0.0,0.0
+CN,press,hmi_infotainment,Xiaomi SU7 (SU7 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,hmi_infotainment,Zeekr 007 (007 1st gen (2024-)),web records,1,2,0.5,0.0,0.5,0.0,0.5
+CN,press,interior_design_quality,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,interior_design_quality,Xiaomi SU7 (SU7 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,interior_design_quality,Zeekr 007 (007 1st gen (2024-)),web records,1,2,1.0,0.0,0.0,0.0,0.0
+CN,press,lighting_visibility,Zeekr 007 (007 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,overall_quality_ownership,Mercedes-Benz E-Class L (V214),web records,1,1,0.0,0.0,1.0,0.0,1.0
+CN,press,powertrain_performance,Audi A6L (C9 L),web records,2,2,1.0,0.0,0.0,0.0,0.0
+CN,press,powertrain_performance,BMW 5 Series Li (G68),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,powertrain_performance,Mercedes-Benz E-Class L (V214),web records,2,2,0.5,0.0,0.5,0.0,0.5
+CN,press,powertrain_performance,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,powertrain_performance,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,powertrain_performance,Zeekr 007 (007 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,range_charging_efficiency,Audi A6L (C9 L),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,range_charging_efficiency,BMW 5 Series Li (G68),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,range_charging_efficiency,Mercedes-Benz E-Class L (V214),web records,1,1,0.0,0.0,1.0,0.0,1.0
+CN,press,range_charging_efficiency,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,2,0.5,0.0,0.5,0.0,0.5
+CN,press,ride_handling,Audi A6L (C9 L),web records,1,3,0.67,0.0,0.33,0.0,0.33
+CN,press,ride_handling,BMW 5 Series Li (G68),web records,1,2,0.0,0.0,1.0,0.0,1.0
+CN,press,ride_handling,Mercedes-Benz E-Class L (V214),web records,2,5,0.6,0.0,0.4,0.0,0.4
+CN,press,ride_handling,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,3,0.33,0.0,0.67,0.0,0.67
+CN,press,ride_handling,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,1,2,1.0,0.0,0.0,0.0,0.0
+CN,press,ride_handling,Xiaomi SU7 (SU7 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,ride_handling,Zeekr 007 (007 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,safety,Xiaomi SU7 (SU7 1st gen (2024-)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,seats_comfort,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,2,0.5,0.5,0.0,0.0,0.0
+CN,press,seats_comfort,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,seats_comfort,Zeekr 007 (007 1st gen (2024-)),web records,1,2,0.5,0.0,0.5,0.0,0.5
+CN,press,space_practicality,Audi A6L (C9 L),web records,1,2,0.5,0.0,0.5,0.0,0.5
+CN,press,space_practicality,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,2,0.5,0.0,0.5,0.0,0.5
+CN,press,space_practicality,Stelato S9 (S9 1st gen (2024-; Nov 2025 refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+CN,press,space_practicality,Zeekr 007 (007 1st gen (2024-)),web records,1,3,0.67,0.0,0.33,0.0,0.33
+EU,bmw_all_sources,access_locking,BMW 5 Series (G60),BMW feedback IDs,,5,0.0,0.2,0.0,0.8,0.8
+EU,bmw_all_sources,adas_parking,BMW 5 Series (G60),BMW feedback IDs,,8,0.38,0.12,0.25,0.25,0.5
+EU,bmw_all_sources,audio_acoustics,BMW 5 Series (G60),BMW feedback IDs,,7,0.43,0.29,0.0,0.29,0.29
+EU,bmw_all_sources,climate,BMW 5 Series (G60),BMW feedback IDs,,4,0.25,0.0,0.5,0.25,0.75
+EU,bmw_all_sources,connectivity_app_digital,BMW 5 Series (G60),BMW feedback IDs,,4,0.0,0.25,0.75,0.0,0.75
+EU,bmw_all_sources,equipment_value,BMW 5 Series (G60),BMW feedback IDs,,4,0.25,0.75,0.0,0.0,0.0
+EU,bmw_all_sources,exterior_design,BMW 5 Series (G60),BMW feedback IDs,,2,0.0,0.0,0.0,1.0,1.0
+EU,bmw_all_sources,hmi_infotainment,BMW 5 Series (G60),BMW feedback IDs,,20,0.25,0.15,0.45,0.15,0.6
+EU,bmw_all_sources,interior_design_quality,BMW 5 Series (G60),BMW feedback IDs,,7,0.14,0.14,0.29,0.43,0.71
+EU,bmw_all_sources,lighting_visibility,BMW 5 Series (G60),BMW feedback IDs,,5,0.2,0.4,0.2,0.2,0.4
+EU,bmw_all_sources,overall_quality_ownership,BMW 5 Series (G60),BMW feedback IDs,,5,0.2,0.2,0.6,0.0,0.6
+EU,bmw_all_sources,powertrain_performance,BMW 5 Series (G60),BMW feedback IDs,,10,0.9,0.0,0.0,0.1,0.1
+EU,bmw_all_sources,range_charging_efficiency,BMW 5 Series (G60),BMW feedback IDs,,26,0.27,0.12,0.5,0.12,0.62
+EU,bmw_all_sources,ride_handling,BMW 5 Series (G60),BMW feedback IDs,,38,0.87,0.03,0.05,0.05,0.11
+EU,bmw_all_sources,safety,BMW 5 Series (G60),BMW feedback IDs,,5,0.8,0.0,0.0,0.2,0.2
+EU,bmw_all_sources,seats_comfort,BMW 5 Series (G60),BMW feedback IDs,,5,0.0,0.2,0.4,0.4,0.8
+EU,bmw_all_sources,space_practicality,BMW 5 Series (G60),BMW feedback IDs,,4,0.25,0.25,0.0,0.5,0.5
+EU,owner,access_locking,BMW 5 Series (G60),BMW feedback IDs,,5,0.0,0.2,0.0,0.8,0.8
+EU,owner,access_locking,Mercedes-Benz E-Class (W214),web records,1,1,0.0,0.0,0.0,1.0,1.0
+EU,owner,access_locking,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,owner,adas_parking,Audi A6 e-tron (PPE),web records,2,4,0.5,0.25,0.25,0.0,0.25
+EU,owner,adas_parking,BMW 5 Series (G60),BMW feedback IDs,,8,0.38,0.12,0.25,0.25,0.5
+EU,owner,adas_parking,Mercedes-Benz E-Class (W214),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,owner,adas_parking,Mercedes-Benz EQE (V295),web records,1,3,0.67,0.0,0.33,0.0,0.33
+EU,owner,adas_parking,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,3,0.67,0.0,0.33,0.0,0.33
+EU,owner,adas_parking,Tesla Model 3 (Highland),web records,2,2,0.0,0.5,0.5,0.0,0.5
+EU,owner,audio_acoustics,BMW 5 Series (G60),BMW feedback IDs,,7,0.43,0.29,0.0,0.29,0.29
+EU,owner,audio_acoustics,Mercedes-Benz E-Class (W214),web records,3,3,0.67,0.0,0.33,0.0,0.33
+EU,owner,audio_acoustics,Mercedes-Benz EQE (V295),web records,2,3,1.0,0.0,0.0,0.0,0.0
+EU,owner,audio_acoustics,Tesla Model 3 (Highland),web records,1,2,0.5,0.0,0.5,0.0,0.5
+EU,owner,climate,BMW 5 Series (G60),BMW feedback IDs,,4,0.25,0.0,0.5,0.25,0.75
+EU,owner,climate,Tesla Model 3 (Highland),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,owner,connectivity_app_digital,BMW 5 Series (G60),BMW feedback IDs,,4,0.0,0.25,0.75,0.0,0.75
+EU,owner,equipment_value,BMW 5 Series (G60),BMW feedback IDs,,4,0.25,0.75,0.0,0.0,0.0
+EU,owner,exterior_design,BMW 5 Series (G60),BMW feedback IDs,,2,0.0,0.0,0.0,1.0,1.0
+EU,owner,exterior_design,Mercedes-Benz EQE (V295),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,owner,hmi_infotainment,BMW 5 Series (G60),BMW feedback IDs,,20,0.25,0.15,0.45,0.15,0.6
+EU,owner,hmi_infotainment,Mercedes-Benz E-Class (W214),web records,2,2,0.5,0.0,0.5,0.0,0.5
+EU,owner,hmi_infotainment,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,5,0.4,0.2,0.2,0.2,0.4
+EU,owner,hmi_infotainment,Tesla Model 3 (Highland),web records,2,2,1.0,0.0,0.0,0.0,0.0
+EU,owner,interior_design_quality,BMW 5 Series (G60),BMW feedback IDs,,7,0.14,0.14,0.29,0.43,0.71
+EU,owner,interior_design_quality,Mercedes-Benz E-Class (W214),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,owner,interior_design_quality,Mercedes-Benz EQE (V295),web records,1,2,0.0,0.5,0.0,0.5,0.5
+EU,owner,interior_design_quality,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,2,1.0,0.0,0.0,0.0,0.0
+EU,owner,interior_design_quality,Tesla Model 3 (Highland),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,owner,lighting_visibility,BMW 5 Series (G60),BMW feedback IDs,,5,0.2,0.4,0.2,0.2,0.4
+EU,owner,lighting_visibility,Mercedes-Benz EQE (V295),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,owner,lighting_visibility,Tesla Model 3 (Highland),web records,3,4,0.0,0.0,1.0,0.0,1.0
+EU,owner,overall_quality_ownership,Audi A6 e-tron (PPE),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,owner,overall_quality_ownership,BMW 5 Series (G60),BMW feedback IDs,,5,0.2,0.2,0.6,0.0,0.6
+EU,owner,overall_quality_ownership,Mercedes-Benz E-Class (W214),web records,2,2,0.5,0.0,0.0,0.5,0.5
+EU,owner,overall_quality_ownership,Mercedes-Benz EQE (V295),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,owner,overall_quality_ownership,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,owner,overall_quality_ownership,Tesla Model 3 (Highland),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,owner,powertrain_performance,BMW 5 Series (G60),BMW feedback IDs,,10,0.9,0.0,0.0,0.1,0.1
+EU,owner,powertrain_performance,Mercedes-Benz E-Class (W214),web records,3,3,0.0,0.0,0.33,0.67,1.0
+EU,owner,powertrain_performance,Mercedes-Benz EQE (V295),web records,2,2,0.5,0.0,0.5,0.0,0.5
+EU,owner,powertrain_performance,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,owner,powertrain_performance,Tesla Model 3 (Highland),web records,1,2,1.0,0.0,0.0,0.0,0.0
+EU,owner,range_charging_efficiency,Audi A6 e-tron (PPE),web records,1,3,1.0,0.0,0.0,0.0,0.0
+EU,owner,range_charging_efficiency,BMW 5 Series (G60),BMW feedback IDs,,26,0.27,0.12,0.5,0.12,0.62
+EU,owner,range_charging_efficiency,Mercedes-Benz E-Class (W214),web records,3,3,1.0,0.0,0.0,0.0,0.0
+EU,owner,range_charging_efficiency,Mercedes-Benz EQE (V295),web records,3,3,0.33,0.33,0.33,0.0,0.33
+EU,owner,range_charging_efficiency,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,owner,range_charging_efficiency,Tesla Model 3 (Highland),web records,2,4,1.0,0.0,0.0,0.0,0.0
+EU,owner,ride_handling,BMW 5 Series (G60),BMW feedback IDs,,38,0.87,0.03,0.05,0.05,0.11
+EU,owner,ride_handling,Mercedes-Benz EQE (V295),web records,6,6,1.0,0.0,0.0,0.0,0.0
+EU,owner,ride_handling,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+EU,owner,ride_handling,Tesla Model 3 (Highland),web records,1,2,0.5,0.0,0.5,0.0,0.5
+EU,owner,safety,BMW 5 Series (G60),BMW feedback IDs,,5,0.8,0.0,0.0,0.2,0.2
+EU,owner,seats_comfort,BMW 5 Series (G60),BMW feedback IDs,,5,0.0,0.2,0.4,0.4,0.8
+EU,owner,seats_comfort,Mercedes-Benz E-Class (W214),web records,2,2,0.5,0.0,0.5,0.0,0.5
+EU,owner,seats_comfort,Mercedes-Benz EQE (V295),web records,2,2,0.5,0.5,0.0,0.0,0.0
+EU,owner,seats_comfort,Tesla Model 3 (Highland),web records,2,4,0.75,0.0,0.25,0.0,0.25
+EU,owner,space_practicality,BMW 5 Series (G60),BMW feedback IDs,,4,0.25,0.25,0.0,0.5,0.5
+EU,owner,space_practicality,Mercedes-Benz E-Class (W214),web records,3,3,0.0,0.0,1.0,0.0,1.0
+EU,owner,space_practicality,Mercedes-Benz EQE (V295),web records,2,2,0.5,0.0,0.5,0.0,0.5
+EU,owner,space_practicality,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,4,0.25,0.5,0.25,0.0,0.25
+EU,owner,space_practicality,Tesla Model 3 (Highland),web records,2,4,0.75,0.25,0.0,0.0,0.0
+EU,press,access_locking,Audi A6 (C9),web records,1,4,0.5,0.0,0.5,0.0,0.5
+EU,press,access_locking,Audi A6 e-tron (PPE),web records,1,2,1.0,0.0,0.0,0.0,0.0
+EU,press,access_locking,Mercedes-Benz E-Class (W214),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,press,access_locking,Mercedes-Benz EQE (V295),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,press,access_locking,Volvo ES90 (ES90 1st gen (2025-)),web records,2,4,0.0,0.25,0.5,0.25,0.75
+EU,press,adas_parking,Audi A6 (C9),web records,1,2,1.0,0.0,0.0,0.0,0.0
+EU,press,adas_parking,Audi A6 e-tron (PPE),web records,1,2,0.5,0.5,0.0,0.0,0.0
+EU,press,adas_parking,Mercedes-Benz E-Class (W214),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,press,adas_parking,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,0.0,0.0,0.0,1.0,1.0
+EU,press,adas_parking,Tesla Model 3 (Highland),web records,2,4,0.0,0.25,0.5,0.25,0.75
+EU,press,adas_parking,Tesla Model S (Palladium (2021+ refresh)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+EU,press,adas_parking,Volvo ES90 (ES90 1st gen (2025-)),web records,2,2,0.5,0.0,0.0,0.5,0.5
+EU,press,audio_acoustics,Audi A6 (C9),web records,1,3,0.67,0.0,0.33,0.0,0.33
+EU,press,audio_acoustics,Audi A6 e-tron (PPE),web records,2,2,0.0,0.0,1.0,0.0,1.0
+EU,press,audio_acoustics,Mercedes-Benz E-Class (W214),web records,2,3,1.0,0.0,0.0,0.0,0.0
+EU,press,audio_acoustics,Mercedes-Benz EQE (V295),web records,2,2,1.0,0.0,0.0,0.0,0.0
+EU,press,audio_acoustics,Tesla Model 3 (Highland),web records,2,2,1.0,0.0,0.0,0.0,0.0
+EU,press,audio_acoustics,Tesla Model S (Palladium (2021+ refresh)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+EU,press,audio_acoustics,Volvo ES90 (ES90 1st gen (2025-)),web records,4,5,0.8,0.0,0.0,0.2,0.2
+EU,press,climate,Audi A6 (C9),web records,1,2,0.5,0.0,0.5,0.0,0.5
+EU,press,climate,Audi A6 e-tron (PPE),web records,1,2,0.5,0.0,0.5,0.0,0.5
+EU,press,climate,Mercedes-Benz E-Class (W214),web records,1,2,0.0,0.0,1.0,0.0,1.0
+EU,press,climate,Mercedes-Benz EQE (V295),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,press,climate,Volvo ES90 (ES90 1st gen (2025-)),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,press,connectivity_app_digital,Audi A6 (C9),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,press,connectivity_app_digital,Mercedes-Benz E-Class (W214),web records,1,2,0.5,0.0,0.5,0.0,0.5
+EU,press,connectivity_app_digital,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,0.0,1.0,0.0,0.0,0.0
+EU,press,connectivity_app_digital,Tesla Model 3 (Highland),web records,1,1,0.0,1.0,0.0,0.0,0.0
+EU,press,connectivity_app_digital,Tesla Model S (Palladium (2021+ refresh)),web records,1,1,0.0,1.0,0.0,0.0,0.0
+EU,press,equipment_value,Audi A6 (C9),web records,1,2,0.5,0.0,0.5,0.0,0.5
+EU,press,equipment_value,Audi A6 e-tron (PPE),web records,2,3,0.33,0.0,0.67,0.0,0.67
+EU,press,equipment_value,Mercedes-Benz E-Class (W214),web records,2,3,0.0,0.0,1.0,0.0,1.0
+EU,press,equipment_value,Mercedes-Benz EQE (V295),web records,2,2,0.0,0.0,1.0,0.0,1.0
+EU,press,equipment_value,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+EU,press,equipment_value,Tesla Model 3 (Highland),web records,2,2,1.0,0.0,0.0,0.0,0.0
+EU,press,equipment_value,Tesla Model S (Palladium (2021+ refresh)),web records,2,2,0.5,0.5,0.0,0.0,0.0
+EU,press,equipment_value,Volvo ES90 (ES90 1st gen (2025-)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+EU,press,exterior_design,Audi A6 e-tron (PPE),web records,1,3,0.33,0.0,0.67,0.0,0.67
+EU,press,exterior_design,Tesla Model S (Palladium (2021+ refresh)),web records,1,1,0.0,0.0,0.0,1.0,1.0
+EU,press,hmi_infotainment,Audi A6 (C9),web records,1,7,0.57,0.0,0.43,0.0,0.43
+EU,press,hmi_infotainment,Audi A6 e-tron (PPE),web records,2,9,0.33,0.0,0.67,0.0,0.67
+EU,press,hmi_infotainment,Mercedes-Benz E-Class (W214),web records,2,7,0.29,0.0,0.71,0.0,0.71
+EU,press,hmi_infotainment,Mercedes-Benz EQE (V295),web records,2,5,0.4,0.2,0.4,0.0,0.4
+EU,press,hmi_infotainment,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,4,0.25,0.0,0.75,0.0,0.75
+EU,press,hmi_infotainment,Tesla Model 3 (Highland),web records,2,4,0.5,0.0,0.5,0.0,0.5
+EU,press,hmi_infotainment,Tesla Model S (Palladium (2021+ refresh)),web records,2,3,0.33,0.0,0.67,0.0,0.67
+EU,press,hmi_infotainment,Volvo ES90 (ES90 1st gen (2025-)),web records,4,5,0.2,0.0,0.8,0.0,0.8
+EU,press,interior_design_quality,Audi A6 (C9),web records,1,2,0.0,0.0,1.0,0.0,1.0
+EU,press,interior_design_quality,Audi A6 e-tron (PPE),web records,2,3,0.0,0.0,1.0,0.0,1.0
+EU,press,interior_design_quality,Mercedes-Benz E-Class (W214),web records,2,3,0.33,0.0,0.67,0.0,0.67
+EU,press,interior_design_quality,Mercedes-Benz EQE (V295),web records,2,3,0.67,0.0,0.33,0.0,0.33
+EU,press,interior_design_quality,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,press,interior_design_quality,Tesla Model 3 (Highland),web records,2,2,0.5,0.0,0.5,0.0,0.5
+EU,press,interior_design_quality,Tesla Model S (Palladium (2021+ refresh)),web records,2,4,0.5,0.25,0.25,0.0,0.25
+EU,press,interior_design_quality,Volvo ES90 (ES90 1st gen (2025-)),web records,4,7,0.57,0.0,0.29,0.14,0.43
+EU,press,lighting_visibility,Audi A6 (C9),web records,1,2,0.5,0.0,0.5,0.0,0.5
+EU,press,lighting_visibility,Audi A6 e-tron (PPE),web records,1,3,0.33,0.0,0.67,0.0,0.67
+EU,press,lighting_visibility,Mercedes-Benz E-Class (W214),web records,1,3,0.33,0.0,0.67,0.0,0.67
+EU,press,lighting_visibility,Mercedes-Benz EQE (V295),web records,1,2,0.5,0.0,0.5,0.0,0.5
+EU,press,lighting_visibility,Tesla Model 3 (Highland),web records,1,2,0.0,0.0,1.0,0.0,1.0
+EU,press,lighting_visibility,Tesla Model S (Palladium (2021+ refresh)),web records,2,2,0.0,0.0,1.0,0.0,1.0
+EU,press,lighting_visibility,Volvo ES90 (ES90 1st gen (2025-)),web records,3,4,0.0,0.0,0.75,0.25,1.0
+EU,press,overall_quality_ownership,Audi A6 e-tron (PPE),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,press,overall_quality_ownership,Mercedes-Benz E-Class (W214),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,press,overall_quality_ownership,Mercedes-Benz EQE (V295),web records,1,1,0.0,0.0,1.0,0.0,1.0
+EU,press,overall_quality_ownership,Volvo ES90 (ES90 1st gen (2025-)),web records,3,3,0.0,0.33,0.33,0.33,0.67
+EU,press,powertrain_performance,Audi A6 (C9),web records,2,3,1.0,0.0,0.0,0.0,0.0
+EU,press,powertrain_performance,Audi A6 e-tron (PPE),web records,2,3,0.67,0.0,0.33,0.0,0.33
+EU,press,powertrain_performance,Mercedes-Benz E-Class (W214),web records,2,4,0.5,0.0,0.5,0.0,0.5
+EU,press,powertrain_performance,Mercedes-Benz EQE (V295),web records,2,2,0.5,0.0,0.5,0.0,0.5
+EU,press,powertrain_performance,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+EU,press,powertrain_performance,Tesla Model 3 (Highland),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,press,powertrain_performance,Tesla Model S (Palladium (2021+ refresh)),web records,3,3,1.0,0.0,0.0,0.0,0.0
+EU,press,powertrain_performance,Volvo ES90 (ES90 1st gen (2025-)),web records,1,1,0.0,1.0,0.0,0.0,0.0
+EU,press,range_charging_efficiency,Audi A6 (C9),web records,2,3,0.33,0.33,0.33,0.0,0.33
+EU,press,range_charging_efficiency,Audi A6 e-tron (PPE),web records,3,10,0.5,0.0,0.5,0.0,0.5
+EU,press,range_charging_efficiency,Mercedes-Benz E-Class (W214),web records,2,2,1.0,0.0,0.0,0.0,0.0
+EU,press,range_charging_efficiency,Mercedes-Benz EQE (V295),web records,2,6,0.5,0.0,0.5,0.0,0.5
+EU,press,range_charging_efficiency,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,5,0.6,0.0,0.4,0.0,0.4
+EU,press,range_charging_efficiency,Tesla Model 3 (Highland),web records,2,6,0.83,0.0,0.17,0.0,0.17
+EU,press,range_charging_efficiency,Tesla Model S (Palladium (2021+ refresh)),web records,3,4,0.75,0.0,0.25,0.0,0.25
+EU,press,range_charging_efficiency,Volvo ES90 (ES90 1st gen (2025-)),web records,4,8,0.75,0.0,0.25,0.0,0.25
+EU,press,ride_handling,Audi A6 (C9),web records,1,4,0.75,0.0,0.25,0.0,0.25
+EU,press,ride_handling,Audi A6 e-tron (PPE),web records,3,8,0.5,0.0,0.5,0.0,0.5
+EU,press,ride_handling,Mercedes-Benz E-Class (W214),web records,2,8,0.62,0.0,0.38,0.0,0.38
+EU,press,ride_handling,Mercedes-Benz EQE (V295),web records,2,8,0.38,0.0,0.62,0.0,0.62
+EU,press,ride_handling,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,7,0.43,0.0,0.57,0.0,0.57
+EU,press,ride_handling,Tesla Model 3 (Highland),web records,2,4,0.25,0.0,0.75,0.0,0.75
+EU,press,ride_handling,Tesla Model S (Palladium (2021+ refresh)),web records,2,3,0.33,0.0,0.67,0.0,0.67
+EU,press,ride_handling,Volvo ES90 (ES90 1st gen (2025-)),web records,3,5,0.4,0.0,0.6,0.0,0.6
+EU,press,safety,Audi A6 e-tron (PPE),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,press,safety,Mercedes-Benz E-Class (W214),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,press,seats_comfort,Audi A6 (C9),web records,1,2,0.5,0.0,0.5,0.0,0.5
+EU,press,seats_comfort,Audi A6 e-tron (PPE),web records,2,2,0.0,0.0,1.0,0.0,1.0
+EU,press,seats_comfort,Mercedes-Benz E-Class (W214),web records,2,3,0.33,0.0,0.67,0.0,0.67
+EU,press,seats_comfort,Mercedes-Benz EQE (V295),web records,2,3,0.33,0.0,0.67,0.0,0.67
+EU,press,seats_comfort,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,press,seats_comfort,Tesla Model 3 (Highland),web records,1,2,0.5,0.0,0.5,0.0,0.5
+EU,press,seats_comfort,Tesla Model S (Palladium (2021+ refresh)),web records,2,2,0.0,0.5,0.5,0.0,0.5
+EU,press,seats_comfort,Volvo ES90 (ES90 1st gen (2025-)),web records,3,6,0.67,0.0,0.17,0.17,0.33
+EU,press,space_practicality,Audi A6 (C9),web records,1,2,0.0,0.0,1.0,0.0,1.0
+EU,press,space_practicality,Audi A6 e-tron (PPE),web records,3,10,0.5,0.0,0.5,0.0,0.5
+EU,press,space_practicality,Mercedes-Benz E-Class (W214),web records,2,5,0.8,0.0,0.2,0.0,0.2
+EU,press,space_practicality,Mercedes-Benz EQE (V295),web records,2,6,0.17,0.17,0.67,0.0,0.67
+EU,press,space_practicality,NIO ET7 (ET7 1st gen (2022-; 2024 facelift)),web records,2,7,0.29,0.0,0.71,0.0,0.71
+EU,press,space_practicality,Tesla Model 3 (Highland),web records,2,3,0.33,0.0,0.67,0.0,0.67
+EU,press,space_practicality,Tesla Model S (Palladium (2021+ refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,press,space_practicality,Volvo ES90 (ES90 1st gen (2025-)),web records,4,8,0.25,0.0,0.75,0.0,0.75
+EU,press,unclassified,Tesla Model S (Palladium (2021+ refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,survey,hmi_infotainment,Tesla Model 3 (Highland),web records,1,2,0.5,0.0,0.5,0.0,0.5
+EU,survey,interior_design_quality,Tesla Model 3 (Highland),web records,1,1,0.0,0.0,0.0,1.0,1.0
+EU,survey,overall_quality_ownership,Tesla Model 3 (Highland),web records,1,1,1.0,0.0,0.0,0.0,0.0
+EU,survey,powertrain_performance,Tesla Model 3 (Highland),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,bmw_all_sources,access_locking,BMW 5 Series (G60),BMW feedback IDs,,259,0.13,0.15,0.52,0.2,0.72
+US,bmw_all_sources,adas_parking,BMW 5 Series (G60),BMW feedback IDs,,286,0.35,0.16,0.4,0.09,0.49
+US,bmw_all_sources,audio_acoustics,BMW 5 Series (G60),BMW feedback IDs,,86,0.53,0.15,0.14,0.17,0.31
+US,bmw_all_sources,climate,BMW 5 Series (G60),BMW feedback IDs,,110,0.14,0.22,0.57,0.07,0.65
+US,bmw_all_sources,connectivity_app_digital,BMW 5 Series (G60),BMW feedback IDs,,227,0.18,0.15,0.52,0.15,0.68
+US,bmw_all_sources,equipment_value,BMW 5 Series (G60),BMW feedback IDs,,38,0.37,0.63,0.0,0.0,0.0
+US,bmw_all_sources,exterior_design,BMW 5 Series (G60),BMW feedback IDs,,215,0.78,0.06,0.06,0.11,0.16
+US,bmw_all_sources,hmi_infotainment,BMW 5 Series (G60),BMW feedback IDs,,435,0.35,0.14,0.42,0.09,0.51
+US,bmw_all_sources,interior_design_quality,BMW 5 Series (G60),BMW feedback IDs,,244,0.5,0.22,0.18,0.1,0.28
+US,bmw_all_sources,lighting_visibility,BMW 5 Series (G60),BMW feedback IDs,,70,0.17,0.29,0.3,0.24,0.54
+US,bmw_all_sources,overall_quality_ownership,BMW 5 Series (G60),BMW feedback IDs,,226,0.51,0.08,0.36,0.06,0.42
+US,bmw_all_sources,powertrain_performance,BMW 5 Series (G60),BMW feedback IDs,,427,0.68,0.07,0.19,0.06,0.25
+US,bmw_all_sources,range_charging_efficiency,BMW 5 Series (G60),BMW feedback IDs,,235,0.3,0.16,0.44,0.1,0.54
+US,bmw_all_sources,ride_handling,BMW 5 Series (G60),BMW feedback IDs,,485,0.66,0.09,0.2,0.05,0.25
+US,bmw_all_sources,safety,BMW 5 Series (G60),BMW feedback IDs,,42,0.43,0.05,0.36,0.17,0.52
+US,bmw_all_sources,seats_comfort,BMW 5 Series (G60),BMW feedback IDs,,200,0.53,0.15,0.22,0.1,0.32
+US,bmw_all_sources,space_practicality,BMW 5 Series (G60),BMW feedback IDs,,185,0.31,0.22,0.43,0.04,0.47
+US,complaints,access_locking,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,1,2,0.0,0.0,0.0,1.0,1.0
+US,complaints,access_locking,Mercedes-Benz E-Class (W214),web records,2,2,0.0,0.0,0.0,1.0,1.0
+US,complaints,adas_parking,Mercedes-Benz E-Class (W214),web records,3,3,0.0,0.0,0.0,1.0,1.0
+US,complaints,adas_parking,Mercedes-Benz EQE (V295),web records,11,12,0.0,0.0,0.08,0.92,1.0
+US,complaints,audio_acoustics,Mercedes-Benz EQE (V295),web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,complaints,climate,Mercedes-Benz E-Class (W214),web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,complaints,climate,Mercedes-Benz EQE (V295),web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,complaints,hmi_infotainment,Mercedes-Benz E-Class (W214),web records,8,8,0.0,0.0,0.0,1.0,1.0
+US,complaints,hmi_infotainment,Mercedes-Benz EQE (V295),web records,2,2,0.0,0.0,0.0,1.0,1.0
+US,complaints,interior_design_quality,Mercedes-Benz E-Class (W214),web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,complaints,interior_design_quality,Mercedes-Benz EQE (V295),web records,4,4,0.0,0.0,0.0,1.0,1.0
+US,complaints,overall_quality_ownership,Mercedes-Benz EQE (V295),web records,3,3,0.0,0.0,0.0,1.0,1.0
+US,complaints,powertrain_performance,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,complaints,powertrain_performance,Mercedes-Benz E-Class (W214),web records,5,5,0.0,0.0,0.0,1.0,1.0
+US,complaints,powertrain_performance,Mercedes-Benz EQE (V295),web records,17,17,0.0,0.0,0.0,1.0,1.0
+US,complaints,range_charging_efficiency,Mercedes-Benz EQE (V295),web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,complaints,ride_handling,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,complaints,ride_handling,Mercedes-Benz E-Class (W214),web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,complaints,ride_handling,Mercedes-Benz EQE (V295),web records,9,10,0.0,0.0,0.0,1.0,1.0
+US,complaints,safety,Mercedes-Benz E-Class (W214),web records,2,2,0.0,0.0,0.0,1.0,1.0
+US,complaints,safety,Mercedes-Benz EQE (V295),web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,complaints,seats_comfort,Mercedes-Benz E-Class (W214),web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,owner,access_locking,BMW 5 Series (G60),BMW feedback IDs,,52,0.15,0.12,0.17,0.56,0.73
+US,owner,access_locking,Genesis G80 (RG3),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,access_locking,Tesla Model 3 (Highland),web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,owner,adas_parking,BMW 5 Series (G60),BMW feedback IDs,,36,0.25,0.22,0.31,0.22,0.53
+US,owner,adas_parking,Cadillac CT5 (1st gen (MY2020+)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,adas_parking,Genesis G80 (RG3),web records,4,5,0.4,0.0,0.0,0.6,0.6
+US,owner,adas_parking,Lexus ES (XZ10),web records,3,3,0.67,0.0,0.33,0.0,0.33
+US,owner,adas_parking,Mercedes-Benz E-Class (W214),web records,2,3,0.33,0.0,0.33,0.33,0.67
+US,owner,adas_parking,Tesla Model 3 (Highland),web records,5,6,0.83,0.0,0.0,0.17,0.17
+US,owner,adas_parking,Tesla Model S (Model S (2021 refresh)),web records,4,4,0.75,0.0,0.0,0.25,0.25
+US,owner,audio_acoustics,BMW 5 Series (G60),BMW feedback IDs,,25,0.36,0.12,0.08,0.44,0.52
+US,owner,audio_acoustics,Cadillac CT5 (1st gen (MY2020+)),web records,6,6,1.0,0.0,0.0,0.0,0.0
+US,owner,audio_acoustics,Genesis G80 (RG3),web records,3,5,1.0,0.0,0.0,0.0,0.0
+US,owner,audio_acoustics,Lexus ES (XZ10),web records,9,11,0.64,0.09,0.09,0.18,0.27
+US,owner,audio_acoustics,Mercedes-Benz E-Class (W214),web records,1,2,1.0,0.0,0.0,0.0,0.0
+US,owner,audio_acoustics,Tesla Model 3 (Highland),web records,5,5,0.8,0.0,0.2,0.0,0.2
+US,owner,audio_acoustics,Tesla Model S (Model S (2021 refresh)),web records,4,4,0.75,0.0,0.25,0.0,0.25
+US,owner,climate,BMW 5 Series (G60),BMW feedback IDs,,20,0.05,0.35,0.35,0.25,0.6
+US,owner,climate,Lexus ES (XZ10),web records,2,2,1.0,0.0,0.0,0.0,0.0
+US,owner,climate,Mercedes-Benz E-Class (W214),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,climate,Tesla Model 3 (Highland),web records,1,1,0.0,0.0,1.0,0.0,1.0
+US,owner,connectivity_app_digital,BMW 5 Series (G60),BMW feedback IDs,,43,0.14,0.16,0.42,0.28,0.7
+US,owner,connectivity_app_digital,Cadillac CT5 (1st gen (MY2020+)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+US,owner,connectivity_app_digital,Genesis G80 (RG3),web records,3,3,0.0,0.33,0.33,0.33,0.67
+US,owner,connectivity_app_digital,Lexus ES (XZ10),web records,3,3,0.67,0.0,0.0,0.33,0.33
+US,owner,connectivity_app_digital,Tesla Model 3 (Highland),web records,3,4,1.0,0.0,0.0,0.0,0.0
+US,owner,connectivity_app_digital,Tesla Model S (Model S (2021 refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,equipment_value,BMW 5 Series (G60),BMW feedback IDs,,14,0.57,0.43,0.0,0.0,0.0
+US,owner,equipment_value,Cadillac CT5 (1st gen (MY2020+)),web records,6,6,0.83,0.17,0.0,0.0,0.0
+US,owner,equipment_value,Genesis G80 (RG3),web records,6,7,0.71,0.14,0.14,0.0,0.14
+US,owner,equipment_value,Lexus ES (XZ10),web records,3,3,0.67,0.33,0.0,0.0,0.0
+US,owner,equipment_value,Mercedes-Benz E-Class (W214),web records,1,1,0.0,0.0,1.0,0.0,1.0
+US,owner,equipment_value,Mercedes-Benz EQE (V295),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,equipment_value,Tesla Model 3 (Highland),web records,5,5,0.4,0.0,0.6,0.0,0.6
+US,owner,equipment_value,Tesla Model S (Model S (2021 refresh)),web records,6,6,0.5,0.0,0.5,0.0,0.5
+US,owner,exterior_design,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,exterior_design,BMW 5 Series (G60),BMW feedback IDs,,39,0.64,0.0,0.03,0.33,0.36
+US,owner,exterior_design,Cadillac CT5 (1st gen (MY2020+)),web records,10,10,1.0,0.0,0.0,0.0,0.0
+US,owner,exterior_design,Genesis G80 (RG3),web records,9,9,0.89,0.0,0.11,0.0,0.11
+US,owner,exterior_design,Lexus ES (XZ10),web records,7,7,0.71,0.0,0.14,0.14,0.29
+US,owner,exterior_design,Mercedes-Benz EQE (V295),web records,2,2,1.0,0.0,0.0,0.0,0.0
+US,owner,exterior_design,Tesla Model 3 (Highland),web records,3,3,0.67,0.0,0.33,0.0,0.33
+US,owner,exterior_design,Tesla Model S (Model S (2021 refresh)),web records,4,4,1.0,0.0,0.0,0.0,0.0
+US,owner,hmi_infotainment,BMW 5 Series (G60),BMW feedback IDs,,80,0.26,0.15,0.34,0.25,0.59
+US,owner,hmi_infotainment,Cadillac CT5 (1st gen (MY2020+)),web records,5,5,0.8,0.0,0.2,0.0,0.2
+US,owner,hmi_infotainment,Genesis G80 (RG3),web records,7,7,0.57,0.14,0.29,0.0,0.29
+US,owner,hmi_infotainment,Lexus ES (XZ10),web records,9,13,0.08,0.08,0.69,0.15,0.85
+US,owner,hmi_infotainment,Mercedes-Benz E-Class (W214),web records,2,4,0.5,0.0,0.5,0.0,0.5
+US,owner,hmi_infotainment,Tesla Model 3 (Highland),web records,6,10,0.6,0.1,0.3,0.0,0.3
+US,owner,hmi_infotainment,Tesla Model S (Model S (2021 refresh)),web records,6,6,0.33,0.0,0.67,0.0,0.67
+US,owner,interior_design_quality,BMW 5 Series (G60),BMW feedback IDs,,41,0.41,0.2,0.12,0.27,0.39
+US,owner,interior_design_quality,Cadillac CT5 (1st gen (MY2020+)),web records,10,11,0.73,0.09,0.18,0.0,0.18
+US,owner,interior_design_quality,Genesis G80 (RG3),web records,6,6,0.67,0.0,0.33,0.0,0.33
+US,owner,interior_design_quality,Lexus ES (XZ10),web records,4,4,1.0,0.0,0.0,0.0,0.0
+US,owner,interior_design_quality,Mercedes-Benz E-Class (W214),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,interior_design_quality,Mercedes-Benz EQE (V295),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,interior_design_quality,Tesla Model 3 (Highland),web records,4,4,0.75,0.0,0.25,0.0,0.25
+US,owner,interior_design_quality,Tesla Model S (Model S (2021 refresh)),web records,3,3,0.67,0.0,0.33,0.0,0.33
+US,owner,lighting_visibility,BMW 5 Series (G60),BMW feedback IDs,,8,0.25,0.12,0.25,0.38,0.62
+US,owner,lighting_visibility,Cadillac CT5 (1st gen (MY2020+)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+US,owner,lighting_visibility,Mercedes-Benz E-Class (W214),web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,owner,lighting_visibility,Tesla Model S (Model S (2021 refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,overall_quality_ownership,BMW 5 Series (G60),BMW feedback IDs,,34,0.15,0.21,0.5,0.15,0.65
+US,owner,overall_quality_ownership,Cadillac CT5 (1st gen (MY2020+)),web records,6,7,0.86,0.0,0.14,0.0,0.14
+US,owner,overall_quality_ownership,Genesis G80 (RG3),web records,8,11,0.36,0.09,0.36,0.18,0.55
+US,owner,overall_quality_ownership,Lexus ES (XZ10),web records,6,6,0.67,0.0,0.33,0.0,0.33
+US,owner,overall_quality_ownership,Mercedes-Benz E-Class (W214),web records,2,2,1.0,0.0,0.0,0.0,0.0
+US,owner,overall_quality_ownership,Mercedes-Benz EQE (V295),web records,2,2,0.5,0.0,0.0,0.5,0.5
+US,owner,overall_quality_ownership,Tesla Model 3 (Highland),web records,4,5,0.4,0.0,0.2,0.4,0.6
+US,owner,overall_quality_ownership,Tesla Model S (Model S (2021 refresh)),web records,7,9,0.44,0.0,0.22,0.33,0.56
+US,owner,powertrain_performance,BMW 5 Series (G60),BMW feedback IDs,,102,0.66,0.1,0.16,0.09,0.25
+US,owner,powertrain_performance,Cadillac CT5 (1st gen (MY2020+)),web records,10,10,1.0,0.0,0.0,0.0,0.0
+US,owner,powertrain_performance,Genesis G80 (RG3),web records,9,11,0.64,0.0,0.36,0.0,0.36
+US,owner,powertrain_performance,Lexus ES (XZ10),web records,10,10,0.8,0.0,0.2,0.0,0.2
+US,owner,powertrain_performance,Mercedes-Benz E-Class (W214),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,powertrain_performance,Mercedes-Benz EQE (V295),web records,2,2,1.0,0.0,0.0,0.0,0.0
+US,owner,powertrain_performance,Tesla Model 3 (Highland),web records,4,5,1.0,0.0,0.0,0.0,0.0
+US,owner,powertrain_performance,Tesla Model S (Model S (2021 refresh)),web records,11,13,0.92,0.0,0.08,0.0,0.08
+US,owner,range_charging_efficiency,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,1,2,0.5,0.0,0.5,0.0,0.5
+US,owner,range_charging_efficiency,BMW 5 Series (G60),BMW feedback IDs,,54,0.2,0.2,0.43,0.17,0.59
+US,owner,range_charging_efficiency,Cadillac CT5 (1st gen (MY2020+)),web records,3,3,1.0,0.0,0.0,0.0,0.0
+US,owner,range_charging_efficiency,Genesis G80 (RG3),web records,7,7,0.71,0.0,0.29,0.0,0.29
+US,owner,range_charging_efficiency,Lexus ES (XZ10),web records,12,12,0.83,0.0,0.17,0.0,0.17
+US,owner,range_charging_efficiency,Mercedes-Benz E-Class (W214),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,range_charging_efficiency,Mercedes-Benz EQE (V295),web records,2,4,0.5,0.0,0.25,0.25,0.5
+US,owner,range_charging_efficiency,Tesla Model 3 (Highland),web records,4,5,0.8,0.0,0.0,0.2,0.2
+US,owner,range_charging_efficiency,Tesla Model S (Model S (2021 refresh)),web records,2,2,1.0,0.0,0.0,0.0,0.0
+US,owner,ride_handling,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,ride_handling,BMW 5 Series (G60),BMW feedback IDs,,173,0.73,0.08,0.11,0.08,0.18
+US,owner,ride_handling,Cadillac CT5 (1st gen (MY2020+)),web records,13,13,0.85,0.08,0.08,0.0,0.08
+US,owner,ride_handling,Genesis G80 (RG3),web records,10,10,1.0,0.0,0.0,0.0,0.0
+US,owner,ride_handling,Lexus ES (XZ10),web records,9,10,0.9,0.0,0.1,0.0,0.1
+US,owner,ride_handling,Mercedes-Benz E-Class (W214),web records,2,2,0.5,0.5,0.0,0.0,0.0
+US,owner,ride_handling,Mercedes-Benz EQE (V295),web records,1,2,0.5,0.0,0.5,0.0,0.5
+US,owner,ride_handling,Tesla Model 3 (Highland),web records,6,7,0.71,0.0,0.29,0.0,0.29
+US,owner,ride_handling,Tesla Model S (Model S (2021 refresh)),web records,4,7,0.57,0.14,0.14,0.14,0.29
+US,owner,safety,BMW 5 Series (G60),BMW feedback IDs,,13,0.46,0.0,0.38,0.15,0.54
+US,owner,safety,Cadillac CT5 (1st gen (MY2020+)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,safety,Genesis G80 (RG3),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,safety,Lexus ES (XZ10),web records,3,3,1.0,0.0,0.0,0.0,0.0
+US,owner,seats_comfort,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,1,1,0.0,0.0,1.0,0.0,1.0
+US,owner,seats_comfort,BMW 5 Series (G60),BMW feedback IDs,,55,0.29,0.16,0.27,0.27,0.55
+US,owner,seats_comfort,Cadillac CT5 (1st gen (MY2020+)),web records,6,7,0.86,0.14,0.0,0.0,0.0
+US,owner,seats_comfort,Genesis G80 (RG3),web records,6,6,1.0,0.0,0.0,0.0,0.0
+US,owner,seats_comfort,Lexus ES (XZ10),web records,4,4,0.25,0.5,0.25,0.0,0.25
+US,owner,seats_comfort,Mercedes-Benz E-Class (W214),web records,1,1,0.0,1.0,0.0,0.0,0.0
+US,owner,seats_comfort,Mercedes-Benz EQE (V295),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,seats_comfort,Tesla Model 3 (Highland),web records,7,7,0.71,0.0,0.29,0.0,0.29
+US,owner,seats_comfort,Tesla Model S (Model S (2021 refresh)),web records,2,2,1.0,0.0,0.0,0.0,0.0
+US,owner,space_practicality,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,space_practicality,BMW 5 Series (G60),BMW feedback IDs,,40,0.23,0.33,0.3,0.15,0.45
+US,owner,space_practicality,Cadillac CT5 (1st gen (MY2020+)),web records,8,10,0.6,0.0,0.4,0.0,0.4
+US,owner,space_practicality,Genesis G80 (RG3),web records,2,2,1.0,0.0,0.0,0.0,0.0
+US,owner,space_practicality,Lexus ES (XZ10),web records,6,8,0.38,0.0,0.62,0.0,0.62
+US,owner,space_practicality,Mercedes-Benz E-Class (W214),web records,2,3,0.0,0.0,1.0,0.0,1.0
+US,owner,space_practicality,Mercedes-Benz EQE (V295),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,owner,space_practicality,Tesla Model 3 (Highland),web records,2,2,1.0,0.0,0.0,0.0,0.0
+US,owner,space_practicality,Tesla Model S (Model S (2021 refresh)),web records,5,6,0.83,0.0,0.17,0.0,0.17
+US,press,adas_parking,Cadillac CT5 (1st gen (MY2020+)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,adas_parking,Genesis G80 (RG3),web records,2,2,1.0,0.0,0.0,0.0,0.0
+US,press,adas_parking,Lexus ES (XZ10),web records,1,3,0.33,0.0,0.67,0.0,0.67
+US,press,adas_parking,Mercedes-Benz E-Class (W214),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,adas_parking,Mercedes-Benz EQE (V295),web records,1,1,0.0,0.0,1.0,0.0,1.0
+US,press,adas_parking,Tesla Model 3 (Highland),web records,1,2,0.5,0.0,0.5,0.0,0.5
+US,press,adas_parking,Tesla Model S (Model S (2021 refresh)),web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,press,audio_acoustics,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,1,2,1.0,0.0,0.0,0.0,0.0
+US,press,audio_acoustics,Genesis G80 (RG3),web records,1,2,0.5,0.0,0.5,0.0,0.5
+US,press,audio_acoustics,Lexus ES (8th gen (MY2026+)),web records,1,1,0.0,0.0,1.0,0.0,1.0
+US,press,audio_acoustics,Mercedes-Benz EQE (V295),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,audio_acoustics,Tesla Model 3 (Highland),web records,2,2,0.5,0.0,0.5,0.0,0.5
+US,press,audio_acoustics,Tesla Model S (Model S (2021 refresh)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,climate,Lexus ES (8th gen (MY2026+)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,connectivity_app_digital,Genesis G80 (RG3),web records,1,1,0.0,0.0,1.0,0.0,1.0
+US,press,connectivity_app_digital,Lexus ES (XZ10),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,connectivity_app_digital,Tesla Model S (Model S (2021 refresh)),web records,1,1,0.0,1.0,0.0,0.0,0.0
+US,press,equipment_value,Audi A6 (C9),web records,1,1,0.0,0.0,1.0,0.0,1.0
+US,press,equipment_value,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,3,3,0.33,0.0,0.67,0.0,0.67
+US,press,equipment_value,Genesis G80 (RG3),web records,2,2,0.5,0.5,0.0,0.0,0.0
+US,press,equipment_value,Lexus ES (8th gen (MY2026+)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,equipment_value,Lexus ES (XZ10),web records,2,2,1.0,0.0,0.0,0.0,0.0
+US,press,equipment_value,Mercedes-Benz E-Class (W214),web records,3,3,0.0,0.0,1.0,0.0,1.0
+US,press,equipment_value,Mercedes-Benz EQE (V295),web records,3,3,0.33,0.0,0.67,0.0,0.67
+US,press,equipment_value,Tesla Model 3 (Highland),web records,2,3,0.67,0.0,0.33,0.0,0.33
+US,press,equipment_value,Tesla Model S (Model S (2021 refresh)),web records,2,2,0.0,0.0,1.0,0.0,1.0
+US,press,exterior_design,Genesis G80 (RG3),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,exterior_design,Mercedes-Benz E-Class (W214),web records,1,2,0.5,0.0,0.5,0.0,0.5
+US,press,exterior_design,Mercedes-Benz EQE (V295),web records,2,2,0.0,0.0,1.0,0.0,1.0
+US,press,hmi_infotainment,Audi A6 (C9),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,hmi_infotainment,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,2,4,0.75,0.0,0.25,0.0,0.25
+US,press,hmi_infotainment,Cadillac CT5 (1st gen (MY2020+)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,hmi_infotainment,Genesis G80 (RG3),web records,2,2,0.5,0.0,0.5,0.0,0.5
+US,press,hmi_infotainment,Lexus ES (8th gen (MY2026+)),web records,2,3,1.0,0.0,0.0,0.0,0.0
+US,press,hmi_infotainment,Lexus ES (XZ10),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,hmi_infotainment,Mercedes-Benz E-Class (W214),web records,3,4,0.75,0.25,0.0,0.0,0.0
+US,press,hmi_infotainment,Mercedes-Benz EQE (V295),web records,4,6,0.33,0.0,0.67,0.0,0.67
+US,press,hmi_infotainment,Tesla Model 3 (Highland),web records,2,5,0.2,0.2,0.6,0.0,0.6
+US,press,hmi_infotainment,Tesla Model S (Model S (2021 refresh)),web records,3,4,0.5,0.0,0.5,0.0,0.5
+US,press,interior_design_quality,Audi A6 (C9),web records,2,2,0.5,0.0,0.5,0.0,0.5
+US,press,interior_design_quality,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,3,6,0.5,0.0,0.5,0.0,0.5
+US,press,interior_design_quality,Cadillac CT5 (1st gen (MY2020+)),web records,1,1,0.0,0.0,1.0,0.0,1.0
+US,press,interior_design_quality,Genesis G80 (RG3),web records,2,2,1.0,0.0,0.0,0.0,0.0
+US,press,interior_design_quality,Lexus ES (8th gen (MY2026+)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+US,press,interior_design_quality,Lexus ES (XZ10),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,interior_design_quality,Mercedes-Benz E-Class (W214),web records,2,3,0.67,0.0,0.33,0.0,0.33
+US,press,interior_design_quality,Mercedes-Benz EQE (V295),web records,4,4,0.5,0.0,0.5,0.0,0.5
+US,press,interior_design_quality,Tesla Model 3 (Highland),web records,2,3,0.33,0.0,0.67,0.0,0.67
+US,press,interior_design_quality,Tesla Model S (Model S (2021 refresh)),web records,3,8,0.12,0.0,0.88,0.0,0.88
+US,press,lighting_visibility,Mercedes-Benz EQE (V295),web records,1,1,0.0,0.0,1.0,0.0,1.0
+US,press,overall_quality_ownership,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,1,2,1.0,0.0,0.0,0.0,0.0
+US,press,overall_quality_ownership,Genesis G80 (RG3),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,overall_quality_ownership,Mercedes-Benz E-Class (W214),web records,2,2,0.5,0.0,0.5,0.0,0.5
+US,press,overall_quality_ownership,Tesla Model 3 (Highland),web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,press,overall_quality_ownership,Tesla Model S (Model S (2021 refresh)),web records,1,1,0.0,0.0,0.0,1.0,1.0
+US,press,powertrain_performance,Audi A6 (C9),web records,1,2,1.0,0.0,0.0,0.0,0.0
+US,press,powertrain_performance,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,3,5,1.0,0.0,0.0,0.0,0.0
+US,press,powertrain_performance,Cadillac CT5 (1st gen (MY2020+)),web records,2,3,0.33,0.0,0.67,0.0,0.67
+US,press,powertrain_performance,Genesis G80 (RG3),web records,2,3,0.67,0.0,0.33,0.0,0.33
+US,press,powertrain_performance,Lexus ES (8th gen (MY2026+)),web records,2,2,0.5,0.0,0.5,0.0,0.5
+US,press,powertrain_performance,Lexus ES (XZ10),web records,2,3,0.0,0.67,0.33,0.0,0.33
+US,press,powertrain_performance,Mercedes-Benz E-Class (W214),web records,2,3,0.67,0.0,0.33,0.0,0.33
+US,press,powertrain_performance,Mercedes-Benz EQE (V295),web records,3,3,0.67,0.0,0.33,0.0,0.33
+US,press,powertrain_performance,Tesla Model 3 (Highland),web records,2,4,0.5,0.0,0.5,0.0,0.5
+US,press,powertrain_performance,Tesla Model S (Model S (2021 refresh)),web records,3,4,1.0,0.0,0.0,0.0,0.0
+US,press,range_charging_efficiency,Audi A6 (C9),web records,1,1,0.0,0.0,1.0,0.0,1.0
+US,press,range_charging_efficiency,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,2,3,0.67,0.0,0.33,0.0,0.33
+US,press,range_charging_efficiency,Genesis G80 (RG3),web records,2,3,0.33,0.0,0.67,0.0,0.67
+US,press,range_charging_efficiency,Lexus ES (8th gen (MY2026+)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,range_charging_efficiency,Lexus ES (XZ10),web records,1,2,0.5,0.0,0.5,0.0,0.5
+US,press,range_charging_efficiency,Mercedes-Benz E-Class (W214),web records,2,2,0.0,0.0,1.0,0.0,1.0
+US,press,range_charging_efficiency,Mercedes-Benz EQE (V295),web records,3,6,0.33,0.0,0.67,0.0,0.67
+US,press,range_charging_efficiency,Tesla Model 3 (Highland),web records,2,3,1.0,0.0,0.0,0.0,0.0
+US,press,range_charging_efficiency,Tesla Model S (Model S (2021 refresh)),web records,2,4,1.0,0.0,0.0,0.0,0.0
+US,press,ride_handling,Audi A6 (C9),web records,1,3,0.33,0.0,0.67,0.0,0.67
+US,press,ride_handling,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,3,8,0.75,0.0,0.25,0.0,0.25
+US,press,ride_handling,Cadillac CT5 (1st gen (MY2020+)),web records,2,2,1.0,0.0,0.0,0.0,0.0
+US,press,ride_handling,Genesis G80 (RG3),web records,2,4,0.5,0.0,0.5,0.0,0.5
+US,press,ride_handling,Lexus ES (8th gen (MY2026+)),web records,2,2,1.0,0.0,0.0,0.0,0.0
+US,press,ride_handling,Lexus ES (XZ10),web records,2,3,0.67,0.0,0.33,0.0,0.33
+US,press,ride_handling,Mercedes-Benz E-Class (W214),web records,4,7,0.86,0.0,0.14,0.0,0.14
+US,press,ride_handling,Mercedes-Benz EQE (V295),web records,4,10,0.5,0.0,0.5,0.0,0.5
+US,press,ride_handling,Tesla Model 3 (Highland),web records,2,3,0.33,0.0,0.67,0.0,0.67
+US,press,ride_handling,Tesla Model S (Model S (2021 refresh)),web records,2,4,0.75,0.0,0.25,0.0,0.25
+US,press,safety,Mercedes-Benz E-Class (W214),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,safety,Mercedes-Benz EQE (V295),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,seats_comfort,Genesis G80 (RG3),web records,2,2,0.5,0.0,0.5,0.0,0.5
+US,press,seats_comfort,Tesla Model 3 (Highland),web records,1,1,0.0,0.0,1.0,0.0,1.0
+US,press,space_practicality,Audi A6 (C9),web records,1,1,0.0,0.0,1.0,0.0,1.0
+US,press,space_practicality,"Audi A6 Sportback e-tron (A6 e-tron (PPE, MY2025+))",web records,2,3,1.0,0.0,0.0,0.0,0.0
+US,press,space_practicality,Cadillac CT5 (1st gen (MY2020+)),web records,2,4,0.5,0.0,0.5,0.0,0.5
+US,press,space_practicality,Genesis G80 (RG3),web records,2,3,0.33,0.0,0.67,0.0,0.67
+US,press,space_practicality,Lexus ES (8th gen (MY2026+)),web records,1,1,1.0,0.0,0.0,0.0,0.0
+US,press,space_practicality,Lexus ES (XZ10),web records,1,2,0.5,0.0,0.5,0.0,0.5
+US,press,space_practicality,Mercedes-Benz E-Class (W214),web records,3,4,0.5,0.0,0.5,0.0,0.5
+US,press,space_practicality,Mercedes-Benz EQE (V295),web records,4,7,0.29,0.0,0.71,0.0,0.71
+US,press,space_practicality,Tesla Model 3 (Highland),web records,1,1,0.0,0.0,1.0,0.0,1.0
+US,press,space_practicality,Tesla Model S (Model S (2021 refresh)),web records,3,4,0.75,0.0,0.25,0.0,0.25

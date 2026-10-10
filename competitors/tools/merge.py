@@ -95,6 +95,17 @@ def check(rec: dict) -> tuple[list[str], list[str]]:
     return err, warn
 
 
+def channel(rec: dict) -> str:
+    """Comparable customer channel: owner reviews/forums, complaint databases, surveys, press."""
+    if rec["source_type"] == "press_review":
+        return "press"
+    if "nhtsa" in (rec.get("source_name") or "").lower():
+        return "complaints"
+    if rec["source_type"] == "owner_survey":
+        return "survey"
+    return "owner"
+
+
 def vehicle(rec: dict) -> str:
     gen = rec.get("generation") or ""
     return f"{rec['brand']} {rec['model']}" + (f" ({gen})" if gen else "")
@@ -111,12 +122,13 @@ def bmw_rows() -> list[dict]:
             if r["market"] not in MARKETS or r["feedback_type"] not in FEEDBACK_TYPES:
                 continue
             n = int(r["feedbacks"])
-            agg[(r["market"], "BMW 5 Series (G60) — all sources", r["theme"])][r["feedback_type"]] += n
+            agg[(r["market"], "bmw_all_sources", r["theme"])][r["feedback_type"]] += n
             if r["source"] == "Source A":
-                agg[(r["market"], "BMW 5 Series (G60) — Source A owner reviews", r["theme"])][r["feedback_type"]] += n
+                agg[(r["market"], "owner", r["theme"])][r["feedback_type"]] += n
     return [
-        {"market": m, "vehicle": v, "theme": t, "basis": "BMW feedback IDs", "n_reviews": "", "counts": c}
-        for (m, v, t), c in agg.items()
+        {"market": m, "vehicle": "BMW 5 Series (G60)", "channel": ch, "theme": t, "basis": "BMW feedback IDs",
+         "n_reviews": "", "counts": c}
+        for (m, ch, t), c in agg.items()
     ]
 
 
@@ -154,27 +166,28 @@ def main() -> None:
     for rec in valid:
         if rec["kind"] != "feedback":
             continue
-        g = groups[(rec["market"], vehicle(rec), rec["theme"])]
+        g = groups[(rec["market"], vehicle(rec), channel(rec), rec["theme"])]
         g["counts"][rec["feedback_type"]] += 1
         g["reviews"].add(rec["review_ref"])
         g["tiers"][rec["evidence_tier"]] += 1
     rows = [
-        {"market": m, "vehicle": v, "theme": t, "basis": "web records (A=%d, B=%d)" % (g["tiers"]["A"], g["tiers"]["B"]),
+        {"market": m, "vehicle": v, "channel": ch, "theme": t, "basis": "web records",
          "n_reviews": len(g["reviews"]), "counts": g["counts"]}
-        for (m, v, t), g in groups.items()
+        for (m, v, ch, t), g in groups.items()
     ] + bmw_rows()
     types = ["Likes", "Wants", "Difficult to Use", "Defect"]
     with (ROOT / "theme_comparison.csv").open("w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["market", "theme", "vehicle", "basis", "n_reviews", "n_statements"]
+        w.writerow(["market", "channel", "theme", "vehicle", "basis", "n_reviews", "n_statements"]
                    + [f"share_{t.lower().replace(' ', '_')}" for t in types] + ["share_negative"])
-        for r in sorted(rows, key=lambda r: (r["market"], r["theme"], r["vehicle"])):
+        for r in sorted(rows, key=lambda r: (r["market"], r["channel"], r["theme"], r["vehicle"])):
             n = sum(r["counts"][t] for t in types)
             if not n:
                 continue
             shares = [round(r["counts"][t] / n, 2) for t in types]
             neg = round((r["counts"]["Difficult to Use"] + r["counts"]["Defect"]) / n, 2)
-            w.writerow([r["market"], r["theme"], r["vehicle"], r["basis"], r["n_reviews"], n] + shares + [neg])
+            w.writerow([r["market"], r["channel"], r["theme"], r["vehicle"], r["basis"], r["n_reviews"], n]
+                       + shares + [neg])
 
     # Equipment matrix
     eq = defaultdict(dict)
