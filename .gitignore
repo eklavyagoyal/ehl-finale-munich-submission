@@ -12,3 +12,11 @@ __pycache__/
 .env.*
 !.env.example
 .DS_Store
+
+# Local Entire configuration and agent integrations
+/.entire/
+/.claude/settings.json
+/.claude/settings.local.json
+/.codex/hooks.json
+/.pi/extensions/entire/
+/.omp/extensions/entire.ts
