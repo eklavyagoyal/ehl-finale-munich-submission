@@ -13,35 +13,28 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { buildThemes, draftRequirements, refreshAll, useMeta } from "@/lib/api/hooks";
+import { buildThemes, draftRequirements, refreshAll } from "@/lib/api/hooks";
+import type { Signal } from "@/lib/api/types";
 
-// The AI drafts candidate requirements from the strongest signals that have no requirement yet.
-export function DraftDialog({ defaultMarket = "US" }: { defaultMarket?: string }) {
-  const { data: meta } = useMeta();
+// The AI drafts one candidate requirement per selected signal, with cited quotes. The PM reviews every draft.
+export function DraftSelectedDialog({ market, selected, onDone }: { market: string | null; selected: Signal[]; onDone: () => void }) {
   const [open, setOpen] = useState(false);
-  const [market, setMarket] = useState(defaultMarket);
-  const [limit, setLimit] = useState("5");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const keys = selected.map((s) => s.feature_key);
 
   async function run() {
-    const count = Number(limit);
-    if (!Number.isInteger(count) || count < 1 || count > 30) {
-      setError("Enter a number between 1 and 30.");
-      return;
-    }
     setBusy(true);
     setError(null);
     try {
-      const result = await draftRequirements(market === "pooled" ? null : market, count);
+      // The drafter caps by limit after filtering to the selected features, so limit = selection size.
+      const result = await draftRequirements(market, Math.min(Math.max(keys.length, 1), 30), keys);
       const created = result?.created?.length ?? 0;
       if (created > 0) toast.success(`${created} new requirement draft${created === 1 ? "" : "s"}`);
-      else toast.info("No new drafts: every strong signal already has a requirement, or there is no accepted evidence yet.");
+      else toast.info("No new drafts: the selected signals already have a requirement, or their evidence is not accepted yet.");
       await refreshAll();
       setOpen(false);
+      onDone();
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
@@ -52,37 +45,27 @@ export function DraftDialog({ defaultMarket = "US" }: { defaultMarket?: string }
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm">Draft requirements</Button>
+        <Button size="sm" disabled={keys.length === 0}>
+          Draft requirements{keys.length > 0 ? ` (${keys.length})` : ""}
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Draft requirements</DialogTitle>
           <DialogDescription>
-            The drafter turns the strongest signals of one market into candidate requirements with cited quotes. You review every draft.
+            The drafter writes one candidate requirement per signal for {market ?? "all markets pooled"}, citing the reviews behind it. You review
+            every draft under Decision.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="draft-market">Market</Label>
-            <Select value={market} onValueChange={setMarket}>
-              <SelectTrigger id="draft-market" className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {(meta?.markets ?? ["US", "EU", "CN"]).map((m) => (
-                  <SelectItem key={m} value={m}>
-                    {m}
-                  </SelectItem>
-                ))}
-                <SelectItem value="pooled">All markets pooled</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="draft-limit">At most</Label>
-            <Input id="draft-limit" inputMode="numeric" value={limit} onChange={(e) => setLimit(e.target.value)} />
-          </div>
-        </div>
+        <ul className="flex max-h-56 flex-col gap-1 overflow-y-auto text-sm">
+          {selected.map((s) => (
+            <li key={s.feature_key} className="flex justify-between gap-3">
+              <span className="truncate">{s.label}</span>
+              <span className="text-muted-foreground tabular-nums">{s.reviews} reviews</span>
+            </li>
+          ))}
+        </ul>
+        {keys.length > 30 && <p className="text-sm text-muted-foreground">Only the first 30 are drafted in one go.</p>}
         {error && <p className="text-sm text-destructive">{error}</p>}
         <DialogFooter>
           <Button onClick={run} disabled={busy}>
