@@ -1,5 +1,6 @@
 "use client";
 
+import { RaterChips, RaterLegend } from "@/components/rater-chips";
 import { ScoreBar } from "@/components/score-bar";
 import { EmptyState } from "@/components/states";
 import { ToneBadge } from "@/components/tone-badge";
@@ -13,6 +14,7 @@ export function OverviewTab() {
   if (!detail) return null;
   const { requirement: r, scores, recommendation, synthesis, gates, decisions } = detail;
   const criteria = Object.values(scores.criteria);
+  const ratingsFor = (criterion: string) => detail.ratings.filter((rt) => rt.criterion === criterion);
   const challenge = recommendation?.challenge;
 
   return (
@@ -44,11 +46,12 @@ export function OverviewTab() {
           {criteria.length === 0 ? (
             <p className="text-muted-foreground">No ratings yet. Run Parallax to score this requirement.</p>
           ) : (
-            <div className="flex max-w-2xl flex-col gap-2.5">
+            <div className="flex max-w-3xl flex-col gap-2.5">
+              <RaterLegend />
               {criteria.map((c) => {
                 const hypothesis = isHypothesis(c.status);
                 return (
-                  <div key={c.criterion} className="grid grid-cols-[150px_minmax(0,1fr)_56px_92px] items-center gap-3 text-[13px]">
+                  <div key={c.criterion} className="grid grid-cols-[150px_minmax(0,1fr)_56px_170px] items-center gap-3 text-[13px]">
                     <span className="truncate">
                       {humanize(c.criterion)} <span className="text-muted-foreground/60">{Math.round(c.weight * 100)}%</span>
                     </span>
@@ -56,16 +59,7 @@ export function OverviewTab() {
                     <span className="text-right tabular-nums text-muted-foreground">
                       {c.low != null && c.high != null && c.low !== c.high ? fmtRange(c.low, c.high, 1) : fmtScore(c.score ?? c.low, 1)}
                     </span>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <span className="justify-self-start">
-                          <ToneBadge tone={hypothesis ? "amber" : "muted"}>{hypothesis ? "hypothesis" : "evidence"}</ToneBadge>
-                        </span>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        {humanize(c.status)} · {c.raters.map(actorLabel).join(", ") || "no rater"}
-                      </TooltipContent>
-                    </Tooltip>
+                    <RaterChips ratings={ratingsFor(c.criterion)} />
                   </div>
                 );
               })}
