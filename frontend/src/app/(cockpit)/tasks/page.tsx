@@ -30,11 +30,11 @@ export default function TasksPage() {
         {isLoading && <LoadingRows />}
         {data && data.length === 0 && (
           <EmptyState title="Nothing waits for you">
-            New requirements appear here once evidence is imported and drafted. See{" "}
-            <Link href="/sources" className="text-foreground underline-offset-4 hover:underline">
-              Sources
-            </Link>
-            .
+            New requirements appear here once evidence is imported and drafted. The{" "}
+            <Link href="/" className="text-foreground underline-offset-4 hover:underline">
+              pipeline
+            </Link>{" "}
+            shows the next step.
           </EmptyState>
         )}
         {data &&
@@ -119,9 +119,9 @@ function TaskRow({ task }: { task: Task }) {
           </Button>
         )}
         {task.kind === "running" &&
-          (task.requirement_ids?.length ? (
+          (task.run_id ? (
             <Button size="sm" variant="outline" asChild>
-              <Link href={`/requirements/${task.requirement_ids[0]}/simulation?run=${task.run_id ?? ""}`}>Watch</Link>
+              <Link href={`/experts?run=${task.run_id}`}>Watch</Link>
             </Button>
           ) : (
             <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
