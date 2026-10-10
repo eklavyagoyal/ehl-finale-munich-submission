@@ -3,7 +3,7 @@
 The contract lives on branch feat/research-handoff (research/schema.json, docs/research-data-contract.md).
 Our own format (competitors/findings.jsonl) stays the master. This script writes a contract-shaped copy:
 
-  research/batches/competitors/luis-2026-10-10-<market>-<source>-<kind>/
+  research/batches/competitors/luis-20261010-<market>-<source>-<kind>/
     source.json, records.jsonl, claims.jsonl   strictly per contract schema
     notes.md                                   scope, counts, limitations
     luis_extensions.json                       everything the contract has no field for (theme, tiers, ...)
@@ -44,7 +44,7 @@ DATE = "2026-10-10"
 COLLECTED_AT = "2026-10-10T16:00:00Z"  # web research ran 14:50-16:00 UTC; records carry no per-page fetch time
 RUN_ID = "luis-competitors-2026-10-10"
 MODEL = "claude-opus-5-5"
-PREFIX = f"{COLLECTOR}-{DATE}"
+PREFIX = f"{COLLECTOR}-{DATE.replace('-', '')}"  # same style as other collectors: yelya-20261010-...
 
 FEATURES = {
     "F01_display_layout": ("central_display_layout", "Central display(s): size, layout, passenger screen"),
@@ -488,7 +488,7 @@ def main() -> None:
     for b in batches.values():
         for r in b.records:
             for s in r["subject_ids"]:
-                support[(s, b.name.split("-")[4])].append(r["record_id"])
+                support[(s, b.name[len(PREFIX) + 1:].split("-")[0])].append(r["record_id"])
     comps = []
     for rec in recs:
         if rec["kind"] != "competitor" or rec["brand"] == "BMW":

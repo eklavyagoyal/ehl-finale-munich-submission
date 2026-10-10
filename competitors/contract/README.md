@@ -8,7 +8,7 @@ Our 5 Series competitor research exported into the **research data contract v1**
 
 | Output | Count | Where |
 | --- | ---: | --- |
-| Batches (`source.json` + `records.jsonl` + `claims.jsonl` + `notes.md`) | 76 | `research/batches/competitors/luis-2026-10-10-<market>-<source>-<kind>/` |
+| Batches (`source.json` + `records.jsonl` + `claims.jsonl` + `notes.md`) | 76 | `research/batches/competitors/luis-20261010-<market>-<source>-<kind>/` |
 | Records | 2,290 | 390 web feedback records (one per review/article), 614 feature-availability records, 1,286 NHTSA complaint records |
 | Claims | 2,022 | one per feedback statement (`producer.method: llm`, `review_status: pending`) |
 | Comparisons | 27 | [`comparisons.json`](comparisons.json): BMW target ↔ competitor, rationale, supporting record IDs |
