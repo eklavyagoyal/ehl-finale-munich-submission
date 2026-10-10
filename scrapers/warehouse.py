@@ -180,6 +180,19 @@ def read_table(name):
     return pq.read_table(path).to_pandas()
 
 
+def delete_where(name, predicate):
+    """Remove rows for which predicate(df) is True. Returns the number of rows removed."""
+    table = read_table(name)
+    if table.empty:
+        return 0
+    drop = predicate(table)
+    if drop.any():
+        WAREHOUSE_DIR.mkdir(parents=True, exist_ok=True)
+        kept = pa.Table.from_pandas(table[~drop], schema=SCHEMAS[name], preserve_index=False)
+        pq.write_table(kept, WAREHOUSE_DIR / f"{name}.parquet")
+    return int(drop.sum())
+
+
 def upsert(name, rows):
     """Merge rows into a table; newer rows win on key conflicts. Returns the new row count."""
     if not rows:

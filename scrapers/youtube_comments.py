@@ -26,6 +26,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 
+import pandas as pd
 import yaml
 
 from scrapers import warehouse
@@ -160,8 +161,11 @@ def comment_row(c, comment_id, parent_comment_id, reply_count):
             "reply_count": reply_count}
 
 
-def fetch_comments(youtube_video_id, max_pages, known_ids):
-    """Comment threads newest first, plus the replies the API includes with them."""
+def fetch_comments(youtube_video_id, max_pages, known_ids, date_from=None):
+    """Comment threads newest first, plus the replies the API includes with them.
+
+    Rows older than date_from are dropped; paging stops at the first thread older than it.
+    """
     rows, token = [], None
     for _ in range(max_pages):
         params = {"part": "snippet,replies", "videoId": youtube_video_id, "maxResults": 100,
@@ -169,16 +173,19 @@ def fetch_comments(youtube_video_id, max_pages, known_ids):
         if token:
             params["pageToken"] = token
         data = youtube_get("commentThreads", params)
-        new = 0
+        new, too_old = 0, False
         for thread in data.get("items", []):
             top = thread["snippet"]["topLevelComment"]
             top_id = f"youtube:{top['id']}"
             new += top_id not in known_ids
-            rows.append(comment_row(top, top_id, None, int(thread["snippet"].get("totalReplyCount", 0))))
+            thread_rows = [comment_row(top, top_id, None, int(thread["snippet"].get("totalReplyCount", 0)))]
             for reply in thread.get("replies", {}).get("comments", []):
-                rows.append(comment_row(reply, f"youtube:{reply['id']}", top_id, 0))
+                thread_rows.append(comment_row(reply, f"youtube:{reply['id']}", top_id, 0))
+            too_old |= bool(date_from) and thread_rows[0]["datetime"].date() < date_from
+            rows += [r for r in thread_rows if not date_from or r["datetime"].date() >= date_from]
         token = data.get("nextPageToken")
-        if not token or new == 0:  # newest first: an all-known page means we're caught up
+        # Newest first: an all-known page means we're caught up; an old thread means we're past date_from.
+        if not token or new == 0 or too_old:
             break
     return rows
 
@@ -246,7 +253,8 @@ def scrape(config_path, markets=None, dry_run=False, workers=4):
         videos = discover_videos(config, markets)
         print(f"{len(videos)} videos kept")
         with ThreadPoolExecutor(max_workers=workers) as pool:
-            futures = {pool.submit(fetch_comments, vid, limits["comment_pages_per_video"], known_ids): vid
+            futures = {pool.submit(fetch_comments, vid, limits["comment_pages_per_video"], known_ids,
+                                   limits.get("date_from")): vid
                        for vid in videos}
             for future in as_completed(futures):
                 vid = futures[future]
@@ -265,6 +273,14 @@ def scrape(config_path, markets=None, dry_run=False, workers=4):
     videos = {vid: v for vid, v in videos.items() if vid in comments}
     for name, rows in build_tables(config, videos, comments).items():
         print(f"{name}: {warehouse.upsert(name, rows)} rows")
+
+    date_from = limits.get("date_from")
+    if date_from:  # keep this vehicle's stored comments inside the configured window
+        vehicle_id = warehouse.surrogate_key(config["vehicle"]["brand"], config["vehicle"]["code"])
+        removed = warehouse.delete_where("fact_video_comment", lambda t: (t["vehicle_model_id"] == vehicle_id)
+                                         & (pd.to_datetime(t["content_date"]).dt.date < date_from))
+        if removed:
+            print(f"fact_video_comment: removed {removed} stored comments older than {date_from}")
 
 
 def main():

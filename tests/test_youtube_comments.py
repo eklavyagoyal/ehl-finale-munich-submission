@@ -110,6 +110,17 @@ class YouTubeScraperTest(unittest.TestCase):
         # Page 1 of vidA holds only known comments, so page 2 is not requested again.
         self.assertEqual(self.fake.calls.count("commentThreads"), 2)  # vidA page 1 + vidC
 
+    def test_date_from_drops_old_comments_and_stops_paging(self):
+        # Page 1 ends with a thread from 2023: it is dropped and page 2 is never requested.
+        self.fake.pages["vidA"][0]["items"].append(
+            {"snippet": {"topLevelComment": comment("old", "launch day", when="2023-06-01T10:00:00Z"),
+                         "totalReplyCount": 0}})
+        yt.scrape(self.config_path, markets=["de"], workers=1)
+        ids = set(self.table("fact_video_comment")["comment_id"])
+        self.assertNotIn("youtube:old", ids)
+        self.assertNotIn("youtube:c3", ids)  # on page 2, past the cutoff
+        self.assertEqual(self.fake.calls.count("commentThreads"), 2)  # vidA page 1 + vidC
+
     def test_quota_exceeded_keeps_collected_data(self):
         original = self.fake.__call__
 

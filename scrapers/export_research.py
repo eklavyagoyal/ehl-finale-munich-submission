@@ -59,28 +59,31 @@ def table_time(name):
 
 
 def load_configs():
-    """Google Play review languages and YouTube search settings, keyed for lookup."""
-    gp_lang, youtube = {}, None
+    """Google Play review languages, app date windows and YouTube settings, keyed for lookup."""
+    gp_lang, app_date_from, youtube = {}, {}, None
     for path in sorted(CONFIGS.glob("*.yaml")):
         config = yaml.safe_load(path.read_text(encoding="utf-8"))
         for entry in config.get("apps", []):
+            app_date_from[(entry["store"], str(entry["app_id"]))] = config.get("scrape", {}).get("date_from")
             if entry["store"] == "google_play" and isinstance(entry["markets"], dict):
                 for market, lang in entry["markets"].items():
                     gp_lang[(str(entry["app_id"]), market.upper())] = lang
         if "vehicle" in config and "markets" in config:
             youtube = config  # one YouTube config today; extend to a list when there are more
-    return gp_lang, youtube
+    return gp_lang, app_date_from, youtube
 
 
 def source_doc(source_id, dataset_key, channel, title, locator, collected_at, collector, records,
-               method, query, retrieved, limitations, notes, artifact):
+               method, query, retrieved, limitations, notes, artifact, date_from=None):
     dates = sorted(r["content_date"] for r in records)
+    # The sampling window starts at the configured date_from when there is one.
+    date_start = date_from.isoformat() if date_from else dates[0]
     return {
         "document_type": "source", "schema_version": "1.0",
         "source_id": source_id, "dataset_key": dataset_key, "stream": "social", "channel": channel,
         "title": title, "locator": locator, "collected_at": collected_at, "collector": collector,
         "is_example": False, "normalized_record_count": len(records),
-        "sampling": {"method": method, "query": query, "date_start": dates[0], "date_end": dates[-1],
+        "sampling": {"method": method, "query": query, "date_start": date_start, "date_end": dates[-1],
                      "retrieved_count": retrieved, "complete": False, "limitations": limitations},
         "provenance": {"origin": "third_party", "verification": "provenance_checked", "notes": notes},
         "artifact": {"path": str(artifact.relative_to(ROOT)), "sha256": sha256(artifact)},
@@ -103,7 +106,7 @@ def record_doc(source_id, dedup_key, text, locator, date, datetime_str, subject_
     }
 
 
-def app_batches(collector, markets, channels, gp_lang):
+def app_batches(collector, markets, channels, gp_lang, app_date_from):
     facts = warehouse.read_table("fact_review")
     apps = warehouse.read_table("dim_app").set_index("app_id")
     market_codes = warehouse.read_table("dim_market").set_index("market_id")["market_code"]
@@ -159,7 +162,7 @@ def app_batches(collector, markets, channels, gp_lang):
             None, len(records) + skipped, limitations,
             f"Collected with scrapers/app_reviews.py from the public {store_name} review endpoints. "
             f"DimXxxID values are this warehouse's surrogate keys (see scrapers/warehouse.py), resolved into markets.",
-            artifact,
+            artifact, app_date_from.get((channel, store_app_id)),
         )
         yield source_id, source, records, None
 
@@ -222,7 +225,7 @@ def youtube_batches(collector, markets, config):
             ],
             "Collected with scrapers/youtube_comments.py (spec docs/specs/youtube-scraper.md). "
             "Commenter names and channel ids are not stored.",
-            artifact,
+            artifact, limits.get("date_from"),
         )
         yield source_id, source, records, None
 
@@ -273,11 +276,11 @@ def export(out_dir=DEFAULT_OUT, collector=None, channels=None, markets=None):
     collector = slug(collector or getpass.getuser())
     channels = set(channels or (APP_CHANNELS | {"youtube"}))
     markets = {m.upper() for m in markets} if markets else None
-    gp_lang, youtube_config = load_configs()
+    gp_lang, app_date_from, youtube_config = load_configs()
 
     batches = []
     if channels & APP_CHANNELS:
-        batches += app_batches(collector, markets, channels, gp_lang)
+        batches += app_batches(collector, markets, channels, gp_lang, app_date_from)
     if "youtube" in channels:
         batches += youtube_batches(collector, markets, youtube_config)
 

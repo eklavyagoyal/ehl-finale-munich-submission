@@ -20,6 +20,7 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 
+import pandas as pd
 import yaml
 from google_play_scraper import Sort, app as gp_app, reviews as gp_reviews, search as gp_search
 
@@ -74,7 +75,7 @@ def apple_page(app_id, market, page, attempts=5):
     return []
 
 
-def apple_reviews(app_id, market, limit, known_ids):
+def apple_reviews(app_id, market, limit, known_ids, date_from=None):
     out, empty_pages = [], 0
     for page in range(1, APPLE_MAX_PAGES + 1):
         page_reviews = apple_page(app_id, market, page)
@@ -84,19 +85,24 @@ def apple_reviews(app_id, market, limit, known_ids):
                 break
             continue
         empty_pages = 0
-        new = 0
+        new, too_old = 0, False
         for e in page_reviews:
+            when = datetime.fromisoformat(e["updated"]["label"])
+            if date_from and when.date() < date_from:
+                too_old = True
+                continue
             review_id = f"app_store:{e['id']['label']}"
             new += review_id not in known_ids
             out.append({
                 "store": "app_store", "store_app_id": str(app_id), "market": market,
                 "review_id": review_id,
-                "datetime": datetime.fromisoformat(e["updated"]["label"]),
+                "datetime": when,
                 "content": f"{e['title']['label']}. {e['content']['label']}".strip(),
                 "rating": int(e["im:rating"]["label"]),
                 "app_version": e.get("im:version", {}).get("label") or None,
             })
-        if new == 0 or len(out) >= limit:  # newest first: an all-known page means we're caught up
+        # Newest first: an all-known page means we're caught up; an old review means we're past date_from.
+        if new == 0 or too_old or len(out) >= limit:
             break
         time.sleep(0.5)
     return out[:limit]
@@ -110,26 +116,30 @@ def google_app_info(package, country, lang):
             "bundle_id": package, "developer": a.get("developer")}
 
 
-def google_reviews(package, market, lang, limit, known_ids):
+def google_reviews(package, market, lang, limit, known_ids, date_from=None):
     out, token = [], None
     while len(out) < limit:
         with GOOGLE_SLOTS:
             batch, token = gp_reviews(package, lang=lang, country=market, sort=Sort.NEWEST,
                                       count=min(GOOGLE_PAGE_SIZE, limit - len(out)),
                                       continuation_token=token)
-        new = 0
+        new, too_old = 0, False
         for r in batch:
+            when = r["at"].replace(tzinfo=timezone.utc)
+            if date_from and when.date() < date_from:
+                too_old = True
+                continue
             review_id = f"google_play:{r['reviewId']}"
             new += review_id not in known_ids
             out.append({
                 "store": "google_play", "store_app_id": package, "market": market,
                 "review_id": review_id,
-                "datetime": r["at"].replace(tzinfo=timezone.utc),
+                "datetime": when,
                 "content": (r["content"] or "").strip(),
                 "rating": r["score"],
                 "app_version": r.get("appVersion") or r.get("reviewCreatedVersion"),
             })
-        if not batch or token is None or new == 0:
+        if not batch or token is None or new == 0 or too_old:
             break
         time.sleep(0.5)
     return out[:limit]
@@ -154,14 +164,16 @@ def jobs_from_config(config, stores, markets_filter):
 def scrape(config_path, stores=None, markets=None, full=False, workers=8):
     config = yaml.safe_load(open(config_path, encoding="utf-8"))
     limit = config.get("scrape", {}).get("max_reviews_per_market", 2000)
+    date_from = config.get("scrape", {}).get("date_from")  # YAML parses it as a date; None = no limit
     known_ids = set() if full else set(warehouse.read_table("fact_review")["review_id"])
     jobs = list(jobs_from_config(config, stores, {m.lower() for m in markets or []}))
 
     def run(job):
         store, app_id, market, lang = job
         if store == "app_store":
-            return apple_app_info(app_id, market), apple_reviews(app_id, market, limit, known_ids)
-        return google_app_info(app_id, market, lang), google_reviews(app_id, market, lang, limit, known_ids)
+            return apple_app_info(app_id, market), apple_reviews(app_id, market, limit, known_ids, date_from)
+        return (google_app_info(app_id, market, lang),
+                google_reviews(app_id, market, lang, limit, known_ids, date_from))
 
     apps, reviews = {}, {}
     with ThreadPoolExecutor(max_workers=workers) as pool:
@@ -183,6 +195,13 @@ def scrape(config_path, stores=None, markets=None, full=False, workers=8):
     for name, rows in tables.items():
         total = warehouse.upsert(name, rows)
         print(f"{name}: {total} rows")
+
+    if date_from:  # keep stored reviews of this config's apps inside the configured window
+        app_ids = {warehouse.surrogate_key(e["store"], str(e["app_id"])) for e in config["apps"]}
+        removed = warehouse.delete_where("fact_review", lambda t: t["app_id"].isin(app_ids)
+                                         & (pd.to_datetime(t["content_date"]).dt.date < date_from))
+        if removed:
+            print(f"fact_review: removed {removed} stored reviews older than {date_from}")
 
 
 def discover(term, countries, lang):

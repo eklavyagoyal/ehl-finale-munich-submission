@@ -36,3 +36,4 @@ markets:
 limits:
   videos_per_query: 10           # search results per query (max 50)
   comment_pages_per_video: 3     # 100 comment threads per page
+  date_from: 2024-01-01          # ignore comments older than this (content date); remove for no limit

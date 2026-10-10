@@ -48,6 +48,7 @@ New target: find its app ids with `python -m scrapers.app_reviews discover "<app
 
 `dim_date` and `dim_market` are shared by both fact tables.
 
+- **Date window:** `date_from` in each config (`scrape.date_from` for apps, `limits.date_from` for YouTube; both 2024-01-01 today) stops collection at that date, and each run removes stored rows of that config that are older. The export uses it as `sampling.date_start`.
 - Surrogate keys are deterministic 63-bit hashes of the natural key, so reruns produce the same ids. `app_version_id` is `-1` when the store gives no version.
 - `review_id` is prefixed with the store (`app_store:…`, `google_play:…`).
 

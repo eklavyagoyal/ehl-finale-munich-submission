@@ -66,6 +66,7 @@ markets:
 limits:
   videos_per_query: 10
   comment_pages_per_video: 3     # 100 comments per page
+  date_from: 2024-01-01          # drop older comments; stored older rows are removed on the next run
 ```
 
 The API key comes from the environment variable `YOUTUBE_API_KEY` (or `.env`), never from the config.

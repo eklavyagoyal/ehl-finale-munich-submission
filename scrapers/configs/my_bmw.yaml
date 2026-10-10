@@ -30,4 +30,5 @@ apps:
 
 scrape:
   max_reviews_per_market: 2000   # App Store's public feed stops at ~500 anyway
+  date_from: 2024-01-01          # ignore reviews older than this (content date); remove for no limit
 
