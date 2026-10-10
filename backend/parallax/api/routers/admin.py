@@ -17,6 +17,7 @@ from parallax.models import (
     DepartmentMemo,
     Entity,
     Feature,
+    Finding,
     GateState,
     IngestRun,
     Lesson,
@@ -39,9 +40,9 @@ from parallax.models import (
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
 # Children before parents. Agents, policy versions, the audit trail and the LLM call log are kept.
-DATA_TABLES = [Lesson, PMDecision, Vote, Recommendation, Synthesis, ResearchRequest, DepartmentMemo, PersonaResponse,
-               SimStep, CriterionRating, GateState, RequirementEvidence, RequirementVersion, Requirement, SimRun,
-               Theme, Claim, Record, Source, IngestRun, Feature, Entity]
+REQUIREMENT_TABLES = [Lesson, PMDecision, Vote, Recommendation, Synthesis, ResearchRequest, DepartmentMemo, PersonaResponse,
+                      SimStep, CriterionRating, GateState, RequirementEvidence, RequirementVersion, Requirement, SimRun]
+DATA_TABLES = REQUIREMENT_TABLES + [Finding, Theme, Claim, Record, Source, IngestRun, Feature, Entity]
 
 
 def require_cli(request: Request) -> None:
@@ -50,17 +51,21 @@ def require_cli(request: Request) -> None:
 
 
 class ResetIn(BaseModel):
-    confirm: Literal["DELETE ALL DATA"]
+    confirm: Literal["DELETE ALL DATA", "DELETE REQUIREMENTS"]
+    scope: Literal["all_data", "requirements"] = "all_data"
     rationale: str
 
 
 @router.post("/reset", summary="Delete all evidence, themes, requirements and runs (keeps agents, policy, audit trail)")
 def reset(body: ResetIn, request: Request, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     require_cli(request)
-    counts = {model.__tablename__: session.scalar(select(func.count()).select_from(model)) for model in DATA_TABLES}
-    for model in DATA_TABLES:
+    if (body.scope == "all_data") != (body.confirm == "DELETE ALL DATA"):
+        raise HTTPException(400, "confirm text does not match the scope")
+    tables = DATA_TABLES if body.scope == "all_data" else REQUIREMENT_TABLES
+    counts = {model.__tablename__: session.scalar(select(func.count()).select_from(model)) for model in tables}
+    for model in tables:
         session.execute(delete(model))
     record_event(session, category="system", actor_id=who, action="data.reset", entity_type="database",
-                 entity_id="all_data", before=counts, after={table: 0 for table in counts}, rationale=body.rationale,
+                 entity_id=body.scope, before=counts, after={table: 0 for table in counts}, rationale=body.rationale,
                  meta={"kept": ["agents", "agent_versions", "policy_versions", "audit_events", "llm_calls"]})
     return {"deleted": counts, "kept": ["agents", "policy_versions", "audit_events", "llm_calls"]}

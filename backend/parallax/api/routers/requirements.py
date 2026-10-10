@@ -285,3 +285,75 @@ def decision_snapshot(requirement_id: str, decision_id: int, session: Session = 
     if decision is None or decision.requirement_id != requirement_id:
         raise not_found("decision", decision_id)
     return row(decision)
+
+
+@router.get("/{requirement_id}/council",
+            summary="Customer council vs company council for the latest run: who said what, tensions, challenger, judges")
+def council(requirement_id: str, session: Session = Depends(get_session, scope="function")):
+    from collections import Counter
+
+    from parallax.models import Agent, SimStep
+
+    requirement = session.get(Requirement, requirement_id)
+    if requirement is None:
+        raise not_found("requirement", requirement_id)
+    run_id = requirement.last_run_id
+    if run_id is None:
+        return {"requirement_id": requirement_id, "run_id": None, "status": "not_simulated"}
+    agents = {a.id: a for a in session.scalars(select(Agent))}
+    owners = session.scalars(select(PersonaResponse).where(PersonaResponse.run_id == run_id,
+                                                           PersonaResponse.requirement_id == requirement_id)).all()
+    by_market: dict[str, dict] = {}
+    for p in owners:
+        agent = agents.get(p.agent_id)
+        spec = agent.spec if agent else {}
+        market = by_market.setdefault(agent.market if agent else "other", {"personas": []})
+        market["personas"].append({
+            "agent_id": p.agent_id, "name": spec.get("persona", {}).get("name"), "display_name": agent.display_name if agent else p.agent_id,
+            "vehicle": spec.get("vehicle_label"), "powertrain": spec.get("powertrain"), "verdict": p.verdict,
+            "budget_points": p.budget_points, "importance_0_5": p.importance_0_5, "stance": p.stance,
+            "quote": p.response_text.split("\n[raw] ")[0], "concerns": p.concerns,
+            "validation_status": agent.validation_status if agent else None,
+        })
+    for market in by_market.values():
+        people = market["personas"]
+        verdicts = Counter(x["verdict"] or "unknown" for x in people)
+        budgets = [x["budget_points"] for x in people if x["budget_points"] is not None]
+        market["summary"] = {"personas": len(people), "verdicts": dict(verdicts),
+                             "mean_budget_points_of_100": round(sum(budgets) / len(budgets), 1) if budgets else None,
+                             "mean_importance_0_5": round(sum(x["importance_0_5"] for x in people) / len(people), 2)}
+    memos = session.scalars(select(DepartmentMemo).where(DepartmentMemo.run_id == run_id,
+                                                         DepartmentMemo.requirement_id == requirement_id)).all()
+    departments = [{
+        "agent_id": m.agent_id, "display_name": agents[m.agent_id].display_name if m.agent_id in agents else m.agent_id,
+        "market": agents[m.agent_id].market if m.agent_id in agents else None,
+        "verdict": m.memo.get("verdict") or {"support": "for", "oppose": "against"}.get(m.stance, "conditional"),
+        "main_argument": m.memo.get("main_argument") or m.memo.get("summary"),
+        "strongest_counterargument": m.memo.get("strongest_counterargument"), "cost_view": m.memo.get("cost_view"),
+        "effort_band": m.memo.get("effort_band"), "risks": m.memo.get("risks", []),
+    } for m in memos]
+    synthesis = session.scalars(select(Synthesis).where(Synthesis.run_id == run_id, Synthesis.requirement_id == requirement_id)).first()
+    content = synthesis.content if synthesis else {}
+    rec = session.scalars(select(Recommendation).where(Recommendation.run_id == run_id,
+                                                       Recommendation.requirement_id == requirement_id)).first()
+    votes = session.scalars(select(Vote).where(Vote.run_id == run_id, Vote.requirement_id == requirement_id)).all()
+    research = session.scalars(select(ResearchRequest).where(ResearchRequest.run_id == run_id,
+                                                             ResearchRequest.requirement_id == requirement_id)).all()
+    twin = session.scalars(select(SimStep).where(SimStep.run_id == run_id, SimStep.stage == "market_twin")).first()
+    return {
+        "requirement_id": requirement_id, "title": requirement.title, "run_id": str(run_id), "status": "simulated",
+        "question_to_owners": (twin.detail or {}).get("question") if twin else None,
+        "customers": {"by_market": by_market, "view": content.get("customer_view")},
+        "company": {"departments": departments, "view": content.get("company_view"),
+                    "verdicts": dict(Counter(d["verdict"] for d in departments))},
+        "tensions": content.get("tensions") or [{"topic": c.get("between"), "customers_say": None, "company_says": None,
+                                                 "resolution_options": [], "description": c.get("description")}
+                                                for c in content.get("conflicts", [])],
+        "headline": content.get("headline"),
+        "research": [{"requested_by": r.requested_by, "question": r.question, "verdict": r.verdict} for r in research],
+        "challenger": rec.challenge if rec else None,
+        "judges": [{"agent_id": v.agent_id, "model": v.model, "vote": v.vote, "rationale": v.rationale} for v in votes],
+        "recommendation": rec.recommendation if rec else None,
+        "order": ["customer council + company council (parallel)", "research + verifier", "scoring", "synthesis",
+                  "challenger", "judges", "PM decision"],
+    }

@@ -8,12 +8,16 @@ from collections import Counter
 from typing import Literal
 
 from fastapi import APIRouter, Depends, Query
+from pydantic import BaseModel, Field
+
+from parallax.api.common import actor
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from parallax.config import get_settings
 from parallax.db import get_session
-from parallax.models import Claim, IngestRun, Record, Requirement, SimRun, Source, Theme
+from parallax.models import Claim, Finding, IngestRun, Record, Requirement, SimRun, Source, Theme
+from parallax.signals import classify, latest_findings, ranked_themes
 from parallax.themes import latest_snapshot_id
 
 router = APIRouter(prefix="/api", tags=["pipeline"])
@@ -21,21 +25,12 @@ router = APIRouter(prefix="/api", tags=["pipeline"])
 STREAM_LABELS = {"bmw": "BMW", "social": "Social media", "competitors": "Competitors"}
 
 
-def classify(theme: Theme) -> str:
-    total = theme.mention_review_count or 0
-    if not total:
-        return "none"
-    pain, praise, requests = theme.pain_review_count / total, theme.praise_review_count / total, theme.request_review_count / total
-    if pain >= 0.4:
-        return "pain"
-    if requests >= 0.3:
-        return "request"
-    if praise >= 0.6 and pain < 0.15:
-        return "strength"
-    return "mixed"
+def _finding(f: Finding) -> dict:
+    return {"id": f.id, "title": f.title, "description": f.description, "kind": f.kind, "reviews": f.review_count,
+            "share_of_theme": f.share_of_theme, "quotes": f.quotes, "record_ids": f.record_ids[:200]}
 
 
-def _signal(theme: Theme, kind: str, texts: dict[str, str], drafted: set) -> dict:
+def _signal(theme: Theme, kind: str, texts: dict[str, str], drafted: set, findings: list[Finding] | None = None) -> dict:
     return {
         "theme_id": theme.id, "feature_key": theme.feature_key, "label": theme.label, "area": theme.area,
         "market": theme.market, "kind": kind, "reviews": theme.mention_review_count,
@@ -45,6 +40,8 @@ def _signal(theme: Theme, kind: str, texts: dict[str, str], drafted: set) -> dic
         "demand_0_5": theme.demand_score, "impact_0_5": theme.impact_score,
         "sample_quotes": [{"record_id": rid, "text": texts[rid][:280]} for rid in theme.record_ids[:2] if rid in texts],
         "has_requirement": (theme.feature_key, theme.market) in drafted,
+        "condensed": bool(findings),
+        "findings": [_finding(f) for f in findings or []],
     }
 
 
@@ -55,23 +52,33 @@ def signals(market: str | None = Query(None, description="US, EU, CN or omit for
     snapshot = latest_snapshot_id(session, get_settings().target_model)
     if snapshot is None:
         return {"snapshot_id": None, "market": market, "items": []}
-    query = select(Theme).where(Theme.snapshot_id == snapshot, Theme.mention_review_count > 0)
-    query = query.where(Theme.market == market) if market else query.where(Theme.market.is_(None))
-    themes = [(t, classify(t)) for t in session.scalars(query)]
-    if kind != "all":
-        themes = [(t, k) for t, k in themes if k == kind]
-    order = {"pain": lambda t: (t.pain_review_count, t.impact_score or 0), "strength": lambda t: (t.praise_review_count,),
-             "request": lambda t: (t.request_review_count,), "mixed": lambda t: (t.mention_review_count,),
-             "all": lambda t: (t.demand_score, t.pain_review_count, t.mention_review_count)}[kind]
-    themes.sort(key=lambda pair: order(pair[0]), reverse=True)
-    themes = themes[:limit]
+    themes = ranked_themes(session, market, kind, limit)
     ids = {rid for t, _ in themes for rid in t.record_ids[:2]}
     texts = {r.record_id: (r.translation_en or r.text_original or "")
              for r in session.scalars(select(Record).where(Record.record_id.in_(list(ids))))} if ids else {}
     drafted = {(r.feature_key, r.market) for r in session.scalars(select(Requirement))}
+    findings = latest_findings(session, market, [t.feature_key for t, _ in themes])
     return {"snapshot_id": str(snapshot), "market": market,
-            "basis": "Distinct collected reviews per feature; pain = defects and hard-to-use reports; not customer prevalence.",
-            "items": [_signal(t, k, texts, drafted) for t, k in themes]}
+            "basis": "Distinct collected reviews per feature; pain = defects and hard-to-use reports; not customer prevalence. "
+                     "Findings: the LLM groups reviews, counts come from code.",
+            "items": [_signal(t, k, texts, drafted, findings.get(t.feature_key)) for t, k in themes]}
+
+
+class CondenseIn(BaseModel):
+    markets: list[str | None] = Field(default=["US", "EU", None], description="Markets to condense; null = all pooled")
+    kinds: list[Literal["pain", "request", "strength", "mixed"]] = ["pain", "request", "strength"]
+    limit: int = Field(8, ge=1, le=30, description="Top signals per market and kind")
+
+
+@router.post("/signals/condense", summary="Condense the top signals into concrete findings (background run, poll /api/simulations/{id})")
+def condense(body: CondenseIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
+    from parallax import signals as signal_service
+    from parallax.orchestrator import launch
+
+    run = signal_service.start(session, who, body.model_dump())
+    session.commit()
+    launch(run.id)
+    return {"run_id": str(run.id), "status": run.status}
 
 
 @router.get("/pipeline", summary="Start page: one card per stage with counts, status and the next action")
@@ -92,6 +99,8 @@ def pipeline(session: Session = Depends(get_session, scope="function")):
     feedback = session.scalar(select(func.count()).select_from(Record).where(Record.record_kind == "feedback",
                                                                              Record.superseded_by.is_(None))) or 0
     with_claims = session.scalar(select(func.count(func.distinct(Claim.record_id)))) or 0
+    findings_count = session.scalar(select(func.count()).select_from(Finding)) or 0
+    condensed_features = session.scalar(select(func.count(func.distinct(Finding.feature_key)))) or 0
     # 3 signals
     snapshot = latest_snapshot_id(session, settings.target_model)
     pooled = list(session.scalars(select(Theme).where(Theme.snapshot_id == snapshot, Theme.market.is_(None),
@@ -120,7 +129,8 @@ def pipeline(session: Session = Depends(get_session, scope="function")):
                     "claims_by_producer": dict(producers)}},
         {"key": "signals", "title": "Signals", "question": "What do customers tell us?",
          "status": status(bool(pooled), bool(snapshot)),
-         "counts": {"features_with_evidence": len(pooled), "by_kind": dict(kinds)},
+         "counts": {"features_with_evidence": len(pooled), "by_kind": dict(kinds), "findings": findings_count,
+                    "condensed_features": condensed_features},
          "top_pains": top("pain", lambda t: t.pain_review_count), "top_strengths": top("strength", lambda t: t.praise_review_count),
          "top_requests": top("request", lambda t: t.request_review_count)},
         {"key": "experts", "title": "Expert pipeline", "question": "What do owners and departments think?",
@@ -146,3 +156,34 @@ def pipeline(session: Session = Depends(get_session, scope="function")):
     else:
         nxt = {"stage": "signals", "label": "Draft more requirements or revisit signals"}
     return {"target_model": settings.target_model, "stages": stages, "next_action": nxt}
+
+
+VEHICLE_INFO = {
+    "bmw:G60": ("BMW 5 Series Sedan", "G60, incl. i5 (BEV) and 530e/550e (PHEV)"),
+    "bmw:G68": ("BMW 5 Series Long Wheelbase", "G68, China only"),
+    "bmw:G70": ("BMW 7 Series", "G70, incl. i7 (BEV)"),
+    "bmw:F70": ("BMW 1 Series", "F70, Europe"),
+}
+
+
+@router.get("/vehicles", summary="Vehicles for the landing page: which one is active and how much data each has")
+def vehicles(session: Session = Depends(get_session, scope="function")):
+    from parallax.models import Entity
+
+    target = get_settings().target_model
+    counts: dict[str, int] = {}
+    for subjects, n in session.execute(select(Record.subject_ids, func.count()).where(Record.superseded_by.is_(None))
+                                       .group_by(Record.subject_ids)):
+        for subject in subjects or ["brand_or_unresolved"]:
+            counts[subject] = counts.get(subject, 0) + n
+    entities = {e.entity_id: e for e in session.scalars(select(Entity).where(Entity.entity_id.like("bmw:%")))}
+    items = []
+    for entity_id, (name, detail) in VEHICLE_INFO.items():
+        records = counts.get(entity_id, 0)
+        items.append({"entity_id": entity_id, "code": entity_id.split(":")[1], "name": name, "detail": detail,
+                      "records": records, "in_catalog": entity_id in entities,
+                      "status": "active" if entity_id == target else ("data_available" if records else "not_imported")})
+    items.append({"entity_id": "brand", "code": "ALL", "name": "Across vehicles", "detail": "Brand-wide and unresolved feedback (e.g. My BMW app)",
+                  "records": counts.get("brand_or_unresolved", 0) + counts.get("bmw:brand", 0), "in_catalog": True,
+                  "status": "data_available" if counts.get("brand_or_unresolved") else "not_imported"})
+    return {"active": target, "items": items}

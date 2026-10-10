@@ -101,7 +101,13 @@ def _mock_embedding(text: str, dim: int = 256) -> list[float]:
 class LLMClient:
     _lock = threading.Lock()
     _run_calls: dict[uuid.UUID, int] = {}
+    _budgets: dict[uuid.UUID, int] = {}
     _local = threading.local()
+
+    def set_budget(self, run_id: uuid.UUID, max_calls: int) -> None:
+        """Per-run call budget for batch jobs whose size is known up front."""
+        with self._lock:
+            self._budgets[run_id] = max_calls
 
     def last_citations(self) -> list[dict]:
         """URL citations the web_search tool attached to this thread's last structured call."""
@@ -129,8 +135,9 @@ class LLMClient:
             return
         with self._lock:
             count = self._run_calls.get(run_id, 0) + 1
-            if count > self.settings.max_llm_calls_per_run:
-                raise BudgetExceeded(f"run {run_id} exceeded max_llm_calls_per_run={self.settings.max_llm_calls_per_run}")
+            limit = self._budgets.get(run_id, self.settings.max_llm_calls_per_run)
+            if count > limit:
+                raise BudgetExceeded(f"run {run_id} exceeded its LLM call budget ({limit})")
             self._run_calls[run_id] = count
 
     def _log(self, *, run_id, agent_id, requirement_id, purpose, model, prompt_version, prompt_text, record_ids,

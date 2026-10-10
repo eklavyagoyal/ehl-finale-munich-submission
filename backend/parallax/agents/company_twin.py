@@ -33,6 +33,11 @@ class InfoRequest(BaseModel):
 
 
 class DepartmentMemoOut(BaseModel):
+    verdict: Literal["for", "against", "conditional"] = Field(description="Your department's clear position.")
+    main_argument: str = Field(description="The single strongest reason for your verdict, one sentence.")
+    strongest_counterargument: str = Field(description="The strongest reason against your own verdict, one sentence.")
+    cost_view: Literal["low", "acceptable", "too_expensive", "unknown"] = Field(
+        description="Your view of the effort/cost relative to the value (no numbers).")
     stance: Literal["support", "neutral", "oppose", "unsure"]
     summary: str = Field(description="3-5 sentences from the department's perspective.")
     criterion_ratings: list[RangeRating] = Field(description="Only the criteria this department owns; use wide ranges when unsure.")
@@ -55,6 +60,8 @@ customer requirement for the successor of the BMW 5 Series (G60, G68 long wheelb
 Mandate: {role.get('mandate')}
 Perspective: {role.get('perspective')}
 You rate only these decision criteria (0-5 scale, give a low/high range): {owned}.
+Take a clear position (for / against / conditional) as your department would in a real product committee.
+Do not support everything by default: departments disagree, and a PM needs to see where and why.
 Never: {must_not}.
 {SCOPE}
 {UNITS}
@@ -86,8 +93,12 @@ def review(llm: LLMClient, agent: Agent, requirement: Requirement, evidence: dic
             low = round(rng.uniform(1, 3), 1)
             ratings.append(RangeRating(criterion=criterion, low=low, high=round(min(5, low + rng.uniform(0.5, 2)), 1),
                                        rationale=f"[mock] {agent.display_name} view on {criterion}"))
+        verdict = rng.choice(["for", "against", "conditional"])
         return DepartmentMemoOut(
-            stance=rng.choice(["support", "neutral", "oppose", "unsure"]),
+            verdict=verdict, main_argument=f"[mock] {agent.display_name} main argument",
+            strongest_counterargument="[mock] counterargument",
+            cost_view=rng.choice(["low", "acceptable", "too_expensive", "unknown"]),
+            stance={"for": "support", "against": "oppose", "conditional": "neutral"}[verdict],
             summary=f"[mock] {agent.display_name} assessment of {requirement.id}.",
             criterion_ratings=ratings, effort_band=rng.choice(["low", "medium", "high", "unknown"]),
             risks=["[mock] integration risk"], conditions=["[mock] validate with customer clinic"],
@@ -100,6 +111,7 @@ def review(llm: LLMClient, agent: Agent, requirement: Requirement, evidence: dic
         purpose="department_review", prompt_version=PROMPT_VERSION, agent_id=agent.id, run_id=run_id,
         requirement_id=requirement.id, input_record_ids=evidence_record_ids, mock=mock,
     )
+    memo.stance = {"for": "support", "against": "oppose", "conditional": "neutral"}[memo.verdict]
     # Departments may only rate what they own.
     memo.criterion_ratings = [r for r in memo.criterion_ratings if r.criterion in owned]
     for rating in memo.criterion_ratings:

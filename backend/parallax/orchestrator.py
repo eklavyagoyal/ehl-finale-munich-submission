@@ -92,7 +92,13 @@ def create_run(session: Session, *, requirement_ids: list[str], actor_id: str, k
 
 
 def launch(run_id: uuid.UUID) -> threading.Thread:
-    target = execute_validation if _run_kind(run_id) == "validation" else execute
+    kind = _run_kind(run_id)
+    if kind == "condense":
+        from parallax import signals
+
+        target = signals.execute
+    else:
+        target = execute_validation if kind == "validation" else execute
     thread = threading.Thread(target=target, args=(run_id,), name=f"parallax-run-{str(run_id)[:8]}", daemon=True)
     thread.start()
     return thread
@@ -226,6 +232,9 @@ def run_market_twin(run_id: uuid.UUID, requirement_ids: list[str], challenge: st
         anchor_sets = policy["parallax"]["ssr_anchor_sets"]
         rows = []
         for result in results:
+            # Normalize the 100-point budget (models do not always add up exactly).
+            spent = sum(r.budget_points for r in result.reactions) + result.keep_price_points
+            scale = 100.0 / spent if spent else 0.0
             importance = ssr.rate(llm, [r.reaction for r in result.reactions], anchor_sets, run_id=run_id, agent_id=result.agent.id)
             fit = ssr.rate(llm, [r.class_fit for r in result.reactions], FIT_ANCHORS, run_id=run_id, agent_id=result.agent.id)
             for reaction, imp, fit_score in zip(result.reactions, importance, fit):
@@ -235,6 +244,7 @@ def run_market_twin(run_id: uuid.UUID, requirement_ids: list[str], challenge: st
                     response_text=reaction.reaction + ("\n[raw] " + result.raw_text[:3000] if result.raw_text else ""),
                     stance=reaction.stance, ssr_distribution=imp["distribution"], ssr_mean=imp["mean"],
                     importance_0_5=imp["importance_0_5"], market_fit_0_5=fit_score["importance_0_5"],
+                    budget_points=round(reaction.budget_points * scale, 1), verdict=reaction.verdict,
                     concerns=reaction.concerns, info_requests=[i.model_dump() for i in reaction.would_need_to_know],
                     grounding_record_ids=result.grounding.record_ids,
                 ))
@@ -392,12 +402,18 @@ def _market_twin_summary(session: Session, run_id, requirement_id: str) -> dict:
         stances = defaultdict(int)
         for r in items:
             stances[r.stance] += 1
+        verdicts = defaultdict(int)
+        for r in items:
+            verdicts[r.verdict or "unknown"] += 1
+        budgets = [r.budget_points for r in items if r.budget_points is not None]
         summary[market] = {
-            "personas": len(items), "stances": dict(stances),
+            "personas": len(items), "stances": dict(stances), "verdicts": dict(verdicts),
+            "mean_budget_points_of_100": round(sum(budgets) / len(budgets), 1) if budgets else None,
             "mean_importance_0_5": round(sum(r.importance_0_5 for r in items) / len(items), 2),
             "mean_class_fit_0_5": round(sum((r.market_fit_0_5 or 0) for r in items) / len(items), 2),
             "reactions": [{"persona": agents[r.agent_id].display_name, "validation": agents[r.agent_id].validation_status,
-                           "stance": r.stance, "importance_0_5": r.importance_0_5,
+                           "stance": r.stance, "verdict": r.verdict, "budget_points": r.budget_points,
+                           "importance_0_5": r.importance_0_5,
                            "reaction": r.response_text.split("\n[raw]")[0][:400], "concerns": r.concerns} for r in items],
             "label": "SIMULATED owner reactions (hypotheses, not evidence)",
         }
@@ -415,7 +431,9 @@ def build_package(session: Session, run_id, requirement: Requirement, scores: di
         "requirement": _requirement_payload(requirement),
         "evidence": evidence,
         "market_twin": _market_twin_summary(session, run_id, requirement.id),
-        "company_twin": [{"department": m.agent_id, "stance": m.stance, "summary": m.memo.get("summary"),
+        "company_twin": [{"department": m.agent_id, "stance": m.stance, "verdict": m.memo.get("verdict"),
+                          "main_argument": m.memo.get("main_argument"), "cost_view": m.memo.get("cost_view"),
+                          "strongest_counterargument": m.memo.get("strongest_counterargument"), "summary": m.memo.get("summary"),
                           "effort_band": m.memo.get("effort_band"), "ratings": m.memo.get("criterion_ratings"),
                           "risks": m.memo.get("risks"), "conditions": m.memo.get("conditions"),
                           "label": "SIMULATED department view (assumption)"} for m in memos],

@@ -46,12 +46,16 @@ class RequirementReaction(BaseModel):
     reaction: str = Field(description="2-4 sentences in first person, in your own words: does this matter to you and why?")
     class_fit: str = Field(description="One sentence: does this belong in a car like yours (vehicle class, brand)?")
     stance: Literal["positive", "neutral", "negative"]
+    verdict: Literal["must_have", "nice_to_have", "dont_care", "against"] = Field(
+        description="Forced choice for your next car: must_have, nice_to_have, dont_care or against.")
+    budget_points: int = Field(ge=0, le=100, description="Points from your 100-point budget for this proposal.")
     concerns: list[str] = Field(default_factory=list)
     would_need_to_know: list[InfoRequest] = Field(default_factory=list, description="Facts you would want before caring (optional).")
 
 
 class PersonaReactions(BaseModel):
     reactions: list[RequirementReaction]
+    keep_price_points: int = Field(ge=0, le=100, description="Points you keep for 'make the car cheaper instead'.")
 
 
 @dataclass
@@ -61,6 +65,7 @@ class PersonaResult:
     engine: str
     grounding: Grounding
     raw_text: str = ""
+    keep_price_points: int = 0
 
 
 def persona_profile(agent: Agent, grounding: Grounding | None) -> str:
@@ -106,6 +111,9 @@ def stimulus(requirements: list[Requirement], challenge: str | None = None) -> s
         "BMW is planning the next generation of your car (about 3-5 years from now) and asks you for your honest reaction.",
         "For EACH proposal below: say in 2-4 sentences whether it would matter to you and why, whether it belongs in a car "
         "like yours, what worries you, and what you would need to know first. Refer to each proposal by its ID.",
+        "Then decide for each proposal: MUST HAVE, NICE TO HAVE, DON'T CARE or AGAINST.",
+        "Finally you have exactly 100 points. Split them between the proposals and the option KEEP_PRICE "
+        "(make the car cheaper instead). Put points only where you would really pay. Say the numbers explicitly.",
         "",
     ]
     for req in requirements:
@@ -137,17 +145,20 @@ class DirectEngine:
                     ]),
                     class_fit=rng.choice(["This fits a 5 Series well.", "It could fit this car.", "Feels out of place for this car."]),
                     stance=rng.choice(["positive", "neutral", "negative"]),
+                    verdict=rng.choice(["must_have", "nice_to_have", "dont_care", "against"]),
+                    budget_points=rng.randint(0, 60),
                     concerns=[rng.choice(["reliability of the software", "extra cost", "complexity of menus"])],
                     would_need_to_know=[InfoRequest(question="How do competitors solve this today?", why="to compare")] if rng.random() < 0.2 else [],
                 ) for rid in ids
-            ])
+            ], keep_price_points=rng.randint(0, 40))
 
         result = llm.structured(
             PersonaReactions, system=system, user=user, model=settings.model_fast, purpose="persona_reaction",
             prompt_version=PROMPT_VERSION, agent_id=agent.id, run_id=run_id,
             input_record_ids=grounding.record_ids if with_grounding else [], mock=mock,
         )
-        return PersonaResult(agent=agent, reactions=_align(result.reactions, ids), engine=self.name, grounding=grounding)
+        return PersonaResult(agent=agent, reactions=_align(result.reactions, ids), engine=self.name, grounding=grounding,
+                             keep_price_points=result.keep_price_points)
 
 
 class TinyTroupeEngine:
@@ -226,20 +237,22 @@ class TinyTroupeEngine:
             extracted = llm.structured(
                 PersonaReactions,
                 system="Split a BMW owner's spoken reaction into one entry per proposal ID. Keep their words; do not add opinions. "
-                       "If a proposal was not addressed, write 'no reaction' and stance neutral.\n" + SAFETY,
+                       "Take verdicts (must have / nice to have / don't care / against) and budget points exactly as the owner "
+                       "stated them; KEEP_PRICE points go to keep_price_points. If a proposal was not addressed, write 'no "
+                       "reaction', stance neutral, verdict dont_care, 0 points.\n" + SAFETY,
                 user=f"Proposals: {', '.join(ids)}\n\nWhat the owner said:\n{spoken}",
                 model=settings.model_fast, purpose="persona_reaction_extraction", prompt_version=PROMPT_VERSION,
                 agent_id=agent.id, run_id=run_id,
             )
             results.append(PersonaResult(agent=agent, reactions=_align(extracted.reactions, ids), engine=self.name,
-                                         grounding=grounding, raw_text=spoken))
+                                         grounding=grounding, raw_text=spoken, keep_price_points=extracted.keep_price_points))
         return results
 
 
 def _align(reactions: list[RequirementReaction], ids: list[str]) -> list[RequirementReaction]:
     by_id = {r.requirement_id: r for r in reactions}
     return [by_id.get(rid) or RequirementReaction(requirement_id=rid, reaction="no reaction", class_fit="no reaction",
-                                                  stance="neutral") for rid in ids]
+                                                  stance="neutral", verdict="dont_care", budget_points=0) for rid in ids]
 
 
 # ------------------------------------------------------------------ TinyTroupe call logging

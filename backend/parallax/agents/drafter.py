@@ -51,14 +51,19 @@ class DraftOut(BaseModel):
 SYSTEM = f"""\
 You draft customer requirements for the successor of the BMW 5 Series (target model given below),
 3-5 years ahead, from deterministic theme counts and real owner quotes. One requirement per theme.
+If condensed findings are given, build the requirement around the largest concrete findings (name them),
+not around the generic feature name.
 Cite only the record IDs provided, with exact quotes. Separate evidence from assumptions.
 {SCOPE}
 {UNITS}
 {SAFETY}"""
 
 
-def _theme_payload(theme: Theme, quotes: list[dict]) -> dict:
+def _theme_payload(theme: Theme, quotes: list[dict], findings: list | None = None) -> dict:
     return {
+        "condensed_findings": [{"title": f.title, "description": f.description, "kind": f.kind, "reviews": f.review_count,
+                                "share_of_feature_reviews": f.share_of_theme} for f in findings or []]
+        or "NONE (signal not condensed yet)",
         "feature_key": theme.feature_key, "feature_label": theme.label, "area": theme.area,
         "market": theme.market or "all markets pooled", "distinct_reviews": theme.mention_review_count,
         "direct_target_model_reviews": theme.direct_review_count, "claim_types": theme.counts_by_claim_type,
@@ -82,7 +87,11 @@ def draft_requirements(session: Session, llm: LLMClient, *, target_model: str, s
 
     created, skipped, dropped_citations = [], [], 0
     for theme in themes:
-        quotes, gate_meta = requirement_evidence_quotes(session, theme, theme.record_ids)
+        from parallax.signals import latest_findings
+
+        findings = latest_findings(session, theme.market, [theme.feature_key]).get(theme.feature_key, [])
+        focus = [rid for f in findings[:2] for rid in f.record_ids] if findings else []
+        quotes, gate_meta = requirement_evidence_quotes(session, theme, focus + theme.record_ids)
         quote_ids = [q["record_id"] for q in quotes]
 
         def mock(rng, quotes=quotes, theme=theme):
@@ -104,7 +113,7 @@ def draft_requirements(session: Session, llm: LLMClient, *, target_model: str, s
 
         draft = llm.structured(
             DraftOut, system=SYSTEM + f"\nTarget model: {target_model}. Market: {market or 'all focus markets'}.",
-            user="Theme:\n" + to_json(_theme_payload(theme, quotes)), model=settings.model_strong,
+            user="Theme:\n" + to_json(_theme_payload(theme, quotes, findings)), model=settings.model_strong,
             purpose="draft_requirement", prompt_version=PROMPT_VERSION, agent_id="agent:drafter", run_id=run_id,
             input_record_ids=quote_ids, mock=mock,
         )

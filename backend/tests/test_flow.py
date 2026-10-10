@@ -68,6 +68,12 @@ def test_simulation_decision_challenge_and_audit(client, drafted):
     owner = talk["owners_by_market"]["US"][0]
     assert owner["name"] and owner["answers"][0]["reaction"] and owner["answers"][0]["requirement_title"]
     assert talk["requirements"][drafted[0]]["challenger"] and len(talk["requirements"][drafted[0]]["judges"]) == 3
+    board = client.get(f"/api/requirements/{drafted[0]}/council").json()
+    assert board["status"] == "simulated" and board["customers"]["by_market"]["US"]["summary"]["personas"] == 5
+    assert all(d["verdict"] in ("for", "against", "conditional") for d in board["company"]["departments"])
+    assert board["tensions"] and board["challenger"] and board["question_to_owners"]
+    persona = board["customers"]["by_market"]["US"]["personas"][0]
+    assert persona["verdict"] and persona["budget_points"] is not None
     detail = client.get(f"/api/requirements/{drafted[0]}").json()
     assert detail["requirement"]["status"] == "in_review"
     assert detail["requirement"]["score_low"] <= detail["requirement"]["score"] <= detail["requirement"]["score_high"]
@@ -155,6 +161,15 @@ def test_records_market_filter_and_coverage_matrix(client, drafted):
     assert records.status_code == 200 and records.json()["total"] == 8
     matrix = client.get("/api/coverage").json()["records_by_channel_market"]
     assert {"stream": "bmw", "channel": "bmw_feedback", "market": "US", "records": 8} in matrix
+
+
+def test_condense_and_vehicles(client, drafted):
+    run = client.post("/api/signals/condense", json={"markets": ["US"], "kinds": ["pain"], "limit": 2}).json()
+    assert wait_for(client, run["run_id"])["status"] == "completed"
+    pains = client.get("/api/signals", params={"market": "US", "kind": "pain"}).json()["items"]
+    assert any(p["condensed"] and p["findings"] and p["findings"][0]["quotes"] for p in pains)
+    vehicles = client.get("/api/vehicles").json()
+    assert vehicles["active"] == "bmw:G60" and any(v["status"] == "active" for v in vehicles["items"])
 
 
 def test_pipeline_and_signals(client, drafted):

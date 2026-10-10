@@ -177,6 +177,29 @@ class Theme(Base):
     created_at: Mapped[datetime] = mapped_column(TS, server_default=func.now())
 
 
+class Finding(Base):
+    """A concrete customer problem/wish/praise inside a theme (e.g. CarPlay: "drops during the drive").
+    The LLM proposes the grouping and assigns reviews; counts are computed in code from the assignments."""
+
+    __tablename__ = "findings"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    target_model: Mapped[str] = mapped_column(String(60))
+    market: Mapped[str | None] = mapped_column(String(10), nullable=True, index=True)
+    feature_key: Mapped[str] = mapped_column(String(200), index=True)
+    theme_label: Mapped[str] = mapped_column(Text)
+    title: Mapped[str] = mapped_column(Text)
+    description: Mapped[str] = mapped_column(Text)
+    kind: Mapped[str] = mapped_column(String(20))  # pain | request | praise | mixed
+    record_ids: Mapped[list[str]] = mapped_column(ARRAY(Text))
+    review_count: Mapped[int] = mapped_column(Integer)
+    share_of_theme: Mapped[float] = mapped_column(Float)
+    quotes: Mapped[list] = mapped_column(JSONB)
+    run_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    model: Mapped[str] = mapped_column(String(80))
+    created_at: Mapped[datetime] = mapped_column(TS, server_default=func.now())
+
+
 # --------------------------------------------------------------------------- requirements
 
 
@@ -367,6 +390,9 @@ class PersonaResponse(Base):
     ssr_mean: Mapped[float] = mapped_column(Float)
     importance_0_5: Mapped[float] = mapped_column(Float)
     market_fit_0_5: Mapped[float | None] = mapped_column(Float, nullable=True)
+    # Forced trade-off: share of a fixed 100-point budget (vs. other proposals and "keep the price down").
+    budget_points: Mapped[float | None] = mapped_column(Float, nullable=True)
+    verdict: Mapped[str | None] = mapped_column(String(20), nullable=True)  # must_have | nice_to_have | dont_care | against
     concerns: Mapped[list] = mapped_column(JSONB, default=list)
     info_requests: Mapped[list] = mapped_column(JSONB, default=list)
     grounding_record_ids: Mapped[list[str]] = mapped_column(ARRAY(Text), default=list)

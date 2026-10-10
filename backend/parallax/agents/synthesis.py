@@ -25,8 +25,18 @@ class Conflict(BaseModel):
     description: str
 
 
+class Tension(BaseModel):
+    topic: str
+    customers_say: str = Field(description="What the customer council says, with markets.")
+    company_says: str = Field(description="What the company council says, naming departments.")
+    resolution_options: list[str]
+
+
 class SynthesisOut(BaseModel):
     headline: str = Field(description="One sentence the PM can read first.")
+    customer_view: str = Field(description="The customer council in 2-3 sentences: who wants it, who does not, budget share.")
+    company_view: str = Field(description="The company council in 2-3 sentences: which departments are for/against and why.")
+    tensions: list[Tension] = Field(description="Where customers and company disagree, e.g. 'everyone wants it, Finance: too expensive'.")
     market_views: list[MarketView]
     internal_view: str = Field(description="What the departments think, including disagreements.")
     research_view: str = Field(description="What verified research adds; say if nothing was verified.")
@@ -63,6 +73,10 @@ def synthesize(llm: LLMClient, requirement: Requirement, package: dict, evidence
         markets = package.get("market_twin", {}).keys() or ["US", "EU", "CN"]
         return SynthesisOut(
             headline=f"[mock] {requirement.title}: mixed signals, PM review recommended.",
+            customer_view="[mock] US and EU owners want it; China is lukewarm.",
+            company_view="[mock] Engineering for, Finance against (too expensive).",
+            tensions=[Tension(topic="cost vs demand", customers_say="[mock] most owners call it a must-have",
+                              company_says="[mock] Finance: too expensive for the volume", resolution_options=["[mock] option"])],
             market_views=[MarketView(market=m, summary=f"[mock] {m} view", simulated_importance_0_5=round(rng.uniform(1, 4), 2),
                                      observed_evidence=rng.choice(["strong", "moderate", "weak", "none"])) for m in markets],
             internal_view="[mock] Engineering sees moderate effort; Sales sees good fit in CN.",

@@ -506,6 +506,65 @@
     }
    }
   },
+  "/api/signals/condense": {
+   "post": {
+    "tags": [
+     "pipeline"
+    ],
+    "summary": "Condense the top signals into concrete findings (background run, poll /api/simulations/{id})",
+    "operationId": "condense_api_signals_condense_post",
+    "parameters": [
+     {
+      "name": "x-actor",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`.",
+       "title": "X-Actor"
+      },
+      "description": "Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`."
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CondenseIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/pipeline": {
    "get": {
     "tags": [
@@ -513,6 +572,25 @@
     ],
     "summary": "Start page: one card per stage with counts, status and the next action",
     "operationId": "pipeline_api_pipeline_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/vehicles": {
+   "get": {
+    "tags": [
+     "pipeline"
+    ],
+    "summary": "Vehicles for the landing page: which one is active and how much data each has",
+    "operationId": "vehicles_api_vehicles_get",
     "responses": {
      "200": {
       "description": "Successful Response",
@@ -2261,6 +2339,46 @@
     }
    }
   },
+  "/api/requirements/{requirement_id}/council": {
+   "get": {
+    "tags": [
+     "requirements"
+    ],
+    "summary": "Customer council vs company council for the latest run: who said what, tensions, challenger, judges",
+    "operationId": "council_api_requirements__requirement_id__council_get",
+    "parameters": [
+     {
+      "name": "requirement_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Requirement Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/simulations": {
    "post": {
     "tags": [
@@ -3424,6 +3542,58 @@
     ],
     "title": "ClaimSummaryOut",
     "description": "Who interpreted the record: human, LLM (model + run) or BMW's own VFC classification."
+   },
+   "CondenseIn": {
+    "properties": {
+     "markets": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Markets",
+      "description": "Markets to condense; null = all pooled",
+      "default": [
+       "US",
+       "EU",
+       null
+      ]
+     },
+     "kinds": {
+      "items": {
+       "type": "string",
+       "enum": [
+        "pain",
+        "request",
+        "strength",
+        "mixed"
+       ]
+      },
+      "type": "array",
+      "title": "Kinds",
+      "default": [
+       "pain",
+       "request",
+       "strength"
+      ]
+     },
+     "limit": {
+      "type": "integer",
+      "maximum": 30.0,
+      "minimum": 1.0,
+      "title": "Limit",
+      "description": "Top signals per market and kind",
+      "default": 8
+     }
+    },
+    "type": "object",
+    "title": "CondenseIn"
    },
    "CriterionOut": {
     "properties": {
@@ -5134,8 +5304,20 @@
     "properties": {
      "confirm": {
       "type": "string",
-      "const": "DELETE ALL DATA",
+      "enum": [
+       "DELETE ALL DATA",
+       "DELETE REQUIREMENTS"
+      ],
       "title": "Confirm"
+     },
+     "scope": {
+      "type": "string",
+      "enum": [
+       "all_data",
+       "requirements"
+      ],
+      "title": "Scope",
+      "default": "all_data"
      },
      "rationale": {
       "type": "string",
