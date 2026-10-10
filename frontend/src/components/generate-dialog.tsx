@@ -1,6 +1,5 @@
 "use client";
 
-import { Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -19,11 +18,11 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { buildThemes, draftRequirements, refreshAll, useMeta } from "@/lib/api/hooks";
 
-// Rebuilds the theme signals from the current evidence, then lets the AI draft candidate requirements.
-export function GenerateDialog({ variant = "outline" }: { variant?: "outline" | "default" }) {
+// The AI drafts candidate requirements from the strongest signals that have no requirement yet.
+export function DraftDialog({ defaultMarket = "US" }: { defaultMarket?: string }) {
   const { data: meta } = useMeta();
   const [open, setOpen] = useState(false);
-  const [market, setMarket] = useState("US");
+  const [market, setMarket] = useState(defaultMarket);
   const [limit, setLimit] = useState("5");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,11 +36,10 @@ export function GenerateDialog({ variant = "outline" }: { variant?: "outline" | 
     setBusy(true);
     setError(null);
     try {
-      await buildThemes();
-      const result = await draftRequirements(market === "all" ? null : market, count);
+      const result = await draftRequirements(market === "pooled" ? null : market, count);
       const created = result?.created?.length ?? 0;
       if (created > 0) toast.success(`${created} new requirement draft${created === 1 ? "" : "s"}`);
-      else toast.info("No new drafts: no strong signals without an existing requirement. Import more evidence first.");
+      else toast.info("No new drafts: every strong signal already has a requirement, or there is no accepted evidence yet.");
       await refreshAll();
       setOpen(false);
     } catch (e) {
@@ -54,23 +52,20 @@ export function GenerateDialog({ variant = "outline" }: { variant?: "outline" | 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={variant} size="sm">
-          <Sparkles data-icon="inline-start" />
-          Generate
-        </Button>
+        <Button size="sm">Draft requirements</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Generate requirements</DialogTitle>
+          <DialogTitle>Draft requirements</DialogTitle>
           <DialogDescription>
-            Rebuilds the signals from the imported evidence, then the AI drafts candidates. You review every draft.
+            The drafter turns the strongest signals of one market into candidate requirements with cited quotes. You review every draft.
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="gen-market">Market</Label>
+            <Label htmlFor="draft-market">Market</Label>
             <Select value={market} onValueChange={setMarket}>
-              <SelectTrigger id="gen-market" className="w-full">
+              <SelectTrigger id="draft-market" className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -79,22 +74,44 @@ export function GenerateDialog({ variant = "outline" }: { variant?: "outline" | 
                     {m}
                   </SelectItem>
                 ))}
-                <SelectItem value="all">All markets pooled</SelectItem>
+                <SelectItem value="pooled">All markets pooled</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="gen-limit">How many</Label>
-            <Input id="gen-limit" inputMode="numeric" value={limit} onChange={(e) => setLimit(e.target.value)} />
+            <Label htmlFor="draft-limit">At most</Label>
+            <Input id="draft-limit" inputMode="numeric" value={limit} onChange={(e) => setLimit(e.target.value)} />
           </div>
         </div>
         {error && <p className="text-sm text-destructive">{error}</p>}
         <DialogFooter>
           <Button onClick={run} disabled={busy}>
-            {busy ? "Drafting…" : "Draft requirements"}
+            {busy ? "Drafting…" : "Draft"}
           </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+// Recomputes the deterministic signals (counts per feature × market) from accepted evidence.
+export function RebuildSignalsButton() {
+  const [busy, setBusy] = useState(false);
+  async function rebuild() {
+    setBusy(true);
+    try {
+      await buildThemes();
+      toast.success("Signals rebuilt from the accepted evidence");
+      await refreshAll();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <Button size="sm" variant="outline" onClick={rebuild} disabled={busy}>
+      {busy ? "Rebuilding…" : "Rebuild signals"}
+    </Button>
   );
 }

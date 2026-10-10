@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import { GenerateDialog } from "@/components/generate-dialog";
 import { PageHeader } from "@/components/page-header";
 import { ScoreBar } from "@/components/score-bar";
 import { EmptyState, ErrorState, LoadingRows } from "@/components/states";
@@ -33,9 +32,7 @@ export default function RequirementsPage() {
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "G60" }, { label: "Requirements" }]}>
-        <GenerateDialog />
-      </PageHeader>
+      <PageHeader crumbs={[{ label: "G60" }, { label: "Requirements" }]} />
 
       <div className="-ml-2.5 mt-2 flex flex-wrap items-center gap-1">
         <FilterPill active={!status} onClick={() => setStatus(undefined)} label="All" count={all.data?.length} />
@@ -72,7 +69,11 @@ export default function RequirementsPage() {
           {isLoading && <LoadingRows />}
           {data && data.length === 0 && (
             <EmptyState title="No requirements yet">
-              Requirements exist once evidence is imported. Generate drafts from the current signals.
+              Requirements exist once evidence is imported. Draft them from the signals in{" "}
+              <Link href="/data?tab=signals" className="text-foreground underline-offset-4 hover:underline">
+                Data
+              </Link>
+              .
             </EmptyState>
           )}
           {data?.map((r) => (

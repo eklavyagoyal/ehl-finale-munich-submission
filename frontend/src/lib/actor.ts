@@ -1,7 +1,6 @@
 // The PM identity travels as a cookie; the BFF turns it into `X-Actor: pm:<name>`.
 export const ACTOR_COOKIE = "parallax_pm";
 export const DEFAULT_PM = "luis";
-export const PM_OPTIONS = ["luis", "lisa", "nikita", "yelya"];
 
 const NAME = /^[a-z0-9][a-z0-9_-]{0,31}$/;
 

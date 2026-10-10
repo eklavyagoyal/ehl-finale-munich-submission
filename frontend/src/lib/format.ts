@@ -1,10 +1,12 @@
 // Display helpers shared by all screens. Enum values come from /api/meta; this file only turns
 // machine values into readable labels and picks a tone.
 
+const ACRONYMS = /\b(bmw|hmi|llm|pm|ai|us|eu|cn|adas|ssr|mcda|ev|bev|phev|ice|suv|nps)\b/gi;
+
 export function humanize(value: string | null | undefined): string {
   if (!value) return "";
   const text = value.replace(/[_-]+/g, " ").trim();
-  return text.charAt(0).toUpperCase() + text.slice(1);
+  return (text.charAt(0).toUpperCase() + text.slice(1)).replace(ACRONYMS, (m) => m.toUpperCase());
 }
 
 export type Tone = "neutral" | "amber" | "green" | "red" | "blue" | "muted";

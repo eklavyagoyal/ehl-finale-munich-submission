@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { GenerateDialog } from "@/components/generate-dialog";
 import { PageHeader } from "@/components/page-header";
 import { EmptyState, ErrorState, LoadingRows } from "@/components/states";
 import { Button } from "@/components/ui/button";
@@ -33,10 +32,11 @@ export default function TasksPage() {
         {isLoading && <LoadingRows />}
         {data && data.length === 0 && (
           <EmptyState title="Nothing waits for you">
-            New requirements appear here once evidence is imported and drafts exist.
-            <div className="mt-3">
-              <GenerateDialog />
-            </div>
+            New requirements appear here once evidence is imported and drafted. See{" "}
+            <Link href="/data" className="text-foreground underline-offset-4 hover:underline">
+              Data
+            </Link>
+            .
           </EmptyState>
         )}
         {data &&
@@ -108,6 +108,11 @@ function TaskRow({ task, requirement }: { task: Task; requirement?: Requirement 
         {task.kind === "simulate" && (
           <Button size="sm" variant="outline" onClick={simulate} disabled={busy}>
             {busy ? "Starting…" : "Simulate"}
+          </Button>
+        )}
+        {task.kind === "review_evidence" && (
+          <Button size="sm" variant="outline" asChild>
+            <Link href="/data?tab=sources">Review</Link>
           </Button>
         )}
         {task.kind === "running" && (

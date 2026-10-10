@@ -1,18 +1,11 @@
 "use client";
 
-import { Activity, ChevronsUpDown, History, Inbox, ListChecks } from "lucide-react";
+import { Activity, Database, History, Inbox, ListChecks } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { SettingsDialog } from "@/components/settings-dialog";
 import {
   Sidebar,
   SidebarContent,
@@ -25,8 +18,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { PM_OPTIONS, writePmCookie } from "@/lib/actor";
-import { refreshAll, useRequirements, useTasks } from "@/lib/api/hooks";
+import { useRequirements, useTasks } from "@/lib/api/hooks";
 import { humanize } from "@/lib/format";
 
 export function AppSidebar({ initialPm }: { initialPm: string }) {
@@ -38,15 +30,10 @@ export function AppSidebar({ initialPm }: { initialPm: string }) {
   const items = [
     { href: "/tasks", label: "My tasks", icon: Inbox, count: tasks?.length },
     { href: "/requirements", label: "Requirements", icon: ListChecks, count: requirements?.length },
+    { href: "/data", label: "Data", icon: Database },
     { href: "/activity", label: "Activity", icon: Activity },
     { href: "/history", label: "History", icon: History },
   ];
-
-  function switchPm(name: string) {
-    writePmCookie(name);
-    setPm(name);
-    void refreshAll();
-  }
 
   return (
     <Sidebar collapsible="icon">
@@ -89,34 +76,18 @@ export function AppSidebar({ initialPm }: { initialPm: string }) {
       </SidebarContent>
 
       <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size="lg" aria-label="Switch product manager">
-                  <span className="flex size-8 items-center justify-center rounded-full bg-muted text-xs font-medium uppercase">
-                    {pm.slice(0, 2)}
-                  </span>
-                  <span className="flex flex-col leading-tight">
-                    <span className="font-medium">{humanize(pm)}</span>
-                    <span className="text-xs text-muted-foreground">Product manager · 5 Series</span>
-                  </span>
-                  <ChevronsUpDown className="ml-auto" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent side="top" align="start" className="w-56">
-                <DropdownMenuLabel className="text-xs text-muted-foreground">Act as</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {PM_OPTIONS.map((name) => (
-                  <DropdownMenuItem key={name} onSelect={() => switchPm(name)}>
-                    pm:{name}
-                    {name === pm && <span className="ml-auto text-xs text-muted-foreground">active</span>}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <div className="flex items-center gap-2 p-1 group-data-[collapsible=icon]:justify-center">
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium uppercase">
+            {pm.slice(0, 2)}
+          </span>
+          <span className="flex min-w-0 flex-1 flex-col text-sm leading-tight group-data-[collapsible=icon]:hidden">
+            <span className="truncate font-medium">{humanize(pm)}</span>
+            <span className="truncate text-xs text-muted-foreground">Product manager · 5 Series</span>
+          </span>
+          <span className="group-data-[collapsible=icon]:hidden">
+            <SettingsDialog pm={pm} onPmChange={setPm} />
+          </span>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );

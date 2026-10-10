@@ -328,3 +328,67 @@ export interface DecisionResult {
   followup_run_id: string | null;
   requirement: Requirement;
 }
+
+export interface Source {
+  source_id: string;
+  dataset_key: string;
+  stream: string;
+  channel: string;
+  title: string;
+  locator: string | null;
+  collected_at: string | null;
+  collector: string | null;
+  is_example: boolean;
+  normalized_record_count: number;
+  sampling: { method?: string; limitations?: string[]; retrieved_count?: number } | null;
+  provenance: { origin?: string; verification?: string; notes?: string } | null;
+  external_llm: boolean;
+  review_status: "pending" | "accepted" | "rejected" | string;
+}
+
+export interface EvidenceRecord {
+  record_id: string;
+  source_id: string;
+  record_kind: string;
+  markets: string[];
+  subject_ids: string[];
+  text_original: string | null;
+  translation_en: string | null;
+  language: string | null;
+  content_date: string | null;
+  channel: string;
+  locator: Record<string, unknown>;
+}
+
+export interface RecordPage {
+  total: number;
+  items: EvidenceRecord[];
+}
+
+export interface Theme {
+  id: number;
+  market: string | null;
+  feature_key: string;
+  label: string;
+  area: string;
+  mention_review_count: number;
+  direct_review_count: number;
+  request_review_count: number;
+  pain_review_count: number;
+  praise_review_count: number;
+  competitor_review_count: number;
+  channels: string[];
+  demand_score?: number;
+}
+
+export interface ThemePage {
+  snapshot_id: string | null;
+  items: Theme[];
+}
+
+export interface Coverage {
+  records_by_channel: { stream: string; channel: string; review_status: string; external_llm: boolean; records: number }[];
+  records_by_market: { market: string | null; records: number }[];
+  claims: { review_status: string; derived_from_bmw_labels: boolean; claims: number }[];
+  llm_rule: string;
+}

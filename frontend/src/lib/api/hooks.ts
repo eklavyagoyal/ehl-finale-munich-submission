@@ -7,15 +7,19 @@ import type {
   Agreement,
   AuditEvent,
   AuditPage,
+  Coverage,
   Decision,
   DecisionResult,
   LlmCall,
   Meta,
   Requirement,
   RequirementDetail,
+  RecordPage,
   Run,
   RunDetail,
+  Source,
   Task,
+  ThemePage,
   Version,
 } from "./types";
 
@@ -154,5 +158,38 @@ export async function buildThemes() {
 export async function draftRequirements(market: string | null, limit: number) {
   return unwrap<{ created: unknown[]; skipped_existing?: unknown[]; dropped_invalid_citations?: number }>(
     api.POST("/api/requirements/draft", { body: { market, limit } }),
+  );
+}
+
+export function useCoverage() {
+  return useSWR("coverage", () => unwrap<Coverage>(api.GET("/api/coverage")));
+}
+
+export function useSources() {
+  return useSWR("sources", () => unwrap<Source[]>(api.GET("/api/sources")));
+}
+
+export function useRecords(query: { q?: string; market?: string; channel?: string; offset?: number }) {
+  return useSWR(["records", query.q, query.market, query.channel, query.offset], () =>
+    unwrap<RecordPage>(
+      api.GET("/api/records", {
+        params: { query: { q: query.q || undefined, market: query.market, channel: query.channel, limit: 50, offset: query.offset ?? 0 } },
+      }),
+    ),
+  );
+}
+
+export function useThemes(market: string | undefined) {
+  return useSWR(["themes", market ?? "pooled"], () =>
+    unwrap<ThemePage>(api.GET("/api/themes", { params: { query: { market, limit: 200 } } })),
+  );
+}
+
+export async function reviewSource(id: string, status: "accepted" | "rejected" | "pending", notes: string) {
+  return unwrap<unknown>(
+    api.POST("/api/sources/{source_id}/review", {
+      params: { path: { source_id: id } },
+      body: { review_status: status, external_llm: null, notes },
+    }),
   );
 }
