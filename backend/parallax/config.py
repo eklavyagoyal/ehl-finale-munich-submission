@@ -22,9 +22,9 @@ class Settings(BaseSettings):
     # Inbound bearer token. nexus injects PARALLAX_API_API_TOKEN for the app slug "parallax-api".
     # When set, every /api route except /api/health requires `Authorization: Bearer <token>`.
     api_token: str | None = Field(default=None, validation_alias=AliasChoices("PARALLAX_API_TOKEN", "PARALLAX_API_API_TOKEN"))
-    # Optional second credential for the CLI (push-research, smoke). Only its SHA-256 lives on the server;
-    # the plaintext stays in the operator's local backend/.env as PARALLAX_REMOTE_TOKEN.
-    cli_token_sha256: str | None = None
+    # Optional second credential for the CLI (push-research, smoke). Minted by nexus (generate) as
+    # PARALLAX_CLI_TOKEN; the operator copies it from the nexus UI into backend/.env as PARALLAX_REMOTE_TOKEN.
+    cli_token: str | None = None
 
     # "mock" runs the whole pipeline offline with deterministic fake outputs.
     llm_mode: Literal["openai", "mock"] = "mock"

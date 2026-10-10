@@ -1,6 +1,5 @@
 """FastAPI application. Run: `uvicorn parallax.api.app:app --reload --port 8000`."""
 
-import hashlib
 import hmac
 
 from fastapi import FastAPI, Request
@@ -72,14 +71,13 @@ async def access_log(request: Request, call_next):
 async def bearer_auth(request: Request, call_next):
     """Registered last, so it runs first: unauthenticated calls are rejected (and still access-logged)."""
     settings = get_settings()
-    token, cli_hash = settings.api_token, settings.cli_token_sha256
+    accepted = [t for t in (settings.api_token, settings.cli_token) if t]
     path = request.url.path
-    if (token or cli_hash) and request.method != "OPTIONS" and path.startswith("/api") and not path.startswith(OPEN_PREFIXES):
-        supplied = request.headers.get("authorization", "")
-        bearer = supplied[7:] if supplied.startswith("Bearer ") else ""
-        ok = bool(token) and hmac.compare_digest(supplied.encode(), f"Bearer {token}".encode())
-        if not ok and cli_hash and bearer:
-            ok = hmac.compare_digest(hashlib.sha256(bearer.encode()).hexdigest(), cli_hash.lower())
+    if accepted and request.method != "OPTIONS" and path.startswith("/api") and not path.startswith(OPEN_PREFIXES):
+        supplied = request.headers.get("authorization", "").encode()
+        ok = False
+        for token in accepted:  # constant-time compare against every accepted credential
+            ok |= hmac.compare_digest(supplied, f"Bearer {token}".encode())
         if not ok:
             return JSONResponse({"detail": "missing or invalid bearer token"}, status_code=401)
     return await call_next(request)

@@ -119,7 +119,7 @@ A demographics-only twin of the same persona serves as the baseline. Grounding h
 | Database | store `parallax-pg` (pgvector recipe), bound with profile `sql` | Injects `DATABASE_URL`; the app converts it to the psycopg driver |
 | Shared config | group `EHL` env | `OPENAI_API_KEY` (operator fills), `PARALLAX_LLM_MODE`, model names |
 | Auth | nexus injects `PARALLAX_API_API_TOKEN` (used by the frontend via the mesh) | Every `/api` call needs `Authorization: Bearer <token>` (except `/api/health`, `/api/docs`, `/api/openapi.json`) |
-| CLI token | `PARALLAX_CLI_TOKEN_SHA256` on the app; plaintext only in local `backend/.env` as `PARALLAX_REMOTE_TOKEN` | For `push-research` and `smoke`. Rotate: generate a new token locally, store its hash on nexus, redeploy |
+| CLI token | `PARALLAX_CLI_TOKEN`, minted by nexus (`generate`), never seen by an agent | For `push-research` and `smoke`: the operator copies it from the nexus UI into local `backend/.env` as `PARALLAX_REMOTE_TOKEN`. Rotate with `deploy.rotate_secret` (mode `generate`), then redeploy |
 | Frontend (later) | app `parallax-web` in group `EHL` | The mesh injects `PARALLAX_API_URL` + `PARALLAX_API_TOKEN` into it; the frontend calls the API server-side with that token and passes `X-Actor` |
 | Data | `python -m parallax.cli push-research ../research --url https://<api-host> --token <token>` | Uploads the research contract as a zip to `POST /api/ingest/upload` |
 
