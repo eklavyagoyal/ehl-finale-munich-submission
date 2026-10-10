@@ -1,6 +1,6 @@
 # Orchestrator checklist
 
-Keep F70, G60, and G70 in scope. Build one evidence packet with separate model/market views and an explicit unallocated group for combined, brand-wide, and unresolved data. Sparse coverage is a finding to report, not a reason to transfer evidence from another vehicle or market.
+The current working scope is G60 only. Build one evidence packet with separate market views and an explicit unallocated group for combined, brand-wide, and unresolved data. The exporter reports and excludes evidence assigned only to other BMW vehicle models; existing batches remain stored. Sparse coverage is a finding to report, not a reason to transfer evidence from another vehicle or market.
 
 ## While the collectors work
 
@@ -9,7 +9,7 @@ Keep F70, G60, and G70 in scope. Build one evidence packet with separate model/m
 | Intake | One representative batch per workstream, reviewed before larger collection | IDs, original text/units, scope, sampling and permissions are understood |
 | Dimension resolution | Obtain dictionaries and provenance for the anonymous review tables | App, market, OS and version IDs are resolved from documented mappings, or remain explicitly unknown |
 | Feature vocabulary | Review additions to `catalog/features.json`; merge true aliases | Claims about one feature share a key; distinct requests, defects and praise retain their types |
-| Coverage | Track evidence for each target model and actual market/cohort | Missing strata, combined G60/G68 data and unresolved app applicability are visible |
+| Coverage | Track G60 evidence by actual market/cohort | Missing strata, combined G60/G68 data and unresolved app applicability are visible |
 | LLM evaluation | Prepare a small set of questions with known supporting record IDs and expected limitations | The set checks repeated reviews, contradictory evidence, units, combined models and unresolved scope |
 | Decision criteria | Review `decision-model.json` and write evidence-based 0–5 scoring anchors | A PM can explain each score; unsupported effort or fit stays unknown |
 | PM workflow | Prepare the requirement view and edit/approve/reject/challenge actions | Each real change records actor, time, changed value and reason |
@@ -35,10 +35,10 @@ Replace `research/batches` with the local submissions root when needed. Source o
 
 ## First synthesis and demo
 
-Use the packet's synthesis prompt with the full evidence packet if it fits the selected model's usable budget. Keep all three models available; compare frequency within comparable cohorts. If partitioning becomes necessary, state the partitions and preserve record IDs. Byte size is not a token count.
+Use the packet's synthesis prompt with the full evidence packet if it fits the selected model's usable budget. Derive G60 requirements only; compare frequency within comparable cohorts. If partitioning becomes necessary, state the partitions and preserve record IDs. Byte size is not a token count.
 
 Before showing a shortlist, check that every cited ID exists, quoted text matches, model/market applicability is supported, and reported counts agree with the code. Run the prepared evidence questions and inspect contrary evidence. Test whether changing evidence order changes the important findings. Record the actual model/version/settings and retain its output with the context run; the offline packet's model field is initially null.
 
 Each requirement needs the brief's eight fields: unique ID, actionable description, linked findings/sources, priority or score, rationale, evidence level, future assumptions/uncertainties, and decision status. Preserve the 3–5 year successor-vehicle horizon. Keep numeric priorities pending until scoring anchors and inputs are reviewed. Frequency can surface demand; severity, applicability, evidence quality and verified competitor differences also inform a decision.
 
-The first demo is ready when the PM can inspect evidence and limitations, change a proposal, approve/reject/challenge it, and see a chronological audit of actual actions. Keep evidence acceptance separate from requirement approval. The brief's minimum is one derivative in one market; our data pipeline retains all three, and any unsupported model/market view must explain its evidence gap.
+The first demo is ready when the PM can inspect evidence and limitations, change a proposal, approve/reject/challenge it, and see a chronological audit of actual actions. Keep evidence acceptance separate from requirement approval. Demonstrate G60 in at least one supported market, as allowed by the broader brief. Any unsupported market view must explain its evidence gap.

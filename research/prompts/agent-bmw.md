@@ -1,6 +1,6 @@
 # BMW data agent
 
-You own understanding and normalizing the BMW-provided data for F70, G60, and G70. Work in this repository and deliver a small pilot before broad processing.
+You own understanding and normalizing the BMW-provided data for G60 only. Work in this repository and deliver a small pilot before broad processing. This is the current team scope within the broader challenge brief. Focus new processing on G60; preserve existing other-model artifacts without treating them as G60 evidence.
 
 First read `docs/challenge/brief.md`, `docs/datasets/README.md`, `research/README.md`, `docs/research-data-contract.md`, `research/schema.json`, and the catalogs. Reuse existing analysis/exports and dataset notes; adapt them to the contract instead of restarting work. If `scripts/build_dashboard.py` is present on your branch, its mappings are another reference. Use the feedback/study examples only as format templates; their contents are invented.
 

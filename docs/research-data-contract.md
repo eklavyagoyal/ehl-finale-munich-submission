@@ -2,7 +2,7 @@
 
 Version: 1.0. Created: 2026-10-10. Status: team handoff contract, ready for a pilot batch.
 
-The goal is an evidence-backed customer-requirement shortlist for successor vehicles to F70, G60, and G70, separated by market. The BMW challenge brief sets a 3–5 year horizon and requires PM control, transparent assumptions, and an audit trail. Demonstrate at least one derivative in one market while retaining support for the others. The collection contract also supports exploratory dashboards.
+The current team goal is an evidence-backed customer-requirement shortlist for a successor vehicle to G60 only, separated by market. The broader BMW challenge brief includes F70, G60, and G70, permits a single-derivative demo, and sets a 3–5 year horizon with PM control, transparent assumptions, and an audit trail. Demonstrate G60 in at least one supported market. Retain existing catalog identities and stored data for traceability. The collection contract also supports exploratory dashboards.
 
 Read [the challenge brief](challenge/brief.md) and [the BMW product-manager discussion](bmw-pm-interview/bmw-product-manager-groundwork.md) before selecting the demo. Detailed pricing/business-case calculations, regulatory requirements, and engineering specifications are outside challenge scope. Rough effort can inform prioritization; it is not a required engineering study. Keep current evidence and future-facing assumptions distinct.
 
@@ -14,7 +14,7 @@ Use Git as the shared handoff and version history. Use JSON Lines for repeated o
 | --- | --- | --- |
 | Evidence | What a source actually contains | Original review, study statistic, explicit competitor specification |
 | Claims | A human or model's interpretation | This review requests scheduled cabin heating |
-| Decisions | Proposed action under stated criteria | Investigate scheduled heating for F70 in DE |
+| Decisions | Proposed action under stated criteria | Investigate scheduled heating for G60 in DE |
 
 ```mermaid
 flowchart LR
@@ -74,7 +74,7 @@ Include only fields needed for interpretation and traceability. Avoid reviewer n
 
 ### Identity and counting
 
-`dataset_key` identifies a stable namespace across collection runs, rather than a batch name. Examples: `bmw-feedback:F70`, or provider plus a resolved app identifier and storefront/market. Keep anonymous/unresolved exports in their own namespace until their identity is known.
+`dataset_key` identifies a stable namespace across collection runs, rather than a batch name. Examples: `bmw-feedback:G60`, or provider plus a resolved app identifier and storefront/market. Keep anonymous/unresolved exports in their own namespace until their identity is known.
 
 `source_id` identifies a collection batch. `dedup_key` identifies an original observation across snapshots: dataset namespace plus native review/feedback ID where available. `record_id` identifies a particular exported snapshot. Use readable namespaced IDs or SHA-256-based IDs; preserve them on identical reruns. New text or materially changed metadata creates a new snapshot ID. Serialize identifiers, including BIGINT dimension IDs, as strings to avoid precision loss in JavaScript.
 
@@ -165,13 +165,13 @@ Validation does not verify truth, authorization, artifact hashes, semantic dupli
 
 A full packet is a reasonable first experiment if it fits the selected model's usable budget. A long-context study found position-dependent retrieval performance on the models/tasks it tested; that motivates evaluating our chosen model rather than assuming its advertised window guarantees recall ([Lost in the Middle](https://arxiv.org/abs/2307.03172)).
 
-Build `outputs/research/<run-id>/context.json` using the commands in [research/README.md](../research/README.md). The local exporter validates its inputs, retains all three target models, and creates these logical sections without making a model request:
+Build `outputs/research/<run-id>/context.json` using the commands in [research/README.md](../research/README.md). The local exporter validates its inputs, targets G60 only, and creates these logical sections without making a model request:
 
 | Section | Contents |
 | --- | --- |
 | `run_manifest` | Run/time, Git commit, dirty-state flag, schema version, exact consumed input/code hashes; model initially null |
-| `scope` | All three target models, horizon, no market filter; unresolved mappings remain on records |
-| `coverage` | Code-computed channel/kind/scope counts, unresolved subjects/markets, exclusions, superseded snapshots and omitted claims; sampling notes remain on sources |
+| `scope` | G60 only, horizon, no market filter; unresolved mappings remain on records |
+| `coverage` | Code-computed channel/kind/scope counts, unresolved subjects/markets, source and out-of-scope record exclusions, superseded snapshots and omitted claims; sampling notes remain on sources |
 | `sources` | Accepted, permitted, non-example manifests |
 | `records` | Latest accepted observations with IDs, original text, units |
 | `claims` | Accepted extractions for retained record snapshots |
@@ -182,6 +182,8 @@ Build `outputs/research/<run-id>/context.json` using the commands in [research/R
 Default eligibility: accepted source, `is_example == false`, and `export_permissions.external_llm == true`. Include only accepted claims for included records. An accepted source does not approve its generated claims. Report exclusions; fail when nothing eligible remains. Anonymous provenance can enter only as explicitly reviewed weak evidence, with limitations retained, never as verified BMW evidence.
 
 Use `--demo` only for synthetic fixtures; it excludes real sources and marks the packet as a demo. Each run creates a new file under ignored `outputs/research/`, never overwriting an earlier snapshot. An optional `--max-bytes` limit rejects oversized packets without truncation. Stable identity deduplication is automatic; cross-dataset reposts or inconsistent namespaces still need review. Frequency cohorts preserve dataset, channel, subject/market scope and sampling method/query, and pool retained observations across collection windows with those same attributes. Narrative notes and competitor-match sidecars must be reviewed separately.
+
+After selecting the latest eligible snapshot, exclude records assigned only to other BMW vehicle models and their claims from the G60 packet. Report these exclusions without deleting stored batches. Retain G60/G68 combined, competitor, brand-wide and unresolved evidence as context with its original scope; do not reassign it to G60 or claim G60 applicability without support. If no records remain, fail instead of generating an empty packet.
 
 Compute counts in code. Distinguish observations, original classification rows if known, claim rows, unique feature-mentioning reviews, and known sample bases. Within-channel frequency is `unique reviews mentioning feature / eligible reviews in the same cohort`, with window and selection rules. It is not customer prevalence. Deduplicate overlapping queries. Source diversity means provenance/channel groups rather than downloaded files.
 
@@ -241,7 +243,7 @@ PMs must be able to edit, approve, reject, and challenge proposals. Keep evidenc
 3. Review pilot mappings, identifiers, units, and permissions before scaling.
 4. Collect additional batches with completeness/query notes.
 5. Use the deterministic exporter to assemble the first packet and run citation/recall checks with the selected LLM.
-6. Keep all three models available in the demo with separate market/cohort views. Build the eight requirement fields, PM actions, and an audit trail; retain open effort/timing questions and make sparse coverage explicit.
+6. Build the G60 demo with separate market/cohort views, the eight requirement fields, PM actions, and an audit trail; retain open effort/timing questions and make sparse coverage explicit.
 7. Calibrate anchors/weights and present the reviewed shortlist with future assumptions and uncertainty/sensitivity.
 
 The contract and offline exporter are ready to pilot. Real ingestion, dimension resolution, reviewed matches and a real ranking depend on teammate outputs and have not been fabricated here.

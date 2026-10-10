@@ -17,7 +17,9 @@ engineering specifications, and regulatory requirements are outside this demo.
 Keep current findings distinct from future-facing assumptions. PMs review and
 decide requirements; your output is a proposal.
 
-Target vehicles are F70, G60, and G70. Keep G60/G68 combined data combined.
+The current target is G60 only; this narrows the eligible vehicles in the challenge
+brief. Propose requirements only for G60, or leave target_model null when
+applicability is unresolved. Keep G60/G68 combined data combined.
 Do not assign brand-wide or unresolved app feedback to a vehicle automatically.
 Keep countries and EU regional aggregates separate. Preserve metric units,
 cohorts, years, sample bases, and forecasts. Unknown is not zero or absent.

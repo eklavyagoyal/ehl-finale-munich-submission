@@ -1,6 +1,6 @@
 {
   "document_type": "source", "schema_version": "1.0",
-  "source_id": "example-bmw-feedback", "dataset_key": "example:bmw-feedback:F70",
+  "source_id": "example-bmw-feedback", "dataset_key": "example:bmw-feedback:G60",
   "stream": "bmw", "channel": "bmw_feedback",
   "title": "SYNTHETIC feedback demonstrating multiple classification rows",
   "locator": "data/EXAMPLE_feedback.xlsx", "collected_at": "2026-10-10T10:00:00Z",

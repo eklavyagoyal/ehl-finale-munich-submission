@@ -12,7 +12,7 @@ Give each workstream its prompt:
 - [Competitor research agent](research/prompts/agent-competitors.md)
 - [Social and app-review agent](research/prompts/agent-social.md)
 
-First collect one representative batch per workstream. Review scope and mappings before scaling, then use the offline context exporter. Keep F70, G60, and G70 in scope, with evidence separated by model and market. Follow the [orchestrator checklist](research/INTEGRATION.md) to prepare the first synthesis and PM review.
+First collect one representative batch per workstream. Review scope and mappings before scaling, then use the offline context exporter. The current working scope is G60 only, with evidence separated by market. Follow the [orchestrator checklist](research/INTEGRATION.md) to prepare the first synthesis and PM review.
 
 ## Checks
 

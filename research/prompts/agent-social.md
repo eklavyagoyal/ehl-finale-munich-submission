@@ -1,6 +1,6 @@
 # Social and app-review agent
 
-You own collecting customer signals from app stores, Reddit, YouTube, forums, and other relevant sources. Target BMW-related functionality and comparable competitor signals. Deliver a small pilot before broad collection.
+You own collecting customer signals from app stores, Reddit, YouTube, forums, and other relevant sources for the current G60-only team scope. Target relevant BMW functionality and signals from competitors comparable to G60. Keep brand-wide or unresolved app feedback explicitly unallocated. Deliver a small pilot before broad collection.
 
 First read `docs/challenge/brief.md`, `docs/datasets/README.md`, `research/README.md`, `docs/research-data-contract.md`, `research/schema.json`, and the catalogs. Reuse existing scrapers and reviews; adapt their exports instead of collecting the same material again. Use `research/examples/social/` only as a format template; its review, IDs, and dimensions are invented.
 
@@ -10,7 +10,7 @@ Your tasks:
 
 1. Declare each collection's provider/app, query, sorting, date window, market basis, language, and limits. Include positive/neutral material where available. Report failures, blocked sources, and partial collections; do not silently omit them or bypass access controls.
 2. Store one original review/post/comment as one evidence record, preserving text, native ID, available dates and source locator. Separate video excerpts from comments; include timestamps for video excerpts. Avoid author names, contacts, VINs, and credentials.
-3. Preserve supplied `Dim*ID` values as strings. Resolve app/version/OS/device/market only with known dictionaries. Retain ambiguous original timestamps and keep canonical datetime null when timezone is unknown. Use table locators for exports without public review URLs. Do not automatically assign app/brand feedback to F70/G60/G70.
+3. Preserve supplied `Dim*ID` values as strings. Resolve app/version/OS/device/market only with known dictionaries. Retain ambiguous original timestamps and keep canonical datetime null when timezone is unknown. Use table locators for exports without public review URLs. Do not automatically assign app/brand feedback to G60. Focus new collection on G60-relevant sources; preserve existing other-model data separately.
 4. If extracting features, write one claim per specific feature with a parent `record_id` and exact original quote. Classify requests, discontinued features, competitor parity, defects, and praise separately. A broken function is not automatically removed. Vague/None reviews need no invented claim or forced cluster.
 
 One review can produce ten distinct feature claims and still represents one review. Count each parent at most once per feature. Likes/stars and review frequency are not representative customer demand. Competitor mentions require independent verification.

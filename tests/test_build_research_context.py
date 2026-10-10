@@ -66,14 +66,90 @@ class ContextExportTests(unittest.TestCase):
             claim.update(record_id="second-review", claim_id=claim["claim_id"] + "-second")
         self.write_lines(path, claims)
 
-    def test_demo_retains_all_targets_and_is_explicitly_synthetic(self):
+    def test_demo_targets_only_g60_and_is_explicitly_synthetic(self):
         packet = CONTEXT.build_context(self.batches, demo=True, run_id="test-demo")
         self.assertTrue(packet["run_manifest"]["is_demo"])
-        self.assertEqual(packet["scope"]["target_model_ids"], ["bmw:F70", "bmw:G60", "bmw:G70"])
+        self.assertEqual(packet["scope"]["target_model_ids"], ["bmw:G60"])
         self.assertEqual(packet["coverage"]["exported_record_count"], 4)
         self.assertEqual(packet["coverage"]["feedback_review_count"], 2)
-        self.assertEqual(packet["coverage"]["records_with_direct_target_subject"], {"bmw:F70": 1, "bmw:G60": 1, "bmw:G70": 0})
+        self.assertEqual(packet["coverage"]["records_with_direct_target_subject"], {"bmw:G60": 2})
         self.assertEqual(sum(row["record_count"] for row in packet["coverage"]["record_counts_by_scope"]), 4)
+        self.assertEqual(
+            {entity["entity_id"] for entity in packet["catalogs"]["entities"]["entities"] if entity["target"]},
+            {"bmw:G60"},
+        )
+
+    def test_other_bmw_model_records_and_claims_are_excluded(self):
+        self.make_reviewed()
+        path = self.batches / "social/records.jsonl"
+        record = self.json(path)
+        for model in ("bmw:F70", "bmw:G70", "bmw:G68"):
+            with self.subTest(model=model):
+                record["subject_ids"] = [model]
+                self.write_lines(path, [record])
+                packet = CONTEXT.build_context(self.batches)
+                self.assertEqual(packet["coverage"]["exported_record_count"], 3)
+                self.assertEqual(packet["claims"], [])
+                self.assertEqual(packet["feature_frequency"]["by_feature"], [])
+                self.assertEqual(packet["coverage"]["excluded_records"], [{
+                    "record_id": record["record_id"], "reason": "outside_target_model_scope", "subject_ids": [model],
+                }])
+                self.assertTrue(all(row["reason"] == "parent_outside_target_model_scope" for row in packet["coverage"]["omitted_claims"]))
+
+    def test_combined_brand_and_unresolved_context_keep_their_original_scope(self):
+        self.make_reviewed()
+        path = self.batches / "social/records.jsonl"
+        record = self.json(path)
+        for subjects in (["bmw:G60_G68"], ["bmw:brand"], []):
+            with self.subTest(subjects=subjects):
+                record["subject_ids"] = subjects
+                self.write_lines(path, [record])
+                packet = CONTEXT.build_context(self.batches)
+                self.assertEqual(packet["coverage"]["exported_record_count"], 4)
+                self.assertEqual(packet["coverage"]["records_with_direct_target_subject"], {"bmw:G60": 2})
+                parent = next(row for row in packet["records"] if row["record_id"] == record["record_id"])
+                self.assertEqual(parent["subject_ids"], subjects)
+                self.assertTrue(all(row["subject_ids"] == subjects for row in packet["feature_frequency"]["by_cohort"]))
+
+    def test_latest_other_model_snapshot_does_not_restore_stale_g60_evidence(self):
+        self.make_reviewed()
+        path = self.batches / "social/records.jsonl"
+        record = self.json(path)
+        record["subject_ids"] = ["bmw:G60"]
+        self.write_lines(path, [record])
+        self.second_review_snapshot("2026-10-11T10:00:00Z")
+        path = self.batches / "social-second/records.jsonl"
+        latest = self.json(path)
+        latest["subject_ids"] = ["bmw:F70"]
+        self.write_lines(path, [latest])
+        packet = CONTEXT.build_context(self.batches)
+        ids = {row["record_id"] for row in packet["records"]}
+        self.assertNotIn(record["record_id"], ids)
+        self.assertNotIn(latest["record_id"], ids)
+        self.assertEqual(packet["coverage"]["excluded_records"][0]["record_id"], latest["record_id"])
+        self.assertEqual(packet["claims"], [])
+
+    def test_only_other_model_evidence_cannot_produce_an_empty_packet(self):
+        self.make_reviewed()
+        path = self.batches / "social/records.jsonl"
+        record = self.json(path)
+        record["subject_ids"] = ["bmw:F70"]
+        self.write_lines(path, [record])
+        with self.assertRaisesRegex(ValueError, "No evidence remains in G60 scope"):
+            CONTEXT.build_context(self.batches / "social")
+
+    def test_competitor_vehicle_context_is_retained(self):
+        data = load_batches(self.batches)
+        data["catalogs"]["entities"]["entities"].append({
+            "entity_id": "example:competitor", "type": "vehicle_model", "label": "Example competitor", "target": False,
+        })
+        competitor_id = self.json(self.batches / "competitor/records.jsonl")["record_id"]
+        data["records"][competitor_id]["subject_ids"] = ["example:competitor"]
+        with patch.object(CONTEXT, "load_batches", return_value=data):
+            packet = CONTEXT.build_context(self.batches, demo=True)
+        self.assertEqual(packet["coverage"]["exported_record_count"], 4)
+        self.assertEqual(packet["coverage"]["excluded_records"], [])
+        self.assertEqual(packet["coverage"]["records_with_direct_target_subject"], {"bmw:G60": 2})
 
     def test_normal_export_rejects_fixtures_and_unreviewed_sources(self):
         with self.assertRaisesRegex(ValueError, "No eligible evidence"):

@@ -1,4 +1,4 @@
-"""Build an offline, source-linked LLM packet and reviewed-claim frequency counts."""
+"""Build an offline G60 LLM packet and source-linked review frequency counts."""
 
 import argparse
 from collections import Counter, defaultdict
@@ -15,7 +15,7 @@ from uuid import uuid4
 from validate_research import ROOT, json_file, load_batches
 
 REQUEST_TYPES = {"new_request", "discontinued", "competitor_parity"}
-TARGET_MODELS = ["bmw:F70", "bmw:G60", "bmw:G70"]
+TARGET_MODELS = ["bmw:G60"]
 
 
 def source_exclusions(source, demo):
@@ -159,10 +159,29 @@ def build_context(batch_root, demo=False, run_id=None):
 
     eligible_records = {key: record for key, record in data["records"].items() if record["source_id"] in eligible_sources}
     records, superseded = latest_records(eligible_records, eligible_sources)
+    bmw_models = {
+        entity["entity_id"] for entity in data["catalogs"]["entities"]["entities"]
+        if entity.get("type") == "vehicle_model" and entity["entity_id"].startswith("bmw:")
+    }
+    relevant_subjects = set(TARGET_MODELS) | {
+        entity["entity_id"] for entity in data["catalogs"]["entities"]["entities"]
+        if entity.get("type") == "vehicle_group" and set(entity.get("members", [])) & set(TARGET_MODELS)
+    }
+    excluded_records = [
+        {"record_id": key, "reason": "outside_target_model_scope", "subject_ids": record["subject_ids"]}
+        for key, record in sorted(records.items())
+        if set(record["subject_ids"]) & bmw_models and not set(record["subject_ids"]) & relevant_subjects
+    ]
+    excluded_record_ids = {record["record_id"] for record in excluded_records}
+    records = {key: record for key, record in records.items() if key not in excluded_record_ids}
+    if not records:
+        raise ValueError("No evidence remains in G60 scope after excluding other BMW models")
     sources = {key: eligible_sources[key] for key in sorted({record["source_id"] for record in records.values()})}
     claims, omitted_claims = {}, []
     for claim_id, claim in sorted(data["claims"].items()):
-        if claim["record_id"] not in records:
+        if claim["record_id"] in excluded_record_ids:
+            reason = "parent_outside_target_model_scope"
+        elif claim["record_id"] not in records:
             reason = "parent_not_retained"
         elif claim["review_status"] == "rejected":
             reason = "claim_rejected"
@@ -223,13 +242,15 @@ def build_context(batch_root, demo=False, run_id=None):
             "unknown_subject_record_count": sum(not record["subject_ids"] for record in records.values()),
             "unknown_market_record_count": sum(not record["markets"] for record in records.values()),
             "unmapped_feature_claim_count": sum(claim["feature_key"] is None for claim in claims.values()),
-            "excluded_sources": exclusions, "superseded_records": superseded, "omitted_claims": omitted_claims,
+            "excluded_sources": exclusions, "excluded_records": excluded_records,
+            "superseded_records": superseded, "omitted_claims": omitted_claims,
             "frequency_basis": "accepted_claims_on_retained_feedback_records; demo also permits pending synthetic claims",
             "limitations": [
                 "Counts describe collected reviews, not unique people or customer prevalence.",
                 "Reviews with claims may not have complete feature extraction; missing mentions are not established absence.",
                 "Claim-type counts can overlap within a feature; do not sum them as distinct reviews.",
                 "Combined, brand-wide, and unresolved subjects remain unallocated to individual target models.",
+                "Other BMW model-only records are excluded; competitor and unallocated evidence remains context, not established G60 applicability.",
                 "Cohorts pool retained observations with matching dataset/channel/subjects/markets/method/query across collection windows.",
                 "Comparison sidecars and narrative notes require separate review and are not automatically ingested.",
             ],
