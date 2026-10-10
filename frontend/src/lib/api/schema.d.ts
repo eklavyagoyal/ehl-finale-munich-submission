@@ -246,6 +246,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/sources/{source_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** One source with provenance, sampling, permissions and claim counts */
+        get: operations["get_source_api_sources__source_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/sources/{source_id}/review": {
         parameters: {
             query?: never;
@@ -771,6 +788,55 @@ export interface components {
             /** Rationale */
             rationale: string;
         };
+        /** AuditEventOut */
+        AuditEventOut: {
+            /** Id */
+            id: number;
+            /** Event Id */
+            event_id: string;
+            /**
+             * Occurred At
+             * Format: date-time
+             */
+            occurred_at: string;
+            /** Category */
+            category: string;
+            /** Actor Type */
+            actor_type: string;
+            /** Actor Id */
+            actor_id: string;
+            /** Action */
+            action: string;
+            /** Entity Type */
+            entity_type: string | null;
+            /** Entity Id */
+            entity_id: string | null;
+            /** Requirement Id */
+            requirement_id: string | null;
+            /** Run Id */
+            run_id: string | null;
+            /** Before */
+            before: {
+                [key: string]: unknown;
+            } | null;
+            /** After */
+            after: {
+                [key: string]: unknown;
+            } | null;
+            /** Rationale */
+            rationale: string | null;
+            /** Meta */
+            meta: {
+                [key: string]: unknown;
+            };
+        };
+        /** AuditPageOut */
+        AuditPageOut: {
+            /** Total */
+            total: number;
+            /** Items */
+            items: components["schemas"]["AuditEventOut"][];
+        };
         /** Body_upload_ingest_api_ingest_upload_post */
         Body_upload_ingest_api_ingest_upload_post: {
             /** File */
@@ -809,6 +875,55 @@ export interface components {
             /** Notes */
             notes: string;
         };
+        /**
+         * ClaimSummaryOut
+         * @description Who interpreted the record: human, LLM (model + run) or BMW's own VFC classification.
+         */
+        ClaimSummaryOut: {
+            /** Claim Id */
+            claim_id: string;
+            /** Feature Key */
+            feature_key: string | null;
+            /** Feature Label */
+            feature_label: string;
+            /** Claim Type */
+            claim_type: string;
+            /** Summary */
+            summary: string;
+            /** Quotes */
+            quotes: unknown[];
+            /** Review Status */
+            review_status: string;
+            /** Derived From Bmw Labels */
+            derived_from_bmw_labels: boolean;
+            /** Producer Method */
+            producer_method: string | null;
+            /** Producer Name */
+            producer_name: string | null;
+            /** Producer Version */
+            producer_version: string | null;
+            /** Producer Run Id */
+            producer_run_id: string | null;
+        };
+        /** CriterionOut */
+        CriterionOut: {
+            /** Criterion */
+            criterion: string;
+            /** Weight */
+            weight: number;
+            /** Score */
+            score: number | null;
+            /** Low */
+            low: number;
+            /** High */
+            high: number;
+            /** Status */
+            status: string;
+            /** Raters */
+            raters: string[];
+            /** Rating Ids */
+            rating_ids: number[];
+        };
         /** DecisionIn */
         DecisionIn: {
             /**
@@ -823,6 +938,65 @@ export interface components {
              * @description For 'challenge': what the agents should re-examine
              */
             challenge_question?: string | null;
+        };
+        /** DecisionOut */
+        DecisionOut: {
+            /** Id */
+            id: number;
+            /** Requirement Id */
+            requirement_id: string;
+            /** Action */
+            action: string;
+            /** Rationale */
+            rationale: string;
+            /** Actor Id */
+            actor_id: string;
+            /** Requirement Version */
+            requirement_version: number;
+            /** Recommendation Id */
+            recommendation_id: number | null;
+            /** Ai Recommendation */
+            ai_recommendation: string | null;
+            /** Agreed With Ai */
+            agreed_with_ai: boolean | null;
+            /** Followup Run Id */
+            followup_run_id: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** DecisionResultOut */
+        DecisionResultOut: {
+            decision: components["schemas"]["DecisionOut"];
+            /** Followup Run Id */
+            followup_run_id: string | null;
+            requirement: components["schemas"]["RequirementOut"];
+        };
+        /** DepartmentMemoRowOut */
+        DepartmentMemoRowOut: {
+            /** Id */
+            id: number;
+            /** Run Id */
+            run_id: string;
+            /** Agent Id */
+            agent_id: string;
+            /** Agent Version */
+            agent_version: number;
+            /** Requirement Id */
+            requirement_id: string;
+            /** Stance */
+            stance: string;
+            /** Memo */
+            memo: {
+                [key: string]: unknown;
+            };
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
         };
         /** DraftIn */
         DraftIn: {
@@ -865,6 +1039,60 @@ export interface components {
             /** Rationale */
             rationale: string;
         };
+        /** EvidenceOut */
+        EvidenceOut: {
+            /** Id */
+            id: number;
+            /** Requirement Id */
+            requirement_id: string;
+            /** Record Id */
+            record_id: string;
+            /** Claim Id */
+            claim_id: string | null;
+            /** Relation */
+            relation: string;
+            /** Quote */
+            quote: string | null;
+            /** Quote Verified */
+            quote_verified: boolean;
+            /** Added By */
+            added_by: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            record: components["schemas"]["EvidenceRecordOut"];
+            source?: components["schemas"]["SourceSummaryOut"] | null;
+            /**
+             * Claims
+             * @default []
+             */
+            claims: components["schemas"]["ClaimSummaryOut"][];
+        };
+        /** EvidenceRecordOut */
+        EvidenceRecordOut: {
+            /** Text */
+            text: string | null;
+            /** Translation En */
+            translation_en: string | null;
+            /** Language */
+            language?: string | null;
+            /** Markets */
+            markets: string[];
+            /** Subject Ids */
+            subject_ids: string[];
+            /** Source Id */
+            source_id: string;
+            /** Locator */
+            locator: {
+                [key: string]: unknown;
+            };
+            /** Content Date */
+            content_date?: string | null;
+            /** Record Kind */
+            record_kind?: string | null;
+        };
         /** GateIn */
         GateIn: {
             /**
@@ -874,6 +1102,19 @@ export interface components {
             value: "pass" | "fail" | "unknown";
             /** Rationale */
             rationale: string;
+        };
+        /** GateOut */
+        GateOut: {
+            /** Value */
+            value: string;
+            /** Owner */
+            owner: string;
+            /** Reason */
+            reason: string;
+            /** Reference */
+            reference: string | null;
+            /** At */
+            at: string | null;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -892,6 +1133,90 @@ export interface components {
             path: string;
             /** Research Root */
             research_root?: string | null;
+        };
+        /** LLMCallOut */
+        LLMCallOut: {
+            /** Id */
+            id: number;
+            /** Run Id */
+            run_id: string | null;
+            /** Agent Id */
+            agent_id: string | null;
+            /** Requirement Id */
+            requirement_id: string | null;
+            /** Purpose */
+            purpose: string;
+            /** Provider */
+            provider: string;
+            /** Model */
+            model: string;
+            /** Prompt Version */
+            prompt_version: string;
+            /** Prompt Sha256 */
+            prompt_sha256: string;
+            /** Input Record Ids */
+            input_record_ids: string[];
+            /** Input Tokens */
+            input_tokens: number;
+            /** Output Tokens */
+            output_tokens: number;
+            /** Latency Ms */
+            latency_ms: number;
+            /** Status */
+            status: string;
+            /** Error */
+            error: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Request */
+            request?: {
+                [key: string]: unknown;
+            } | null;
+            /** Response */
+            response?: {
+                [key: string]: unknown;
+            } | null;
+        };
+        /** PersonaResponseOut */
+        PersonaResponseOut: {
+            /** Id */
+            id: number;
+            /** Run Id */
+            run_id: string;
+            /** Agent Id */
+            agent_id: string;
+            /** Agent Version */
+            agent_version: number;
+            /** Requirement Id */
+            requirement_id: string;
+            /** Engine */
+            engine: string;
+            /** Response Text */
+            response_text: string;
+            /** Stance */
+            stance: string;
+            /** Ssr Distribution */
+            ssr_distribution: number[];
+            /** Ssr Mean */
+            ssr_mean: number;
+            /** Importance 0 5 */
+            importance_0_5: number;
+            /** Market Fit 0 5 */
+            market_fit_0_5: number | null;
+            /** Concerns */
+            concerns: unknown[];
+            /** Info Requests */
+            info_requests: unknown[];
+            /** Grounding Record Ids */
+            grounding_record_ids: string[];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
         };
         /** PolicyIn */
         PolicyIn: {
@@ -929,6 +1254,95 @@ export interface components {
              */
             evidence_ids: string[];
         };
+        /** RatingOut */
+        RatingOut: {
+            /** Id */
+            id: number;
+            /** Requirement Id */
+            requirement_id: string;
+            /** Run Id */
+            run_id: string | null;
+            /** Criterion */
+            criterion: string;
+            /** Score */
+            score: number | null;
+            /** Low */
+            low: number | null;
+            /** High */
+            high: number | null;
+            /** Status */
+            status: string;
+            /** Rater Type */
+            rater_type: string;
+            /** Rater Id */
+            rater_id: string;
+            /** Rationale */
+            rationale: string;
+            /** Evidence Ids */
+            evidence_ids: string[];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** RecommendationOut */
+        RecommendationOut: {
+            /** Id */
+            id: number;
+            /** Run Id */
+            run_id: string;
+            /** Requirement Id */
+            requirement_id: string;
+            /** Recommendation */
+            recommendation: string;
+            /** Tally */
+            tally: {
+                [key: string]: unknown;
+            };
+            /** Minority Report */
+            minority_report: unknown[];
+            /** Challenge */
+            challenge: {
+                [key: string]: unknown;
+            };
+            /** Score Snapshot */
+            score_snapshot: {
+                [key: string]: unknown;
+            };
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** RequirementDetailOut */
+        RequirementDetailOut: {
+            requirement: components["schemas"]["RequirementOut"];
+            /** Gates */
+            gates: {
+                [key: string]: components["schemas"]["GateOut"];
+            };
+            scores: components["schemas"]["ScoresOut"];
+            /** Ratings */
+            ratings: components["schemas"]["RatingOut"][];
+            /** Evidence */
+            evidence: components["schemas"]["EvidenceOut"][];
+            /** Latest Run Id */
+            latest_run_id: string | null;
+            synthesis: components["schemas"]["SynthesisRowOut"] | null;
+            recommendation: components["schemas"]["RecommendationOut"] | null;
+            /** Votes */
+            votes: components["schemas"]["VoteOut"][];
+            /** Persona Responses */
+            persona_responses: components["schemas"]["PersonaResponseOut"][];
+            /** Department Memos */
+            department_memos: components["schemas"]["DepartmentMemoRowOut"][];
+            /** Research */
+            research: components["schemas"]["ResearchRequestOut"][];
+            /** Decisions */
+            decisions: components["schemas"]["DecisionOut"][];
+        };
         /** RequirementIn */
         RequirementIn: {
             /** Title */
@@ -965,6 +1379,185 @@ export interface components {
              */
             rationale: string;
         };
+        /** RequirementOut */
+        RequirementOut: {
+            /** Id */
+            id: string;
+            /** Target Model */
+            target_model: string;
+            /** Market */
+            market: string | null;
+            /** Feature Key */
+            feature_key: string | null;
+            /** Theme Id */
+            theme_id: number | null;
+            /** Title */
+            title: string;
+            /** Description */
+            description: string;
+            /** Customer Problem */
+            customer_problem: string;
+            /** Acceptance Criteria */
+            acceptance_criteria: unknown[];
+            /** Evidence Level */
+            evidence_level: string;
+            /** Evidence Level Explanation */
+            evidence_level_explanation: string;
+            /** Assumptions */
+            assumptions: unknown[];
+            /** Uncertainties */
+            uncertainties: unknown[];
+            /** Planning Horizon */
+            planning_horizon: string;
+            /** Status */
+            status: string;
+            /** Priority Rank */
+            priority_rank: number | null;
+            /** Score */
+            score: number | null;
+            /** Score Low */
+            score_low: number | null;
+            /** Score High */
+            score_high: number | null;
+            /** Prioritization Rationale */
+            prioritization_rationale: string;
+            /** Suggested Next Action */
+            suggested_next_action: string | null;
+            /** Kano Class */
+            kano_class: string | null;
+            /** Kano Rationale */
+            kano_rationale: string;
+            /** Benchmark Target */
+            benchmark_target: string | null;
+            /** Version */
+            version: number;
+            /** Created By */
+            created_by: string;
+            /** Last Run Id */
+            last_run_id: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Gates */
+            gates: {
+                [key: string]: string;
+            };
+            /** Ai Recommendation */
+            ai_recommendation: string | null;
+        };
+        /** ResearchRequestOut */
+        ResearchRequestOut: {
+            /** Id */
+            id: number;
+            /** Run Id */
+            run_id: string;
+            /** Requirement Id */
+            requirement_id: string;
+            /** Requested By */
+            requested_by: string;
+            /** Question */
+            question: string;
+            /** Rationale */
+            rationale: string;
+            /** Status */
+            status: string;
+            /** Findings */
+            findings: unknown[];
+            /** Sources */
+            sources: unknown[];
+            /** Verification */
+            verification: {
+                [key: string]: unknown;
+            };
+            /** Verdict */
+            verdict: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /** RunDetailOut */
+        RunDetailOut: {
+            run: components["schemas"]["RunOut"];
+            /** Steps */
+            steps: components["schemas"]["StepOut"][];
+        };
+        /** RunOut */
+        RunOut: {
+            /** Id */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Status */
+            status: string;
+            /** Requirement Ids */
+            requirement_ids: string[];
+            /** Config */
+            config: {
+                [key: string]: unknown;
+            };
+            /** Parent Run Id */
+            parent_run_id: string | null;
+            /** Challenge Question */
+            challenge_question: string | null;
+            /** Requested By */
+            requested_by: string;
+            /** Progress */
+            progress: {
+                [key: string]: unknown;
+            };
+            /** Error */
+            error: string | null;
+            /** Llm Calls */
+            llm_calls: number;
+            /** Input Tokens */
+            input_tokens: number;
+            /** Output Tokens */
+            output_tokens: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Started At */
+            started_at: string | null;
+            /** Finished At */
+            finished_at: string | null;
+        };
+        /** ScoresOut */
+        ScoresOut: {
+            /** Criteria */
+            criteria: {
+                [key: string]: components["schemas"]["CriterionOut"];
+            };
+            /** Score Low */
+            score_low: number;
+            /** Score High */
+            score_high: number;
+            /** Score Midpoint */
+            score_midpoint: number;
+            /** Unknown Criteria */
+            unknown_criteria: string[];
+            /** Uncertain Criteria */
+            uncertain_criteria: string[];
+            /** Formula */
+            formula: string | null;
+            /** Note */
+            note: string;
+        };
         /** SimulationIn */
         SimulationIn: {
             /**
@@ -992,6 +1585,42 @@ export interface components {
             /** Notes */
             notes: string;
         };
+        /**
+         * SourceSummaryOut
+         * @description Where the evidence comes from: stream (bmw/competitors/social), channel, collector, origin, review, LLM permission.
+         */
+        SourceSummaryOut: {
+            /** Source Id */
+            source_id: string;
+            /** Stream */
+            stream: string;
+            /** Channel */
+            channel: string;
+            /** Title */
+            title: string;
+            /** Collector */
+            collector: string;
+            /** Collected At */
+            collected_at: string | null;
+            /** Dataset Key */
+            dataset_key: string;
+            /** Origin */
+            origin: string | null;
+            /** Verification */
+            verification: string | null;
+            /** Review Status */
+            review_status: string;
+            /** External Llm */
+            external_llm: boolean | null;
+            /** Is Example */
+            is_example: boolean;
+            /** Sampling Method */
+            sampling_method: string | null;
+            /** Sampling Complete */
+            sampling_complete: boolean | null;
+            /** Limitations */
+            limitations: unknown[];
+        };
         /** SpecIn */
         SpecIn: {
             /** Spec */
@@ -1000,6 +1629,83 @@ export interface components {
             };
             /** Rationale */
             rationale: string;
+        };
+        /** StepOut */
+        StepOut: {
+            /** Id */
+            id: number;
+            /** Run Id */
+            run_id: string;
+            /** Requirement Id */
+            requirement_id: string | null;
+            /** Stage */
+            stage: string;
+            /** Agent Id */
+            agent_id: string | null;
+            /** Status */
+            status: string;
+            /** Detail */
+            detail: {
+                [key: string]: unknown;
+            };
+            /** Error */
+            error: string | null;
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Finished At */
+            finished_at: string | null;
+        };
+        /** SynthesisRowOut */
+        SynthesisRowOut: {
+            /** Id */
+            id: number;
+            /** Run Id */
+            run_id: string;
+            /** Requirement Id */
+            requirement_id: string;
+            /** Content */
+            content: {
+                [key: string]: unknown;
+            };
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** TaskOut */
+        TaskOut: {
+            /** Kind */
+            kind: string;
+            /** Label */
+            label: string;
+            /** Requirement Id */
+            requirement_id?: string | null;
+            /** Requirement Ids */
+            requirement_ids?: string[] | null;
+            /** Title */
+            title?: string | null;
+            /** Market */
+            market?: string | null;
+            /** Ai Recommendation */
+            ai_recommendation?: string | null;
+            /** Score */
+            score?: number | null;
+            /** Score Low */
+            score_low?: number | null;
+            /** Score High */
+            score_high?: number | null;
+            /** Failed Gates */
+            failed_gates?: string[] | null;
+            /** Run Id */
+            run_id?: string | null;
+            /** Stage */
+            stage?: string | null;
+            /** Count */
+            count?: number | null;
         };
         /** ThemeBuildIn */
         ThemeBuildIn: {
@@ -1038,6 +1744,30 @@ export interface components {
             input?: unknown;
             /** Context */
             ctx?: Record<string, never>;
+        };
+        /** VoteOut */
+        VoteOut: {
+            /** Id */
+            id: number;
+            /** Run Id */
+            run_id: string;
+            /** Requirement Id */
+            requirement_id: string;
+            /** Agent Id */
+            agent_id: string;
+            /** Model */
+            model: string;
+            /** Vote */
+            vote: string;
+            /** Rationale */
+            rationale: string;
+            /** Key Points */
+            key_points: unknown[];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
         };
     };
     responses: never;
@@ -1123,7 +1853,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["TaskOut"][];
                 };
             };
         };
@@ -1229,7 +1959,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["AuditPageOut"];
                 };
             };
             /** @description Validation Error */
@@ -1415,6 +2145,37 @@ export interface operations {
             };
             header?: never;
             path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_source_api_sources__source_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                source_id: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -1799,7 +2560,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["RequirementOut"][];
                 };
             };
             /** @description Validation Error */
@@ -1835,7 +2596,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["RequirementOut"];
                 };
             };
             /** @description Validation Error */
@@ -1902,7 +2663,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["RequirementDetailOut"];
                 };
             };
             /** @description Validation Error */
@@ -1940,7 +2701,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["RequirementOut"];
                 };
             };
             /** @description Validation Error */
@@ -1978,7 +2739,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["DecisionResultOut"];
                 };
             };
             /** @description Validation Error */
@@ -2157,7 +2918,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["AuditEventOut"][];
                 };
             };
             /** @description Validation Error */
@@ -2221,7 +2982,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["RunOut"][];
                 };
             };
             /** @description Validation Error */
@@ -2257,7 +3018,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["RunOut"];
                 };
             };
             /** @description Validation Error */
@@ -2288,7 +3049,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["RunDetailOut"];
                 };
             };
             /** @description Validation Error */
@@ -2354,7 +3115,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["LLMCallOut"][];
                 };
             };
             /** @description Validation Error */

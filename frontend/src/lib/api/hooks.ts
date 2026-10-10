@@ -69,12 +69,14 @@ export function useRun(runId: string | null | undefined) {
 export function useLlmCalls(runId: string | null | undefined, requirementId: string, live: boolean) {
   return useSWR(
     runId ? ["llm-calls", runId, requirementId] : null,
-    () =>
-      unwrap<LlmCall[]>(
+    async () => {
+      const calls = await unwrap<(Omit<LlmCall, "agent_id"> & { agent_id: string | null })[]>(
         api.GET("/api/simulations/{run_id}/llm-calls", {
           params: { path: { run_id: runId! }, query: { requirement_id: requirementId } },
         }),
-      ),
+      );
+      return calls.map((c) => ({ ...c, agent_id: c.agent_id ?? "agent:unknown" })) as LlmCall[];
+    },
     { refreshInterval: live ? 1500 : 0 },
   );
 }

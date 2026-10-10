@@ -8,8 +8,8 @@ import { toast } from "sonner";
 import { PageHeader } from "@/components/page-header";
 import { EmptyState, ErrorState, LoadingRows } from "@/components/states";
 import { Button } from "@/components/ui/button";
-import { refreshAll, startRun, useRequirements, useTasks } from "@/lib/api/hooks";
-import type { Requirement, Task } from "@/lib/api/types";
+import { refreshAll, startRun, useTasks } from "@/lib/api/hooks";
+import type { Task } from "@/lib/api/types";
 import { fmtRange, fmtScore, humanize, STAGE_LABEL } from "@/lib/format";
 
 const GROUPS: { kind: string; title: string }[] = [
@@ -21,8 +21,6 @@ const GROUPS: { kind: string; title: string }[] = [
 
 export default function TasksPage() {
   const { data, error, isLoading } = useTasks();
-  const { data: requirements } = useRequirements();
-  const byId = new Map((requirements ?? []).map((r) => [r.id, r]));
 
   return (
     <>
@@ -49,7 +47,7 @@ export default function TasksPage() {
                   {group.title} <span className="ml-1 text-muted-foreground/60">{items.length}</span>
                 </h2>
                 {items.map((task, i) => (
-                  <TaskRow key={`${task.kind}-${task.requirement_id ?? task.run_id ?? i}`} task={task} requirement={byId.get(task.requirement_id ?? "")} />
+                  <TaskRow key={`${task.kind}-${task.requirement_id ?? task.run_id ?? i}`} task={task} />
                 ))}
               </section>
             );
@@ -59,7 +57,7 @@ export default function TasksPage() {
   );
 }
 
-function TaskRow({ task, requirement }: { task: Task; requirement?: Requirement }) {
+function TaskRow({ task }: { task: Task }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
 
@@ -86,7 +84,7 @@ function TaskRow({ task, requirement }: { task: Task; requirement?: Requirement 
         : [
             task.ai_recommendation && `AI: ${humanize(task.ai_recommendation)}`,
             task.score != null &&
-              `score ${fmtScore(task.score)}${requirement ? ` (${fmtRange(requirement.score_low, requirement.score_high)})` : ""}`,
+              `score ${fmtScore(task.score)} (${fmtRange(task.score_low, task.score_high)})`,
             task.failed_gates?.length ? `${task.failed_gates.length} gate failed` : null,
           ]
             .filter(Boolean)
@@ -97,7 +95,12 @@ function TaskRow({ task, requirement }: { task: Task; requirement?: Requirement 
       <span className="truncate font-mono text-xs text-muted-foreground">
         {task.requirement_id ?? task.run_id?.slice(0, 8) ?? ""}
       </span>
-      <span className="truncate font-medium">{task.title ?? task.label}</span>
+      <span className="truncate font-medium">
+        {task.title ?? task.label}
+        {task.kind === "running" && task.requirement_ids && task.requirement_ids.length > 1 && (
+          <span className="font-normal text-muted-foreground"> · {task.requirement_ids.length} requirements</span>
+        )}
+      </span>
       <span className="truncate text-[13px] text-muted-foreground">{meta}</span>
       <span className="justify-self-end">
         {task.kind === "decide" && task.requirement_id && (
@@ -115,12 +118,17 @@ function TaskRow({ task, requirement }: { task: Task; requirement?: Requirement 
             <Link href="/data?tab=sources">Review</Link>
           </Button>
         )}
-        {task.kind === "running" && (
-          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <span className="size-1.5 animate-pulse rounded-full bg-blue-600" aria-hidden />
-            running
-          </span>
-        )}
+        {task.kind === "running" &&
+          (task.requirement_ids?.length ? (
+            <Button size="sm" variant="outline" asChild>
+              <Link href={`/requirements/${task.requirement_ids[0]}/simulation?run=${task.run_id ?? ""}`}>Watch</Link>
+            </Button>
+          ) : (
+            <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <span className="size-1.5 animate-pulse rounded-full bg-blue-600" aria-hidden />
+              running
+            </span>
+          ))}
       </span>
     </div>
   );

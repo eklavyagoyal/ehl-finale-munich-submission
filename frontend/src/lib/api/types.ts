@@ -1,5 +1,16 @@
-// Response shapes of the Parallax API. The OpenAPI spec types request bodies and parameters
-// (see schema.d.ts) but not responses, so these follow backend/API.md and real responses.
+import type { components } from "./schema";
+
+// Response shapes of the Parallax API. Flat models come straight from the generated OpenAPI types
+// (schema.d.ts); interfaces below refine the JSON blobs the spec leaves as generic objects.
+type Schemas = components["schemas"];
+
+export type Task = Schemas["TaskOut"];
+export type Rating = Schemas["RatingOut"];
+// agent_id is nullable in the spec; the hook fills "agent:unknown" so every call has a lane.
+export type LlmCall = Omit<Schemas["LLMCallOut"], "agent_id"> & { agent_id: string };
+export type EvidenceLink = Schemas["EvidenceOut"];
+export type SourceSummary = Schemas["SourceSummaryOut"];
+export type ClaimSummary = Schemas["ClaimSummaryOut"];
 
 export type GateValue = "pass" | "fail" | "unknown";
 export type RatingStatus = "observed" | "estimated" | "simulated" | "assumed" | "unknown" | string;
@@ -38,19 +49,6 @@ export interface Requirement {
   ai_recommendation: string | null;
 }
 
-export interface Task {
-  kind: "decide" | "simulate" | "running" | "review_evidence" | string;
-  label: string;
-  requirement_id?: string;
-  title?: string;
-  market?: string | null;
-  ai_recommendation?: string | null;
-  score?: number | null;
-  failed_gates?: string[];
-  run_id?: string;
-  stage?: string | null;
-  count?: number;
-}
 
 export interface GateDetail {
   value: GateValue;
@@ -71,36 +69,7 @@ export interface CriterionScore {
   rating_ids: number[];
 }
 
-export interface Rating {
-  id: number;
-  criterion: string;
-  score: number | null;
-  low: number | null;
-  high: number | null;
-  status: RatingStatus;
-  rater_type: string;
-  rater_id: string;
-  rationale: string;
-  created_at: string;
-}
 
-export interface EvidenceLink {
-  id: number;
-  record_id: string;
-  relation: "supporting" | "contradicting" | "context" | string;
-  quote: string | null;
-  quote_verified: boolean | null;
-  added_by: string;
-  created_at: string;
-  record: {
-    text: string;
-    translation_en: string | null;
-    markets: string[];
-    subject_ids: string[];
-    source_id: string;
-    locator: Record<string, unknown>;
-  } | null;
-}
 
 export interface Synthesis {
   run_id: string;
@@ -250,22 +219,6 @@ export interface RunDetail {
   steps: RunStep[];
 }
 
-export interface LlmCall {
-  id: number;
-  run_id: string;
-  agent_id: string;
-  requirement_id: string | null;
-  purpose: string;
-  model: string;
-  prompt_version: string;
-  input_record_ids: string[];
-  input_tokens: number;
-  output_tokens: number;
-  latency_ms: number;
-  status: string;
-  error: string | null;
-  created_at: string;
-}
 
 export interface AuditEvent {
   id: number;
@@ -391,4 +344,18 @@ export interface Coverage {
   records_by_market: { market: string | null; records: number }[];
   claims: { review_status: string; derived_from_bmw_labels: boolean; claims: number }[];
   llm_rule: string;
+}
+
+export interface SourceDetail {
+  source: Source & {
+    sampling: { method?: string; complete?: boolean; retrieved_count?: number; query?: string | null; date_start?: string | null; date_end?: string | null; limitations?: string[] } | null;
+    provenance: { origin?: string; verification?: string; notes?: string } | null;
+    export_permissions: { git?: boolean; external_llm?: boolean; notes?: string } | null;
+    ingest_run_id: string | null;
+    updated_at: string | null;
+  };
+  summary: SourceSummary;
+  records: number;
+  claims: { review_status: string; derived_from_bmw_labels: boolean; count: number }[];
+  claim_producers: { method: string | null; name: string | null; count: number }[];
 }

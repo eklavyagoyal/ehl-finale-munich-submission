@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
 
 import { ACTOR_COOKIE, sanitizePm } from "@/lib/actor";
+import { isAllowed } from "@/lib/api/allowlist";
 import { authEnabled, readSession, SESSION_COOKIE, verifySession } from "@/lib/session";
 
 // Server-side proxy to the Parallax API. The browser only ever talks to /bff; the token stays here.
@@ -21,6 +22,10 @@ async function proxy(request: NextRequest, context: RouteContext<"/bff/[...path]
   const segments = path[0] === "api" ? path.slice(1) : path;
   if (segments.length === 0 || segments.some((s) => s === "." || s === ".." || !SAFE_SEGMENT.test(s))) {
     return Response.json({ detail: "Invalid API path" }, { status: 400 });
+  }
+  if (!isAllowed(request.method, segments)) {
+    console.warn(`[bff] refused ${request.method} /api/${segments.join("/")}`);
+    return Response.json({ detail: "Not allowed through the cockpit proxy" }, { status: 403 });
   }
 
   const base = process.env.PARALLAX_API_URL?.replace(/\/+$/, "");
