@@ -43,8 +43,9 @@ Off by default. Turn it on with env on the frontend server; the signed-in name b
 | Env | Effect |
 | --- | --- |
 | `PARALLAX_WEB_USERS` | One account per PM, comma-separated `name:secret`. Use `node scripts/hash-password.mjs <name>` to print a hashed entry (`name:scrypt:<salt>:<hash>`); plain `name:password` also works. |
-| `PARALLAX_WEB_PASSWORD` | Fallback: any name with one shared password. Ignored when `PARALLAX_WEB_USERS` is set. |
-| `PARALLAX_WEB_SESSION_SECRET` | Signs the 7-day session cookie. Changing any of these three signs everyone out. |
+| `PARALLAX_WEB_USER_<NAME>` | One account per variable: name is the lowercased suffix, value the password. On nexus use `deploy.set_env` with `generate: true`; the password is then only visible in the nexus UI. Combines with `PARALLAX_WEB_USERS`. |
+| `PARALLAX_WEB_PASSWORD` | Fallback: any name with one shared password. Ignored when any account is set. |
+| `PARALLAX_WEB_SESSION_SECRET` | Signs the 7-day session cookie. Changing the secret or any account variable signs everyone out. |
 
 Without sign-in, `/health`, `/login` and `/auth/login` stay open; everything else, including the `/bff` proxy, needs a session.
 

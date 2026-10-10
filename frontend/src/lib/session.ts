@@ -3,6 +3,8 @@ import { createHmac, scryptSync, timingSafeEqual } from "node:crypto";
 // PM sign-in without backend changes. The signed-in name becomes the X-Actor (pm:<name>).
 // Modes, by env on the frontend server:
 //   PARALLAX_WEB_USERS="luis:scrypt:<salt>:<hash>,lisa:<plain password>"  → one account per PM
+//   PARALLAX_WEB_USER_LUIS=<password>                                     → one account per variable
+//                                                                           (nexus can generate these)
 //   PARALLAX_WEB_PASSWORD=<shared password>                              → any name, one shared password
 //   neither                                                              → open, name from the settings dialog
 // The session cookie is "<name>.<expiry>.<HMAC-SHA256>"; the key includes the secret and the account
@@ -11,18 +13,28 @@ export const SESSION_COOKIE = "parallax_session";
 export const SESSION_MAX_AGE = 60 * 60 * 24 * 7;
 
 const NAME = /^[a-z0-9][a-z0-9_-]{0,31}$/;
+const USER_VAR = /^PARALLAX_WEB_USER_([A-Za-z0-9_-]+)$/;
+
+// PARALLAX_WEB_USER_<NAME> variables, sorted by key so the signing key is stable.
+function userVars(): [string, string][] {
+  return Object.entries(process.env)
+    .filter((e): e is [string, string] => USER_VAR.test(e[0]) && Boolean(e[1]?.trim()))
+    .sort(([a], [b]) => a.localeCompare(b));
+}
 
 function accounts(): Map<string, string> | null {
-  const raw = process.env.PARALLAX_WEB_USERS?.trim();
-  if (!raw) return null;
   const map = new Map<string, string>();
-  for (const entry of raw.split(/[,\n]/)) {
+  for (const entry of (process.env.PARALLAX_WEB_USERS ?? "").split(/[,\n]/)) {
     const item = entry.trim();
     const colon = item.indexOf(":");
     if (colon < 1) continue;
     const name = item.slice(0, colon).trim().toLowerCase();
     const secret = item.slice(colon + 1).trim();
     if (NAME.test(name) && secret) map.set(name, secret);
+  }
+  for (const [key, value] of userVars()) {
+    const name = USER_VAR.exec(key)![1].toLowerCase();
+    if (NAME.test(name)) map.set(name, value.trim());
   }
   return map.size > 0 ? map : null;
 }
@@ -41,7 +53,8 @@ export function authEnabled(): boolean {
 
 function key(): string {
   const { PARALLAX_WEB_SESSION_SECRET: s = "", PARALLAX_WEB_USERS: u = "", PARALLAX_WEB_PASSWORD: p = "" } = process.env;
-  return `${s}\u0000${u}\u0000${p}`;
+  const vars = userVars().map(([k, v]) => `${k}=${v}`);
+  return [s, u, p, ...vars].join("\u0000");
 }
 
 function sign(payload: string): string {
