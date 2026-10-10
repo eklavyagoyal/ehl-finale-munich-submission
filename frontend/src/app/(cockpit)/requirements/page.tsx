@@ -70,8 +70,8 @@ export default function RequirementsPage() {
           {data && data.length === 0 && (
             <EmptyState title="No requirements yet">
               Requirements exist once evidence is imported. Draft them from the signals in{" "}
-              <Link href="/data?tab=signals" className="text-foreground underline-offset-4 hover:underline">
-                Data
+              <Link href="/sources?tab=signals" className="text-foreground underline-offset-4 hover:underline">
+                Sources
               </Link>
               .
             </EmptyState>

@@ -15,6 +15,7 @@ import type {
   Requirement,
   RequirementDetail,
   RecordPage,
+  SourceDetail,
   Run,
   RunDetail,
   Source,
@@ -171,13 +172,46 @@ export function useSources() {
   return useSWR("sources", () => unwrap<Source[]>(api.GET("/api/sources")));
 }
 
-export function useRecords(query: { q?: string; market?: string; channel?: string; offset?: number }) {
-  return useSWR(["records", query.q, query.market, query.channel, query.offset], () =>
+export function useRecords(query: { q?: string; market?: string; channel?: string; ids?: string[]; offset?: number }) {
+  return useSWR(["records", query.q, query.market, query.channel, query.ids?.join(","), query.offset], () =>
     unwrap<RecordPage>(
       api.GET("/api/records", {
-        params: { query: { q: query.q || undefined, market: query.market, channel: query.channel, limit: 50, offset: query.offset ?? 0 } },
+        params: {
+          query: {
+            q: query.q || undefined,
+            market: query.market,
+            channel: query.channel,
+            ids: query.ids?.length ? query.ids : undefined,
+            limit: 50,
+            offset: query.offset ?? 0,
+          },
+        },
       }),
     ),
+  );
+}
+
+export function useSource(id: string) {
+  return useSWR(["source", id], () =>
+    unwrap<SourceDetail>(api.GET("/api/sources/{source_id}", { params: { path: { source_id: id } } })),
+  );
+}
+
+// Counts records per (channel, market) exactly as tagged; one small request per cell, limit=1.
+export function useGapMatrix(channels: string[], markets: string[]) {
+  return useSWR(
+    channels.length && markets.length ? ["gaps", channels.join(","), markets.join(",")] : null,
+    async () => {
+      const cells = await Promise.all(
+        channels.flatMap((channel) =>
+          markets.map(async (market) => {
+            const page = await unwrap<RecordPage>(api.GET("/api/records", { params: { query: { channel, market, limit: 1 } } }));
+            return [`${channel}|${market}`, page.total] as const;
+          }),
+        ),
+      );
+      return new Map<string, number>(cells);
+    },
   );
 }
 

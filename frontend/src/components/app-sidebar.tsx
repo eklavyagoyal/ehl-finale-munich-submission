@@ -30,7 +30,7 @@ export function AppSidebar({ initialPm, signedIn }: { initialPm: string; signedI
   const items = [
     { href: "/tasks", label: "My tasks", icon: Inbox, count: tasks?.length },
     { href: "/requirements", label: "Requirements", icon: ListChecks, count: requirements?.length },
-    { href: "/data", label: "Data", icon: Database },
+    { href: "/sources", label: "Sources", icon: Database },
     { href: "/activity", label: "Activity", icon: Activity },
     { href: "/history", label: "History", icon: History },
   ];

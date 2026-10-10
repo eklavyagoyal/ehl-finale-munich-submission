@@ -10,7 +10,7 @@ import {
   Smartphone,
 } from "lucide-react";
 
-import type { ClaimSummary } from "@/lib/api/types";
+import type { ClaimSummary, Source, SourceSummary } from "@/lib/api/types";
 import { humanize, type Tone } from "@/lib/format";
 
 // Where a number or quote comes from. Labels only; every value is shown as the backend sends it.
@@ -135,4 +135,25 @@ export function locateQuote(text: string, quote: string): [number, number] | nul
   const at = norm.join("").indexOf(needle);
   if (at < 0) return null;
   return [map[at], map[at + needle.length - 1] + 1];
+}
+
+// The source list returns full rows; the hover card wants the evidence-style summary.
+export function toSummary(source: Source): SourceSummary {
+  return {
+    source_id: source.source_id,
+    stream: source.stream,
+    channel: source.channel,
+    title: source.title,
+    collector: source.collector ?? "",
+    collected_at: source.collected_at,
+    dataset_key: source.dataset_key,
+    origin: source.provenance?.origin ?? null,
+    verification: source.provenance?.verification ?? null,
+    review_status: source.review_status,
+    external_llm: source.external_llm,
+    is_example: source.is_example,
+    sampling_method: source.sampling?.method ?? null,
+    sampling_complete: (source.sampling as { complete?: boolean } | null)?.complete ?? null,
+    limitations: source.sampling?.limitations ?? [],
+  };
 }

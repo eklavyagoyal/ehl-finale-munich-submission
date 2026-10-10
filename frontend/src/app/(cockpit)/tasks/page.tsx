@@ -31,8 +31,8 @@ export default function TasksPage() {
         {data && data.length === 0 && (
           <EmptyState title="Nothing waits for you">
             New requirements appear here once evidence is imported and drafted. See{" "}
-            <Link href="/data" className="text-foreground underline-offset-4 hover:underline">
-              Data
+            <Link href="/sources" className="text-foreground underline-offset-4 hover:underline">
+              Sources
             </Link>
             .
           </EmptyState>
@@ -115,7 +115,7 @@ function TaskRow({ task }: { task: Task }) {
         )}
         {task.kind === "review_evidence" && (
           <Button size="sm" variant="outline" asChild>
-            <Link href="/data?tab=sources">Review</Link>
+            <Link href="/sources?tab=list">Review</Link>
           </Button>
         )}
         {task.kind === "running" &&

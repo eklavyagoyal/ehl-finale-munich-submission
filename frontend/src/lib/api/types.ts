@@ -332,6 +332,16 @@ export interface Theme {
   competitor_review_count: number;
   channels: string[];
   demand_score?: number;
+  cohorts?: {
+    channel: string;
+    markets: string[];
+    dataset_key: string;
+    subject_ids?: string[];
+    collection_method?: string | null;
+    mention_review_count: number;
+    feedback_review_count?: number;
+    share?: number;
+  }[];
 }
 
 export interface ThemePage {
