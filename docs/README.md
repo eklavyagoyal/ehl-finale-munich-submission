@@ -38,6 +38,8 @@ docs/
 | Which fields does every requirement need? | [brief.md § 6.2](challenge/brief.md#62-expected-deliverables-s2-section-5) |
 | What's in or out of scope? | [brief.md § 4 Scope](challenge/brief.md#4-scope-s2-section-2) |
 | Where does BMW expect AI vs human review? | [brief.md § 9 Process](challenge/brief.md#9-bmws-requirements-process-s5) |
+| How will we be judged? | [brief.md § 12 Evaluation criteria](challenge/brief.md#12-evaluation-criteria-s6) |
+| What are PMs' real pain points? | [brief.md § 13](challenge/brief.md#13-pm-pain-points-and-the-process-timeline-s7) |
 | Which vehicle/market has which data? | [datasets/README.md](datasets/README.md#coverage-at-a-glance) |
 | How do BMW PMs actually prioritize? | [bmw-pm-interview/](bmw-pm-interview/bmw-product-manager-groundwork.md) |
 | What does the car offer today (standard vs optional)? | [datasets/option-lists/](datasets/option-lists/) |

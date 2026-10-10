@@ -11,6 +11,9 @@ Everything BMW gave us about the challenge, consolidated in one place (EHL Munic
 | S3 | [`slide-data-and-sources.png`](sources/slide-data-and-sources.png) | Table "Data and sources — provided data (per vehicle)" |
 | S4 | [`slide-billions-of-findings-to-one-vehicle.webp`](sources/slide-billions-of-findings-to-one-vehicle.webp) | Slide "From billions of findings to one BMW vehicle" |
 | S5 | [`slide-the-process.webp`](sources/slide-the-process.webp) | Slide "The process" (BMW's requirements workflow) |
+| S6 | [`slide-evaluation-criteria.png`](sources/slide-evaluation-criteria.png) | Table "Evaluation criteria" (how BMW judges submissions) |
+| S7 | BMW answer to a participant question (shared during the event, pasted by the team) | Common PM pain points; the requirement process runs about two years |
+| S8 | BMW hint on the BMW Annual Report (shared during the event, pasted by the team) | Which parts of the Annual Report to use as evidence |
 
 Where S1 and S2 differ in wording or emphasis, both are kept and marked.
 
@@ -173,3 +176,43 @@ Reading of the slide (our interpretation):
 | Minimum demo | ≥ 1 derivative in ≥ 1 market, built to generalize |
 | Hard constraints | Customer-facing requirements only; no regulatory, engineering or pricing work |
 | Must-haves | Requirement list (8 fields), E2E workflow with AI-vs-human split, audit trail, PM-in-the-loop prototype |
+| Judged on | Scoring logic, workflow & human decisions, traceability, solution quality, innovation & scale ([§ 12](#12-evaluation-criteria-s6)); honesty about uncertainty is rewarded |
+
+## 12. Evaluation criteria (S6)
+
+| Criterion | What BMW looks for |
+| --- | --- |
+| **Decision and scoring logic** | Quality, consistency and explainability of the method used to derive, evaluate, score and prioritize requirements. Show **which factors influence decisions**, **how evidence and data sources are weighted and combined**, and **how trade-offs, uncertainties and conflicting signals are resolved**. |
+| **Workflow and human decision-making** | Quality and completeness of the end-to-end workflow from heterogeneous findings to prioritized requirements, with clearly defined **roles, decision gates, review steps**, and boundaries between AI-supported, autonomous and human decisions. |
+| **Traceability and auditability** | Every requirement, score, modification and decision can be traced back to its originating evidence and sources, with a **complete, reconstructable history of approvals, modifications, postponements and rejections**. |
+| **Solution quality, usability and feasibility** | Quality of the concept or prototype, **usefulness of the generated requirements**, ease of use for PMs and engineering teams, and realistic applicability in a complex enterprise product-development environment. |
+| **Innovation, scalability and business impact** | Originality and effectiveness; potential to **scale across products, markets and data volumes**; expected contribution to reducing manual effort and rework, shortening decision cycles and improving requirement and decision quality. |
+
+> **"We reward honesty."** Trustworthy AI acknowledges uncertainty. Show where the app **lacks evidence, encounters conflicting signals or reaches uncertain conclusions**, and how this is surfaced to the PM. Honest limitations are a strength, not a weakness. (S6)
+
+Note: the criteria name **postponements** explicitly, so "postponed" needs to be a decision status next to approved, modified and rejected.
+
+## 13. PM pain points and the process timeline (S7)
+
+BMW's answer when asked what common pain points of product managers are:
+
+1. **Balancing customer requirements across markets and regions.** Preferences differ, for example because of climate, how customers use the car, or culture. The same requirement can matter a lot in one market and little in another.
+2. **Accessing early customer feedback and extracting future requirements from it**, for example feedback on predecessor vehicles. The task is to get from today's feedback to what customers will want in the successor.
+
+**The requirement process is not a one-off.** It does not end in a single requirement list. It runs over **about two years**, during which the most relevant requirements are prioritized again and again. This matches the 1–2 year loop in the [PM interview notes](../bmw-pm-interview/).
+
+What this implies for our solution (our reading):
+
+- Requirements need a **lifecycle** (status, versions, re-scoring when new evidence arrives), not just a final list. The audit trail is the backbone of that.
+- Market should be a **dimension of every requirement and score**, even if the demo covers one market, so cross-market differences become visible instead of averaged away.
+
+## 14. Extra source hint: BMW Annual Report (S8)
+
+BMW suggests the **BMW Annual Report** as backing evidence. There is no need to read the financial breakdown; focus on two areas:
+
+| Area | What to extract | Use in our app |
+| --- | --- | --- |
+| **Market and sales data** | Regional growth trends, deliveries by model series (e.g. X models vs sedans), latest EV adoption rates | Target persona, proof of market demand, where a requirement has the biggest impact |
+| **Product strategy and R&D** | R&D investment priorities, ConnectedDrive and My BMW App metrics, the **Neue Klasse** platform strategy | Showing that a requirement is feasible and aligned with BMW's current investments and future vehicle architecture |
+
+The Annual Report is not in `data/` yet. Whatever we use from it should be cited like any other source (document, year, page).
