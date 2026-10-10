@@ -1,0 +1,19 @@
+{
+  "tool_use_id": "toolu_017fqpj7XXEWo1Gepa6GnVAq",
+  "agent_id": "afc73cdbb217f73c2",
+  "subagent_type": "general-purpose",
+  "task_description": "CN: Chinese NEV sedans research",
+  "files": [
+    "competitors/raw/cn_nev.jsonl",
+    "competitors/raw/cn_nev.log.md"
+  ],
+  "token_usage": {
+    "input_tokens": 148,
+    "cache_creation_tokens": 399650,
+    "cache_read_tokens": 18023172,
+    "output_tokens": 201811,
+    "api_call_count": 74
+  },
+  "started_at": "2026-10-10T16:48:12.998611+02:00",
+  "completed_at": "2026-10-10T17:47:47.784047+02:00"
+}

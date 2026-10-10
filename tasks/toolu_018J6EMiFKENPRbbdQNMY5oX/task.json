@@ -1,0 +1,18 @@
+{
+  "tool_use_id": "toolu_018J6EMiFKENPRbbdQNMY5oX",
+  "agent_id": "a5d12e18b4792428c",
+  "subagent_type": "general-purpose",
+  "task_description": "EU: challenger brands research",
+  "files": [
+    "competitors/raw/eu_challengers.log.md"
+  ],
+  "token_usage": {
+    "input_tokens": 116,
+    "cache_creation_tokens": 282289,
+    "cache_read_tokens": 8814659,
+    "output_tokens": 11317,
+    "api_call_count": 58
+  },
+  "started_at": "2026-10-10T16:48:13.003865+02:00",
+  "completed_at": "2026-10-10T17:24:28.262971+02:00"
+}

@@ -1,0 +1,19 @@
+{
+  "tool_use_id": "toolu_01StSAgFvj5QbJRujmZH7W6h",
+  "agent_id": "a0c85e7911b159b9c",
+  "subagent_type": "general-purpose",
+  "task_description": "US: Genesis/Lexus/Cadillac research",
+  "files": [
+    "competitors/raw/us_premium_others.jsonl",
+    "competitors/raw/us_premium_others.log.md"
+  ],
+  "token_usage": {
+    "input_tokens": 132,
+    "cache_creation_tokens": 505837,
+    "cache_read_tokens": 12129939,
+    "output_tokens": 141881,
+    "api_call_count": 65
+  },
+  "started_at": "2026-10-10T16:48:12.997017+02:00",
+  "completed_at": "2026-10-10T17:34:00.031941+02:00"
+}

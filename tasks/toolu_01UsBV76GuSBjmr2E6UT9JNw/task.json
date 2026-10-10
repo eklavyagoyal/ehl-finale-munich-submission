@@ -1,0 +1,19 @@
+{
+  "tool_use_id": "toolu_01UsBV76GuSBjmr2E6UT9JNw",
+  "agent_id": "af9f08078b4500d0e",
+  "subagent_type": "general-purpose",
+  "task_description": "BMW G60 baseline equipment and outlook",
+  "files": [
+    "competitors/raw/bmw_baseline_outlook.jsonl",
+    "competitors/raw/bmw_baseline_outlook.log.md"
+  ],
+  "token_usage": {
+    "input_tokens": 134,
+    "cache_creation_tokens": 275491,
+    "cache_read_tokens": 11866159,
+    "output_tokens": 16072,
+    "api_call_count": 66
+  },
+  "started_at": "2026-10-10T16:48:13.011129+02:00",
+  "completed_at": "2026-10-10T17:25:17.702474+02:00"
+}

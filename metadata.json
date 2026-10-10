@@ -1,0 +1,55 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4K8HT2DT694FMTC3ZYGHKBG",
+  "strategy": "manual-commit",
+  "branch": "luis-competitors",
+  "checkpoints_count": 9,
+  "files_touched": [
+    "competitors/equipment_matrix.csv",
+    "competitors/findings.jsonl",
+    "competitors/raw/bmw_baseline_outlook.jsonl",
+    "competitors/raw/bmw_baseline_outlook.log.md",
+    "competitors/raw/cn_german_g68.jsonl",
+    "competitors/raw/cn_german_g68.log.md",
+    "competitors/raw/cn_nev.jsonl",
+    "competitors/raw/cn_nev.log.md",
+    "competitors/raw/eu_challengers.log.md",
+    "competitors/raw/eu_german.jsonl",
+    "competitors/raw/eu_german.log.md",
+    "competitors/raw/us_mercedes.jsonl",
+    "competitors/raw/us_mercedes.log.md",
+    "competitors/raw/us_premium_others.jsonl",
+    "competitors/raw/us_premium_others.log.md",
+    "competitors/raw/us_tesla_audi.jsonl",
+    "competitors/raw/us_tesla_audi.log.md",
+    "competitors/scorecard.csv",
+    "competitors/theme_comparison.csv",
+    "competitors/tools/compare.py",
+    "competitors/tools/merge.py",
+    "competitors/tools/nhtsa.py",
+    "competitors/validation.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 94,
+    "cache_creation_tokens": 105086,
+    "cache_read_tokens": 9828274,
+    "output_tokens": 43474,
+    "api_call_count": 39,
+    "subagent_tokens": {
+      "input_tokens": 1076,
+      "cache_creation_tokens": 3442231,
+      "cache_read_tokens": 109231913,
+      "output_tokens": 945488,
+      "api_call_count": 535
+    }
+  }
+}

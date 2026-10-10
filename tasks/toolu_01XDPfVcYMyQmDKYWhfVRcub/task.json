@@ -1,0 +1,19 @@
+{
+  "tool_use_id": "toolu_01XDPfVcYMyQmDKYWhfVRcub",
+  "agent_id": "a7ce90dee6bd9095c",
+  "subagent_type": "general-purpose",
+  "task_description": "EU: Mercedes and Audi research",
+  "files": [
+    "competitors/raw/eu_german.jsonl",
+    "competitors/raw/eu_german.log.md"
+  ],
+  "token_usage": {
+    "input_tokens": 132,
+    "cache_creation_tokens": 574107,
+    "cache_read_tokens": 15767091,
+    "output_tokens": 149533,
+    "api_call_count": 66
+  },
+  "started_at": "2026-10-10T16:48:13.00826+02:00",
+  "completed_at": "2026-10-10T17:28:46.084202+02:00"
+}

@@ -1,0 +1,19 @@
+{
+  "tool_use_id": "toolu_017pmjhW2pDhYd7zVrPEzzQx",
+  "agent_id": "aab3a55a1ecf05183",
+  "subagent_type": "general-purpose",
+  "task_description": "CN: G68, E-Class L, A6L research",
+  "files": [
+    "competitors/raw/cn_german_g68.jsonl",
+    "competitors/raw/cn_german_g68.log.md"
+  ],
+  "token_usage": {
+    "input_tokens": 166,
+    "cache_creation_tokens": 754335,
+    "cache_read_tokens": 17810142,
+    "output_tokens": 202577,
+    "api_call_count": 82
+  },
+  "started_at": "2026-10-10T16:48:13.0072+02:00",
+  "completed_at": "2026-10-10T17:54:19.94566+02:00"
+}

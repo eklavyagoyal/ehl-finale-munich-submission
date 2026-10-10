@@ -1,0 +1,15 @@
+{
+  "tool_use_id": "toolu_01X2GGoPVyZYya3u8aAbsq71",
+  "agent_id": "a167cb20641ab6a32",
+  "subagent_type": "general-purpose",
+  "task_description": "Classify BMW G60 competitor mentions",
+  "token_usage": {
+    "input_tokens": 80,
+    "cache_creation_tokens": 277492,
+    "cache_read_tokens": 6894365,
+    "output_tokens": 39683,
+    "api_call_count": 40
+  },
+  "started_at": "2026-10-10T16:48:13.005432+02:00",
+  "completed_at": "2026-10-10T17:06:07.90463+02:00"
+}

@@ -1,0 +1,19 @@
+{
+  "tool_use_id": "toolu_01HWxpHapzjth1e3oX9q34ja",
+  "agent_id": "a7d9f2d1df608978c",
+  "subagent_type": "general-purpose",
+  "task_description": "US: Mercedes E-Class/EQE research",
+  "files": [
+    "competitors/raw/us_mercedes.jsonl",
+    "competitors/raw/us_mercedes.log.md"
+  ],
+  "token_usage": {
+    "input_tokens": 136,
+    "cache_creation_tokens": 730372,
+    "cache_read_tokens": 9939211,
+    "output_tokens": 95997,
+    "api_call_count": 67
+  },
+  "started_at": "2026-10-10T16:48:12.981001+02:00",
+  "completed_at": "2026-10-10T17:29:01.235549+02:00"
+}
