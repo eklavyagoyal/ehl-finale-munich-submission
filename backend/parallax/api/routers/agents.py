@@ -18,7 +18,7 @@ router = APIRouter(prefix="/api/agents", tags=["agents"])
 
 
 @router.get("", summary="All agents; filter by kind: market_persona, department, judge, drafter, research, verifier, synthesizer")
-def list_agents(kind: str | None = None, session: Session = Depends(get_session)):
+def list_agents(kind: str | None = None, session: Session = Depends(get_session, scope="function")):
     query = select(Agent)
     if kind:
         query = query.where(Agent.kind == kind)
@@ -26,12 +26,12 @@ def list_agents(kind: str | None = None, session: Session = Depends(get_session)
 
 
 @router.post("/seed", summary="Sync personas/departments from roster JSON files and register worker agents")
-def seed(session: Session = Depends(get_session), who: str = Depends(actor)):
+def seed(session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     return seed_agents(session, who)
 
 
 @router.get("/{agent_id}")
-def get_agent(agent_id: str, session: Session = Depends(get_session)):
+def get_agent(agent_id: str, session: Session = Depends(get_session, scope="function")):
     agent = session.get(Agent, agent_id)
     if agent is None:
         raise not_found("agent", agent_id)
@@ -40,7 +40,7 @@ def get_agent(agent_id: str, session: Session = Depends(get_session)):
 
 
 @router.get("/{agent_id}/grounding", summary="Preview which real records a persona would see (after the LLM gate)")
-def grounding(agent_id: str, include_examples: bool = False, session: Session = Depends(get_session)):
+def grounding(agent_id: str, include_examples: bool = False, session: Session = Depends(get_session, scope="function")):
     agent = session.get(Agent, agent_id)
     if agent is None or agent.kind != "market_persona":
         raise not_found("persona", agent_id)
@@ -55,7 +55,7 @@ class SpecIn(BaseModel):
 
 
 @router.put("/{agent_id}", summary="Replace a persona/department spec (new version; personas need re-validation)")
-def update_spec(agent_id: str, body: SpecIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def update_spec(agent_id: str, body: SpecIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     agent = session.get(Agent, agent_id)
     if agent is None:
         raise not_found("agent", agent_id)
@@ -72,7 +72,7 @@ class ActiveIn(BaseModel):
 
 
 @router.post("/{agent_id}/active")
-def set_active(agent_id: str, body: ActiveIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def set_active(agent_id: str, body: ActiveIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     from parallax.audit import record_event
 
     agent = session.get(Agent, agent_id)
@@ -91,7 +91,7 @@ class ValidateIn(BaseModel):
 
 
 @router.post("/validate", summary="Validate personas against held-out study data (background run)")
-def validate(body: ValidateIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def validate(body: ValidateIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     if body.agent_ids:
         for agent_id in body.agent_ids:
             agent = session.get(Agent, agent_id)

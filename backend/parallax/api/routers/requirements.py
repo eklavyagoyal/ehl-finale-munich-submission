@@ -53,7 +53,7 @@ def summary(requirement: Requirement, session: Session) -> dict:
             response_model=list[RequirementOut])
 def list_requirements(status: str | None = None, market: str | None = None, feature_key: str | None = None,
                       sort: Literal["priority", "score", "created", "updated"] = "priority",
-                      session: Session = Depends(get_session)):
+                      session: Session = Depends(get_session, scope="function")):
     query = select(Requirement)
     if status:
         query = query.where(Requirement.status == status)
@@ -77,7 +77,7 @@ class DraftIn(BaseModel):
 
 
 @router.post("/draft", summary="AI drafts candidate requirements from the strongest themes")
-def draft(body: DraftIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def draft(body: DraftIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     settings = get_settings()
     snapshot = latest_snapshot_id(session, settings.target_model)
     if snapshot is None:
@@ -101,7 +101,7 @@ class RequirementIn(BaseModel):
 
 
 @router.post("", summary="PM creates a requirement manually", response_model=RequirementOut)
-def create(body: RequirementIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def create(body: RequirementIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     fields = body.model_dump(exclude={"rationale"})
     fields["target_model"] = get_settings().target_model
     requirement = reqs.create(session, fields, human_actor(who), body.rationale)
@@ -112,7 +112,7 @@ def create(body: RequirementIn, session: Session = Depends(get_session), who: st
 
 @router.get("/{requirement_id}", summary="Everything about one requirement, for the PM detail view",
             response_model=RequirementDetailOut)
-def detail(requirement_id: str, session: Session = Depends(get_session)):
+def detail(requirement_id: str, session: Session = Depends(get_session, scope="function")):
     requirement = session.get(Requirement, requirement_id)
     if requirement is None:
         raise not_found("requirement", requirement_id)
@@ -160,7 +160,7 @@ class EditIn(BaseModel):
 
 
 @router.patch("/{requirement_id}", summary="PM edits requirement content (new version, audited)", response_model=RequirementOut)
-def edit(requirement_id: str, body: EditIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def edit(requirement_id: str, body: EditIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     requirement = session.get(Requirement, requirement_id)
     if requirement is None:
         raise not_found("requirement", requirement_id)
@@ -181,7 +181,7 @@ class DecisionIn(BaseModel):
 
 @router.post("/{requirement_id}/decision", summary="PM approves, rejects, challenges or defers (approve needs all gates passed)",
              response_model=DecisionResultOut)
-def decide(requirement_id: str, body: DecisionIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def decide(requirement_id: str, body: DecisionIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     requirement = session.get(Requirement, requirement_id)
     if requirement is None:
         raise not_found("requirement", requirement_id)
@@ -205,7 +205,7 @@ class GateIn(BaseModel):
 
 
 @router.post("/{requirement_id}/gates/{gate}", summary="PM overrides a gate with a rationale")
-def set_gate(requirement_id: str, gate: str, body: GateIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def set_gate(requirement_id: str, gate: str, body: GateIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     requirement = session.get(Requirement, requirement_id)
     if requirement is None:
         raise not_found("requirement", requirement_id)
@@ -224,7 +224,7 @@ class EvidenceIn(BaseModel):
 
 
 @router.post("/{requirement_id}/evidence", summary="PM links a record as supporting/contradicting evidence")
-def add_evidence(requirement_id: str, body: EvidenceIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def add_evidence(requirement_id: str, body: EvidenceIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     requirement = session.get(Requirement, requirement_id)
     if requirement is None:
         raise not_found("requirement", requirement_id)
@@ -248,7 +248,7 @@ class RatingIn(BaseModel):
 
 
 @router.post("/{requirement_id}/ratings", summary="PM adds a criterion rating (e.g. a reviewed scoring anchor)")
-def add_rating(requirement_id: str, body: RatingIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def add_rating(requirement_id: str, body: RatingIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     requirement = session.get(Requirement, requirement_id)
     if requirement is None:
         raise not_found("requirement", requirement_id)
@@ -265,14 +265,14 @@ def add_rating(requirement_id: str, body: RatingIn, session: Session = Depends(g
 
 
 @router.get("/{requirement_id}/versions")
-def versions(requirement_id: str, session: Session = Depends(get_session)):
+def versions(requirement_id: str, session: Session = Depends(get_session, scope="function")):
     return [row(v) for v in session.scalars(select(RequirementVersion).where(
         RequirementVersion.requirement_id == requirement_id).order_by(RequirementVersion.version)).all()]
 
 
 @router.get("/{requirement_id}/audit", summary="Chronological audit trail for one requirement",
             response_model=list[AuditEventOut])
-def audit(requirement_id: str, include_access: bool = False, session: Session = Depends(get_session)):
+def audit(requirement_id: str, include_access: bool = False, session: Session = Depends(get_session, scope="function")):
     query = select(AuditEvent).where(AuditEvent.requirement_id == requirement_id)
     if not include_access:
         query = query.where(AuditEvent.category != "access")
@@ -280,7 +280,7 @@ def audit(requirement_id: str, include_access: bool = False, session: Session = 
 
 
 @router.get("/{requirement_id}/decisions/{decision_id}/snapshot", summary="What the AI recommended when the PM decided")
-def decision_snapshot(requirement_id: str, decision_id: int, session: Session = Depends(get_session)):
+def decision_snapshot(requirement_id: str, decision_id: int, session: Session = Depends(get_session, scope="function")):
     decision = session.get(PMDecision, decision_id)
     if decision is None or decision.requirement_id != requirement_id:
         raise not_found("decision", decision_id)

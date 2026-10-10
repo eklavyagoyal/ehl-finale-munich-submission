@@ -29,7 +29,7 @@ class IngestIn(BaseModel):
 
 
 @router.post("/ingest", summary="Import research-contract batches or a context packet")
-def run_ingest(body: IngestIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def run_ingest(body: IngestIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     path = Path(body.path).expanduser()
     if not path.exists():
         raise HTTPException(400, f"{path} does not exist")
@@ -45,7 +45,7 @@ def run_ingest(body: IngestIn, session: Session = Depends(get_session), who: str
 
 
 @router.post("/ingest/upload", summary="Upload a zip of a research folder (schema.json, catalog/, decision-model.json, batches/)")
-def upload_ingest(file: UploadFile = File(...), session: Session = Depends(get_session), who: str = Depends(actor)):
+def upload_ingest(file: UploadFile = File(...), session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     """How data reaches a deployed backend: `python -m parallax.cli push-research ../research --url ... --token ...`."""
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
@@ -74,13 +74,13 @@ def upload_ingest(file: UploadFile = File(...), session: Session = Depends(get_s
 
 
 @router.get("/ingest-runs")
-def ingest_runs(session: Session = Depends(get_session)):
+def ingest_runs(session: Session = Depends(get_session, scope="function")):
     return [row(r) for r in session.scalars(select(IngestRun).order_by(IngestRun.created_at.desc())).all()]
 
 
 @router.get("/sources")
 def list_sources(stream: str | None = None, channel: str | None = None, review_status: str | None = None,
-                 session: Session = Depends(get_session)):
+                 session: Session = Depends(get_session, scope="function")):
     query = select(Source)
     if stream:
         query = query.where(Source.stream == stream)
@@ -92,7 +92,7 @@ def list_sources(stream: str | None = None, channel: str | None = None, review_s
 
 
 @router.get("/sources/{source_id}", summary="One source with provenance, sampling, permissions and claim counts")
-def get_source(source_id: str, session: Session = Depends(get_session)):
+def get_source(source_id: str, session: Session = Depends(get_session, scope="function")):
     source = session.get(Source, source_id)
     if source is None:
         raise not_found("source", source_id)
@@ -123,7 +123,7 @@ class SourceReviewIn(BaseModel):
 
 
 @router.post("/sources/{source_id}/review", summary="Evidence acceptance (separate from requirement approval)")
-def review_source(source_id: str, body: SourceReviewIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def review_source(source_id: str, body: SourceReviewIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     source = session.get(Source, source_id)
     if source is None:
         raise not_found("source", source_id)
@@ -140,7 +140,7 @@ class BulkReviewIn(SourceReviewIn):
 
 
 @router.post("/sources/review-bulk")
-def review_sources_bulk(body: BulkReviewIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def review_sources_bulk(body: BulkReviewIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     if not (body.stream or body.channel or body.dataset_key):
         raise HTTPException(400, "filter by stream, channel or dataset_key")
     return decisions.review_sources_bulk(session, stream=body.stream, channel=body.channel, dataset_key=body.dataset_key,
@@ -151,7 +151,7 @@ def review_sources_bulk(body: BulkReviewIn, session: Session = Depends(get_sessi
 @router.get("/records")
 def list_records(feature_key: str | None = None, market: str | None = None, channel: str | None = None,
                  kind: str | None = None, q: str | None = None, ids: list[str] | None = Query(default=None),
-                 limit: int = Query(50, le=500), offset: int = 0, session: Session = Depends(get_session)):
+                 limit: int = Query(50, le=500), offset: int = 0, session: Session = Depends(get_session, scope="function")):
     query = select(Record, Source.channel).join(Source, Source.source_id == Record.source_id).where(Record.superseded_by.is_(None))
     if ids:
         query = query.where(Record.record_id.in_(ids))
@@ -171,7 +171,7 @@ def list_records(feature_key: str | None = None, market: str | None = None, chan
 
 
 @router.get("/records/{record_id}")
-def get_record(record_id: str, session: Session = Depends(get_session)):
+def get_record(record_id: str, session: Session = Depends(get_session, scope="function")):
     record = session.get(Record, record_id)
     if record is None:
         raise not_found("record", record_id)
@@ -185,7 +185,7 @@ def get_record(record_id: str, session: Session = Depends(get_session)):
 @router.get("/claims")
 def list_claims(feature_key: str | None = None, claim_type: str | None = None, review_status: str | None = None,
                 derived: bool | None = None, limit: int = Query(100, le=1000), offset: int = 0,
-                session: Session = Depends(get_session)):
+                session: Session = Depends(get_session, scope="function")):
     query = select(Claim)
     if feature_key:
         query = query.where(Claim.feature_key == feature_key)
@@ -206,7 +206,7 @@ class ClaimReviewIn(BaseModel):
 
 
 @router.post("/claims/{claim_id}/review")
-def review_claim(claim_id: str, body: ClaimReviewIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def review_claim(claim_id: str, body: ClaimReviewIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     claim = session.get(Claim, claim_id)
     if claim is None:
         raise not_found("claim", claim_id)
@@ -215,7 +215,7 @@ def review_claim(claim_id: str, body: ClaimReviewIn, session: Session = Depends(
 
 
 @router.get("/coverage", summary="What evidence exists, by channel / market / review state / LLM permission")
-def coverage(session: Session = Depends(get_session)):
+def coverage(session: Session = Depends(get_session, scope="function")):
     by_channel = session.execute(
         select(Source.stream, Source.channel, Source.review_status, Source.external_llm, func.count(Record.record_id))
         .join(Record, Record.source_id == Source.source_id).where(Record.superseded_by.is_(None))
@@ -250,7 +250,7 @@ class ThemeBuildIn(BaseModel):
 
 
 @router.post("/themes/build", summary="Recompute deterministic theme signals from current evidence")
-def build_themes(body: ThemeBuildIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def build_themes(body: ThemeBuildIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     from parallax.audit import record_event
 
     settings = get_settings()
@@ -266,7 +266,7 @@ def build_themes(body: ThemeBuildIn, session: Session = Depends(get_session), wh
 @router.get("/themes")
 def list_themes(market: str | None = Query(None, description="US, EU, CN, RoW, or omit for pooled"),
                 area: str | None = None, min_demand: float = 0, snapshot_id: str | None = None,
-                limit: int = Query(100, le=1000), session: Session = Depends(get_session)):
+                limit: int = Query(100, le=1000), session: Session = Depends(get_session, scope="function")):
     settings = get_settings()
     snap = snapshot_id or themes.latest_snapshot_id(session, settings.target_model)
     if snap is None:
@@ -280,7 +280,7 @@ def list_themes(market: str | None = Query(None, description="US, EU, CN, RoW, o
 
 
 @router.get("/themes/{theme_id}")
-def get_theme(theme_id: int, session: Session = Depends(get_session)):
+def get_theme(theme_id: int, session: Session = Depends(get_session, scope="function")):
     theme = session.get(Theme, theme_id)
     if theme is None:
         raise not_found("theme", theme_id)

@@ -43,7 +43,7 @@ class SimulationIn(BaseModel):
 
 @router.post("", summary="Start a Parallax run (market twin || company twin -> research -> scoring -> synthesis -> vote)",
              response_model=RunOut)
-def start(body: SimulationIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def start(body: SimulationIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     try:
         run = create_run(session, requirement_ids=body.requirement_ids, actor_id=who, challenge=body.challenge,
                          options={"persona_engine": body.persona_engine} if body.persona_engine else {})
@@ -55,7 +55,7 @@ def start(body: SimulationIn, session: Session = Depends(get_session), who: str 
 
 
 @router.get("", response_model=list[RunOut])
-def list_runs(kind: str | None = None, limit: int = Query(50, le=200), session: Session = Depends(get_session)):
+def list_runs(kind: str | None = None, limit: int = Query(50, le=200), session: Session = Depends(get_session, scope="function")):
     query = select(SimRun)
     if kind:
         query = query.where(SimRun.kind == kind)
@@ -63,7 +63,7 @@ def list_runs(kind: str | None = None, limit: int = Query(50, le=200), session: 
 
 
 @router.get("/{run_id}", summary="Run status, progress and step trace (poll this)", response_model=RunDetailOut)
-def get_run(run_id: str, session: Session = Depends(get_session)):
+def get_run(run_id: str, session: Session = Depends(get_session, scope="function")):
     run = session.get(SimRun, _uuid(run_id))
     if run is None:
         raise not_found("run", run_id)
@@ -72,7 +72,7 @@ def get_run(run_id: str, session: Session = Depends(get_session)):
 
 
 @router.get("/{run_id}/results", summary="All agent outputs of a run, grouped by requirement")
-def results(run_id: str, session: Session = Depends(get_session)):
+def results(run_id: str, session: Session = Depends(get_session, scope="function")):
     rid = _uuid(run_id)
     run = session.get(SimRun, rid)
     if run is None:
@@ -92,7 +92,7 @@ def results(run_id: str, session: Session = Depends(get_session)):
 @router.get("/{run_id}/llm-calls", summary="Every model call of the run: model, prompt version, input record IDs, tokens",
             response_model=list[LLMCallOut])
 def llm_calls(run_id: str, include_payloads: bool = False, requirement_id: str | None = None, agent_id: str | None = None,
-              session: Session = Depends(get_session)):
+              session: Session = Depends(get_session, scope="function")):
     query = select(LLMCall).where(LLMCall.run_id == _uuid(run_id))
     if requirement_id:
         # Persona calls cover all cases of a run at once and carry no requirement_id; include them.

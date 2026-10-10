@@ -42,7 +42,8 @@ def session_scope() -> Iterator[Session]:
 
 
 def get_session() -> Iterator[Session]:
-    """FastAPI dependency."""
+    """FastAPI dependency. Routers use Depends(get_session, scope="function") so the commit happens before the
+    response is sent; otherwise a client that reads right after a write can see stale data."""
     session = _session_factory()()
     try:
         yield session

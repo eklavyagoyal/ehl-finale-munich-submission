@@ -55,7 +55,7 @@ class ResetIn(BaseModel):
 
 
 @router.post("/reset", summary="Delete all evidence, themes, requirements and runs (keeps agents, policy, audit trail)")
-def reset(body: ResetIn, request: Request, session: Session = Depends(get_session), who: str = Depends(actor)):
+def reset(body: ResetIn, request: Request, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     require_cli(request)
     counts = {model.__tablename__: session.scalar(select(func.count()).select_from(model)) for model in DATA_TABLES}
     for model in DATA_TABLES:

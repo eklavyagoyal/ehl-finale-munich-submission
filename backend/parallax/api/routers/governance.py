@@ -20,13 +20,13 @@ router = APIRouter(prefix="/api", tags=["governance"])
 
 
 @router.get("/health")
-def health(session: Session = Depends(get_session)):
+def health(session: Session = Depends(get_session, scope="function")):
     session.execute(select(1))
     return {"status": "ok", "version": __version__}
 
 
 @router.get("/meta", summary="Runtime configuration the frontend may want to show")
-def meta(session: Session = Depends(get_session)):
+def meta(session: Session = Depends(get_session, scope="function")):
     s = get_settings()
     policy = active_policy(session)
     return {
@@ -60,7 +60,7 @@ def llm_models():
 
 
 @router.get("/tasks", summary="What needs the PM now (sidebar 'My tasks')", response_model=list[TaskOut])
-def tasks(session: Session = Depends(get_session)):
+def tasks(session: Session = Depends(get_session, scope="function")):
     from parallax.learning import latest_recommendation
     from parallax.models import Source
     from parallax.requirements import current_gates
@@ -90,12 +90,12 @@ def tasks(session: Session = Depends(get_session)):
 
 
 @router.get("/policy")
-def get_policy(session: Session = Depends(get_session)):
+def get_policy(session: Session = Depends(get_session, scope="function")):
     return row(active_policy(session))
 
 
 @router.get("/policy/versions")
-def policy_versions(session: Session = Depends(get_session)):
+def policy_versions(session: Session = Depends(get_session, scope="function")):
     return [row(p, exclude={"document"}) for p in session.scalars(select(PolicyVersion).order_by(PolicyVersion.id)).all()]
 
 
@@ -105,7 +105,7 @@ class PolicyIn(BaseModel):
 
 
 @router.put("/policy", summary="Publish a new policy version (weights, anchors, persona weighting)")
-def put_policy(body: PolicyIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+def put_policy(body: PolicyIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     try:
         policy = publish_policy(session, body.document, human_actor(who), body.rationale)
     except ValueError as error:
@@ -118,7 +118,7 @@ def put_policy(body: PolicyIn, session: Session = Depends(get_session), who: str
 def audit(requirement_id: str | None = None, actor_id: str | None = None, category: str | None = None,
           entity_type: str | None = None, entity_id: str | None = None, since: datetime | None = None,
           include_access: bool = False, limit: int = Query(200, le=2000), offset: int = 0,
-          session: Session = Depends(get_session)):
+          session: Session = Depends(get_session, scope="function")):
     query = select(AuditEvent)
     if requirement_id:
         query = query.where(AuditEvent.requirement_id == requirement_id)
@@ -140,18 +140,18 @@ def audit(requirement_id: str | None = None, actor_id: str | None = None, catego
 
 
 @router.get("/learning/decisions", summary="Decision history with AI-vs-PM agreement")
-def decisions(session: Session = Depends(get_session)):
+def decisions(session: Session = Depends(get_session, scope="function")):
     rows = session.scalars(select(PMDecision).order_by(PMDecision.id.desc())).all()
     return [row(d, exclude={"snapshot"}) for d in rows]
 
 
 @router.get("/learning/agreement", summary="Per agent: how often its stance matched the PM's later decision")
-def agreement(session: Session = Depends(get_session)):
+def agreement(session: Session = Depends(get_session, scope="function")):
     return agreement_stats(session)
 
 
 @router.get("/learning/lessons")
-def lessons(feature_key: str | None = None, session: Session = Depends(get_session)):
+def lessons(feature_key: str | None = None, session: Session = Depends(get_session, scope="function")):
     query = select(Lesson)
     if feature_key:
         query = query.where(Lesson.feature_key == feature_key)
