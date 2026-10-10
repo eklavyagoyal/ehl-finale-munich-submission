@@ -42,7 +42,7 @@ Comparisons are only made **within the same channel**:
 
 | Theme | Signal | Evidence |
 | --- | --- | --- |
-| **Charging & range** | Competitors ahead | Verdicts 23 : 10 for rivals. BMW owner critical share 0.80 vs 0.22 for rivals. 14 BMW verbatims single out Tesla Supercharger access. A6 e-tron: 800 V, 270 kW, 10–80 % in 21 min and up to 392 mi vs i5 205 kW / ~30 min |
+| **Charging & range** | Competitors ahead | Verdicts 23 : 10 for rivals. Relative to each side's average, charging is a BMW pain point (+0.21) but not a rival one (−0.07). 14 BMW verbatims single out Tesla Supercharger access. A6 e-tron: 800 V, 270 kW, 10–80 % in 21 min and up to 392 mi vs i5 205 kW / ~30 min |
 | **Driver assistance** | Competitors ahead | Verdicts 19 : 3 for rivals (automated parking, sign recognition, collision warning). Cadillac CT5 offers Super Cruise (cars.com lists it as standard); on the G60 the Highway Assistant is optional |
 | **Ride & handling** | BMW ahead | Verdicts 27 : 8 for BMW. Lowest relative critical share for BMW (−0.32). Press: BMW wins agility and steering vs G80, E-Class, EQE |
 | **Overall quality** | BMW ahead in comparisons, but NHTSA flags brakes | Verdicts 22 : 7 for BMW (build quality, mostly vs Tesla). But 59 % of 5 Series NHTSA complaints fall on brakes, steering and stability (rival median 25 %); 22 of 49 reference a recall, mostly the 2024 integrated brake module campaign (24V104000) |
@@ -56,7 +56,7 @@ Owner voice is thin on both sides (BMW EU Source A: ~160 statements; competitors
 
 - **i5 wins both EV comparison tests**: vs EQE 350 (AUTO BILD, 635 : 612) and vs A6 e-tron Avant (AUTO ZEITUNG, 3,305 : 3,292). It wins on handling, boot, rear seat posture and price.
 - **Rivals win on ride comfort and quietness**: E-Class estate (air suspension) beat the 520d Touring 3,322 : 3,294. EQE measured quieter (61 vs 63 dB), and the A6 e-tron's air suspension rides better than the i5 Touring.
-- **Charging gap**: ES90 (800 V, ~300 kW, 10–80 % in 22 min) and A6 e-tron (270 kW, 23 min) vs i5 at 205 kW / 30 min. EU verdicts on charging 5 : 3 for rivals; Charging is the biggest BMW EU owner theme with a high critical share (26 statements, 0.73 critical vs 0.14 for rivals).
+- **Charging gap**: ES90 (800 V, ~300 kW, 10–80 % in 22 min) and A6 e-tron (270 kW, 23 min) vs i5 at 205 kW / 30 min. EU verdicts on charging 5 : 3 for rivals; Charging is the biggest critical theme among BMW EU owners (26 statements, +0.17 above their average), while rivals' owners rate it below their average (−0.30).
 - **Touch-only controls are the shared weakness of every rival**: no physical climate controls on E-Class, A6, A6 e-tron, ES90 or Teslas. AUTO ZEITUNG prefers iDrive's controller to Mercedes touch controls. Audi is bringing back steering-wheel rollers for MY2026.
 - **Audi interior quality has slipped** (ADAC, AUTO ZEITUNG: hard plastics, piano black, rattles).
 
@@ -64,7 +64,7 @@ Owner voice is thin on both sides (BMW EU Source A: ~160 statements; competitors
 
 The cleanest owner-voice comparison: G68 and its rivals are all reviewed on Sohu Auto.
 
-- **Equipment value is the G68's weak spot, and rivals win every head-to-head**: verdicts 7 : 0 for rivals. G68 owners complain about cut equipment by trim: no ventilated seats on 525Li/530Li entry trims, sunroof that cannot open, stripped audio, paid remote start / remote climate, 3 months of free data. Audi A6L owners call their car better value. Chinese NEVs ship driver assistance and ventilated seats as standard where the i5 charges extra.
+- **Equipment per trim is the G68's weak spot; price value is contested**: verdicts 7 : 4 for rivals. G68 owners complain about cut equipment by trim: no ventilated seats on 525Li/530Li entry trims, sunroof that cannot open, stripped audio, paid remote start / remote climate, 3 months of free data. Audi A6L owners (5) call their car the best value of the German trio, and a Stelato S9 owner notes driver assistance and seat ventilation come standard where the i5 charges extra. The 4 BMW wins are G68 owners who found the (discounted) 5 Series cheaper or better value than the E-Class.
 - **Design**: verdicts 6 : 0 for rivals. E-Class L owners rate its styling above the new 5 Series, and some did not consider the BMW because of its looks.
 - **Driver assistance**: Huawei ADS (Luxeed S7, Stelato S9) and Zeekr highway assist are the most praised feature among NEV owners (rival relative critical share −0.22). Lidar is standard on SU7, 007 and S7, and the A6L e-tron uses Huawei NOA. The G68 offers L2 only, and China approved its first L3 cars in December 2025.
 - **Charging**: 800–900 V is the norm in the class (Zeekr 007 10–80 % in ~10 min, Luxeed S7 30–80 % in ~12 min) vs i5 L 30–80 % in ~36 min.
@@ -80,7 +80,7 @@ Candidate requirement areas, ordered by how consistently the evidence points the
 | 2 | **Hands-free / navigate-on-autopilot driver assistance, standard rather than optional** | CN, US | Strong in CN, medium in US | L3 approved in China (Dec 2025), Huawei targets L3 at scale by 2027 |
 | 3 | **Keep physical controls (rotary controller, climate keys) while the rest go touch-only** | EU, US | Medium: press praises iDrive, rivals criticised for touch-only | Audi (MY2027) and the new Lexus ES are bringing physical controls back |
 | 4 | **Ride comfort and cabin quietness (air suspension) to match Mercedes** | EU, US | Medium: comparison tests and dB measurements | — |
-| 5 | **Richer standard equipment per trim in China** (ventilation, sunroof, audio, connectivity included) | CN | Strong: 7 : 0 verdicts, recurring G68 owner complaints | NEV rivals add features by OTA updates |
+| 5 | **Richer standard equipment per trim in China** (ventilation, sunroof, audio, connectivity included) | CN | Strong: recurring G68 owner complaints about trim content; value verdicts 7 : 4 for rivals | NEV rivals add features by OTA updates |
 | 6 | **Natural-language / LLM voice assistant** | all | Medium: trend, little owner voice yet | Volvo (Gemini), Mercedes (ChatGPT), BMW Alexa+ (DE/US, OS 9) and DeepSeek (CN) |
 | 7 | **Software and electrical reliability** (screens, connectivity, brake-system software) | US | Medium: NHTSA on both sides (E-Class screen blackouts, 5 Series brake module) | — |
 | 8 | **Protect what BMW wins on**: handling, build quality, boot space, efficiency | all | Strong: BMW leads head-to-head verdicts on these themes | — |

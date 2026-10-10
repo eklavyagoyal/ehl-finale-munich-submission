@@ -36,7 +36,7 @@ def main() -> None:
                 owner[(r["market"], side, r["theme"])]["total"] += 1
                 owner[(r["market"], side, r["theme"])]["neg"] += r["feedback_type"] in CRITICAL
                 reviews[(r["market"], side, r["theme"])].add(r["review_ref"])
-            if r.get("comparison") and not is_bmw:
+            if r.get("comparison"):  # BMW-side records (G68 owners) compare too
                 verdict[(r["market"], r["theme"])][r["comparison"]] += 1
         elif r["kind"] == "bmw_mention" and r["relation"] in ("competitor_advantage", "bmw_advantage", "parity"):
             mkt = "US" if r.get("country") == "US" else ("EU" if r.get("country") in {"GB", "SE", "DK", "FI", "NO", "FR", "ES", "LV"} else None)
