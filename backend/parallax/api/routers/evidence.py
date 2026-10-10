@@ -157,7 +157,7 @@ def list_records(feature_key: str | None = None, market: str | None = None, chan
     if feature_key:
         query = query.where(Record.record_id.in_(select(Claim.record_id).where(Claim.feature_key == feature_key)))
     if market:
-        query = query.where(Record.markets.any(market))
+        query = query.where(Record.markets.contains([market]))  # uses the GIN index
     if channel:
         query = query.where(Source.channel == channel)
     if kind:
@@ -225,11 +225,19 @@ def coverage(session: Session = Depends(get_session)):
         .group_by("market").order_by(func.count().desc())
     ).all()
     claims = session.execute(select(Claim.review_status, Claim.derived, func.count()).group_by(Claim.review_status, Claim.derived)).all()
+    market = func.unnest(Record.markets).label("market")
+    cross = session.execute(
+        select(Source.stream, Source.channel, market, func.count())
+        .join(Record, Record.source_id == Source.source_id).where(Record.superseded_by.is_(None))
+        .group_by(Source.stream, Source.channel, market)
+    ).all()
     return {
         "records_by_channel": [{"stream": s, "channel": c, "review_status": r, "external_llm": e, "records": n}
                                for s, c, r, e, n in by_channel],
         "records_by_market": [{"market": m, "records": n} for m, n in markets],
         "claims": [{"review_status": r, "derived_from_bmw_labels": d, "claims": n} for r, d, n in claims],
+        # Channel x market matrix in one query, so clients never fan out one request per cell.
+        "records_by_channel_market": [{"stream": s, "channel": c, "market": m, "records": n} for s, c, m, n in cross],
         "llm_rule": "Only accepted sources with external_llm == true reach an external model.",
     }
 

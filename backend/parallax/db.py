@@ -17,7 +17,9 @@ class Base(DeclarativeBase):
 
 @lru_cache
 def get_engine(url: str | None = None) -> Engine:
-    return create_engine(url or get_settings().database_url, pool_pre_ping=True, pool_size=10, max_overflow=20)
+    # Every request uses two connections (endpoint + access log); fail fast instead of queueing for 30 s.
+    return create_engine(url or get_settings().database_url, pool_pre_ping=True, pool_size=20, max_overflow=20,
+                         pool_timeout=10)
 
 
 @lru_cache
