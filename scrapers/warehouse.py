@@ -1,4 +1,6 @@
-"""Star schema for app reviews: one fact table and five dimensions.
+"""Star schema for scraped customer voice: app reviews and YouTube comments.
+
+fact_review (apps) and fact_video_comment (YouTube) share dim_date and dim_market.
 
 Tables are Parquet files in outputs/warehouse/<table>.parquet. Surrogate keys are
 deterministic hashes of the natural key, so reruns and parallel runs produce the
@@ -48,6 +50,31 @@ SCHEMAS = {
     "dim_market": pa.schema([
         ("market_id", pa.int64()), ("market_code", pa.string()), ("region", pa.string()),
     ]),
+    "fact_video_comment": pa.schema([
+        ("date_id", pa.int64()),
+        ("video_id", pa.int64()),
+        ("market_id", pa.int64()),
+        ("vehicle_model_id", pa.int64()),
+        ("comment_id", pa.string()),
+        ("parent_comment_id", pa.string()),
+        ("content_date", pa.date32()),
+        ("content_datetime", pa.string()),
+        ("content", pa.string()),
+        ("like_count", pa.int64()),
+        ("reply_count", pa.int64()),
+        ("source", pa.string()),
+    ]),
+    "dim_video": pa.schema([
+        ("video_id", pa.int64()), ("youtube_video_id", pa.string()), ("title", pa.string()),
+        ("channel_title", pa.string()), ("published_date", pa.date32()),
+        ("view_count", pa.int64()), ("comment_count", pa.int64()),
+        ("search_query", pa.string()), ("search_language", pa.string()),
+        ("video_language", pa.string()),
+    ]),
+    "dim_vehicle_model": pa.schema([
+        ("vehicle_model_id", pa.int64()), ("brand", pa.string()),
+        ("vehicle_code", pa.string()), ("series", pa.string()),
+    ]),
 }
 
 # Primary keys, used to de-duplicate when new rows are merged into a table.
@@ -58,6 +85,9 @@ KEYS = {
     "dim_app_version": ["app_version_id"],
     "dim_os": ["os_id"],
     "dim_market": ["market_id"],
+    "fact_video_comment": ["comment_id"],
+    "dim_video": ["video_id"],
+    "dim_vehicle_model": ["vehicle_model_id"],
 }
 
 # Market regions as used in the BMW sales data (EU / CN / US / RoW).
@@ -69,6 +99,7 @@ EU_CODES = {
 }
 
 STORE_OS = {"app_store": "ios", "google_play": "android"}
+APP_TABLES = ["fact_review", "dim_date", "dim_app", "dim_app_version", "dim_os", "dim_market"]
 
 
 def surrogate_key(*parts):
@@ -94,6 +125,11 @@ def dim_date_row(d: date):
             "month": d.month, "day": d.day, "iso_week": iso.week, "day_of_week": iso.weekday}
 
 
+def dim_market_row(market_code):
+    return {"market_id": surrogate_key(market_code.lower()), "market_code": market_code.upper(),
+            "region": region_of(market_code)}
+
+
 def build_tables(reviews, apps):
     """Turn normalized reviews into fact and dimension rows.
 
@@ -101,7 +137,7 @@ def build_tables(reviews, apps):
              content, rating, app_version (or None).
     apps:    dicts with store, store_app_id, app_name, bundle_id, developer.
     """
-    tables = {name: {} for name in SCHEMAS}
+    tables = {name: {} for name in APP_TABLES}
     for a in apps:
         aid = surrogate_key(a["store"], a["store_app_id"])
         tables["dim_app"][aid] = {"app_id": aid, **a}
@@ -120,8 +156,7 @@ def build_tables(reviews, apps):
 
         tables["dim_date"][date_id(d)] = dim_date_row(d)
         tables["dim_os"][os_id] = {"os_id": os_id, "os_name": os_name}
-        tables["dim_market"][market_id] = {
-            "market_id": market_id, "market_code": r["market"].upper(), "region": region_of(r["market"])}
+        tables["dim_market"][market_id] = dim_market_row(r["market"])
         tables["fact_review"][r["review_id"]] = {
             "date_id": date_id(d),
             "app_id": app_id,

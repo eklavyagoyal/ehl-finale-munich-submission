@@ -1,0 +1,38 @@
+# YouTube comments under BMW 5 Series (G60) review videos.
+# Copy this file for another vehicle: change the vehicle block and the queries.
+# Spec: docs/specs/youtube-scraper.md
+
+name: bmw_5_series_youtube
+
+vehicle:
+  brand: BMW
+  code: G60                      # e-code, as in the BMW datasets
+  series: 5 Series
+  # Keep a video only if its title matches (case-insensitive). Filters out other
+  # models.
+  title_pattern: '\b(5er|5[ -]?series|s[ée]rie 5|i5|m5|g60|5[2-5]0[ide])\b'
+  # Drop videos about earlier 5 Series generations that were uploaded after the premiere.
+  exclude_title_pattern: '\b(g30|g31|f10|f11|e60|e61|e39)\b'
+  published_after: 2023-05-01    # G60 world premiere
+
+# Per market: the language and region YouTube should rank for, and the search queries.
+markets:
+  de:
+    language: de
+    queries: ["BMW 5er G60 Test", "BMW i5 Test", "BMW 5er Limousine Fahrbericht"]
+  gb:
+    language: en
+    queries: ["BMW 5 Series G60 review", "BMW i5 review UK", "BMW 520i review"]
+  us:
+    language: en
+    queries: ["2025 BMW 5 Series review", "BMW i5 review", "BMW 540i review"]
+  fr:
+    language: fr
+    queries: ["BMW Série 5 G60 essai", "BMW i5 essai", "BMW Série 5 2024 avis"]
+  it:
+    language: it
+    queries: ["BMW Serie 5 G60 prova", "BMW i5 prova su strada", "BMW Serie 5 2024 recensione"]
+
+limits:
+  videos_per_query: 10           # search results per query (max 50)
+  comment_pages_per_video: 3     # 100 comment threads per page
