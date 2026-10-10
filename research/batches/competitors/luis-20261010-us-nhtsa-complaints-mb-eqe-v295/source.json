@@ -1,0 +1,43 @@
+{
+  "document_type": "source",
+  "schema_version": "1.0",
+  "source_id": "luis-20261010-us-nhtsa-complaints-mb-eqe-v295",
+  "dataset_key": "nhtsa:complaints",
+  "stream": "competitors",
+  "channel": "other",
+  "title": "US · NHTSA owner complaints · Mercedes-Benz EQE sedan (V295)",
+  "locator": "https://api.nhtsa.gov/complaints/complaintsByVehicle",
+  "collected_at": "2026-10-10T16:15:05Z",
+  "collector": "luis (Claude Code research agents, run luis-competitors-2026-10-10)",
+  "is_example": false,
+  "normalized_record_count": 60,
+  "sampling": {
+    "method": "NHTSA complaints API (complaintsByVehicle) for every NHTSA model name matching the vehicle, model years 2023-2027; all returned complaints, deduplicated by ODI number. Script: competitors/tools/nhtsa.py",
+    "query": "make=MERCEDES-BENZ; model regex=^EQE; exclude=SUV; model years 2023-2027",
+    "date_start": "2023-01-03",
+    "date_end": "2026-09-24",
+    "retrieved_count": 60,
+    "complete": true,
+    "limitations": [
+      "Complaints are self-reported and almost all describe defects; volume scales with fleet size and age.",
+      "NHTSA model buckets are noisy (e.g. EQE sedan and SUV share buckets; complaints mentioning 'SUV' were dropped).",
+      "Narratives are NHTSA's published text (public domain); 17-character VIN-like tokens were replaced.",
+      "A complaint filed for several vehicles appears once per vehicle batch (dedup_key = ODI number + vehicle)."
+    ]
+  },
+  "provenance": {
+    "origin": "official",
+    "verification": "provenance_checked",
+    "notes": "Fetched directly from api.nhtsa.gov by competitors/tools/nhtsa.py; raw JSON kept in data/nhtsa/."
+  },
+  "artifact": {
+    "path": "data/nhtsa/mb_eqe_v295.json",
+    "sha256": "fd21a5ebfebff53777b70dc0a74bc78ce42cca0272317708ebc69b60241aa753"
+  },
+  "export_permissions": {
+    "git": true,
+    "external_llm": null,
+    "notes": "Stored on branch luis-competitors by the collector's decision. External LLM use not decided by the team yet."
+  },
+  "review_status": "pending"
+}

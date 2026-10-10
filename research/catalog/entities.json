@@ -6,6 +6,26 @@
     {"entity_id": "bmw:G70", "type": "vehicle_model", "label": "G70", "target": false},
     {"entity_id": "bmw:G68", "type": "vehicle_model", "label": "G68", "target": false},
     {"entity_id": "bmw:G60_G68", "type": "vehicle_group", "label": "G60/G68 combined", "target": false, "members": ["bmw:G60", "bmw:G68"]},
-    {"entity_id": "bmw:brand", "type": "brand", "label": "BMW", "target": false}
+    {"entity_id": "bmw:brand", "type": "brand", "label": "BMW", "target": false},
+    {"entity_id": "competitor:audi:a6-e-tron:ppe", "type": "vehicle_model", "label": "Audi A6 e-tron / A6 Sportback e-tron (PPE)", "target": false},
+    {"entity_id": "competitor:audi:a6:c9", "type": "vehicle_model", "label": "Audi A6 (C9)", "target": false},
+    {"entity_id": "competitor:audi:a6l-e-tron:ppe", "type": "vehicle_model", "label": "Audi A6L e-tron (PPE, China)", "target": false},
+    {"entity_id": "competitor:audi:a6l:c8l", "type": "vehicle_model", "label": "Audi A6L (C8 L, China)", "target": false},
+    {"entity_id": "competitor:audi:a6l:c9l", "type": "vehicle_model", "label": "Audi A6L, new generation (China, 'C9 L')", "target": false},
+    {"entity_id": "competitor:cadillac:ct5:gen1", "type": "vehicle_model", "label": "Cadillac CT5 (1st gen, MY2020+)", "target": false},
+    {"entity_id": "competitor:genesis:g80:rg3", "type": "vehicle_model", "label": "Genesis G80 incl. Electrified G80 (RG3)", "target": false},
+    {"entity_id": "competitor:lexus:es:gen8", "type": "vehicle_model", "label": "Lexus ES (8th gen, MY2026+)", "target": false},
+    {"entity_id": "competitor:lexus:es:xz10", "type": "vehicle_model", "label": "Lexus ES (7th gen, XZ10)", "target": false},
+    {"entity_id": "competitor:luxeed:s7:gen1", "type": "vehicle_model", "label": "Luxeed S7 (HIMA, 1st gen)", "target": false},
+    {"entity_id": "competitor:mercedes-benz:e-class-l:v214", "type": "vehicle_model", "label": "Mercedes-Benz E-Class L (V214, China)", "target": false},
+    {"entity_id": "competitor:mercedes-benz:e-class:w214", "type": "vehicle_model", "label": "Mercedes-Benz E-Class (W214)", "target": false},
+    {"entity_id": "competitor:mercedes-benz:eqe-sedan:v295", "type": "vehicle_model", "label": "Mercedes-Benz EQE sedan (V295)", "target": false},
+    {"entity_id": "competitor:nio:et7:gen1", "type": "vehicle_model", "label": "NIO ET7 (1st gen, 2024 facelift)", "target": false},
+    {"entity_id": "competitor:stelato:s9:gen1", "type": "vehicle_model", "label": "Stelato S9 (HIMA, 1st gen)", "target": false},
+    {"entity_id": "competitor:tesla:model-3:highland", "type": "vehicle_model", "label": "Tesla Model 3 (Highland)", "target": false},
+    {"entity_id": "competitor:tesla:model-s:2021-refresh", "type": "vehicle_model", "label": "Tesla Model S (2021 refresh)", "target": false},
+    {"entity_id": "competitor:volvo:es90:gen1", "type": "vehicle_model", "label": "Volvo ES90 (1st gen)", "target": false},
+    {"entity_id": "competitor:xiaomi:su7:gen1", "type": "vehicle_model", "label": "Xiaomi SU7 (1st gen)", "target": false},
+    {"entity_id": "competitor:zeekr:007:gen1", "type": "vehicle_model", "label": "Zeekr 007 (1st gen)", "target": false}
   ]
 }

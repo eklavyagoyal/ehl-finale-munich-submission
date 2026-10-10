@@ -1,0 +1,26 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:cn_nev-E0075": {
+   "record_id": "cn_nev-E0075",
+   "kind": "equipment",
+   "market": "CN",
+   "brand": "Luxeed",
+   "model": "S7",
+   "generation": "S7 1st gen (2023-)",
+   "trim_scope": "2025 S7 Max RWD long-range (best)",
+   "feature": "F15_bev_range",
+   "theme": "range_charging_efficiency",
+   "availability": "standard",
+   "value": "855 km (Max RWD LR, 100 kWh NMC); 703 km CLTC Ultra 4WD Sport",
+   "source_type": "press_review",
+   "url": "https://data.carnewschina.com/database/luxeed/luxeed-s7/2025",
+   "as_of": "2025",
+   "evidence_tier": "B",
+   "notes": "Autohome 2025 lists 705/855/785/703 km without trim mapping; 12.4 kWh/100 km claimed.",
+   "agent": "cn_nev",
+   "exact_excerpt": null
+  }
+ },
+ "claims": {}
+}

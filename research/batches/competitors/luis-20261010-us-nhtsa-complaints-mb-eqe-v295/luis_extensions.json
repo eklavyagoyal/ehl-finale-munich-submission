@@ -1,0 +1,509 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:nhtsa:mb_eqe_v295:11761796": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "interior_design_quality"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11749068": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11745521": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11730020": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11730075": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11729782": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "climate"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11729549": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "interior_design_quality"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11713424": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "safety",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11709572": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "hmi_infotainment",
+    "ride_handling",
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11701695": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11696247": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11696352": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11671437": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11666566": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11664231": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11639919": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11619675": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11619500": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11616107": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance",
+    "range_charging_efficiency"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11615581": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11614862": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11596511": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11592912": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11592597": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11584340": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11579404": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "safety",
+    "access_locking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11579179": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11579164": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "safety",
+    "access_locking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11572481": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "adas_parking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11571649": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11570356": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11567208": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11552764": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11536718": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11519132": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance",
+    "range_charging_efficiency",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11499903": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11766723": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11754068": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11748503": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11741951": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11734959": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "interior_design_quality"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11720558": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "overall_quality_ownership",
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11718164": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "range_charging_efficiency",
+    "lighting_visibility",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11706004": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "interior_design_quality"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11695472": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11689289": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11684105": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11677127": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "range_charging_efficiency",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11650193": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11607620": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11606384": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11604988": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11603900": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11551330": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11544857": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11707220": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11692292": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11766383": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11742335": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:mb_eqe_v295:11750792": {
+   "vehicle_key": "mb_eqe_v295",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  }
+ },
+ "claims": {}
+}

@@ -1,0 +1,46 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:bmw_baseline_outlook-E0025": {
+   "record_id": "bmw_baseline_outlook-E0025",
+   "kind": "equipment",
+   "market": "US",
+   "brand": "BMW",
+   "model": "5 Series",
+   "generation": "G60",
+   "trim_scope": "530i (entry), MY2027",
+   "feature": "F04_voice_assistant",
+   "theme": "hmi_infotainment",
+   "availability": "standard",
+   "value": "Voice Recognition System standard (BMW Intelligent Personal Assistant per BMW US press release)",
+   "source_type": "press_review",
+   "url": "https://www.kbb.com/bmw/5-series/2027/specs/",
+   "as_of": "2026-10",
+   "evidence_tier": "B",
+   "notes": "KBB spec table lists 'Voice Recognition System' as Standard on 530i. The 2023 US press release mentions voice commands to the BMW Intelligent Personal Assistant. No source states an LLM-based assistant for the US G60.",
+   "agent": "bmw_baseline_outlook",
+   "exact_excerpt": null
+  },
+  "luis:bmw_baseline_outlook-E0028": {
+   "record_id": "bmw_baseline_outlook-E0028",
+   "kind": "equipment",
+   "market": "US",
+   "brand": "BMW",
+   "model": "5 Series",
+   "generation": "G60",
+   "trim_scope": "530i (entry), MY2027",
+   "feature": "F07_digital_key",
+   "theme": "access_locking",
+   "availability": "unknown",
+   "value": "Phone-as-key not stated; 'Proximity Sensing Keyless Entry' listed as standard",
+   "source_type": "press_review",
+   "url": "https://www.kbb.com/bmw/5-series/2027/specs/",
+   "as_of": "2026-10",
+   "evidence_tier": "B",
+   "notes": "Difference to DE: keyless proximity entry is standard on the US 530i but only in Travel Paket 7LK in Germany. BMW Digital Key / Digital Key Plus (UWB) not mentioned in any fetched US source.",
+   "agent": "bmw_baseline_outlook",
+   "exact_excerpt": null
+  }
+ },
+ "claims": {}
+}

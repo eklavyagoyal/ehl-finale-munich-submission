@@ -1,0 +1,900 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:nhtsa:cadillac_ct5:11765794": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11754827": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11752920": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11750891": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11750953": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11750954": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11740017": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11737209": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11732916": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11722816": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11721714": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11712001": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11710542": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11708590": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11705360": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance",
+    "range_charging_efficiency",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11701649": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11700097": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11697874": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11694212": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11683415": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11681128": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11681133": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11676351": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11671918": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11665068": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11664417": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11657343": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership",
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11654080": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11644689": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11584335": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11560832": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11541139": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11532759": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11439475": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling",
+    "hmi_infotainment",
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11428695": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11385267": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11359880": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11355006": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11330364": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11766863": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11766791": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11765920": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11765625": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11764894": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11765139": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11761126": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11760237": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11755622": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11748689": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11738510": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11728484": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11720298": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11717706": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling",
+    "access_locking",
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11715761": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11711339": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11681668": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11680204": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11680213": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11679649": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11676354": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11671823": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling",
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11641989": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11636164": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11632837": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11605992": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "adas_parking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11604820": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11471219": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11430956": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "safety",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11763729": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11752089": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11751375": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11740325": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11711602": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11648919": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11576798": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11504437": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11487338": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11478497": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11474858": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11767953": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11761978": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11731179": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11709101": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11684787": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11679277": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11676071": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "safety",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11661103": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11652706": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11640854": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11593927": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11519323": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11494586": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11701084": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11656917": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11766843": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "safety",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11759236": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11713127": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11697126": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11690654": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11640259": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11621061": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "hmi_infotainment",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11614372": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11614207": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11768848": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11764078": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11747734": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11738910": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11718643": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:cadillac_ct5:11687842": {
+   "vehicle_key": "cadillac_ct5",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  }
+ },
+ "claims": {}
+}
