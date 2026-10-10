@@ -14,8 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useCoverage, useMeta, useRecords, useSources } from "@/lib/api/hooks";
-import type { Coverage, Source } from "@/lib/api/types";
+import { useCoverage, useMeta, usePipeline, useRecords, useSources } from "@/lib/api/hooks";
+import type { Coverage, Source, SourcesStage } from "@/lib/api/types";
 import { fmtCount, fmtDateTime, humanize } from "@/lib/format";
 import { channelLabel, isSynthetic, STREAM_ORDER, streamLabel, toSummary } from "@/lib/provenance";
 import { cn } from "cn";
@@ -98,6 +98,8 @@ function Overview() {
   const { data, error, isLoading } = useCoverage();
   const { data: meta } = useMeta();
   const { data: sources } = useSources();
+  const { data: pipeline } = usePipeline();
+  const lastImport = pipeline?.stages.find((s): s is SourcesStage => s.key === "sources")?.last_import;
 
   if (error) return <ErrorState error={error} />;
   if (isLoading || !data) return <LoadingRows />;
@@ -108,11 +110,14 @@ function Overview() {
 
   return (
     <div className="flex flex-col gap-12">
-      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="flex flex-col gap-2">
+        <p className="text-xs text-muted-foreground">Last import {lastImport ? fmtDateTime(lastImport) : "–"}</p>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {streams.map((stream) => (
           <StreamCard key={stream} stream={stream} coverage={data} sources={(sources ?? []).filter((s) => s.stream === stream)} />
         ))}
         <ConnectSourceCard />
+        </div>
       </section>
 
       {total === 0 ? (
@@ -133,7 +138,8 @@ function StreamCard({ stream, coverage, sources }: { stream: string; coverage: C
   const byReview = new Map<string, number>();
   for (const r of rows) byReview.set(r.review_status, (byReview.get(r.review_status) ?? 0) + r.records);
   const toModel = rows.filter((r) => r.external_llm && r.review_status === "accepted").reduce((n, r) => n + r.records, 0);
-  const lastImport = sources.map((s) => s.updated_at ?? s.collected_at).filter((d): d is string => !!d).sort().pop();
+  // updated_at also moves on a review, so this is the last change, not the last import.
+  const lastChange = sources.map((s) => s.updated_at ?? s.collected_at).filter((d): d is string => !!d).sort().pop();
   const synthetic = sources.filter(isSynthetic).length;
 
   return (
@@ -168,8 +174,8 @@ function StreamCard({ stream, coverage, sources }: { stream: string; coverage: C
           <dd className="tabular-nums">
             {fmtCount(toModel)} <span className="text-muted-foreground">of {fmtCount(records)}</span>
           </dd>
-          <dt className="text-muted-foreground">Last import</dt>
-          <dd>{lastImport ? fmtDateTime(lastImport) : "–"}</dd>
+          <dt className="text-muted-foreground">Last change</dt>
+          <dd>{lastChange ? fmtDateTime(lastChange) : "–"}</dd>
         </dl>
       )}
     </Link>
