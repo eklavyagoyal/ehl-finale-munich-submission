@@ -7,15 +7,7 @@ import { toast } from "sonner";
 
 import { ErrorState } from "@/components/states";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { sanitizePm, writePmCookie } from "@/lib/actor";
@@ -23,15 +15,7 @@ import { refreshAll, useMeta } from "@/lib/api/hooks";
 
 const NAME = /^[a-z0-9][a-z0-9_-]{0,31}$/;
 
-export function SettingsDialog({
-  pm,
-  onPmChange,
-  canSignOut,
-}: {
-  pm: string;
-  onPmChange: (name: string) => void;
-  canSignOut: boolean;
-}) {
+export function SettingsDialog({ pm, onPmChange, signedIn }: { pm: string; onPmChange: (name: string) => void; signedIn: boolean }) {
   const router = useRouter();
   const { data: meta, error } = useMeta();
   const [open, setOpen] = useState(false);
@@ -45,6 +29,10 @@ export function SettingsDialog({
   }
 
   function save() {
+    if (signedIn) {
+      setOpen(false);
+      return;
+    }
     const value = name.trim().toLowerCase();
     if (!NAME.test(value)) {
       setInvalid(true);
@@ -79,26 +67,34 @@ export function SettingsDialog({
           <DialogDescription>Who you are in the audit trail, and which backend this cockpit talks to.</DialogDescription>
         </DialogHeader>
 
-        <div className="grid gap-2">
-          <Label htmlFor="pm-name">Your name</Label>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">pm:</span>
-            <Input
-              id="pm-name"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                setInvalid(false);
-              }}
-              aria-invalid={invalid}
-            />
+        {signedIn ? (
+          <div className="grid gap-1 text-sm">
+            <p className="text-[13px] text-muted-foreground">Signed in as</p>
+            <p className="font-medium">pm:{pm}</p>
+            <p className="text-xs text-muted-foreground">Every decision, edit and override is signed with this account.</p>
           </div>
-          <p className={invalid ? "text-xs text-destructive" : "text-xs text-muted-foreground"}>
-            {invalid
-              ? "Use lowercase letters, digits, - or _ (up to 32 characters)."
-              : "Every decision, edit and override is signed with this name."}
-          </p>
-        </div>
+        ) : (
+          <div className="grid gap-2">
+            <Label htmlFor="pm-name">Your name</Label>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">pm:</span>
+              <Input
+                id="pm-name"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setInvalid(false);
+                }}
+                aria-invalid={invalid}
+              />
+            </div>
+            <p className={invalid ? "text-xs text-destructive" : "text-xs text-muted-foreground"}>
+              {invalid
+                ? "Use lowercase letters, digits, - or _ (up to 32 characters)."
+                : "Every decision, edit and override is signed with this name."}
+            </p>
+          </div>
+        )}
 
         <div className="grid gap-1.5 border-t pt-4 text-sm">
           <p className="text-[13px] text-muted-foreground">Backend</p>
@@ -124,12 +120,12 @@ export function SettingsDialog({
         </div>
 
         <DialogFooter>
-          {canSignOut && (
+          {signedIn && (
             <Button variant="ghost" className="mr-auto" onClick={signOut}>
               Sign out
             </Button>
           )}
-          <Button onClick={save}>Save</Button>
+          <Button onClick={save}>{signedIn ? "Close" : "Save"}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

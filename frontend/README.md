@@ -36,6 +36,18 @@ npx openapi-typescript https://parallax.dehlwes.net/api/openapi.json -o src/lib/
 
 Simulated (personas) and assumed (departments) ratings are shown as hypotheses with ranges; scores always show their low–high range.
 
+## Sign-in (optional, frontend only)
+
+Off by default. Turn it on with env on the frontend server; the signed-in name becomes the `X-Actor` (`pm:<name>`), so no backend change is needed.
+
+| Env | Effect |
+| --- | --- |
+| `PARALLAX_WEB_USERS` | One account per PM, comma-separated `name:secret`. Use `node scripts/hash-password.mjs <name>` to print a hashed entry (`name:scrypt:<salt>:<hash>`); plain `name:password` also works. |
+| `PARALLAX_WEB_PASSWORD` | Fallback: any name with one shared password. Ignored when `PARALLAX_WEB_USERS` is set. |
+| `PARALLAX_WEB_SESSION_SECRET` | Signs the 7-day session cookie. Changing any of these three signs everyone out. |
+
+Without sign-in, `/health`, `/login` and `/auth/login` stay open; everything else, including the `/bff` proxy, needs a session.
+
 ## Deploy (nexus)
 
 `Dockerfile` builds a standalone server on `node:22.23.3-bookworm-slim`, runs as a non-root user and listens on `0.0.0.0:$PORT`. Runtime env only: `PARALLAX_API_URL`, `PARALLAX_API_TOKEN`. The API stays under `/api` on the same host; the frontend owns everything else.

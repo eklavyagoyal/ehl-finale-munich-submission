@@ -21,7 +21,7 @@ import {
 import { useRequirements, useTasks } from "@/lib/api/hooks";
 import { humanize } from "@/lib/format";
 
-export function AppSidebar({ initialPm, canSignOut }: { initialPm: string; canSignOut: boolean }) {
+export function AppSidebar({ initialPm, signedIn }: { initialPm: string; signedIn: boolean }) {
   const pathname = usePathname();
   const { data: tasks } = useTasks();
   const { data: requirements } = useRequirements();
@@ -85,7 +85,7 @@ export function AppSidebar({ initialPm, canSignOut }: { initialPm: string; canSi
             <span className="truncate text-xs text-muted-foreground">Product manager · 5 Series</span>
           </span>
           <span className="group-data-[collapsible=icon]:hidden">
-            <SettingsDialog pm={pm} onPmChange={setPm} canSignOut={canSignOut} />
+            <SettingsDialog pm={pm} onPmChange={setPm} signedIn={signedIn} />
           </span>
         </div>
       </SidebarFooter>

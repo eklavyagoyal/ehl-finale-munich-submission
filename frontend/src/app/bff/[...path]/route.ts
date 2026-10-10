@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
 
 import { ACTOR_COOKIE, sanitizePm } from "@/lib/actor";
-import { SESSION_COOKIE, verifySession } from "@/lib/session";
+import { authEnabled, readSession, SESSION_COOKIE, verifySession } from "@/lib/session";
 
 // Server-side proxy to the Parallax API. The browser only ever talks to /bff; the token stays here.
 // /bff/requirements and /bff/api/requirements both map to ${PARALLAX_API_URL}/api/requirements,
@@ -36,7 +36,9 @@ async function proxy(request: NextRequest, context: RouteContext<"/bff/[...path]
   if (contentType) headers.set("content-type", contentType);
   const token = process.env.PARALLAX_API_TOKEN;
   if (token) headers.set("authorization", `Bearer ${token}`);
-  headers.set("x-actor", `pm:${sanitizePm(jar.get(ACTOR_COOKIE)?.value)}`);
+  // Signed-in PMs act under their account name; without sign-in the settings cookie names the PM.
+  const pm = authEnabled() ? readSession(jar.get(SESSION_COOKIE)?.value)?.pm : sanitizePm(jar.get(ACTOR_COOKIE)?.value);
+  headers.set("x-actor", `pm:${pm ?? "anonymous"}`);
 
   const body = request.method === "GET" || request.method === "HEAD" ? undefined : await request.arrayBuffer();
 
