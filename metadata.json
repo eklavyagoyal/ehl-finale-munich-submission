@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4K7VWTNRKYPMSZ6VA0HHMN5",
+  "strategy": "manual-commit",
+  "branch": "nikita-excel-exploration",
+  "checkpoints_count": 6,
+  "files_touched": [
+    "notebooks/g60_us_analysis.ipynb"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 76,
+    "cache_creation_tokens": 142796,
+    "cache_read_tokens": 3956637,
+    "output_tokens": 55594,
+    "api_call_count": 38
+  }
+}
