@@ -137,9 +137,33 @@ function Overview() {
   return (
     <div className="flex flex-col gap-10">
       <p className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-        <span className="text-foreground tabular-nums">{total}</span> records ·
-        <span className="text-foreground tabular-nums">{claims}</span> interpretations (claims) ·
-        <span className="text-foreground tabular-nums">{sources?.length ?? "–"}</span> sources
+        <Link href="/sources?tab=records" className="text-foreground tabular-nums hover:underline">
+          {total}
+        </Link>{" "}
+        records ·
+        <HoverCard openDelay={100} closeDelay={60}>
+          <HoverCardTrigger asChild>
+            <button type="button" className="text-foreground tabular-nums underline decoration-dotted underline-offset-4">
+              {claims}
+            </button>
+          </HoverCardTrigger>
+          <HoverCardContent align="start" className="w-64 text-xs">
+            <p className="mb-1.5 text-muted-foreground">Interpretations of records, by origin and review:</p>
+            {data.claims.map((c, i) => (
+              <p key={i} className="flex justify-between gap-3">
+                <span>
+                  {c.derived_from_bmw_labels ? "From BMW labels" : "Not from BMW labels"} · {c.review_status}
+                </span>
+                <span className="tabular-nums">{c.claims}</span>
+              </p>
+            ))}
+          </HoverCardContent>
+        </HoverCard>
+        interpretations (claims) ·
+        <Link href="/sources?tab=list" className="text-foreground tabular-nums hover:underline">
+          {sources?.length ?? "–"}
+        </Link>{" "}
+        sources
         {sources && syntheticCount > 0 && (
           <span className="flex items-center gap-1.5">
             ·<SyntheticBadge />

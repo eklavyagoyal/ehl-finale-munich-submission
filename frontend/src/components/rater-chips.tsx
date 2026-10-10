@@ -32,7 +32,10 @@ function value(r: Rating): string {
 }
 
 // One chip per kind of rater behind a criterion; the hover lists every rating with its rationale.
-export function RaterChips({ ratings }: { ratings: Rating[] }) {
+// `counted` are the rating ids the backend used for the score: observed data outranks simulations
+// and assumptions, so a kind whose ratings were all left out is shown faded and labelled.
+export function RaterChips({ ratings, counted }: { ratings: Rating[]; counted?: number[] }) {
+  const used = counted ? new Set(counted) : null;
   const byKind = new Map<RaterKind, Rating[]>();
   for (const r of ratings) {
     const kind = raterKind(r.rater_type);
@@ -43,10 +46,11 @@ export function RaterChips({ ratings }: { ratings: Rating[] }) {
     <span className="flex flex-wrap gap-1">
       {RATER_KINDS.filter((k) => byKind.has(k.kind)).map((k) => {
         const items = byKind.get(k.kind)!;
+        const ignored = used !== null && items.every((r) => !used.has(r.id));
         return (
           <HoverCard key={k.kind} openDelay={100} closeDelay={60}>
             <HoverCardTrigger asChild>
-              <button type="button">
+              <button type="button" className={ignored ? "opacity-45" : undefined}>
                 <ToneBadge tone={KIND_TONE[k.kind]}>
                   {k.label}
                   {items.length > 1 && <span className="ml-1 opacity-70">{items.length}</span>}
@@ -56,6 +60,7 @@ export function RaterChips({ ratings }: { ratings: Rating[] }) {
             <HoverCardContent align="end" className="w-80 text-xs">
               <p className="mb-2 text-muted-foreground">
                 {k.label} · {k.meaning}
+                {ignored && " · not counted in this score, stronger data was available"}
               </p>
               <div className="flex flex-col gap-2">
                 {items.map((r) => (
@@ -65,6 +70,7 @@ export function RaterChips({ ratings }: { ratings: Rating[] }) {
                       <span className="text-muted-foreground">
                         {" "}
                         · {value(r)} / 5 · {humanize(r.status)}
+                        {used !== null && !used.has(r.id) && " · not counted"}
                       </span>
                     </p>
                     {r.rationale && <p className="line-clamp-3 text-foreground/80">{r.rationale}</p>}

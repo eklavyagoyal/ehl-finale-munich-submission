@@ -4,6 +4,7 @@ import { RaterChips, RaterLegend } from "@/components/rater-chips";
 import { ScoreBar } from "@/components/score-bar";
 import { EmptyState } from "@/components/states";
 import { ToneBadge } from "@/components/tone-badge";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { actorLabel, fmtDateTime, fmtRange, fmtScore, gateTone, humanize, isHypothesis } from "@/lib/format";
 
@@ -59,7 +60,7 @@ export function OverviewTab() {
                     <span className="text-right tabular-nums text-muted-foreground">
                       {c.low != null && c.high != null && c.low !== c.high ? fmtRange(c.low, c.high, 1) : fmtScore(c.score ?? c.low, 1)}
                     </span>
-                    <RaterChips ratings={ratingsFor(c.criterion)} />
+                    <RaterChips ratings={ratingsFor(c.criterion)} counted={c.rating_ids} />
                   </div>
                 );
               })}
@@ -129,12 +130,36 @@ export function OverviewTab() {
           {recommendation ? (
             <>
               <p className="font-medium">{humanize(recommendation.recommendation)}</p>
-              <p className="mt-0.5 text-muted-foreground">
-                {Object.entries(recommendation.tally.counts)
-                  .map(([vote, n]) => `${n} ${humanize(vote).toLowerCase()}`)
-                  .join(" · ")}
-                {recommendation.tally.gate_cap && ` · capped: ${recommendation.tally.gate_cap}`}
-              </p>
+              <HoverCard openDelay={100} closeDelay={60}>
+                <HoverCardTrigger asChild>
+                  <button type="button" className="mt-0.5 text-left text-muted-foreground underline decoration-dotted underline-offset-4">
+                    {Object.entries(recommendation.tally.counts)
+                      .map(([vote, n]) => `${n} ${humanize(vote).toLowerCase()}`)
+                      .join(" · ")}
+                    {recommendation.tally.gate_cap && ` · capped: ${recommendation.tally.gate_cap}`}
+                  </button>
+                </HoverCardTrigger>
+                <HoverCardContent align="start" className="w-80 text-xs">
+                  <p className="mb-2 text-muted-foreground">Judge votes in run {recommendation.run_id.slice(0, 8)}</p>
+                  <div className="flex flex-col gap-2">
+                    {detail.votes
+                      .filter((v) => !v.run_id || v.run_id === recommendation.run_id)
+                      .map((v) => (
+                        <div key={v.agent_id} className="flex flex-col gap-0.5">
+                          <p>
+                            <span className="font-medium">{actorLabel(v.agent_id)}</span>
+                            <span className="text-muted-foreground">
+                              {" "}
+                              · {humanize(v.vote)} · {v.model}
+                            </span>
+                          </p>
+                          {v.rationale && <p className="line-clamp-2 text-foreground/80">{v.rationale}</p>}
+                        </div>
+                      ))}
+                  </div>
+                  {recommendation.tally.reason && <p className="mt-2 text-muted-foreground">{recommendation.tally.reason}</p>}
+                </HoverCardContent>
+              </HoverCard>
               {recommendation.minority_report.length > 0 && (
                 <div className="mt-2 flex flex-col gap-1">
                   <p className="text-[13px] text-muted-foreground">Dissent</p>
