@@ -152,6 +152,15 @@ def test_records_market_filter_and_coverage_matrix(client, drafted):
     assert {"stream": "bmw", "channel": "bmw_feedback", "market": "US", "records": 8} in matrix
 
 
+def test_pipeline_and_signals(client, drafted):
+    stages = client.get("/api/pipeline").json()
+    assert [s["key"] for s in stages["stages"]] == ["sources", "processing", "signals", "experts", "decision"]
+    assert stages["next_action"]["label"]
+    pains = client.get("/api/signals", params={"market": "US", "kind": "pain"}).json()["items"]
+    assert pains and all(p["kind"] == "pain" for p in pains)
+    assert pains[0]["sample_quotes"]
+
+
 def test_admin_reset_needs_cli_token_and_keeps_audit(drafted):
 
     from fastapi.testclient import TestClient

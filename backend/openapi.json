@@ -429,6 +429,102 @@
     }
    }
   },
+  "/api/signals": {
+   "get": {
+    "tags": [
+     "pipeline"
+    ],
+    "summary": "What customers say, ranked: pain points, strengths, requests (from deterministic theme counts)",
+    "operationId": "signals_api_signals_get",
+    "parameters": [
+     {
+      "name": "market",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "US, EU, CN or omit for all markets pooled",
+       "title": "Market"
+      },
+      "description": "US, EU, CN or omit for all markets pooled"
+     },
+     {
+      "name": "kind",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "pain",
+        "strength",
+        "request",
+        "mixed",
+        "all"
+       ],
+       "type": "string",
+       "default": "all",
+       "title": "Kind"
+      }
+     },
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 100,
+       "default": 15,
+       "title": "Limit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/pipeline": {
+   "get": {
+    "tags": [
+     "pipeline"
+    ],
+    "summary": "Start page: one card per stage with counts, status and the next action",
+    "operationId": "pipeline_api_pipeline_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/ingest": {
    "post": {
     "tags": [
