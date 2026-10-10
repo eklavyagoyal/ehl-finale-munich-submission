@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4K4MQ8KKS07S1JDAB857XFP",
+  "strategy": "manual-commit",
+  "branch": "luis-competitors",
+  "checkpoints_count": 5,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 96,
+    "cache_creation_tokens": 158184,
+    "cache_read_tokens": 5341449,
+    "output_tokens": 79375,
+    "api_call_count": 46,
+    "subagent_tokens": {
+      "input_tokens": 112,
+      "cache_creation_tokens": 640716,
+      "cache_read_tokens": 2868422,
+      "output_tokens": 2222,
+      "api_call_count": 56
+    }
+  }
+}
