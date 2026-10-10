@@ -32,7 +32,7 @@ export default function RequirementsPage() {
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "G60" }, { label: "Requirements" }]} />
+      <PageHeader crumbs={[{ label: "G60" }, { label: "Decision" }]} />
 
       <div className="-ml-2.5 mt-2 flex flex-wrap items-center gap-1">
         <FilterPill active={!status} onClick={() => setStatus(undefined)} label="All" count={all.data?.length} />
@@ -70,7 +70,7 @@ export default function RequirementsPage() {
           {data && data.length === 0 && (
             <EmptyState title="No requirements yet">
               Requirements exist once evidence is imported. Draft them from the signals in{" "}
-              <Link href="/sources?tab=signals" className="text-foreground underline-offset-4 hover:underline">
+              <Link href="/signals" className="text-foreground underline-offset-4 hover:underline">
                 Sources
               </Link>
               .

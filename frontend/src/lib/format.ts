@@ -64,6 +64,10 @@ export function fmtRange(low: number | null | undefined, high: number | null | u
   return a === b ? a : `${a}–${b}`;
 }
 
+export function fmtCount(value: number | null | undefined): string {
+  return value == null ? "–" : value.toLocaleString("en-US");
+}
+
 export function fmtTime(iso: string | null | undefined): string {
   if (!iso) return "";
   return new Date(iso).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });

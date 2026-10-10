@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity, Database, History, Inbox, ListChecks } from "lucide-react";
+import { Activity, History } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -18,21 +18,25 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useRequirements, useTasks } from "@/lib/api/hooks";
+import { useRequirements } from "@/lib/api/hooks";
 import { humanize } from "@/lib/format";
+import { STAGES } from "@/lib/stages";
 
 export function AppSidebar({ initialPm, signedIn }: { initialPm: string; signedIn: boolean }) {
   const pathname = usePathname();
-  const { data: tasks } = useTasks();
   const { data: requirements } = useRequirements();
   const [pm, setPm] = useState(initialPm);
 
-  const items = [
-    { href: "/tasks", label: "My tasks", icon: Inbox, count: tasks?.length },
-    { href: "/requirements", label: "Requirements", icon: ListChecks, count: requirements?.length },
-    { href: "/sources", label: "Sources", icon: Database },
-    { href: "/activity", label: "Activity", icon: Activity },
-    { href: "/history", label: "History", icon: History },
+  // The PM's path in stage order; Activity and History sit apart at the bottom.
+  const path = STAGES.map((s) => ({
+    href: s.href,
+    label: s.title,
+    icon: s.icon,
+    count: s.key === "decision" ? requirements?.length : undefined,
+  }));
+  const trail = [
+    { href: "/activity", label: "Activity", icon: Activity, count: undefined },
+    { href: "/history", label: "History", icon: History, count: undefined },
   ];
 
   return (
@@ -41,7 +45,7 @@ export function AppSidebar({ initialPm, signedIn }: { initialPm: string; signedI
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/tasks">
+              <Link href="/">
                 <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-xs font-semibold text-primary-foreground">
                   P
                 </span>
@@ -56,23 +60,25 @@ export function AppSidebar({ initialPm, signedIn }: { initialPm: string; signedI
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={item.label}>
-                    <Link href={item.href}>
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                  {item.count !== undefined && <SidebarMenuBadge>{item.count}</SidebarMenuBadge>}
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {[path, trail].map((items, i) => (
+          <SidebarGroup key={i} className={i === 1 ? "mt-auto" : undefined}>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {items.map((item) => (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={item.label}>
+                      <Link href={item.href}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                    {item.count !== undefined && <SidebarMenuBadge>{item.count}</SidebarMenuBadge>}
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ))}
       </SidebarContent>
 
       <SidebarFooter>

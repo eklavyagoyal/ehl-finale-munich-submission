@@ -2,12 +2,14 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { Fragment } from "react";
 
+import { TasksCounter } from "@/components/tasks-counter";
+
 export interface Crumb {
   label: string;
   href?: string;
 }
 
-// The only header: a breadcrumb row at the top edge, page actions on the right.
+// The only header: a breadcrumb row at the top edge, page actions and the tasks counter on the right.
 export function PageHeader({ crumbs, children }: { crumbs: Crumb[]; children?: React.ReactNode }) {
   return (
     <div className="flex min-h-12 flex-wrap items-center gap-3 py-2">
@@ -28,7 +30,10 @@ export function PageHeader({ crumbs, children }: { crumbs: Crumb[]; children?: R
           );
         })}
       </nav>
-      <div className="ml-auto flex items-center gap-2">{children}</div>
+      <div className="ml-auto flex items-center gap-2">
+        {children}
+        <TasksCounter />
+      </div>
     </div>
   );
 }

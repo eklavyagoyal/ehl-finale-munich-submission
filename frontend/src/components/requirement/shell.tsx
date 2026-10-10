@@ -38,7 +38,7 @@ export function RequirementShell({ children }: { children: React.ReactNode }) {
       <PageHeader
         crumbs={[
           { label: requirement ? `${requirement.target_model.replace(/^bmw:/, "")} · ${requirement.market ?? "All markets"}` : "G60" },
-          { label: "Requirements", href: "/requirements" },
+          { label: "Decision", href: "/requirements" },
           { label: id },
         ]}
       />
