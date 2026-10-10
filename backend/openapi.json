@@ -2836,6 +2836,65 @@
      }
     }
    }
+  },
+  "/api/admin/reset": {
+   "post": {
+    "tags": [
+     "admin"
+    ],
+    "summary": "Delete all evidence, themes, requirements and runs (keeps agents, policy, audit trail)",
+    "operationId": "reset_api_admin_reset_post",
+    "parameters": [
+     {
+      "name": "x-actor",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`.",
+       "title": "X-Actor"
+      },
+      "description": "Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`."
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ResetIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
   }
  },
  "components": {
@@ -4934,6 +4993,25 @@
      "updated_at"
     ],
     "title": "ResearchRequestOut"
+   },
+   "ResetIn": {
+    "properties": {
+     "confirm": {
+      "type": "string",
+      "const": "DELETE ALL DATA",
+      "title": "Confirm"
+     },
+     "rationale": {
+      "type": "string",
+      "title": "Rationale"
+     }
+    },
+    "type": "object",
+    "required": [
+     "confirm",
+     "rationale"
+    ],
+    "title": "ResetIn"
    },
    "RunDetailOut": {
     "properties": {

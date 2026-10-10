@@ -150,3 +150,28 @@ def test_records_market_filter_and_coverage_matrix(client, drafted):
     assert records.status_code == 200 and records.json()["total"] == 8
     matrix = client.get("/api/coverage").json()["records_by_channel_market"]
     assert {"stream": "bmw", "channel": "bmw_feedback", "market": "US", "records": 8} in matrix
+
+
+def test_admin_reset_needs_cli_token_and_keeps_audit(drafted):
+
+    from fastapi.testclient import TestClient
+
+    from parallax.api.app import app
+    from parallax.config import get_settings
+
+    settings = get_settings()
+    settings.api_token, settings.cli_token = "service-token", "cli-token"
+    try:
+        client = TestClient(app)
+        body = {"confirm": "DELETE ALL DATA", "rationale": "test"}
+        assert client.post("/api/admin/reset", json=body).status_code == 401
+        assert client.post("/api/admin/reset", json=body, headers={"Authorization": "Bearer service-token"}).status_code == 403
+        audit_before = client.get("/api/audit", headers={"Authorization": "Bearer cli-token"}).json()["total"]
+        done = client.post("/api/admin/reset", json=body, headers={"Authorization": "Bearer cli-token", "X-Actor": "pm:test"})
+        assert done.status_code == 200 and done.json()["deleted"]["records"] >= 1
+        after = client.get("/api/coverage", headers={"Authorization": "Bearer cli-token"}).json()
+        assert after["records_by_channel"] == []
+        assert client.get("/api/audit", headers={"Authorization": "Bearer cli-token"}).json()["total"] > audit_before
+        assert len(client.get("/api/agents", headers={"Authorization": "Bearer cli-token"}).json()) > 0
+    finally:
+        settings.api_token, settings.cli_token = None, None

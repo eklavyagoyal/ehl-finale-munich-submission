@@ -12,6 +12,7 @@
   serve-prod              container entrypoint: migrate, sync agents, serve on 0.0.0.0:$PORT
   push-research PATH      zip a research folder and upload it to a deployed backend
   smoke [--full]          check a deployed backend end to end (token from PARALLAX_REMOTE_TOKEN in .env)
+  reset-remote --confirm  delete all data on the deployed backend (keeps agents, policy, audit trail)
 """
 
 import argparse
@@ -145,6 +146,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--url", default=None, help="backend base URL (default PARALLAX_REMOTE_URL)")
     p.add_argument("--token", default=None, help="bearer token (default PARALLAX_REMOTE_TOKEN from .env)")
     p.add_argument("--actor", default="pm:cli")
+    p = sub.add_parser("reset-remote")
+    p.add_argument("--confirm", action="store_true", required=True)
+    p.add_argument("--rationale", required=True)
+    p.add_argument("--actor", default="pm:cli")
     p = sub.add_parser("smoke")
     p.add_argument("--url", default=None)
     p.add_argument("--full", action="store_true", help="also run one simulation (real LLM cost in openai mode)")
@@ -174,6 +179,14 @@ def main(argv: list[str] | None = None) -> int:
         uvicorn.run("parallax.api.app:app", host="0.0.0.0", port=int(os.environ.get("PORT", "8000")),
                     proxy_headers=True, forwarded_allow_ips="*")
         return 0
+    if args.command == "reset-remote":
+        import httpx
+
+        response = httpx.post(f"{settings.remote_url.rstrip('/')}/api/admin/reset", timeout=300,
+                              headers={"Authorization": f"Bearer {settings.remote_token}", "X-Actor": args.actor},
+                              json={"confirm": "DELETE ALL DATA", "rationale": args.rationale})
+        print(response.status_code, response.text[:2000])
+        return 0 if response.is_success else 1
     if args.command == "smoke":
         return _smoke(args.url or settings.remote_url, settings.remote_token, args.actor, args.full)
     if args.command == "push-research":

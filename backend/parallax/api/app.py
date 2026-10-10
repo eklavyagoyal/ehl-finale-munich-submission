@@ -10,7 +10,7 @@ from starlette.concurrency import run_in_threadpool
 
 from parallax import __version__
 from parallax.api.common import ACTOR_PATTERN
-from parallax.api.routers import agents, evidence, governance, requirements, simulations
+from parallax.api.routers import admin, agents, evidence, governance, requirements, simulations
 from parallax.audit import record_event
 from parallax.config import get_settings
 from parallax.db import get_engine, session_scope
@@ -78,10 +78,12 @@ async def bearer_auth(request: Request, call_next):
         ok = False
         for token in accepted:  # constant-time compare against every accepted credential
             ok |= hmac.compare_digest(supplied, f"Bearer {token}".encode())
+        if settings.cli_token and hmac.compare_digest(supplied, f"Bearer {settings.cli_token}".encode()):
+            request.state.credential = "cli"
         if not ok:
             return JSONResponse({"detail": "missing or invalid bearer token"}, status_code=401)
     return await call_next(request)
 
 
-for module in (governance, evidence, requirements, simulations, agents):
+for module in (governance, evidence, requirements, simulations, agents, admin):
     app.include_router(module.router)
