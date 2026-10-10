@@ -2554,6 +2554,46 @@
     }
    }
   },
+  "/api/simulations/{run_id}/conversation": {
+   "get": {
+    "tags": [
+     "simulations"
+    ],
+    "summary": "Who was asked what and how they answered: owners by market, departments, research, challenger, judges",
+    "operationId": "conversation_api_simulations__run_id__conversation_get",
+    "parameters": [
+     {
+      "name": "run_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Run Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/agents": {
    "get": {
     "tags": [

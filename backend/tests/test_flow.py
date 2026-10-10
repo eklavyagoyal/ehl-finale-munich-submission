@@ -63,6 +63,11 @@ def test_simulation_decision_challenge_and_audit(client, drafted):
                            "dept:finance", "dept:sales-us"}
     assert first["recommendation"] and len(first["votes"]) == 3
     assert first["recommendation"][0]["challenge"]["counter_position"]
+    talk = client.get(f"/api/simulations/{run['id']}/conversation").json()
+    assert talk["question_to_owners"] and set(talk["owners_by_market"]) == {"US", "EU", "CN"}
+    owner = talk["owners_by_market"]["US"][0]
+    assert owner["name"] and owner["answers"][0]["reaction"] and owner["answers"][0]["requirement_title"]
+    assert talk["requirements"][drafted[0]]["challenger"] and len(talk["requirements"][drafted[0]]["judges"]) == 3
     detail = client.get(f"/api/requirements/{drafted[0]}").json()
     assert detail["requirement"]["status"] == "in_review"
     assert detail["requirement"]["score_low"] <= detail["requirement"]["score"] <= detail["requirement"]["score_high"]

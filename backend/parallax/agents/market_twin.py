@@ -9,6 +9,7 @@ Free-text reactions are then scored with SSR (importance and class fit), never b
 """
 
 import os
+import re
 import threading
 import uuid
 from dataclasses import dataclass
@@ -248,6 +249,9 @@ class _LoggingContext:
     run_id: uuid.UUID | None = None
 
 
+_PERSONA_TAG = re.compile(r"\[((?:us|eu|cn)-[a-z0-9-]+)\]")
+
+
 def _install_logging_client() -> None:
     """Wrap TinyTroupe's OpenAI client so its calls land in llm_calls and count against the run budget."""
     import time
@@ -265,7 +269,10 @@ def _install_logging_client() -> None:
             started = time.perf_counter()
             messages = chat_api_params.get("messages", [])
             prompt_text = "\n".join(str(m.get("content", "")) for m in messages if isinstance(m, dict))
-            log = dict(run_id=run_id, agent_id="tinytroupe", requirement_id=None, purpose="tinytroupe_action",
+            # TinyPerson names carry the persona id ("Li Na [cn-family-multigen]"), so each call gets its own lane.
+            match = _PERSONA_TAG.search(prompt_text)
+            agent_id = f"persona:{match.group(1)}" if match else "tinytroupe"
+            log = dict(run_id=run_id, agent_id=agent_id, requirement_id=None, purpose="persona_simulation_step",
                        model=model, prompt_version="tinytroupe-0.7", prompt_text=prompt_text, record_ids=(),
                        request={"messages": [{"role": m.get("role"), "content": str(m.get("content", ""))[:4000]}
                                              for m in messages if isinstance(m, dict)]}, started=started)

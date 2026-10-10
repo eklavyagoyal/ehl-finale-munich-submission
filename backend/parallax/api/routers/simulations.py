@@ -102,3 +102,81 @@ def llm_calls(run_id: str, include_payloads: bool = False, requirement_id: str |
     calls = session.scalars(query.order_by(LLMCall.id)).all()
     exclude = set() if include_payloads else {"request", "response"}
     return [row(c, exclude=exclude) for c in calls]
+
+
+@router.get("/{run_id}/conversation",
+            summary="Who was asked what and how they answered: owners by market, departments, research, challenger, judges")
+def conversation(run_id: str, session: Session = Depends(get_session, scope="function")):
+    from parallax.models import Agent, Requirement
+
+    rid = _uuid(run_id)
+    run = session.get(SimRun, rid)
+    if run is None:
+        raise not_found("run", run_id)
+    agents = {a.id: a for a in session.scalars(select(Agent))}
+    titles = {r.id: r.title for r in session.scalars(select(Requirement).where(Requirement.id.in_(run.requirement_ids or [])))}
+    steps = session.scalars(select(SimStep).where(SimStep.run_id == rid).order_by(SimStep.id)).all()
+    twin = next((s for s in steps if s.stage == "market_twin"), None)
+
+    owners: dict[str, dict] = {}
+    for p in session.scalars(select(PersonaResponse).where(PersonaResponse.run_id == rid).order_by(PersonaResponse.id)):
+        agent = agents.get(p.agent_id)
+        spec = agent.spec if agent else {}
+        reaction, _, transcript = p.response_text.partition("\n[raw] ")
+        owner = owners.setdefault(p.agent_id, {
+            "agent_id": p.agent_id, "name": spec.get("persona", {}).get("name"), "display_name": agent.display_name if agent else p.agent_id,
+            "market": agent.market if agent else None, "country": agent.country if agent else None,
+            "vehicle": spec.get("vehicle_label"), "powertrain": spec.get("powertrain"), "segment": spec.get("segment"),
+            "environment": spec.get("environment", {}), "validation_status": agent.validation_status if agent else None,
+            "engine": p.engine, "grounding_records": len(p.grounding_record_ids or []), "transcript": transcript or None,
+            "answers": [],
+        })
+        owner["answers"].append({
+            "requirement_id": p.requirement_id, "requirement_title": titles.get(p.requirement_id), "reaction": reaction,
+            "stance": p.stance, "importance_0_5": p.importance_0_5, "class_fit_0_5": p.market_fit_0_5,
+            "concerns": p.concerns, "would_need_to_know": p.info_requests,
+        })
+    by_market: dict[str, list] = {}
+    for owner in owners.values():
+        by_market.setdefault(owner["market"] or "other", []).append(owner)
+
+    departments: dict[str, dict] = {}
+    for m in session.scalars(select(DepartmentMemo).where(DepartmentMemo.run_id == rid).order_by(DepartmentMemo.id)):
+        agent = agents.get(m.agent_id)
+        dept = departments.setdefault(m.agent_id, {
+            "agent_id": m.agent_id, "display_name": agent.display_name if agent else m.agent_id,
+            "market": agent.market if agent else None, "role": (agent.spec.get("role", {}) if agent else {}).get("title"),
+            "answers": [],
+        })
+        dept["answers"].append({"requirement_id": m.requirement_id, "requirement_title": titles.get(m.requirement_id),
+                                "question": f"Review requirement {m.requirement_id} from the {dept['display_name']} perspective",
+                                "stance": m.stance, **{k: m.memo.get(k) for k in ("summary", "effort_band", "risks", "conditions",
+                                                                                 "criterion_ratings", "info_requests")}})
+
+    per_requirement = {}
+    for requirement_id in run.requirement_ids or []:
+        rec = session.scalars(select(Recommendation).where(Recommendation.run_id == rid,
+                                                           Recommendation.requirement_id == requirement_id)).first()
+        syn = session.scalars(select(Synthesis).where(Synthesis.run_id == rid, Synthesis.requirement_id == requirement_id)).first()
+        per_requirement[requirement_id] = {
+            "title": titles.get(requirement_id),
+            "research": [{"requested_by": r.requested_by, "question": r.question, "verdict": r.verdict,
+                          "answer": next((f.get("answer_summary") for f in r.findings if "answer_summary" in f), None),
+                          "sources": r.sources[:5]}
+                         for r in session.scalars(select(ResearchRequest).where(ResearchRequest.run_id == rid,
+                                                                                ResearchRequest.requirement_id == requirement_id))],
+            "synthesis_headline": syn.content.get("headline") if syn else None,
+            "challenger": rec.challenge if rec else None,
+            "judges": [{"agent_id": v.agent_id, "model": v.model, "vote": v.vote, "rationale": v.rationale}
+                       for v in session.scalars(select(Vote).where(Vote.run_id == rid, Vote.requirement_id == requirement_id))],
+            "recommendation": rec.recommendation if rec else None,
+        }
+    return {
+        "run": {"id": str(run.id), "status": run.status, "stage": (run.progress or {}).get("stage"),
+                "challenge_question": run.challenge_question, "engine": (run.config or {}).get("persona_engine")},
+        "order": ["owners + departments (parallel)", "research + verifier", "scoring", "synthesis", "challenger", "judges", "PM"],
+        "question_to_owners": (twin.detail or {}).get("question") if twin else None,
+        "owners_by_market": by_market,
+        "departments": list(departments.values()),
+        "requirements": per_requirement,
+    }

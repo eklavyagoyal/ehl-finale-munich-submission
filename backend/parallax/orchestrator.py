@@ -242,7 +242,10 @@ def run_market_twin(run_id: uuid.UUID, requirement_ids: list[str], challenge: st
             session.add_all(rows)
             session.flush()
             _simulated_ratings(session, run_id, requirement_ids, rows, weights, {p.id: p for p in personas})
+        from parallax.agents.market_twin import stimulus
+
         detail.update({"personas": len(results), "responses": len(rows), "engine": engine_name,
+                       "question": stimulus(requirements, challenge),
                        "grounding": {pid: g.gate for pid, g in groundings.items()}})
     return {"personas": len(results), "responses": len(rows)}
 
@@ -470,6 +473,14 @@ def vote_case(run_id: uuid.UUID, requirement_id: str, package: dict, synthesis_o
     compact = {"requirement": package["requirement"], "synthesis": synthesis_out, "scores": package["scores"],
                "gates": package["gates"], "evidence": {"themes_by_market": package["evidence"]["themes_by_market"],
                                                        "owner_quotes": package["evidence"]["owner_quotes"][:5]}}
+    # The challenger argues first, so the judges vote knowing the strongest counter-case.
+    with _step(run_id, "challenge", requirement_id, "agent:challenger") as detail:
+        challenged = vote.challenge(llm, requirement, compact,
+                                    {"proposed_next_action": synthesis_out.get("recommended_next_action"),
+                                     "headline": synthesis_out.get("headline")},
+                                    evidence_ids, run_id, settings.model_strong)
+        detail["risk_if_outcome_is_wrong"] = challenged.risk_if_outcome_is_wrong
+    compact["challenge"] = challenged.model_dump()
     votes = []
     with _step(run_id, "vote", requirement_id, "panel") as detail:
         with ThreadPoolExecutor(max_workers=max(1, len(judges))) as pool:
@@ -480,10 +491,6 @@ def vote_case(run_id: uuid.UUID, requirement_id: str, package: dict, synthesis_o
                 votes.append((judge.id, judge.spec.get("model", settings.model_fast), future.result()))
         result = vote.tally([(j, v) for j, _, v in votes], gates, policy["parallax"]["vote"]["tie_breaker"])
         detail.update(result)
-    with _step(run_id, "challenge", requirement_id, "agent:challenger") as detail:
-        challenged = vote.challenge(llm, requirement, compact, {k: v for k, v in result.items() if k != "minority"},
-                                    evidence_ids, run_id, settings.model_strong)
-        detail["risk_if_outcome_is_wrong"] = challenged.risk_if_outcome_is_wrong
     with session_scope() as session:
         for judge_id, model, out in votes:
             session.add(Vote(run_id=run_id, requirement_id=requirement_id, agent_id=judge_id, model=model, vote=out.vote,

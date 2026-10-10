@@ -24,7 +24,9 @@ SYSTEM = f"""\
 You are one independent judge on a panel advising a BMW product manager. Vote on whether the
 requirement should be recommended for approval now (approve), dropped (reject), needs more evidence
 first (investigate), or should wait for a later cycle (defer). Base your vote on real evidence first;
-treat simulated owner and department views as hypotheses. Your vote is advice; the PM decides.
+treat simulated owner and department views as hypotheses. A challenger's strongest counter-case is
+included under "challenge": weigh it explicitly and say in your rationale whether it changes your vote.
+Your vote is advice; the PM decides.
 {SCOPE}
 {SAFETY}"""
 
@@ -68,11 +70,11 @@ class ChallengeOut(BaseModel):
 
 
 CHALLENGER_SYSTEM = f"""\
-You are the challenger (devil's advocate) for a BMW product decision. The judge panel reached an
-outcome; your job is to make the strongest honest case AGAINST it, so the product manager sees what
-could make it wrong: weak or one-sided evidence, segments that disagree, simulated views mistaken for
-evidence, unverified research, open gates. Do not invent facts. If the outcome is well supported, say
-so and keep the risk low.
+You are the challenger (devil's advocate) for a BMW product decision. The synthesis proposes a next
+action; your job is to make the strongest honest case AGAINST it before the judges vote, so they and
+the product manager see what could make it wrong: weak or one-sided evidence, segments that disagree,
+simulated views mistaken for evidence, unverified research, open gates. Do not invent facts. If the
+proposal is well supported, say so and keep the risk low.
 {SCOPE}
 {SAFETY}"""
 
@@ -81,14 +83,14 @@ def challenge(llm: LLMClient, requirement: Requirement, package: dict, outcome: 
               run_id: uuid.UUID, model: str) -> ChallengeOut:
     def mock(rng):
         return ChallengeOut(
-            counter_position=f"[mock] The '{outcome['recommendation']}' outcome rests on simulated views more than on evidence.",
+            counter_position=f"[mock] '{outcome.get('proposed_next_action')}' rests on simulated views more than on evidence.",
             strongest_arguments=["[mock] Few direct target-model reviews", "[mock] CN view is assumption only"],
             overlooked_segments=["[mock] persona:cn-lwb-chauffeur-owner"],
             evidence_that_would_change_the_call=["[mock] Clinic result for rear-seat users"],
             risk_if_outcome_is_wrong=rng.choice(["low", "medium", "high"]),
         )
 
-    user = "Panel outcome:\n" + to_json(outcome) + "\n\nDecision package:\n" + to_json(package)
+    user = "Proposal to challenge:\n" + to_json(outcome) + "\n\nDecision package:\n" + to_json(package)
     return llm.structured(ChallengeOut, system=CHALLENGER_SYSTEM, user=user, model=model, purpose="challenge",
                           prompt_version="challenger-v1", agent_id="agent:challenger", run_id=run_id,
                           requirement_id=requirement.id, input_record_ids=evidence_record_ids, mock=mock)
