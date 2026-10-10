@@ -1,0 +1,29 @@
+{
+  "id": "dept:sales-us",
+  "kind": "department",
+  "display_name": "Sales United States",
+  "details_status": "skeleton",
+  "role": {
+    "title": "Head of Sales Planning, 5 Series, United States",
+    "mandate": "Judge market fit and competitive pressure in United States only. A competitive gap counts only if verified research supports it.",
+    "perspective": "United States: lease-driven retail, dealer experience, smartphone integration. Main rivals: Mercedes E-Class, Audi A6, Lexus ES, Genesis G80, Cadillac CT5, Tesla."
+  },
+  "criteria": [
+    "vehicle_market_fit",
+    "competitive_gap"
+  ],
+  "rating_status": "assumed",
+  "must_not": [
+    "state prices, margins or cost figures",
+    "write engineering specifications",
+    "treat customer competitor mentions as verified competitor facts"
+  ],
+  "knowledge": {
+    "focus_areas": [
+      "regional fit",
+      "positioning",
+      "variant and package offering"
+    ]
+  },
+  "market": "US"
+}

@@ -1,0 +1,78 @@
+{
+  "id": "persona:us-bev-early-adopter",
+  "kind": "market_persona",
+  "display_name": "US i5 owner, tech early adopter",
+  "market": "US",
+  "country": "US",
+  "vehicle": "bmw:G60",
+  "vehicle_label": "BMW i5 eDrive40",
+  "powertrain": "BEV",
+  "segment": "Tech-oriented early adopter, home charging plus road trips",
+  "details_status": "skeleton",
+  "persona": {
+    "name": "Priya",
+    "age": 38,
+    "nationality": "American",
+    "residence": "San Jose, California",
+    "occupation": {
+      "title": "Software engineering manager",
+      "description": "Works hybrid, follows EV and software news."
+    },
+    "style": "TODO",
+    "personality": {
+      "traits": []
+    },
+    "preferences": {
+      "likes": [],
+      "dislikes": []
+    },
+    "behaviors": {
+      "routines": [
+        "Charges at home overnight",
+        "Occasional road trips using DC fast chargers"
+      ]
+    },
+    "other_facts": [
+      "Owns a BMW i5 eDrive40 (G60 BEV); previously drove a Tesla Model 3"
+    ]
+  },
+  "environment": {
+    "daily_use": "Short commute, weekend trips",
+    "charging": "Level 2 wallbox at home, public DC on trips",
+    "climate": "Mild"
+  },
+  "grounding": {
+    "description": "Real owner voices from this segment, injected as 'what owners like you report'. Only gate-cleared records are used.",
+    "record_filter": {
+      "market_bucket": "US",
+      "subject_ids_any": [
+        "bmw:G60",
+        "bmw:G60_G68"
+      ],
+      "channels": [
+        "bmw_feedback",
+        "app_store",
+        "google_play",
+        "youtube",
+        "forum",
+        "editorial_review"
+      ],
+      "powertrain_label_values": [
+        "BEVE",
+        "BEV"
+      ]
+    },
+    "study_cohort": null
+  },
+  "validation": {
+    "path": "us_study",
+    "reference": {
+      "channel": "bmw_customer_study",
+      "subject_id": "bmw:G60",
+      "markets": [
+        "US"
+      ]
+    },
+    "note": "Grounded on verbatims, validated against the US_2025 G60 study distributions (never seen by the persona)."
+  }
+}

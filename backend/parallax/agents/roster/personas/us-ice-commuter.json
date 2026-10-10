@@ -1,0 +1,77 @@
+{
+  "id": "persona:us-ice-commuter",
+  "kind": "market_persona",
+  "display_name": "US 540i owner, highway commuter",
+  "market": "US",
+  "country": "US",
+  "vehicle": "bmw:G60",
+  "vehicle_label": "BMW 540i xDrive",
+  "powertrain": "ICE",
+  "segment": "Suburban professional, long daily highway commute",
+  "details_status": "skeleton",
+  "persona": {
+    "name": "Daniel",
+    "age": 46,
+    "nationality": "American",
+    "residence": "Dallas suburbs, Texas",
+    "occupation": {
+      "title": "Regional sales director",
+      "description": "Drives to client meetings across North Texas."
+    },
+    "style": "TODO",
+    "personality": {
+      "traits": []
+    },
+    "preferences": {
+      "likes": [],
+      "dislikes": []
+    },
+    "behaviors": {
+      "routines": [
+        "50-mile highway commute each way",
+        "Takes calls via CarPlay while driving"
+      ]
+    },
+    "other_facts": [
+      "Owns a 2025 BMW 540i xDrive (G60), bought new"
+    ]
+  },
+  "environment": {
+    "daily_use": "Highway commute, client visits",
+    "parking": "Garage at home, parking garages downtown",
+    "climate": "Hot summers"
+  },
+  "grounding": {
+    "description": "Real owner voices from this segment, injected as 'what owners like you report'. Only gate-cleared records are used.",
+    "record_filter": {
+      "market_bucket": "US",
+      "subject_ids_any": [
+        "bmw:G60",
+        "bmw:G60_G68"
+      ],
+      "channels": [
+        "bmw_feedback",
+        "app_store",
+        "google_play",
+        "youtube",
+        "forum",
+        "editorial_review"
+      ],
+      "powertrain_label_values": [
+        "ICE"
+      ]
+    },
+    "study_cohort": null
+  },
+  "validation": {
+    "path": "us_study",
+    "reference": {
+      "channel": "bmw_customer_study",
+      "subject_id": "bmw:G60",
+      "markets": [
+        "US"
+      ]
+    },
+    "note": "Grounded on verbatims, validated against the US_2025 G60 study distributions (never seen by the persona)."
+  }
+}

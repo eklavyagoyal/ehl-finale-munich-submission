@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "status": "proposed_demo_policy_not_bmw_approved",
+  "planning_horizon": "successor_vehicle_3_to_5_years",
+  "decision_unit": ["feature_key", "target_model", "market", "planning_horizon"],
+  "scale": {"min": 0, "max": 5},
+  "criteria": [
+    {"key": "demand", "weight": 0.25, "meaning": "Strength of demand within comparable cohorts; frequency, corroboration, and sampling limitations."},
+    {"key": "impact", "weight": 0.20, "meaning": "Severity of the customer problem and benefit of addressing it."},
+    {"key": "competitive_gap", "weight": 0.15, "meaning": "Verified gap against matched competitor models, years, markets, and trims."},
+    {"key": "vehicle_market_fit", "weight": 0.20, "meaning": "Fit to the target vehicle class and documented needs of the market."},
+    {"key": "delivery_fit", "weight": 0.10, "meaning": "Fit of available rough effort/timing estimates to the planning horizon; unknown without support."},
+    {"key": "reuse", "weight": 0.10, "meaning": "Supported applicability across customer segments and target vehicles."}
+  ],
+  "gates": ["customer_facing_scope", "model_market_applicability", "evidence_traceability", "pm_review"],
+  "advisory_inputs": ["rough_effort", "timing_constraints"],
+  "gate_values": ["pass", "fail", "unknown"],
+  "gate_policy": {"fail": "defer_or_reject_with_reason", "unknown": "investigate_before_commitment"},
+  "missing_score_policy": "retain_null_and_compute_bounds_using_0_and_5_without_renormalizing_weights",
+  "formula": "score_0_to_100 = 20 * sum(weight_i * score_i)",
+  "sensitivity": {
+    "method": "vary_each_weight_by_20_percent_then_renormalize_all_weights",
+    "additional_checks": ["leave_out_each_source_channel", "low_and_high_score_estimates", "market_specific_rankings"],
+    "interpretation": "Flag changes in the top shortlist; show overlapping score bounds rather than claiming a definite order."
+  }
+}

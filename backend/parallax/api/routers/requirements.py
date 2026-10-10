@@ -1,0 +1,275 @@
+"""Requirements: list, detail, draft, create, edit, evidence links, gates, PM decisions, history."""
+
+from typing import Literal
+
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from parallax import decisions
+from parallax import requirements as reqs
+from parallax.agents.drafter import draft_requirements
+from parallax.api.common import actor, human_actor, not_found, row
+from parallax.audit import record_event
+from parallax.config import get_settings
+from parallax.db import get_session
+from parallax.llm.client import get_llm
+from parallax.models import (
+    AuditEvent,
+    CriterionRating,
+    DepartmentMemo,
+    PersonaResponse,
+    PMDecision,
+    Recommendation,
+    Record,
+    Requirement,
+    RequirementEvidence,
+    RequirementVersion,
+    ResearchRequest,
+    Synthesis,
+    Vote,
+)
+from parallax.orchestrator import launch
+from parallax.policy import active_policy
+from parallax.scoring import compute
+from parallax.themes import latest_snapshot_id
+
+router = APIRouter(prefix="/api/requirements", tags=["requirements"])
+
+
+def summary(requirement: Requirement, session: Session) -> dict:
+    data = row(requirement)
+    data["gates"] = {g: v["value"] for g, v in reqs.current_gates(session, requirement.id).items()}
+    rec = session.scalars(select(Recommendation).where(Recommendation.requirement_id == requirement.id)
+                          .order_by(Recommendation.id.desc()).limit(1)).first()
+    data["ai_recommendation"] = rec.recommendation if rec else None
+    return data
+
+
+@router.get("", summary="Requirement list with the eight brief fields, gates and latest AI recommendation")
+def list_requirements(status: str | None = None, market: str | None = None, feature_key: str | None = None,
+                      sort: Literal["priority", "score", "created", "updated"] = "priority",
+                      session: Session = Depends(get_session)):
+    query = select(Requirement)
+    if status:
+        query = query.where(Requirement.status == status)
+    if market:
+        query = query.where(Requirement.market == market)
+    if feature_key:
+        query = query.where(Requirement.feature_key == feature_key)
+    order = {
+        "priority": (Requirement.priority_rank.asc().nulls_last(), Requirement.id),
+        "score": (Requirement.score.desc().nulls_last(), Requirement.id),
+        "created": (Requirement.created_at.desc(),),
+        "updated": (Requirement.updated_at.desc(),),
+    }[sort]
+    return [summary(r, session) for r in session.scalars(query.order_by(*order)).all()]
+
+
+class DraftIn(BaseModel):
+    market: str | None = Field(None, description="US, EU, CN or null for all markets pooled")
+    limit: int = Field(5, ge=1, le=30)
+    feature_keys: list[str] | None = None
+
+
+@router.post("/draft", summary="AI drafts candidate requirements from the strongest themes")
+def draft(body: DraftIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+    settings = get_settings()
+    snapshot = latest_snapshot_id(session, settings.target_model)
+    if snapshot is None:
+        raise HTTPException(409, "no theme snapshot yet; POST /api/themes/build first")
+    record_event(session, category="ai", actor_id=who, action="requirements.draft.request",
+                 after={"market": body.market, "limit": body.limit, "feature_keys": body.feature_keys})
+    return draft_requirements(session, get_llm(), target_model=settings.target_model, snapshot_id=snapshot,
+                              market=body.market, limit=body.limit, actor_id=who, feature_keys=body.feature_keys)
+
+
+class RequirementIn(BaseModel):
+    title: str
+    description: str
+    customer_problem: str = ""
+    market: str | None = None
+    feature_key: str | None = None
+    acceptance_criteria: list[str] = []
+    assumptions: list[str] = []
+    uncertainties: list[str] = []
+    rationale: str = "Created manually by PM"
+
+
+@router.post("", summary="PM creates a requirement manually")
+def create(body: RequirementIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+    fields = body.model_dump(exclude={"rationale"})
+    fields["target_model"] = get_settings().target_model
+    requirement = reqs.create(session, fields, human_actor(who), body.rationale)
+    reqs.add_observed_ratings(session, requirement)
+    reqs.refresh_code_gates(session, requirement)
+    return summary(requirement, session)
+
+
+@router.get("/{requirement_id}", summary="Everything about one requirement, for the PM detail view")
+def detail(requirement_id: str, session: Session = Depends(get_session)):
+    requirement = session.get(Requirement, requirement_id)
+    if requirement is None:
+        raise not_found("requirement", requirement_id)
+    run_id = requirement.last_run_id
+    evidence = session.execute(
+        select(RequirementEvidence, Record).join(Record, Record.record_id == RequirementEvidence.record_id)
+        .where(RequirementEvidence.requirement_id == requirement_id).order_by(RequirementEvidence.id)
+    ).all()
+    latest = lambda model: session.scalars(select(model).where(model.requirement_id == requirement_id, model.run_id == run_id)).all() if run_id else []
+    in_scope = (CriterionRating.run_id == run_id) if run_id else CriterionRating.run_id.is_(None)
+    ratings = session.scalars(select(CriterionRating).where(
+        CriterionRating.requirement_id == requirement_id, in_scope | (CriterionRating.rater_type == "pm"),
+    )).all()
+    policy = active_policy(session).document
+    return {
+        "requirement": summary(requirement, session),
+        "gates": reqs.current_gates(session, requirement_id),
+        "scores": compute(policy, list(ratings)),
+        "ratings": [row(r) for r in ratings],
+        "evidence": [{**row(link), "record": {"text": rec.text_original, "translation_en": rec.translation_en,
+                                              "markets": rec.markets, "subject_ids": rec.subject_ids,
+                                              "source_id": rec.source_id, "locator": rec.locator}}
+                     for link, rec in evidence],
+        "latest_run_id": str(run_id) if run_id else None,
+        "synthesis": next((row(s) for s in latest(Synthesis)), None),
+        "recommendation": next((row(r) for r in latest(Recommendation)), None),
+        "votes": [row(v) for v in latest(Vote)],
+        "persona_responses": [row(p) for p in latest(PersonaResponse)],
+        "department_memos": [row(m) for m in latest(DepartmentMemo)],
+        "research": [row(r) for r in latest(ResearchRequest)],
+        "decisions": [row(d, exclude={"snapshot"}) for d in session.scalars(
+            select(PMDecision).where(PMDecision.requirement_id == requirement_id).order_by(PMDecision.id)).all()],
+    }
+
+
+class EditIn(BaseModel):
+    changes: dict = Field(description=f"Any of: {sorted(reqs.EDITABLE_FIELDS)}")
+    rationale: str
+
+
+@router.patch("/{requirement_id}", summary="PM edits requirement content (new version, audited)")
+def edit(requirement_id: str, body: EditIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+    requirement = session.get(Requirement, requirement_id)
+    if requirement is None:
+        raise not_found("requirement", requirement_id)
+    if not body.rationale.strip():
+        raise HTTPException(400, "rationale required")
+    bad = set(body.changes) - reqs.EDITABLE_FIELDS
+    if bad:
+        raise HTTPException(400, f"not editable here: {sorted(bad)} (status changes go through /decision)")
+    reqs.edit(session, requirement, body.changes, human_actor(who), body.rationale)
+    return summary(requirement, session)
+
+
+class DecisionIn(BaseModel):
+    action: Literal["approve", "reject", "challenge", "defer"]
+    rationale: str
+    challenge_question: str | None = Field(None, description="For 'challenge': what the agents should re-examine")
+
+
+@router.post("/{requirement_id}/decision", summary="PM approves, rejects, challenges or defers (approve needs all gates passed)")
+def decide(requirement_id: str, body: DecisionIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+    requirement = session.get(Requirement, requirement_id)
+    if requirement is None:
+        raise not_found("requirement", requirement_id)
+    try:
+        decision, followup = decisions.decide(session, requirement, body.action, body.rationale, human_actor(who),
+                                              body.challenge_question)
+    except decisions.DecisionBlocked as error:
+        raise HTTPException(409, str(error))
+    except ValueError as error:
+        raise HTTPException(400, str(error))
+    session.commit()
+    if followup:
+        launch(followup)
+    return {"decision": row(decision, exclude={"snapshot"}), "followup_run_id": str(followup) if followup else None,
+            "requirement": summary(requirement, session)}
+
+
+class GateIn(BaseModel):
+    value: Literal["pass", "fail", "unknown"]
+    rationale: str
+
+
+@router.post("/{requirement_id}/gates/{gate}", summary="PM overrides a gate with a rationale")
+def set_gate(requirement_id: str, gate: str, body: GateIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+    requirement = session.get(Requirement, requirement_id)
+    if requirement is None:
+        raise not_found("requirement", requirement_id)
+    try:
+        decisions.override_gate(session, requirement, gate, body.value, human_actor(who), body.rationale)
+    except ValueError as error:
+        raise HTTPException(400, str(error))
+    return reqs.current_gates(session, requirement_id)
+
+
+class EvidenceIn(BaseModel):
+    record_id: str
+    relation: Literal["supporting", "contradicting", "context"]
+    quote: str | None = None
+    rationale: str
+
+
+@router.post("/{requirement_id}/evidence", summary="PM links a record as supporting/contradicting evidence")
+def add_evidence(requirement_id: str, body: EvidenceIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+    requirement = session.get(Requirement, requirement_id)
+    if requirement is None:
+        raise not_found("requirement", requirement_id)
+    try:
+        link = reqs.link_evidence(session, requirement, body.record_id, body.relation, human_actor(who), body.quote,
+                                  rationale=body.rationale)
+    except ValueError as error:
+        raise HTTPException(400, str(error))
+    reqs.refresh_code_gates(session, requirement)
+    return row(link)
+
+
+class RatingIn(BaseModel):
+    criterion: Literal["demand", "impact", "competitive_gap", "vehicle_market_fit", "delivery_fit", "reuse"]
+    score: float | None = Field(None, ge=0, le=5)
+    low: float | None = Field(None, ge=0, le=5)
+    high: float | None = Field(None, ge=0, le=5)
+    status: Literal["observed", "estimated", "assumed"] = "estimated"
+    rationale: str
+    evidence_ids: list[str] = []
+
+
+@router.post("/{requirement_id}/ratings", summary="PM adds a criterion rating (e.g. a reviewed scoring anchor)")
+def add_rating(requirement_id: str, body: RatingIn, session: Session = Depends(get_session), who: str = Depends(actor)):
+    requirement = session.get(Requirement, requirement_id)
+    if requirement is None:
+        raise not_found("requirement", requirement_id)
+    if body.score is None and (body.low is None or body.high is None):
+        raise HTTPException(400, "give a score or a low/high range")
+    rating = CriterionRating(requirement_id=requirement_id, criterion=body.criterion, score=body.score, low=body.low,
+                             high=body.high, status=body.status, rater_type="pm", rater_id=human_actor(who),
+                             rationale=body.rationale, evidence_ids=body.evidence_ids)
+    session.add(rating)
+    session.flush()
+    record_event(session, category="change", actor_id=who, action="requirement.rating", entity_type="requirement",
+                 entity_id=requirement_id, requirement_id=requirement_id, after=row(rating), rationale=body.rationale)
+    return row(rating)
+
+
+@router.get("/{requirement_id}/versions")
+def versions(requirement_id: str, session: Session = Depends(get_session)):
+    return [row(v) for v in session.scalars(select(RequirementVersion).where(
+        RequirementVersion.requirement_id == requirement_id).order_by(RequirementVersion.version)).all()]
+
+
+@router.get("/{requirement_id}/audit", summary="Chronological audit trail for one requirement")
+def audit(requirement_id: str, include_access: bool = False, session: Session = Depends(get_session)):
+    query = select(AuditEvent).where(AuditEvent.requirement_id == requirement_id)
+    if not include_access:
+        query = query.where(AuditEvent.category != "access")
+    return [row(e) for e in session.scalars(query.order_by(AuditEvent.id)).all()]
+
+
+@router.get("/{requirement_id}/decisions/{decision_id}/snapshot", summary="What the AI recommended when the PM decided")
+def decision_snapshot(requirement_id: str, decision_id: int, session: Session = Depends(get_session)):
+    decision = session.get(PMDecision, decision_id)
+    if decision is None or decision.requirement_id != requirement_id:
+        raise not_found("decision", decision_id)
+    return row(decision)
