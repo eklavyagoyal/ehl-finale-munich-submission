@@ -175,6 +175,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/signals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** What customers say, ranked: pain points, strengths, requests (from deterministic theme counts) */
+        get: operations["signals_api_signals_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/pipeline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Start page: one card per stage with counts, status and the next action */
+        get: operations["pipeline_api_pipeline_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/ingest": {
         parameters: {
             query?: never;
@@ -771,6 +805,23 @@ export interface paths {
         put?: never;
         /** Validate personas against held-out study data (background run) */
         post: operations["validate_api_agents_validate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Delete all evidence, themes, requirements and runs (keeps agents, policy, audit trail) */
+        post: operations["reset_api_admin_reset_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1489,6 +1540,16 @@ export interface components {
              */
             updated_at: string;
         };
+        /** ResetIn */
+        ResetIn: {
+            /**
+             * Confirm
+             * @constant
+             */
+            confirm: "DELETE ALL DATA";
+            /** Rationale */
+            rationale: string;
+        };
         /** RunDetailOut */
         RunDetailOut: {
             run: components["schemas"]["RunOut"];
@@ -2040,6 +2101,60 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    signals_api_signals_get: {
+        parameters: {
+            query?: {
+                /** @description US, EU, CN or omit for all markets pooled */
+                market?: string | null;
+                kind?: "pain" | "strength" | "request" | "mixed" | "all";
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    pipeline_api_pipeline_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
         };
@@ -3345,6 +3460,42 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["ValidateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reset_api_admin_reset_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`. */
+                "x-actor"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetIn"];
             };
         };
         responses: {

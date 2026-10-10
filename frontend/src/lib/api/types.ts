@@ -297,6 +297,8 @@ export interface Source {
   provenance: { origin?: string; verification?: string; notes?: string } | null;
   external_llm: boolean;
   review_status: "pending" | "accepted" | "rejected" | string;
+  ingest_run_id?: string | null;
+  updated_at?: string | null;
 }
 
 export interface EvidenceRecord {
@@ -331,6 +333,9 @@ export interface Theme {
   praise_review_count: number;
   competitor_review_count: number;
   channels: string[];
+  counts_by_claim_type?: Record<string, number>;
+  record_ids?: string[];
+  derived_from_labels?: number;
   demand_score?: number;
   cohorts?: {
     channel: string;
@@ -371,4 +376,111 @@ export interface SourceDetail {
   records: number;
   claims: { review_status: string; derived_from_bmw_labels: boolean; count: number }[];
   claim_producers: { method: string | null; name: string | null; count: number }[];
+}
+
+// GET /api/pipeline: the start page, one card per stage of the PM's path.
+export type StageKey = "sources" | "processing" | "signals" | "experts" | "decision";
+export type StageStatus = "todo" | "in_progress" | "done";
+
+interface StageBase {
+  title: string;
+  question: string;
+  status: StageStatus;
+}
+
+export interface SourcesStage extends StageBase {
+  key: "sources";
+  counts: {
+    sources: number;
+    records: number;
+    pending_review: number;
+    by_stream: { stream: string; label: string; records: number }[];
+  };
+  last_import: string | null;
+}
+
+export interface ProcessingStage extends StageBase {
+  key: "processing";
+  counts: {
+    // Only records of kind "feedback"; records_without_claims is measured against this number.
+    feedback_records: number;
+    records_with_claims: number;
+    records_without_claims: number;
+    claims_by_status: Record<string, number>;
+    // "BMW labels", or the producer method: llm, human, provided_unknown, unknown.
+    claims_by_producer: Record<string, number>;
+  };
+}
+
+export interface SignalsStage extends StageBase {
+  key: "signals";
+  counts: { features_with_evidence: number; by_kind: Record<string, number> };
+  top_pains: string[];
+  top_strengths: string[];
+  top_requests: string[];
+}
+
+export interface ExpertsStage extends StageBase {
+  key: "experts";
+  counts: { requirements: number; runs_by_status: Record<string, number> };
+}
+
+export interface DecisionStage extends StageBase {
+  key: "decision";
+  counts: { by_status: Record<string, number> };
+}
+
+export type PipelineStage = SourcesStage | ProcessingStage | SignalsStage | ExpertsStage | DecisionStage;
+
+export interface Pipeline {
+  target_model: string;
+  stages: PipelineStage[];
+  next_action: { stage: StageKey; label: string; action?: string };
+}
+
+// GET /api/signals: theme counts read as pains, strengths and requests.
+export type SignalKind = "pain" | "strength" | "request" | "mixed";
+
+export interface Signal {
+  theme_id: number;
+  feature_key: string;
+  label: string;
+  area: string | null;
+  market: string | null;
+  kind: SignalKind;
+  reviews: number;
+  direct_reviews: number;
+  pain: number;
+  requests: number;
+  praise: number;
+  competitor_reviews: number;
+  channels: string[];
+  demand_0_5: number;
+  impact_0_5: number | null;
+  sample_quotes: { record_id: string; text: string }[];
+  has_requirement: boolean;
+}
+
+export interface SignalPage {
+  snapshot_id: string | null;
+  market: string | null;
+  basis?: string;
+  items: Signal[];
+}
+
+// GET /api/simulations/{id}/results: every agent output of a run, per requirement.
+export interface RunResults {
+  run: Run;
+  requirements: Record<
+    string,
+    {
+      persona_responses: PersonaResponse[];
+      department_memos: DepartmentMemo[];
+      research: ResearchItem[];
+      ratings: Rating[];
+      synthesis: Synthesis[];
+      votes: Vote[];
+      recommendation: Recommendation[];
+    }
+  >;
 }

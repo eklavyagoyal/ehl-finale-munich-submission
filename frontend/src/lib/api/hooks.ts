@@ -12,14 +12,19 @@ import type {
   DecisionResult,
   LlmCall,
   Meta,
+  Pipeline,
   Requirement,
   RequirementDetail,
   RecordPage,
   SourceDetail,
   Run,
   RunDetail,
+  RunResults,
+  SignalKind,
+  SignalPage,
   Source,
   Task,
+  Theme,
   ThemePage,
   Version,
 } from "./types";
@@ -30,8 +35,53 @@ export function useMeta() {
   return useSWR("meta", () => unwrap<Meta>(api.GET("/api/meta")), { revalidateOnFocus: false });
 }
 
+// The tasks counter sits on every page, so it polls slowly.
 export function useTasks() {
-  return useSWR("tasks", () => unwrap<Task[]>(api.GET("/api/tasks")), { refreshInterval: 5000 });
+  return useSWR("tasks", () => unwrap<Task[]>(api.GET("/api/tasks")), { refreshInterval: 30000 });
+}
+
+// /pipeline aggregates over every claim on each call: fetched on demand, never polled.
+export function usePipeline() {
+  return useSWR("pipeline", () => unwrap<Pipeline>(api.GET("/api/pipeline")), { revalidateOnFocus: false });
+}
+
+export function useSignals(market: string | null, kind: SignalKind | "all", limit = 15) {
+  return useSWR(["signals", market ?? "pooled", kind, limit], () =>
+    unwrap<SignalPage>(api.GET("/api/signals", { params: { query: { market: market ?? undefined, kind, limit } } })),
+  );
+}
+
+export function useTheme(id: number | null | undefined) {
+  return useSWR(id != null ? ["theme", id] : null, () =>
+    unwrap<Theme>(api.GET("/api/themes/{theme_id}", { params: { path: { theme_id: id! } } })),
+  );
+}
+
+// The run list refreshes every 5 s while any run is still going.
+export function useRuns(limit = 20) {
+  return useSWR(["runs", limit], () => unwrap<Run[]>(api.GET("/api/simulations", { params: { query: { limit } } })), {
+    refreshInterval: (data) => (data?.some((r) => ACTIVE_RUN.has(r.status)) ? 5000 : 0),
+  });
+}
+
+export function useRunResults(runId: string | null | undefined) {
+  return useSWR(runId ? ["run-results", runId] : null, () =>
+    unwrap<RunResults>(api.GET("/api/simulations/{run_id}/results", { params: { path: { run_id: runId! } } })),
+  );
+}
+
+// Every model call of a run in one request (no payloads); polled every 3 s while the run is live.
+export function useRunCalls(runId: string | null | undefined, live: boolean) {
+  return useSWR(
+    runId ? ["run-calls", runId] : null,
+    async () => {
+      const calls = await unwrap<(Omit<LlmCall, "agent_id"> & { agent_id: string | null })[]>(
+        api.GET("/api/simulations/{run_id}/llm-calls", { params: { path: { run_id: runId! } } }),
+      );
+      return calls.map((c) => ({ ...c, agent_id: c.agent_id ?? "agent:unknown" })) as LlmCall[];
+    },
+    { refreshInterval: live ? 3000 : 0 },
+  );
 }
 
 export interface RequirementQuery {
@@ -85,7 +135,7 @@ export function useLlmCalls(runId: string | null | undefined, requirementId: str
 export function useAudit(category?: string) {
   return useSWR(["audit", category ?? "all"], () =>
     unwrap<AuditPage>(api.GET("/api/audit", { params: { query: { category, limit: 100 } } })),
-    { refreshInterval: 4000 },
+    { refreshInterval: 10000 },
   );
 }
 
@@ -158,9 +208,9 @@ export async function buildThemes() {
   return unwrap<unknown>(api.POST("/api/themes/build", { body: { include_examples: false, include_pending_claims: false } }));
 }
 
-export async function draftRequirements(market: string | null, limit: number) {
+export async function draftRequirements(market: string | null, limit: number, featureKeys?: string[]) {
   return unwrap<{ created: unknown[]; skipped_existing?: unknown[]; dropped_invalid_citations?: number }>(
-    api.POST("/api/requirements/draft", { body: { market, limit } }),
+    api.POST("/api/requirements/draft", { body: { market, limit, feature_keys: featureKeys?.length ? featureKeys : null } }),
   );
 }
 
