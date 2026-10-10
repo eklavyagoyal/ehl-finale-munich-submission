@@ -51,6 +51,13 @@ def meta(session: Session = Depends(get_session)):
     }
 
 
+@router.get("/llm/models", summary="Configured model roles and which of them the OpenAI key can use")
+def llm_models():
+    from parallax.cli import _model_check
+
+    return _model_check()
+
+
 @router.get("/tasks", summary="What needs the PM now (sidebar 'My tasks')")
 def tasks(session: Session = Depends(get_session)):
     from parallax.learning import latest_recommendation

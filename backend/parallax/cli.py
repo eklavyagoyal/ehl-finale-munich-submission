@@ -38,6 +38,22 @@ def _db_init() -> None:
     print("schema up to date")
 
 
+def _model_check() -> dict:
+    """Startup diagnostic for the logs: are the configured model names available to this key?"""
+    settings = get_settings()
+    configured = sorted({settings.model_fast, settings.model_strong, *settings.judge_models, settings.embedding_model})
+    if settings.llm_mode != "openai":
+        return {"mode": settings.llm_mode, "configured": configured}
+    try:
+        from parallax.llm.client import get_llm
+
+        available = set(get_llm().list_models())
+    except Exception as error:  # never block startup on a diagnostic
+        return {"mode": "openai", "error": repr(error)[:500]}
+    return {"mode": "openai", "configured": configured, "missing": [m for m in configured if m not in available],
+            "available_gpt": sorted(m for m in available if m.startswith(("gpt-", "o")) and "realtime" not in m)[:60]}
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="parallax", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -92,6 +108,7 @@ def main(argv: list[str] | None = None) -> int:
         _db_init()
         with session_scope() as session:
             print(json.dumps({"agents": seed_agents(session, "system:startup")}), flush=True)
+        print(json.dumps({"llm_check": _model_check()}), flush=True)
         uvicorn.run("parallax.api.app:app", host="0.0.0.0", port=int(os.environ.get("PORT", "8000")),
                     proxy_headers=True, forwarded_allow_ips="*")
         return 0
