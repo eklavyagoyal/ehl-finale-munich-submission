@@ -7,7 +7,7 @@ import { Suspense, useEffect, useState } from "react";
 import { DraftSelectedDialog } from "@/components/generate-dialog";
 import { PageHeader } from "@/components/page-header";
 import { SignalChart } from "@/components/signal-chart";
-import { MapLegend, SignalMap } from "@/components/signal-map";
+import { HiddenSignalsNote, MapLegend, SignalMap } from "@/components/signal-map";
 import { SignalPanel } from "@/components/signal-panel";
 import { ChannelIcon } from "@/components/provenance";
 import { ErrorState, LoadingRows } from "@/components/states";
@@ -54,6 +54,7 @@ function SignalsView() {
   const markets: (string | null)[] = [...(meta?.markets ?? ["US", "EU", "CN"]), null];
   const [selected, setSelected] = useState<Map<string, Signal>>(new Map());
   const [opened, setOpened] = useState<string | null>(null);
+  const [showAll, setShowAll] = useState(false);
 
   // A new market starts with an empty selection and no open panel.
   function setMarket(m: string | null) {
@@ -89,15 +90,27 @@ function SignalsView() {
       </PageHeader>
 
       <div className="mt-2 flex flex-col gap-8">
-        <SignalMap market={market} selected={new Set(selected.keys())} onSelect={onDot} />
+        <SignalMap market={market} selected={new Set(selected.keys())} onSelect={onDot} showAll={showAll} />
         <SignalPanel featureKey={opened} market={market} onClose={() => setOpened(null)} />
-        <SignalBoard market={market} selected={selected} onToggle={toggle} />
+        <SignalBoard market={market} selected={selected} onToggle={toggle} showAll={showAll} onToggleShowAll={() => setShowAll((v) => !v)} />
       </div>
     </>
   );
 }
 
-function SignalBoard({ market, selected, onToggle }: { market: string | null; selected: Map<string, Signal>; onToggle: (s: Signal) => void }) {
+function SignalBoard({
+  market,
+  selected,
+  onToggle,
+  showAll,
+  onToggleShowAll,
+}: {
+  market: string | null;
+  selected: Map<string, Signal>;
+  onToggle: (s: Signal) => void;
+  showAll: boolean;
+  onToggleShowAll: () => void;
+}) {
   const { data: requirements } = useRequirements();
   const mixed = useSignals(market, "mixed", 100);
   // Signals that already became a requirement link to it; pooled signals match requirements without a market.
@@ -137,6 +150,7 @@ function SignalBoard({ market, selected, onToggle }: { market: string | null; se
       {/* Explanations and legends at the very bottom, small. */}
       <footer className="flex flex-col gap-2 border-t pt-4 text-[11px] text-muted-foreground">
         <MapLegend />
+        <HiddenSignalsNote market={market} showAll={showAll} onToggle={onToggleShowAll} />
         <span className="flex items-center gap-3">
           Bars:
           {MIX.map((m) => (

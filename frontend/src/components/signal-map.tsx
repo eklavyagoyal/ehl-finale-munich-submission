@@ -5,13 +5,14 @@ import { useState } from "react";
 import { ErrorState, LoadingRows } from "@/components/states";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { useSignalMap } from "@/lib/api/hooks";
-import type { MapAxis, MapItem, Quadrant, SignalKind } from "@/lib/api/types";
+import type { MapItem, Quadrant, SignalKind } from "@/lib/api/types";
 import { fmtCount } from "@/lib/format";
 import { cn } from "cn";
 
-const W = 760;
-const H = 340;
-const PAD = { left: 58, right: 16, top: 26, bottom: 34 };
+const W = 1000;
+const H = 460;
+// Symmetric padding: the cross sits exactly in the middle of the figure.
+const PAD = 24;
 const JITTER_PX = 3;
 const LABELS_PER_QUADRANT = 5;
 
@@ -25,10 +26,20 @@ export const KIND_DOT: Record<SignalKind, string> = {
 const KIND_LABEL: Record<SignalKind, string> = { pain: "Pain", request: "Wish", strength: "Strength", mixed: "Mixed" };
 
 
-// Every signal of the market on one four-field map: reviews (x, log) against the share of problems and
-// wishes (y). Axes, thresholds and quadrants come from the API; clicking a dot opens the signal.
-export function SignalMap({ market, selected, onSelect }: { market: string | null; selected: Set<string>; onSelect: (item: MapItem) => void }) {
-  const [showAll, setShowAll] = useState(false);
+// Every signal of the market on one 2×2 map, like a consulting slide: a cross exactly in the middle, what low
+// and high mean at the four arm ends, the field names inside the fields. No ticks, no percentages; numbers on
+// hover. The piecewise scale (center_on_threshold) puts the API's thresholds on the cross.
+export function SignalMap({
+  market,
+  selected,
+  onSelect,
+  showAll = false,
+}: {
+  market: string | null;
+  selected: Set<string>;
+  onSelect: (item: MapItem) => void;
+  showAll?: boolean;
+}) {
   const { data, error, isLoading } = useSignalMap(market, showAll ? 1 : undefined);
   const [hover, setHover] = useState<MapItem | null>(null);
 
@@ -40,13 +51,12 @@ export function SignalMap({ market, selected, onSelect }: { market: string | nul
   const xmin = Math.max(1, Math.min(ax.threshold / 4, ...reviews) / 1.2);
   const xmax = Math.max(ax.threshold * 4, ...reviews) * 1.2;
   const lx = (v: number) => Math.log10(Math.max(v, xmin));
-  const left = PAD.left;
-  const right = W - PAD.right;
-  const top = PAD.top;
-  const bottom = H - PAD.bottom;
-  const midX = (left + right) / 2;
-  const midY = (top + bottom) / 2;
-  // centre_on_threshold: a piecewise scale puts the threshold exactly in the middle, so the cross is centred.
+  const left = PAD;
+  const right = W - PAD;
+  const top = PAD;
+  const bottom = H - PAD;
+  const midX = W / 2;
+  const midY = H / 2;
   const x = (v: number) => {
     if (!ax.center_on_threshold) return left + ((lx(v) - lx(xmin)) / (lx(xmax) - lx(xmin))) * (right - left);
     return v <= ax.threshold
@@ -82,124 +92,107 @@ export function SignalMap({ market, selected, onSelect }: { market: string | nul
   );
 
   return (
-    <figure className="flex flex-col gap-2">
-      <div className="relative w-full" style={{ aspectRatio: `${W} / ${H}` }}>
-        <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 size-full" aria-hidden>
-          <g stroke="var(--border)" strokeWidth={1} shapeRendering="crispEdges" fill="none">
-            <line x1={left} y1={bottom} x2={right} y2={bottom} />
-            <line x1={left} y1={top} x2={left} y2={bottom} />
-            <line x1={x(ax.threshold)} y1={top} x2={x(ax.threshold)} y2={bottom} />
-            <line x1={left} y1={y(ay.threshold)} x2={right} y2={y(ay.threshold)} />
-          </g>
-          <g className="fill-muted-foreground" style={{ fontSize: 10 }}>
-            {[1, 10, 100, 1000, 10000, ax.threshold]
-              .filter((t, i, all) => t >= xmin && t <= xmax && all.indexOf(t) === i)
-              .filter((t) => x(t) > left + 60 && x(t) < right - 60)
-              .map((t) => (
-                <text key={t} x={x(t)} y={bottom + 14} textAnchor="middle">
-                  {fmtCount(t)}
-                </text>
-              ))}
-            {/* The four sides say what low and high mean. */}
-            <text x={left} y={bottom + 14} textAnchor="start">
-              {ax.low_label ?? ""}
-            </text>
-            <text x={right} y={bottom + 14} textAnchor="end">
-              {ax.high_label ?? ""}
-            </text>
-            <text x={12} y={(midY + bottom) / 2} transform={`rotate(-90 12 ${(midY + bottom) / 2})`} textAnchor="middle">
-              {ay.low_label ?? ""}
-            </text>
-            <text x={12} y={(top + midY) / 2} transform={`rotate(-90 12 ${(top + midY) / 2})`} textAnchor="middle">
-              {ay.high_label ?? ""}
-            </text>
-            <text x={left - 6} y={y(1) + 4} textAnchor="end">
-              100 %
-            </text>
-            <text x={left - 6} y={y(ay.threshold) + 4} textAnchor="end">
-              {Math.round(ay.threshold * 100)} %
-            </text>
-            <text x={left - 6} y={y(0) + 4} textAnchor="end">
-              0
-            </text>
-          </g>
-        </svg>
+    <figure className="relative w-full" style={{ aspectRatio: `${W} / ${H}` }}>
+      <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 size-full" aria-hidden>
+        <g className="stroke-foreground/25" strokeWidth={1} shapeRendering="crispEdges">
+          <line x1={left} y1={midY} x2={right} y2={midY} />
+          <line x1={midX} y1={top} x2={midX} y2={bottom} />
+        </g>
+      </svg>
 
-        <AxisLabel axis={ax} style={{ left: "50%", bottom: 0, transform: "translateX(-50%)" }} />
-        <AxisLabel axis={ay} style={{ left: pct(PAD.left, W), top: 0 }} />
+      {/* What low and high mean, at the four ends of the cross. */}
+      <ArmLabel style={{ right: pct(PAD, W), top: pct(midY, H), transform: "translateY(-120%)" }}>{ax.high_label ?? "Many reviews"} →</ArmLabel>
+      <ArmLabel style={{ left: pct(PAD, W), top: pct(midY, H), transform: "translateY(-120%)" }}>← {ax.low_label ?? "Few reviews"}</ArmLabel>
+      <ArmLabel style={{ left: pct(midX, W), top: pct(PAD, H), transform: "translateX(8px)" }}>↑ {ay.high_label ?? "Mostly problems & wishes"}</ArmLabel>
+      <ArmLabel style={{ left: pct(midX, W), bottom: pct(PAD, H), transform: "translateX(8px)" }}>↓ {ay.low_label ?? "Mostly praise"}</ArmLabel>
 
-        {data.quadrants.map((q) => (
+      {/* Field names inside the fields, in their outer corners: act top right, watch top left, protect bottom right, background bottom left. */}
+      {data.quadrants.map((q) => {
+        const isRight = q.key === "act" || q.key === "protect";
+        const isTop = q.key === "act" || q.key === "watch";
+        return (
           <HoverCard key={q.key} openDelay={100} closeDelay={60}>
             <HoverCardTrigger asChild>
               <span
-                className={cn("absolute cursor-default text-[11px] text-muted-foreground", (q.key === "act" || q.key === "protect") && "text-right")}
-                // Corners as the contract fixes them: act top right, watch top left, protect bottom right, background bottom left.
+                className={cn("absolute flex cursor-default flex-col leading-tight", isRight && "items-end text-right")}
                 style={{
-                  ...(q.key === "act" || q.key === "protect" ? { right: pct(PAD.right + 6, W) } : { left: pct(PAD.left + 8, W) }),
-                  ...(q.key === "act" || q.key === "watch" ? { top: pct(PAD.top + 4, H) } : { bottom: pct(PAD.bottom + 4, H) }),
+                  ...(isRight ? { right: pct(PAD + 18, W) } : { left: pct(PAD + 18, W) }),
+                  ...(isTop ? { top: pct(PAD + 34, H) } : { bottom: pct(PAD + 34, H) }),
                 }}
               >
-                <span className="font-medium text-foreground/80">{q.label}</span> <span className="tabular-nums">{q.signals}</span>
+                <span className="text-lg font-semibold tracking-tight text-foreground/25">{q.label}</span>
+                <span className="text-xs text-muted-foreground/70 tabular-nums">{q.signals} signals</span>
               </span>
             </HoverCardTrigger>
             <HoverCardContent className="w-60 text-xs">{q.hint}</HoverCardContent>
           </HoverCard>
-        ))}
+        );
+      })}
 
-        {data.items.map((item) => (
-          <button
-            key={item.feature_key}
-            type="button"
-            onClick={() => onSelect(item)}
-            aria-pressed={selected.has(item.feature_key)}
-            onMouseEnter={() => setHover(item)}
-            onMouseLeave={() => setHover((h) => (h?.feature_key === item.feature_key ? null : h))}
-            onFocus={() => setHover(item)}
-            onBlur={() => setHover(null)}
-            aria-label={`${item.label}: ${item.reviews} reviews, ${Math.round(item.need_share * 100)} % problems or wishes`}
-            className="absolute flex items-center gap-1"
-            style={{
-              left: pct(x(item.reviews), W),
-              top: pct(y(item.need_share), H),
-              transform: `translate(calc(-50% + ${jitter.get(item.feature_key)?.[0] ?? 0}px), calc(-50% + ${jitter.get(item.feature_key)?.[1] ?? 0}px))`,
-            }}
-          >
-            <span
-              className={cn(
-                "size-2.5 rounded-full",
-                KIND_DOT[item.kind],
-                item.requirement_ids.length > 0 && "outline outline-1 outline-offset-2 outline-foreground/50",
-                selected.has(item.feature_key) && "ring-[3px] ring-blue-600/80 ring-offset-1 ring-offset-background",
-              )}
-            />
-            {labelled.has(item.feature_key) && <span className="max-w-28 truncate text-[10px] text-muted-foreground">{item.label}</span>}
-          </button>
-        ))}
+      {data.items.map((item) => (
+        <button
+          key={item.feature_key}
+          type="button"
+          onClick={() => onSelect(item)}
+          aria-pressed={selected.has(item.feature_key)}
+          onMouseEnter={() => setHover(item)}
+          onMouseLeave={() => setHover((h) => (h?.feature_key === item.feature_key ? null : h))}
+          onFocus={() => setHover(item)}
+          onBlur={() => setHover(null)}
+          aria-label={`${item.label}: ${item.reviews} reviews, ${Math.round(item.need_share * 100)} % problems or wishes`}
+          className="absolute flex items-center gap-1"
+          style={{
+            left: pct(x(item.reviews), W),
+            top: pct(y(item.need_share), H),
+            transform: `translate(calc(-50% + ${jitter.get(item.feature_key)?.[0] ?? 0}px), calc(-50% + ${jitter.get(item.feature_key)?.[1] ?? 0}px))`,
+          }}
+        >
+          <span
+            className={cn(
+              "size-2.5 rounded-full",
+              KIND_DOT[item.kind],
+              item.requirement_ids.length > 0 && "outline outline-1 outline-offset-2 outline-foreground/50",
+              selected.has(item.feature_key) && "ring-[3px] ring-blue-600/80 ring-offset-1 ring-offset-background",
+            )}
+          />
+          {labelled.has(item.feature_key) && <span className="max-w-28 truncate text-[10px] text-muted-foreground">{item.label}</span>}
+        </button>
+      ))}
 
-        {hover && (
-          <div
-            className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+10px)] rounded-md border bg-popover px-2.5 py-1.5 text-xs shadow-sm"
-            style={{ left: pct(x(hover.reviews), W), top: pct(y(hover.need_share), H) }}
-          >
-            <p className="font-medium whitespace-nowrap">{hover.label}</p>
-            <p className="whitespace-nowrap text-muted-foreground tabular-nums">
-              {fmtCount(hover.reviews)} reviews · {Math.round((hover.need_share_raw ?? hover.need_share) * 100)} % problems or wishes
-              {hover.need_share_raw != null && Math.round(hover.need_share_raw * 100) !== Math.round(hover.need_share * 100)
-                ? ` (plotted at ${Math.round(hover.need_share * 100)} %)`
-                : ""}
-            </p>
-          </div>
-        )}
-      </div>
-      {data.hidden_below_min_reviews || showAll ? (
-        <figcaption className="text-[11px] text-muted-foreground">
-          {showAll ? "Showing every signal, also those under 5 reviews. " : `${data.hidden_below_min_reviews} signals under 5 reviews hidden. `}
-          <button type="button" onClick={() => setShowAll((v) => !v)} className="underline-offset-2 hover:text-foreground hover:underline">
-            {showAll ? "Hide them" : "Show them"}
-          </button>
-        </figcaption>
-      ) : null}
+      {hover && (
+        <div
+          className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+10px)] rounded-md border bg-popover px-2.5 py-1.5 text-xs shadow-sm"
+          style={{ left: pct(x(hover.reviews), W), top: pct(y(hover.need_share), H) }}
+        >
+          <p className="font-medium whitespace-nowrap">{hover.label}</p>
+          <p className="whitespace-nowrap text-muted-foreground tabular-nums">
+            {fmtCount(hover.reviews)} reviews · {Math.round((hover.need_share_raw ?? hover.need_share) * 100)} % problems or wishes
+          </p>
+        </div>
+      )}
     </figure>
+  );
+}
+
+function ArmLabel({ style, children }: { style: React.CSSProperties; children: React.ReactNode }) {
+  return (
+    <span className="absolute text-[11px] whitespace-nowrap text-muted-foreground" style={style}>
+      {children}
+    </span>
+  );
+}
+
+// How many signals the map hides under 5 reviews, with a switch; shown small at the bottom of the page.
+export function HiddenSignalsNote({ market, showAll, onToggle }: { market: string | null; showAll: boolean; onToggle: () => void }) {
+  const { data } = useSignalMap(market, showAll ? 1 : undefined);
+  if (!data || (!data.hidden_below_min_reviews && !showAll)) return null;
+  return (
+    <span>
+      {showAll ? "The map shows every signal, also those under 5 reviews. " : `${data.hidden_below_min_reviews} signals under 5 reviews are hidden on the map. `}
+      <button type="button" onClick={onToggle} className="underline-offset-2 hover:text-foreground hover:underline">
+        {showAll ? "Hide them" : "Show them"}
+      </button>
+    </span>
   );
 }
 
@@ -223,19 +216,5 @@ export function MapLegend() {
         selected
       </span>
     </span>
-  );
-}
-
-function AxisLabel({ axis, style }: { axis: MapAxis; style: React.CSSProperties }) {
-  return (
-    <HoverCard openDelay={100} closeDelay={60}>
-      <HoverCardTrigger asChild>
-        <span className="absolute cursor-default text-[11px] text-muted-foreground underline decoration-dotted underline-offset-2" style={style}>
-          {axis.label}
-          {axis.scale === "log" ? " (log)" : ""}
-        </span>
-      </HoverCardTrigger>
-      <HoverCardContent className="w-64 text-xs">{axis.hint}</HoverCardContent>
-    </HoverCard>
   );
 }
