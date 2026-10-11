@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from parallax.models import Claim, Entity, Feature, Record, Source, Theme
+from parallax.models import Claim, Entity, Feature, Record, RecordTriage, Source, Theme
 from parallax.policy import active_policy, market_bucket
 
 REQUEST_TYPES = {"new_request", "discontinued", "competitor_parity"}
@@ -32,6 +32,7 @@ class _Acc:
     eligible: set = field(default_factory=set)
     derived: set = field(default_factory=set)
     pending: set = field(default_factory=set)
+    owners: set = field(default_factory=set)
 
 
 def target_scope(session: Session, target_model: str) -> tuple[set[str], set[str]]:
@@ -100,6 +101,9 @@ def build_themes(session: Session, *, target_model: str, include_examples: bool 
         select(Record, Source).join(Source, Source.source_id == Record.source_id)
         .where(Record.record_kind == "feedback", Record.superseded_by.is_(None), Source.review_status != "rejected")
     ).all()
+    triage = {t.record_id: t for t in session.scalars(select(RecordTriage))}
+    triage_filter = ext.get("triage_filter", {})
+    excluded_by_triage = 0
     retained: dict[str, tuple[Record, Source]] = {}
     for record, source in rows:
         if source.is_example and not include_examples:
@@ -107,6 +111,12 @@ def build_themes(session: Session, *, target_model: str, include_examples: bool 
         subjects = set(record.subject_ids or [])
         if subjects & bmw_models and not subjects & (relevant | proxies):
             continue  # assigned only to another BMW model
+        t = triage.get(record.record_id)
+        if triage_filter.get("enabled") and t is not None and source.stream != "bmw" and (
+                (triage_filter.get("exclude_not_relevant") and not t.relevant)
+                or t.vehicle in triage_filter.get("exclude_vehicles", [])):
+            excluded_by_triage += 1
+            continue
         retained[record.record_id] = (record, source)
 
     cohort_of: dict[str, tuple] = {}
@@ -145,6 +155,8 @@ def build_themes(session: Session, *, target_model: str, include_examples: bool 
                 a.brand.add(parent)  # e.g. My BMW app reviews: shown as brand-wide context, not G60 demand
                 continue
             a.parents.add(parent)
+            if source.stream == "bmw" or (triage.get(parent) is not None and triage[parent].author == "owner"):
+                a.owners.add(parent)  # BMW feedback is owner feedback by source; online reviews by triage
             if target_model in (record.subject_ids or []):
                 a.direct.add(parent)
             a.by_type[claim.claim_type].add(parent)
@@ -184,7 +196,7 @@ def build_themes(session: Session, *, target_model: str, include_examples: bool 
             competitor_review_count=len(a.competitor), competitor_record_ids=sorted(a.competitor)[:500],
             brand_review_count=len(a.brand), brand_record_ids=sorted(a.brand)[:500],
             pain_review_count=len(a.pain), praise_review_count=len(a.by_type.get("praise", set())),
-            need_review_count=len(a.pain | requests),
+            need_review_count=len(a.pain | requests), owner_review_count=len(a.owners),
             counts_by_claim_type={k: len(v) for k, v in sorted(a.by_type.items())},
             channels=sorted(a.channels), cohorts=cohorts, max_cohort_share=max_share,
             record_ids=sorted(a.parents), llm_eligible_record_count=len(a.eligible),
@@ -197,6 +209,7 @@ def build_themes(session: Session, *, target_model: str, include_examples: bool 
     return {
         "snapshot_id": str(snapshot_id), "themes": created, "retained_feedback_records": len(retained),
         "claims_considered": len(claims), "claim_statuses_counted": sorted(statuses),
+        "triage_filter": bool(triage_filter.get("enabled")), "excluded_by_triage": excluded_by_triage,
         "basis": "Distinct collected reviews per feature; within-cohort shares; not customer prevalence.",
     }
 

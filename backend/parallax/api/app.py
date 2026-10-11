@@ -10,7 +10,7 @@ from starlette.concurrency import run_in_threadpool
 
 from parallax import __version__
 from parallax.api.common import ACTOR_PATTERN
-from parallax.api.routers import admin, agents, evidence, governance, labeling, pipeline, requirements, simulations
+from parallax.api.routers import admin, agents, evidence, governance, labeling, pipeline, requirements, simulations, triage
 from parallax.audit import record_event
 from parallax.config import get_settings
 from parallax.db import get_engine, session_scope
@@ -85,5 +85,5 @@ async def bearer_auth(request: Request, call_next):
     return await call_next(request)
 
 
-for module in (governance, pipeline, evidence, requirements, simulations, agents, labeling, admin):
+for module in (governance, pipeline, evidence, requirements, simulations, agents, labeling, triage, admin):
     app.include_router(module.router)

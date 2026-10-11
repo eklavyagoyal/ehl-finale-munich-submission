@@ -25,6 +25,7 @@ from parallax.models import (
     PMDecision,
     Recommendation,
     Record,
+    RecordTriage,
     Requirement,
     RequirementEvidence,
     RequirementVersion,
@@ -42,7 +43,7 @@ router = APIRouter(prefix="/api/admin", tags=["admin"])
 # Children before parents. Agents, policy versions, the audit trail and the LLM call log are kept.
 REQUIREMENT_TABLES = [Lesson, PMDecision, Vote, Recommendation, Synthesis, ResearchRequest, DepartmentMemo, PersonaResponse,
                       SimStep, CriterionRating, GateState, RequirementEvidence, RequirementVersion, Requirement, SimRun]
-DATA_TABLES = REQUIREMENT_TABLES + [Finding, Theme, Claim, Record, Source, IngestRun, Feature, Entity]
+DATA_TABLES = REQUIREMENT_TABLES + [Finding, Theme, Claim, RecordTriage, Record, Source, IngestRun, Feature, Entity]
 
 
 def require_cli(request: Request) -> None:

@@ -231,6 +231,78 @@ def labeler_quality(session: Session) -> dict | None:
             "sample": result.get("sample"), "run_id": str(run.id)}
 
 
+def _processing_flow(session: Session, scope: VehicleScope, by_bmw: set, by_ai: set) -> tuple[dict, set]:
+    """Left-to-right flow of the vehicle's reviews (link values = reviews): where they come from, what triage kept,
+    who found the topic, what became signals and findings. Returns the flow and the reviews excluded by triage."""
+    from parallax.models import RecordTriage
+
+    policy = active_policy(session).document["parallax"]
+    triage_filter = policy.get("triage_filter", {})
+    stream_of = dict(session.execute(
+        select(Record.record_id, Source.stream).join(Source, Source.source_id == Record.source_id)
+        .where(scope.target_filter(), Record.record_kind == "feedback", Record.superseded_by.is_(None))).all())
+    flagged = {rid for rid, relevant, vehicle in session.execute(
+        select(RecordTriage.record_id, RecordTriage.relevant, RecordTriage.vehicle)
+        .join(Record, Record.record_id == RecordTriage.record_id).where(scope.target_filter()))
+        if stream_of.get(rid) not in (None, "bmw") and (
+            (triage_filter.get("exclude_not_relevant", True) and not relevant)
+            or vehicle in triage_filter.get("exclude_vehicles", []))}
+    triaged = session.scalar(select(func.count()).select_from(RecordTriage).join(Record, Record.record_id == RecordTriage.record_id)
+                             .where(scope.target_filter())) or 0
+    excluded = flagged if triage_filter.get("enabled") else set()
+    bmw_ids = {rid for rid, stream in stream_of.items() if stream == "bmw"}
+    online_ids = set(stream_of) - bmw_ids
+    labeled_bmw, labeled_ai = by_bmw - excluded, (by_ai - by_bmw) - excluded
+    in_findings = set()
+    for ids in session.scalars(select(Finding.record_ids).where(Finding.target_model == scope.target_model)):
+        in_findings.update(ids or [])
+    tagged = labeled_bmw | labeled_ai
+    code = scope.target_model.split(":")[-1]
+    online_detail = (f"YouTube comments, app-store and forum reviews collected under the {code}. Triage checked "
+                     f"{triaged:,} of them for vehicle, author and relevance; {len(flagged):,} are not relevant or about "
+                     "another car. " + ("They are excluded from the signals." if excluded else
+                                         "They still count until the PM switches the triage filter on."))
+    nodes = [
+        {"key": "bmw", "label": "BMW feedback", "count": len(bmw_ids), "unit": "reviews",
+         "hint": "Owners, through BMW channels",
+         "detail": "BMW's own feedback export: every row comes with vehicle, engine type, country and, for most rows, "
+                   "BMW's topic and feedback type."},
+        {"key": "online", "label": "Online reviews", "count": len(online_ids), "unit": "reviews",
+         "hint": f"{len(flagged):,} flagged by triage" if triaged else "Not triaged yet", "detail": online_detail},
+    ]
+    links = []
+    if excluded:
+        nodes.append({"key": "excluded", "label": "Excluded", "count": len(excluded), "unit": "reviews",
+                      "hint": "Not relevant or another car", "detail": online_detail})
+        links.append({"source": "online", "target": "excluded", "value": len(excluded & online_ids)})
+    nodes += [
+        {"key": "bmw_labels", "label": "BMW labels", "count": len(labeled_bmw), "unit": "reviews",
+         "hint": "Topic from BMW's classification", "detail": "BMW's VFC topic and feedback type, used as they are."},
+        {"key": "ai_labeler", "label": "AI labeler", "count": len(labeled_ai), "unit": "reviews",
+         "hint": "Topic found by our labeler",
+         "detail": "gpt-5-mini with BMW examples assigns catalog features and feedback type; every claim needs a verbatim "
+                   "quote from the review."},
+        {"key": "no_topic", "label": "No topic", "count": 0, "unit": "reviews", "hint": "No catalog feature found",
+         "detail": "Mostly reviews that name no catalog feature (e.g. 'great car'); also texts under 15 characters and "
+                   "claims dropped because their quote did not match."},
+        {"key": "signals", "label": "Signals", "count": 0, "unit": "signals", "hint": "One per feature, counted by code",
+         "detail": "Each review counts once per feature and market; the feature is classified as pain, wish, strength or mixed."},
+        {"key": "findings", "label": "Findings", "count": 0, "unit": "findings", "hint": "Concrete statements for the top signals",
+         "detail": "The AI groups the reviews of a top signal into 2-5 concrete statements; counts and quotes come from code."},
+    ]
+    for source_key, ids in (("bmw", bmw_ids), ("online", online_ids - excluded)):
+        links += [{"source": source_key, "target": "bmw_labels", "value": len(ids & labeled_bmw)},
+                  {"source": source_key, "target": "ai_labeler", "value": len(ids & labeled_ai)},
+                  {"source": source_key, "target": "no_topic", "value": len(ids - tagged)}]
+    links += [{"source": "bmw_labels", "target": "signals", "value": len(labeled_bmw)},
+              {"source": "ai_labeler", "target": "signals", "value": len(labeled_ai)},
+              {"source": "signals", "target": "findings", "value": len(tagged & in_findings)}]
+    counts = {n["key"]: n for n in nodes}
+    counts["no_topic"]["count"] = len((set(stream_of) - excluded) - tagged)
+    return {"nodes": nodes, "links": [l for l in links if l["value"] > 0], "link_unit": "reviews",
+            "triage": {"triaged": triaged, "flagged": len(flagged), "filter_enabled": bool(excluded)}}, excluded
+
+
 def _text(label: str, hint: str, detail: str) -> dict:
     return {"label": label, "hint": hint, "detail": detail}
 
@@ -272,6 +344,9 @@ def pipeline(vehicle: str | None = Query(None, description="e.g. G60 or bmw:G60;
         if status == "accepted" and feature_key:
             (by_bmw if derived else by_ai).add(record_id)
     pending_claims = claim_status.get("pending", 0)
+    flow, excluded = _processing_flow(session, scope, by_bmw, by_ai)
+    by_bmw -= excluded
+    by_ai -= excluded
     tagged = len(by_bmw | by_ai)
     by_ai -= by_bmw
     findings_count = session.scalar(select(func.count()).select_from(Finding).where(Finding.target_model == target)) or 0
@@ -284,6 +359,8 @@ def pipeline(vehicle: str | None = Query(None, description="e.g. G60 or bmw:G60;
     kinds = Counter(classify(t) for t in pooled)
     thresholds = _thresholds(session)
     quadrants = Counter(quadrant(t, thresholds) for t in pooled)
+    for node in flow["nodes"]:
+        node["count"] = {"signals": len(pooled), "findings": findings_count}.get(node["key"], node["count"])
     top = lambda k, key: [t.label for t in sorted((t for t in pooled if classify(t) == k), key=key, reverse=True)[:3]]
     # 4 experts, 5 decision: this vehicle's requirements only
     vehicle_reqs = list(session.scalars(select(Requirement).where(Requirement.target_model == target)))
@@ -328,6 +405,7 @@ def pipeline(vehicle: str | None = Query(None, description="e.g. G60 or bmw:G60;
                     "claims_by_status": dict(claim_status), "claims_by_producer": dict(producers),
                     "records_by_producer": {"BMW labels": len(by_bmw), "AI labeler": len(by_ai)}},
          "funnel": funnel,
+         "flow": flow,
          "gap": {"count": max(0, target_feedback - tagged), **_text(
              "No topic", "No catalog feature found",
              "Mostly reviews that name no catalog feature (e.g. 'great car', dealer experience); also texts under 15 "

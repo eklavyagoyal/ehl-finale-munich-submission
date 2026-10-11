@@ -65,6 +65,10 @@ PARALLAX_EXTENSIONS: dict[str, Any] = {
     # Signal map (four fields): x = distinct reviews mentioning the feature, y = share of them reporting a
     # pain or a wish. A signal counts as "frequent" from this many reviews, as "mostly problems" from this share.
     "signal_map": {"frequent_min_reviews": 30, "need_share_threshold": 0.5},
+    # Triage of online reviews (parallax.triage). Off until the PM has checked the spot-check sample: when on,
+    # online reviews marked not relevant or about another vehicle no longer count toward the vehicle's signals.
+    "triage_filter": {"enabled": False, "exclude_not_relevant": True,
+                      "exclude_vehicles": ["older_generation", "other_bmw", "competitor"]},
     # Observed demand anchors (0-5), first matching rule from the top wins. Shares are
     # within-cohort collected-review shares, never customer prevalence.
     "demand_anchors": [

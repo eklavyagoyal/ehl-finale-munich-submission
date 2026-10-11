@@ -91,6 +91,10 @@ def create_run(session: Session, *, requirement_ids: list[str], actor_id: str, k
     return run
 
 
+HEAVY_KINDS = ("simulation", "followup", "validation", "council_validation")
+_HEAVY_SLOT = threading.Semaphore(1)
+
+
 def launch(run_id: uuid.UUID) -> threading.Thread:
     kind = _run_kind(run_id)
     if kind == "condense":
@@ -101,12 +105,24 @@ def launch(run_id: uuid.UUID) -> threading.Thread:
         from parallax import labeling
 
         target = labeling.execute
+    elif kind == "triage":
+        from parallax import triage
+
+        target = triage.execute
     elif kind == "council_validation":
         from parallax import council_validation
 
         target = council_validation.execute
     else:
         target = execute_validation if kind == "validation" else execute
+    if kind in HEAVY_KINDS:
+        heavy = target
+
+        def target(run_id: uuid.UUID) -> None:
+            # Persona runs hold TinyTroupe worlds and many parallel calls; two at once exceeded the container's
+            # memory and killed both. They queue here (status stays "queued") and run one after another.
+            with _HEAVY_SLOT:
+                heavy(run_id)
     thread = threading.Thread(target=target, args=(run_id,), name=f"parallax-run-{str(run_id)[:8]}", daemon=True)
     thread.start()
     return thread

@@ -226,6 +226,12 @@ def test_pipeline_and_signals(client, drafted):
     assert {"sources", "records", "pending_review", "by_stream"} <= set(stages["stages"][0]["counts"])
     assert [f["key"] for f in processing["funnel"]] == ["reviews", "tagged", "signals", "findings"]
     assert all(f["label"] and f["hint"] and f["detail"] for f in processing["funnel"])
+    flow = processing["flow"]
+    keys = {n["key"] for n in flow["nodes"]}
+    assert {"bmw", "online", "bmw_labels", "ai_labeler", "no_topic", "signals", "findings"} <= keys
+    assert all(l["source"] in keys and l["target"] in keys and l["value"] > 0 for l in flow["links"])
+    into_labels = sum(l["value"] for l in flow["links"] if l["source"] in ("bmw", "online") and l["target"] != "excluded")
+    assert into_labels == processing["counts"]["feedback_records"]
     sources = stages["stages"][0]
     assert stages["vehicle"]["code"] == "G60" and isinstance(sources["outside_scope"], list)
     signal_map = client.get("/api/signals/map", params={"market": "US", "min_reviews": 1}).json()
@@ -236,6 +242,22 @@ def test_pipeline_and_signals(client, drafted):
     assert [s["key"] for s in opened["how_sorted"]] == ["collected", "tagged", "counted", "classified", "placed", "grouped"]
     assert all(s["short"] and s["detail"] for s in opened["how_sorted"])
     assert client.get("/api/signals/no_such_feature", params={"market": "US"}).status_code == 404
+
+
+def test_triage_marks_online_reviews(client, drafted):
+    run = client.post("/api/triage/run", json={"workers": 4}).json()
+    done = wait_for(client, run["id"])
+    assert done["status"] == "completed", done
+    summary = client.get("/api/triage/summary").json()
+    assert summary["validated"] is False and summary["triaged"] >= 1
+    assert set(summary["overall"]["author"]) <= {"owner", "not_owner", "unclear"}
+    sample = client.get("/api/triage/sample", params={"n": 5}).json()["items"]
+    assert sample and all(item["text"] is not None and item["reason"] for item in sample)
+    # Nothing is excluded while the filter is off (default).
+    rebuilt = client.post("/api/themes/build", json={}).json()
+    assert rebuilt["triage_filter"] is False and rebuilt["excluded_by_triage"] == 0
+    processing = client.get("/api/pipeline").json()["stages"][1]
+    assert processing["flow"]["triage"]["triaged"] >= 0 and processing["flow"]["triage"]["filter_enabled"] is False
 
 
 def test_interrupted_runs_are_marked_failed(client, drafted):

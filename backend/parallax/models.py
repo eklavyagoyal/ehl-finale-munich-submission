@@ -121,6 +121,26 @@ class Claim(Base):
     derived: Mapped[bool] = mapped_column(Boolean, default=False)
 
 
+class RecordTriage(Base):
+    """Per online review: the columns BMW's feedback export has per row (vehicle, engine type), plus author and
+    relevance. Produced by parallax.triage; one row per record, latest prompt version wins."""
+
+    __tablename__ = "record_triage"
+
+    record_id: Mapped[str] = mapped_column(ForeignKey("records.record_id"), primary_key=True)
+    target_model: Mapped[str] = mapped_column(String(60))
+    vehicle: Mapped[str] = mapped_column(String(30), index=True)
+    engine: Mapped[str] = mapped_column(String(20))
+    author: Mapped[str] = mapped_column(String(20), index=True)
+    relevant: Mapped[bool] = mapped_column(Boolean, index=True)
+    reason: Mapped[str] = mapped_column(Text)
+    method: Mapped[str] = mapped_column(String(20))  # llm | rule
+    model: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    prompt_version: Mapped[str] = mapped_column(String(40))
+    run_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(TS, server_default=func.now())
+
+
 class Feature(Base):
     __tablename__ = "features"
 
@@ -166,6 +186,7 @@ class Theme(Base):
     brand_review_count: Mapped[int] = mapped_column(Integer, default=0)
     brand_record_ids: Mapped[list[str]] = mapped_column(ARRAY(Text), default=list)
     need_review_count: Mapped[int] = mapped_column(Integer, default=0)  # distinct reviews with a pain or a wish
+    owner_review_count: Mapped[int] = mapped_column(Integer, default=0)  # BMW feedback + online reviews triaged as owner
     request_review_count: Mapped[int] = mapped_column(Integer)
     pain_review_count: Mapped[int] = mapped_column(Integer)
     praise_review_count: Mapped[int] = mapped_column(Integer)

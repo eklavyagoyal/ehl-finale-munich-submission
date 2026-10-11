@@ -3606,6 +3606,185 @@
     }
    }
   },
+  "/api/triage/run": {
+   "post": {
+    "tags": [
+     "triage"
+    ],
+    "summary": "Triage online reviews (background run; poll /api/simulations/{id})",
+    "operationId": "run_api_triage_run_post",
+    "parameters": [
+     {
+      "name": "x-actor",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`.",
+       "title": "X-Actor"
+      },
+      "description": "Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`."
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/TriageIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/triage/summary": {
+   "get": {
+    "tags": [
+     "triage"
+    ],
+    "summary": "Online data after triage: overall and for the records collected under the vehicle",
+    "operationId": "summary_api_triage_summary_get",
+    "parameters": [
+     {
+      "name": "vehicle",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "e.g. G60; default: the active vehicle",
+       "title": "Vehicle"
+      },
+      "description": "e.g. G60; default: the active vehicle"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/triage/sample": {
+   "get": {
+    "tags": [
+     "triage"
+    ],
+    "summary": "Spot-check sample of triaged reviews (text next to the labels)",
+    "operationId": "sample_api_triage_sample_get",
+    "parameters": [
+     {
+      "name": "n",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 200,
+       "minimum": 1,
+       "default": 30,
+       "title": "N"
+      }
+     },
+     {
+      "name": "seed",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "default": 1,
+       "title": "Seed"
+      }
+     },
+     {
+      "name": "only",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "not_relevant | owner | omit for all",
+       "title": "Only"
+      },
+      "description": "not_relevant | owner | omit for all"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/admin/reset": {
    "post": {
     "tags": [
@@ -6712,6 +6891,54 @@
     },
     "type": "object",
     "title": "ThemeBuildIn"
+   },
+   "TriageIn": {
+    "properties": {
+     "limit": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "minimum": 1.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Limit",
+      "description": "Optional cap on records"
+     },
+     "workers": {
+      "type": "integer",
+      "maximum": 64.0,
+      "minimum": 1.0,
+      "title": "Workers",
+      "description": "Parallel model calls",
+      "default": 32
+     },
+     "record_ids": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Record Ids",
+      "description": "Triage exactly these records"
+     },
+     "retriage": {
+      "type": "boolean",
+      "title": "Retriage",
+      "description": "Also redo records already triaged with the current prompt version",
+      "default": false
+     }
+    },
+    "type": "object",
+    "title": "TriageIn"
    },
    "ValidateIn": {
     "properties": {
