@@ -69,6 +69,15 @@ export function runStatusLabel(status: string | null | undefined): string {
   return status === "queued" ? "Waiting" : humanize(status);
 }
 
+// How long something took, without clock times: "45 s", "4 min 12 s", "1 h 5 min".
+export function fmtDuration(seconds: number | null | undefined): string {
+  if (seconds == null || !Number.isFinite(seconds) || seconds < 0) return "–";
+  const s = Math.round(seconds);
+  if (s < 60) return `${s} s`;
+  if (s < 3600) return `${Math.floor(s / 60)} min ${s % 60} s`;
+  return `${Math.floor(s / 3600)} h ${Math.floor((s % 3600) / 60)} min`;
+}
+
 export function fmtCount(value: number | null | undefined): string {
   return value == null ? "–" : value.toLocaleString("en-US");
 }
