@@ -39,7 +39,7 @@ function CallBody({ callId }: { callId: number }) {
     return (
       <SheetHeader>
         <SheetTitle>Call {callId}</SheetTitle>
-        <SheetDescription>Not available yet: the backend that opens single calls is not deployed.</SheetDescription>
+        <SheetDescription>This call was not found.</SheetDescription>
       </SheetHeader>
     );
   }
