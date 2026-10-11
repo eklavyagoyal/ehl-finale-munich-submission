@@ -192,6 +192,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/signals/condense": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Condense the top signals into concrete findings (background run, poll /api/simulations/{id}) */
+        post: operations["condense_api_signals_condense_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/pipeline": {
         parameters: {
             query?: never;
@@ -201,6 +218,23 @@ export interface paths {
         };
         /** Start page: one card per stage with counts, status and the next action */
         get: operations["pipeline_api_pipeline_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/vehicles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Vehicles for the landing page: which one is active and how much data each has */
+        get: operations["vehicles_api_vehicles_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -639,6 +673,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/requirements/{requirement_id}/council": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Customer council vs company council for the latest run: who said what, tensions, challenger, judges */
+        get: operations["council_api_requirements__requirement_id__council_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/requirements/{requirement_id}/trace": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Decision path: per step who was involved, what they got, what they concluded, why, basis and effect */
+        get: operations["trace_api_requirements__requirement_id__trace_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/simulations": {
         parameters: {
             query?: never;
@@ -700,6 +768,23 @@ export interface paths {
         };
         /** Every model call of the run: model, prompt version, input record IDs, tokens */
         get: operations["llm_calls_api_simulations__run_id__llm_calls_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/simulations/{run_id}/conversation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Who was asked what and how they answered: owners by market, departments, research, challenger, judges */
+        get: operations["conversation_api_simulations__run_id__conversation_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -788,6 +873,23 @@ export interface paths {
         put?: never;
         /** Set Active */
         post: operations["set_active_api_agents__agent_id__active_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/agents/council-validation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** T2 reliability, T3 decoy discrimination, T4 evidence alignment (background run) */
+        post: operations["council_validation_api_agents_council_validation_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -955,6 +1057,44 @@ export interface components {
             producer_version: string | null;
             /** Producer Run Id */
             producer_run_id: string | null;
+        };
+        /** CondenseIn */
+        CondenseIn: {
+            /**
+             * Markets
+             * @description Markets to condense; null = all pooled
+             * @default [
+             *       "US",
+             *       "EU",
+             *       null
+             *     ]
+             */
+            markets: (string | null)[];
+            /**
+             * Kinds
+             * @default [
+             *       "pain",
+             *       "request",
+             *       "strength"
+             *     ]
+             */
+            kinds: ("pain" | "request" | "strength" | "mixed")[];
+            /**
+             * Limit
+             * @description Top signals per market and kind
+             * @default 8
+             */
+            limit: number;
+        };
+        /** CouncilValidationIn */
+        CouncilValidationIn: {
+            /** Requirement Ids */
+            requirement_ids: string[];
+            /**
+             * Persona Engine
+             * @default direct
+             */
+            persona_engine: string;
         };
         /** CriterionOut */
         CriterionOut: {
@@ -1544,9 +1684,15 @@ export interface components {
         ResetIn: {
             /**
              * Confirm
-             * @constant
+             * @enum {string}
              */
-            confirm: "DELETE ALL DATA";
+            confirm: "DELETE ALL DATA" | "DELETE REQUIREMENTS";
+            /**
+             * Scope
+             * @default all_data
+             * @enum {string}
+             */
+            scope: "all_data" | "requirements";
             /** Rationale */
             rationale: string;
         };
@@ -2139,7 +2285,63 @@ export interface operations {
             };
         };
     };
+    condense_api_signals_condense_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`. */
+                "x-actor"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CondenseIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     pipeline_api_pipeline_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    vehicles_api_vehicles_get: {
         parameters: {
             query?: never;
             header?: never;
@@ -3079,6 +3281,68 @@ export interface operations {
             };
         };
     };
+    council_api_requirements__requirement_id__council_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                requirement_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    trace_api_requirements__requirement_id__trace_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                requirement_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_runs_api_simulations_get: {
         parameters: {
             query?: {
@@ -3231,6 +3495,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["LLMCallOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    conversation_api_simulations__run_id__conversation_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */
@@ -3424,6 +3719,42 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["ActiveIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    council_validation_api_agents_council_validation_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`. */
+                "x-actor"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CouncilValidationIn"];
             };
         };
         responses: {

@@ -26,7 +26,11 @@ import type {
   Task,
   Theme,
   ThemePage,
+  Trace,
+  VehiclePage,
   Version,
+  Council,
+  Conversation,
 } from "./types";
 
 const ACTIVE_RUN = new Set(["queued", "running"]);
@@ -48,6 +52,36 @@ export function usePipeline() {
 export function useSignals(market: string | null, kind: SignalKind | "all", limit = 15) {
   return useSWR(["signals", market ?? "pooled", kind, limit], () =>
     unwrap<SignalPage>(api.GET("/api/signals", { params: { query: { market: market ?? undefined, kind, limit } } })),
+  );
+}
+
+export function useVehicles() {
+  return useSWR("vehicles", () => unwrap<VehiclePage>(api.GET("/api/vehicles")), { revalidateOnFocus: false });
+}
+
+export function useTrace(id: string | undefined) {
+  return useSWR(id ? ["trace", id] : null, () =>
+    unwrap<Trace>(api.GET("/api/requirements/{requirement_id}/trace", { params: { path: { requirement_id: id! } } })),
+  );
+}
+
+export function useCouncil(id: string | undefined) {
+  return useSWR(id ? ["council", id] : null, () =>
+    unwrap<Council>(api.GET("/api/requirements/{requirement_id}/council", { params: { path: { requirement_id: id! } } })),
+  );
+}
+
+// Can be large (TinyTroupe transcripts): fetched once per run and status, never polled.
+export function useConversation(runId: string | null | undefined, status?: string) {
+  return useSWR(runId ? ["conversation", runId, status ?? ""] : null, () =>
+    unwrap<Conversation>(api.GET("/api/simulations/{run_id}/conversation", { params: { path: { run_id: runId! } } })),
+    { revalidateOnFocus: false },
+  );
+}
+
+export async function condenseSignals(markets: (string | null)[]) {
+  return unwrap<{ run_id: string; status: string }>(
+    api.POST("/api/signals/condense", { body: { markets, kinds: ["pain", "request", "strength"], limit: 8 } }),
   );
 }
 

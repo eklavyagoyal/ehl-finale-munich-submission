@@ -33,7 +33,8 @@ export default function ExpertsPage() {
 function ExpertsView() {
   const params = useSearchParams();
   const runs = useRuns(12);
-  const pipelineRuns = (runs.data ?? []).filter((r) => r.kind !== "validation");
+  // Only expert-pipeline runs; condense and validation runs share the endpoint.
+  const pipelineRuns = (runs.data ?? []).filter((r) => r.kind === "simulation" || r.kind === "followup");
   const runId = params.get("run") ?? pipelineRuns.find((r) => ACTIVE.has(r.status))?.id ?? pipelineRuns[0]?.id ?? null;
 
   return (

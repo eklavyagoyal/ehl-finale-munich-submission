@@ -459,6 +459,20 @@ export interface Signal {
   impact_0_5: number | null;
   sample_quotes: { record_id: string; text: string }[];
   has_requirement: boolean;
+  // Findings: the LLM groups reviews into concrete issues, the counts come from code.
+  condensed?: boolean;
+  findings?: Finding[];
+}
+
+export interface Finding {
+  id: number;
+  title: string;
+  description: string;
+  kind: string;
+  reviews: number;
+  share_of_theme: number;
+  quotes: { record_id: string; text: string }[];
+  record_ids: string[];
 }
 
 export interface SignalPage {
@@ -483,4 +497,167 @@ export interface RunResults {
       recommendation: Recommendation[];
     }
   >;
+}
+
+// GET /api/vehicles: the landing page.
+export interface Vehicle {
+  entity_id: string;
+  code: string;
+  name: string;
+  detail: string;
+  records: number;
+  in_catalog: boolean;
+  status: "active" | "data_available" | "not_imported";
+}
+
+export interface VehiclePage {
+  active: string;
+  items: Vehicle[];
+}
+
+// GET /api/requirements/{id}/trace: the decision path, one aggregated step per stage.
+export type TraceBasis = "evidence" | "simulation" | "assumption" | "mixed" | "human" | "none";
+export type TraceEffect = "supports" | "against" | "neutral";
+
+export interface TraceAgent {
+  id: string;
+  name: string;
+  kind: "code" | "agent" | "persona" | "department" | "judge" | "human" | string;
+}
+
+export interface TraceTension {
+  topic?: string | null;
+  customers_say?: string | null;
+  company_says?: string | null;
+  resolution_options?: string[];
+  description?: string | null;
+}
+
+export interface TraceDriver {
+  source: string;
+  statement: string;
+  effect: TraceEffect;
+  weight?: "high" | "medium" | "low";
+}
+
+export interface TraceStep {
+  key: string;
+  order: number;
+  title: string;
+  question?: string;
+  agents?: TraceAgent[];
+  basis: TraceBasis;
+  inputs?: Record<string, unknown>;
+  // Shape depends on the step key; see the renderers in decision-path.tsx.
+  output?: unknown;
+  why?: string | null;
+  effect: TraceEffect;
+  caveat?: string;
+  tensions?: TraceTension[];
+  drill_down?: string;
+}
+
+export interface Trace {
+  requirement_id: string;
+  title: string;
+  market: string | null;
+  legend: Record<string, string>;
+  steps: TraceStep[];
+}
+
+// GET /api/requirements/{id}/council: customer council by market vs company council.
+export interface CouncilPersona {
+  agent_id: string;
+  name: string | null;
+  display_name: string;
+  vehicle: string | null;
+  powertrain: string | null;
+  verdict: string | null;
+  budget_points: number | null;
+  importance_0_5: number | null;
+  stance: string;
+  quote: string;
+  concerns: string[] | null;
+  validation_status: string | null;
+}
+
+export interface CouncilMarket {
+  personas: CouncilPersona[];
+  summary: {
+    personas: number;
+    verdicts: Record<string, number>;
+    mean_budget_points_of_100: number | null;
+    mean_importance_0_5: number | null;
+  };
+}
+
+export interface CouncilDepartment {
+  agent_id: string;
+  display_name: string;
+  market: string | null;
+  verdict: string | null;
+  main_argument: string | null;
+  strongest_counterargument?: string | null;
+  cost_view?: string | null;
+  effort_band?: string | null;
+  risks?: string[];
+}
+
+export interface Council {
+  requirement_id: string;
+  run_id: string | null;
+  status: "simulated" | "not_simulated";
+  title?: string;
+  question_to_owners?: string | null;
+  customers?: { by_market: Record<string, CouncilMarket>; view?: string | null };
+  company?: { departments: CouncilDepartment[]; view?: string | null; verdicts: Record<string, number> };
+  tensions?: TraceTension[];
+  headline?: string | null;
+  research?: { requested_by: string; question: string; verdict: string | null }[];
+  challenger?: Challenge | null;
+  judges?: { agent_id: string; model: string; vote: string; rationale: string }[];
+  recommendation?: string | null;
+}
+
+// GET /api/simulations/{id}/conversation: who was asked what, and every answer.
+export interface ConversationOwner {
+  agent_id: string;
+  name: string | null;
+  display_name: string;
+  market: string | null;
+  country: string | null;
+  vehicle: string | null;
+  powertrain: string | null;
+  segment?: string | null;
+  environment?: Record<string, string>;
+  validation_status?: string | null;
+  engine?: string | null;
+  grounding_records: number;
+  transcript?: string | null;
+  answers: {
+    requirement_id: string;
+    requirement_title?: string | null;
+    reaction: string;
+    stance: string;
+    importance_0_5: number | null;
+    class_fit_0_5: number | null;
+    concerns: string[] | null;
+    would_need_to_know: unknown[] | null;
+  }[];
+}
+
+export interface ConversationDepartment {
+  agent_id: string;
+  display_name: string;
+  market: string | null;
+  role?: string | null;
+  answers: { requirement_id: string; stance: string; summary?: string | null; effort_band?: string | null; risks?: string[] | null }[];
+}
+
+export interface Conversation {
+  run: { id: string; status: string; stage?: string | null; challenge_question?: string | null; engine?: string | null };
+  order: string[];
+  question_to_owners: string | null;
+  owners_by_market: Record<string, ConversationOwner[]>;
+  departments: ConversationDepartment[];
 }
