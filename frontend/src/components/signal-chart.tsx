@@ -39,7 +39,7 @@ export function SignalChart({ market }: { market: string | null }) {
 
   const points: Point[] = [];
   for (const r of simulated) {
-    const council = councils.data?.get(r.id);
+    const council = councils.data?.byId.get(r.id);
     const signal = complaintsBy.get(r.feature_key!);
     const b = council && budgetOf(council, market);
     if (!signal || !b) continue;
@@ -104,7 +104,13 @@ export function SignalChart({ market }: { market: string | null }) {
         ))}
         {points.length === 0 && (
           <p className="absolute inset-x-10 top-1/2 -translate-y-1/2 text-center text-xs text-muted-foreground">
-            {councils.isLoading || signals.isLoading ? "Loading…" : "Run the expert pipeline on requirements of this market to see the owners' budget here."}
+            {councils.error || signals.error
+              ? `Could not load the councils: ${(councils.error ?? signals.error) instanceof Error ? (councils.error ?? signals.error).message : "request failed"}`
+              : councils.isLoading || signals.isLoading
+                ? "Loading…"
+                : simulated.length
+                  ? "The simulated requirements have no budget points from owners yet."
+                  : "Run the expert pipeline on requirements of this market to see the owners' budget here."}
           </p>
         )}
       </div>
@@ -112,6 +118,7 @@ export function SignalChart({ market }: { market: string | null }) {
         Budget: each owner splits 100 points across the proposals of one run and “keep the price down”
         {runs.size > 1 ? `; these points come from ${runs.size} runs and compare only within a run` : ""}.
         {!market && " All markets: every owner of the requirement counts."}
+        {councils.data?.failed ? ` ${councils.data.failed} council${councils.data.failed === 1 ? "" : "s"} could not be loaded.` : ""}
       </p>
     </figure>
   );

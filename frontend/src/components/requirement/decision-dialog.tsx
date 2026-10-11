@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { toast } from "sonner";
 
 import { ToneBadge } from "@/components/tone-badge";
@@ -61,7 +61,8 @@ export function DecisionForm({ onDone }: { onDone?: () => void }) {
   const actions = (meta?.enums.pm_actions ?? ["approve", "reject", "challenge", "defer"]) as Action[];
 
   const openGates = Object.entries(detail?.gates ?? {}).filter(([gate, g]) => gate !== "pm_review" && g.value !== "pass");
-  const [action, setAction] = useState<Action>(openGates.length ? "challenge" : "approve");
+  const [action, setAction] = useState<Action>("approve");
+  const uid = useId();
   const [rationale, setRationale] = useState("");
   const [question, setQuestion] = useState("");
   const [busy, setBusy] = useState(false);
@@ -133,9 +134,9 @@ export function DecisionForm({ onDone }: { onDone?: () => void }) {
 
       {action === "challenge" && (
         <div className="grid gap-2">
-          <Label htmlFor={`challenge-question-${id}`}>What should the agents re-examine?</Label>
+          <Label htmlFor={`${uid}-question`}>What should the agents re-examine?</Label>
           <Textarea
-            id={`challenge-question-${id}`}
+            id={`${uid}-question`}
             rows={2}
             value={question}
             onChange={(e) => {
@@ -148,9 +149,9 @@ export function DecisionForm({ onDone }: { onDone?: () => void }) {
       )}
 
       <div className="grid gap-2">
-        <Label htmlFor={`rationale-${id}`}>Rationale</Label>
+        <Label htmlFor={`${uid}-rationale`}>Rationale</Label>
         <Textarea
-          id={`rationale-${id}`}
+          id={`${uid}-rationale`}
           rows={3}
           value={rationale}
           onChange={(e) => {

@@ -136,7 +136,11 @@ function StepRow({ step, base }: { step: TraceStep; base: string }) {
           <span className="font-medium">{step.title}</span>
           {step.question && <span className="text-muted-foreground"> · {step.question}</span>}
         </span>
-        {step.why && <span className={cn("text-[13px] text-foreground/80", !expanded && "line-clamp-2")}>{step.why}</span>}
+        {effect === "unknown" ? (
+          <span className="text-[13px] text-foreground/80">This run did not ask the owners for a verdict or budget points.</span>
+        ) : (
+          step.why && <span className={cn("text-[13px] text-foreground/80", !expanded && "line-clamp-2")}>{step.why}</span>
+        )}
         {step.caveat && <span className="text-xs text-muted-foreground">{step.caveat}</span>}
       </span>
       <span className="flex items-center gap-2 pt-0.5">

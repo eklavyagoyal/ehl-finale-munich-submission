@@ -75,10 +75,14 @@ export function useCouncil(id: string | undefined) {
 // requirements in view (a handful), never polled. An aggregate endpoint would replace this.
 export function useCouncils(ids: string[]) {
   return useSWR(ids.length ? ["councils", ids.join(",")] : null, async () => {
-    const list = await Promise.all(
+    // One failing council must not empty the chart: keep the ones that loaded, count the rest.
+    const settled = await Promise.allSettled(
       ids.map((id) => unwrap<Council>(api.GET("/api/requirements/{requirement_id}/council", { params: { path: { requirement_id: id } } }))),
     );
-    return new Map(list.map((c) => [c.requirement_id, c]));
+    const loaded = settled.flatMap((r) => (r.status === "fulfilled" ? [r.value] : []));
+    const failed = settled.filter((r) => r.status === "rejected") as PromiseRejectedResult[];
+    if (loaded.length === 0 && failed.length) throw failed[0].reason;
+    return { byId: new Map(loaded.map((c) => [c.requirement_id, c])), failed: failed.length };
   }, { revalidateOnFocus: false });
 }
 
