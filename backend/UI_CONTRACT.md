@@ -1,9 +1,10 @@
 # Parallax UI contract: structure, order, text
 
-Status 2026-10-11:
+Status 2026-10-11 (second round, after Luis' feedback):
 
-- **Part A** is what Luis asked for. Build it now.
-- **Part B** is proposed and waits for Luis' OK. Do not build it before he agrees.
+- **Part A** is what Luis asked for. Build it now. A2, A4 and A5 were replaced in the second round.
+- **Part B** is proposed. B1 is now part of A2; B2–B4 are **not** to be built.
+- The Expert pipeline stays as it is; Luis reviews it together with the backend.
 
 Design follows the minimal style: hairlines, about 10 % text, details on demand. The data comes from
 [API.md](API.md). Any structure change beyond this file goes through Luis first.
@@ -21,13 +22,20 @@ panel, with a quiet "More" affordance). No paragraph is visible by default on an
 | One line | `headline` (trace), `hint` (funnel, axes, quadrants), `short` (how_sorted) | always, muted |
 | Long form | `detail`, `why`, `output`, `caveat`, `description` | on click only |
 
-### A2. Breadcrumbs and sidebar
+### A2. Overview first, then the vehicle
 
-- Every page uses the same breadcrumb form: `Vehicles › G60 › <Stage> › <Item>`. Every crumb except the last is a
-  link, and "Vehicles" leads to `/`.
-- The market is **not** a crumb. It is a filter chip in the header row (US / EU / CN / All).
-- In the sidebar, **remove History** (the button; `/history` redirects to `/activity`). Activity stays at the
-  bottom.
+1. **`/` Overview** (no breadcrumbs, no stage sidebar) shows which data we have, across all vehicles: streams
+   (BMW, social, competitors), scopes (this vehicle, other BMW models, competitors, brand-wide) and the triage state
+   (vehicle checked, owner yes/no, relevant yes/no; see `/api/triage/summary` once deployed). Below that come the
+   vehicle cards; only G60 is clickable.
+2. **Inside a vehicle** (`/v/g60`, `/v/g60/sources`, ..., `/v/g60/decision/[REQ-ID]`) everything is filtered to
+   that vehicle.
+   - Breadcrumbs: `Overview › G60 › <Stage> › <Item>`.
+   - The market is a filter chip, not a crumb.
+   - Old routes redirect.
+3. **Sidebar** (inside a vehicle): the stages Sources, Processing, Signals, Expert pipeline, Decision. At the
+   bottom only Activity. **History is removed** (the button; `/history` redirects to `/activity`). The "My tasks"
+   counter stays top right.
 
 ### A3. Only G60 under G60
 
@@ -41,38 +49,29 @@ following:
 - On the start page, `stages[0].outside_scope` is one muted line ("+18k not about the G60") that expands.
 - Drop the gap warning built on exact tags. It was wrong because DE is not tagged as EU.
 
-### A4. Processing in one glance
+### A4. Processing as a flow, not four numbers
 
-A horizontal funnel of the four steps in `stages[1].funnel`:
+Draw `stages[1].flow` as a left-to-right flow (Sankey-like, thin bands, hairline style). `nodes[]` have `key`,
+`label`, `count`, `hint`, `detail`; `links[]` have `source`, `target`, `value`.
 
-- Each step shows a number, a label and a muted `hint`; `detail` appears on click.
-- `gap` is a side branch ("7,841 without a topic", with detail on click).
-- `labeler_quality` is a small badge ("77 % same area as BMW"), with detail on click.
-- Nothing else goes on this page.
+- The bands show the connection: reviews split into BMW labels / our AI labeler / no topic; the labelled ones flow
+  into signals; par### A5. Signals: one big map
 
-### A5. Signals on one four-field map
-
-The map from `GET /api/signals/map?market=` sits at the top of the Signals page.
-
-Axes and quadrants:
-
-- Axis labels come from `axes.x.label` / `axes.y.label`, with `hint` on hover.
-- x uses a log scale; the threshold lines come from `axes.*.threshold`.
-- Quadrant corners: `act` top right, `watch` top left, `protect` bottom right, `background` bottom left. Each
-  corner shows its name and count, with the quadrant `hint` on hover.
-
-Dots:
-
-- Colour by `kind` (pain red, request blue, strength green, mixed grey), one size.
-- Only the top signals in Act and Protect get a text label. Hover shows label, reviews and %.
-- A dot with `requirement_ids` gets a small ring.
-
-Clicking a dot opens `GET /api/signals/{feature_key}?market=` as a side panel:
-
-- `how_sorted` is a vertical six-step list (collected → tagged → counted → classified → placed → grouped). Each
-  step shows `label` + `short`; `detail` appears on expand. This answers "how was the pre-sorting done".
-- Findings follow, `matches_signal` first, with the others collapsed as "+N other findings".
-- Quotes appear on expand, then the "Draft requirement" action.
+- The four-field map from `GET /api/signals/map?market=` spans the full page width and is the first thing on the
+  page. The market switch (US / EU / CN / All) sits above it.
+- Axes, threshold lines and quadrant corners come from the response: `act` top right, `watch` top left, `protect`
+  bottom right, `background` bottom left. The corners show name and count; hints appear on hover.
+- Dots are coloured by `kind` (pain red, request blue, strength green, mixed grey). Only the top signals in Act and
+  Protect get a text label. Hover shows label, reviews and %.
+- Clicking a dot selects it (ring) and opens `GET /api/signals/{feature_key}?market=` as a side panel:
+  - `how_sorted` as six steps (label + short; detail on expand)
+  - then the findings (`matches_signal` first, others collapsed)
+  - then quotes on expand
+- **"Draft requirements (n)" appears top right only when at least one signal is selected.** There is no permanent
+  button.
+- Below the map the pain / request / strength columns stay (Luis understands them), with checkboxes that feed the
+  same selection.
+- The explanatory text (`basis`) and the legend go to the very bottom of the page, small and muted.
 
 ### A6. Requirement pages
 
@@ -88,12 +87,7 @@ Clicking a dot opens `GET /api/signals/{feature_key}?market=` as a side panel:
 Add: `GET /api/signals/map`, `GET /api/signals/{feature_key}`, and the new query parameters on `/api/coverage`
 (`scope`, `vehicle`), `/api/records` (`scope`, `bucket`, `vehicle`) and `/api/pipeline` (`vehicle`).
 
-## Part B: proposed, waiting for Luis
+## Part B: decided
 
-- B1. The vehicle goes into the URL: `/v/g60`, `/v/g60/sources`, ..., `/v/g60/decision/[REQ-ID]`. Old routes
-  redirect.
-- B2. Below the map, one compact list per quadrant (Act first) replaces the three kind columns
-  (pain / request / strength).
-- B3. The frequency-vs-budget chart moves from Signals to Decision, because it is about simulated requirements.
-- B4. Requirement tabs become Decision path · Councils · Evidence · Simulation · Timeline, and Overview folds into
-  the header.
+- B1 (vehicle in the URL) is part of A2.
+- Not to be built: B2 (quadrant lists instead of kind columns), B3 (moving the budget chart) and B4 (new tab order).
