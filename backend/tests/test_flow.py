@@ -228,13 +228,19 @@ def test_pipeline_and_signals(client, drafted):
     assert all(f["label"] and f["hint"] and f["detail"] for f in processing["funnel"])
     flow = processing["flow"]
     keys = {n["key"] for n in flow["nodes"]}
-    assert {"bmw", "online", "bmw_labels", "ai_labeler", "no_topic", "signals", "findings"} <= keys
+    assert {"bmw", "online", "bmw_labels", "ai_labeler", "no_topic", "signals", "findings", "requirements",
+            "change_coming", "declined", "open"} <= keys
     assert all(l["source"] in keys and l["target"] in keys and l["value"] > 0 for l in flow["links"])
     into_labels = sum(l["value"] for l in flow["links"] if l["source"] in ("bmw", "online") and l["target"] != "excluded")
     assert into_labels == processing["counts"]["feedback_records"]
     sources = stages["stages"][0]
     assert stages["vehicle"]["code"] == "G60" and isinstance(sources["outside_scope"], list)
     signal_map = client.get("/api/signals/map", params={"market": "US", "min_reviews": 1}).json()
+    assert signal_map["axes"]["x"]["center_on_threshold"] and "need_share_raw" in signal_map["items"][0]
+    overview = client.get("/api/overview/flow").json()
+    assert {"bmw", "target", "brand"} <= {n["key"] for n in overview["nodes"]} and overview["links"]
+    listed = client.get("/api/requirements").json()
+    assert [step["key"] for step in listed[0]["progress"]] == ["drafted", "councils", "recommendation", "decision"]
     assert signal_map["axes"]["x"]["label"] and [q["key"] for q in signal_map["quadrants"]] == ["act", "protect", "watch", "background"]
     assert signal_map["items"] and all(0 <= i["need_share"] <= 1 and i["quadrant"] for i in signal_map["items"])
     feature = signal_map["items"][0]["feature_key"]

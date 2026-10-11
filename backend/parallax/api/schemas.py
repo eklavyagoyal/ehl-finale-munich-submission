@@ -45,6 +45,7 @@ class RequirementOut(Out):
     updated_at: datetime
     gates: dict[str, str]
     ai_recommendation: str | None
+    progress: list[dict[str, Any]] = []
 
 
 class GateOut(Out):

@@ -734,6 +734,25 @@
     }
    }
   },
+  "/api/overview/flow": {
+   "get": {
+    "tags": [
+     "pipeline"
+    ],
+    "summary": "All data, before any vehicle: streams -> triage -> which vehicle it belongs to",
+    "operationId": "overview_flow_api_overview_flow_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/vehicles": {
    "get": {
     "tags": [
@@ -5978,6 +5997,15 @@
        }
       ],
       "title": "Ai Recommendation"
+     },
+     "progress": {
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "type": "array",
+      "title": "Progress",
+      "default": []
      }
     },
     "type": "object",

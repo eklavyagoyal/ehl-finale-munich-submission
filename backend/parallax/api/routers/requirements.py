@@ -46,7 +46,29 @@ def summary(requirement: Requirement, session: Session) -> dict:
     rec = session.scalars(select(Recommendation).where(Recommendation.requirement_id == requirement.id)
                           .order_by(Recommendation.id.desc()).limit(1)).first()
     data["ai_recommendation"] = rec.recommendation if rec else None
+    data["progress"] = _progress(requirement, session, rec)
     return data
+
+
+def _progress(requirement: Requirement, session: Session, rec) -> list[dict]:
+    """Where the requirement stands in the pipeline: drafted -> councils -> AI recommendation -> PM decision.
+    The AI recommendation is advice; only the last step is a decision."""
+    from parallax.models import PMDecision, SimRun
+
+    run = session.get(SimRun, requirement.last_run_id) if requirement.last_run_id else None
+    decision = session.scalars(select(PMDecision).where(PMDecision.requirement_id == requirement.id)
+                               .order_by(PMDecision.id.desc()).limit(1)).first()
+    decided = requirement.status in ("approved", "rejected", "deferred")
+    return [
+        {"key": "drafted", "label": "Drafted", "done": True, "at": requirement.created_at.isoformat(), "value": requirement.created_by},
+        {"key": "councils", "label": "Councils", "done": bool(run and run.status in ("completed", "partial")),
+         "at": run.finished_at.isoformat() if run and run.finished_at else None, "value": run.status if run else "not_run"},
+        {"key": "recommendation", "label": "AI suggests", "done": rec is not None, "at": None,
+         "value": rec.recommendation if rec else None},
+        {"key": "decision", "label": "Your decision", "done": decided,
+         "at": decision.created_at.isoformat() if decision and decided else None,
+         "value": requirement.status if decided else None},
+    ]
 
 
 @router.get("", summary="Requirement list with the eight brief fields, gates and latest AI recommendation",

@@ -19,8 +19,8 @@ from parallax.db import get_session
 from parallax.models import Claim, Finding, IngestRun, Record, Requirement, SimRun, Source, Theme
 from parallax.policy import active_policy
 from parallax.scope import SCOPE_LABELS, SCOPES, VehicleScope
-from parallax.signals import (CHANNEL_LABELS, classify, explain_kind, finding_order, latest_findings, need_share, quadrant,
-                              ranked_themes)
+from parallax.signals import (CHANNEL_LABELS, classify, explain_kind, finding_order, latest_findings, market_prior, need_share,
+                              quadrant, ranked_themes, smoothed_need_share)
 from parallax.themes import latest_snapshot_id
 
 router = APIRouter(prefix="/api", tags=["pipeline"])
@@ -30,6 +30,7 @@ EXPERT_RUN_KINDS = ("simulation", "followup")
 
 
 FINDING_KINDS = {"pain": {"pain"}, "request": {"request"}, "strength": {"praise"}}
+OUTCOMES = {"approved": "change_coming", "rejected": "declined"}
 
 
 def _finding(f: Finding, signal_kind: str | None = None) -> dict:
@@ -45,14 +46,14 @@ def _ordered_findings(findings: list[Finding], kind: str) -> list[dict]:
 
 
 def _signal(theme: Theme, kind: str, texts: dict[str, str], drafted: set, findings: list[Finding] | None,
-            thresholds: dict) -> dict:
+            thresholds: dict, prior: float | None = None) -> dict:
     ordered = _ordered_findings(findings or [], kind)
     return {
         "theme_id": theme.id, "feature_key": theme.feature_key, "label": theme.label, "area": theme.area,
         "market": theme.market, "kind": kind, "reviews": theme.mention_review_count,
         "direct_reviews": theme.direct_review_count, "pain": theme.pain_review_count,
         "requests": theme.request_review_count, "praise": theme.praise_review_count,
-        "need": theme.need_review_count, "need_share": need_share(theme), "quadrant": quadrant(theme, thresholds),
+        "need": theme.need_review_count, "need_share": need_share(theme), "quadrant": quadrant(theme, thresholds, prior),
         "competitor_reviews": theme.competitor_review_count, "brand_wide_reviews": theme.brand_review_count,
         "channels": theme.channels,
         "demand_0_5": theme.demand_score, "impact_0_5": theme.impact_score,
@@ -82,10 +83,13 @@ def signals(market: str | None = Query(None, description="US, EU, CN or omit for
     drafted = {(r.feature_key, r.market) for r in session.scalars(select(Requirement))}
     findings = latest_findings(session, market, [t.feature_key for t, _ in themes])
     thresholds = _thresholds(session)
+    prior = market_prior(list(session.scalars(select(Theme).where(
+        Theme.snapshot_id == snapshot, Theme.mention_review_count > 0,
+        (Theme.market == market) if market else Theme.market.is_(None)))))
     return {"snapshot_id": str(snapshot), "market": market,
             "basis": "Distinct collected reviews per feature; pain = defects and hard-to-use reports; not customer prevalence. "
                      "Findings: the LLM groups reviews, counts come from code.",
-            "items": [_signal(t, k, texts, drafted, findings.get(t.feature_key), thresholds) for t, k in themes]}
+            "items": [_signal(t, k, texts, drafted, findings.get(t.feature_key), thresholds, prior) for t, k in themes]}
 
 
 QUADRANTS = [
@@ -105,19 +109,26 @@ def signal_map(market: str | None = Query(None, description="US, EU, CN or omit 
     thresholds = _thresholds(session)
     axes = {
         "x": {"key": "reviews", "label": "Reviews", "scale": "log", "threshold": thresholds["frequent_min_reviews"],
+              "center_on_threshold": True, "low_label": "Few reviews", "high_label": "Many reviews",
               "hint": "How many owners mention it",
               "detail": "Distinct collected reviews of this vehicle that mention the feature (one review counts once). "
                         "Collected reviews, not customer prevalence."},
         "y": {"key": "need_share", "label": "Problems & wishes", "scale": "linear", "min": 0, "max": 1,
-              "threshold": thresholds["need_share_threshold"], "hint": "Share of those reviews reporting a problem or a wish",
+              "threshold": thresholds["need_share_threshold"], "center_on_threshold": True,
+              "low_label": "Mostly praise", "high_label": "Mostly problems & wishes",
+              "hint": "Share of those reviews reporting a problem or a wish",
               "detail": "Problem = defect or hard to use; wish = new request, discontinued feature or competitor parity. "
-                        "The rest is praise or neutral mentions."},
+                        "The rest is praise or neutral mentions. Plotted with "
+                        f"{thresholds.get('smoothing_reviews', 5)} pseudo-reviews at the market average, so small signals sit "
+                        "closer to the middle instead of lining up at 0 %, 50 % or 100 %; need_share_raw is the plain share."},
     }
     if snapshot is None:
         return {"snapshot_id": None, "market": market, "axes": axes, "quadrants": QUADRANTS, "items": []}
     query = select(Theme).where(Theme.snapshot_id == snapshot, Theme.mention_review_count > 0)
     query = query.where(Theme.market == market) if market else query.where(Theme.market.is_(None))
     themes = list(session.scalars(query))
+    prior = market_prior(themes)
+    strength = thresholds.get("smoothing_reviews", 5)
     shown = [t for t in themes if t.mention_review_count >= min_reviews]
     drafted = {}
     for r in session.scalars(select(Requirement).where(Requirement.target_model == settings.target_model)):
@@ -128,13 +139,14 @@ def signal_map(market: str | None = Query(None, description="US, EU, CN or omit 
         kind = classify(t)
         items.append({
             "theme_id": t.id, "feature_key": t.feature_key, "label": t.label, "area": t.area, "kind": kind,
-            "reviews": t.mention_review_count, "need_share": need_share(t), "quadrant": quadrant(t, thresholds),
+            "reviews": t.mention_review_count, "need_share": smoothed_need_share(t, prior, strength),
+            "need_share_raw": need_share(t), "quadrant": quadrant(t, thresholds, prior),
             "pain": t.pain_review_count, "requests": t.request_review_count, "praise": t.praise_review_count,
             "findings": sum(f.kind in FINDING_KINDS.get(kind, {f.kind}) for f in findings.get(t.feature_key, [])),
             "requirement_ids": drafted.get((t.feature_key, t.market), []),
         })
     counts = Counter(i["quadrant"] for i in items)
-    return {"snapshot_id": str(snapshot), "market": market, "axes": axes,
+    return {"snapshot_id": str(snapshot), "market": market, "axes": axes, "market_average_need_share": round(prior, 3),
             "quadrants": [{**q, "signals": counts.get(q["key"], 0)} for q in QUADRANTS],
             "hidden_below_min_reviews": len(themes) - len(shown), "items": items}
 
@@ -159,7 +171,11 @@ def signal_detail(feature_key: str, market: str | None = Query(None, description
                 "reviews": c["mention_review_count"], "of_collected": c["feedback_review_count"],
                 "share": round(c["share"], 3)} for c in (theme.cohorts or [])[:8]]
     channels = ", ".join(CHANNEL_LABELS.get(c, c) for c in theme.channels) or "no channel"
-    q = next(x for x in QUADRANTS if x["key"] == quadrant(theme, thresholds))
+    market_themes = list(session.scalars(select(Theme).where(
+        Theme.snapshot_id == snapshot, Theme.mention_review_count > 0,
+        (Theme.market == market) if market else Theme.market.is_(None))))
+    prior = market_prior(market_themes)
+    q = next(x for x in QUADRANTS if x["key"] == quadrant(theme, thresholds, prior))
     requirements = [r.id for r in session.scalars(select(Requirement).where(Requirement.feature_key == feature_key,
                                                                              Requirement.target_model == settings.target_model))
                     if r.market == market or market is None]
@@ -188,7 +204,9 @@ def signal_detail(feature_key: str, market: str | None = Query(None, description
          "data": {"kind": kind}},
         {"key": "placed", "label": "Placed", "short": f"{q['label']}: {reviews} reviews, {round(100 * need_share(theme))} % problems or wishes",
          "detail": f"Frequent from {thresholds['frequent_min_reviews']} reviews; mostly problems from "
-                   f"{round(100 * thresholds['need_share_threshold'])} % problems or wishes. Thresholds live in the policy.",
+                   f"{round(100 * thresholds['need_share_threshold'])} % problems or wishes. Small signals are pulled "
+                   f"toward the market average ({round(100 * prior)} %) by {thresholds.get('smoothing_reviews', 5)} "
+                   "pseudo-reviews before placing. Thresholds live in the policy.",
          "data": {"quadrant": q["key"]}},
         {"key": "grouped", "label": "Grouped",
          "short": f"{len(findings)} findings · {findings[0].model}" if findings else "Not grouped into findings yet",
@@ -297,6 +315,37 @@ def _processing_flow(session: Session, scope: VehicleScope, by_bmw: set, by_ai: 
     links += [{"source": "bmw_labels", "target": "signals", "value": len(labeled_bmw)},
               {"source": "ai_labeler", "target": "signals", "value": len(labeled_ai)},
               {"source": "signals", "target": "findings", "value": len(tagged & in_findings)}]
+    # Findings -> requirements -> the PM's decision: how much of the customer voice turns into change.
+    from parallax.models import RequirementEvidence
+
+    requirements = list(session.scalars(select(Requirement).where(Requirement.target_model == scope.target_model)))
+    evidence: dict[str, set] = {}
+    for requirement_id, record_id in session.execute(
+            select(RequirementEvidence.requirement_id, RequirementEvidence.record_id)
+            .where(RequirementEvidence.requirement_id.in_([r.id for r in requirements]))):
+        evidence.setdefault(requirement_id, set()).add(record_id)
+    outcome_reviews: dict[str, set] = {"change_coming": set(), "declined": set(), "open": set()}
+    outcome_count: Counter = Counter()
+    for r in requirements:
+        outcome = OUTCOMES.get(r.status, "open")
+        outcome_count[outcome] += 1
+        outcome_reviews[outcome] |= evidence.get(r.id, set()) & tagged & in_findings
+    outcome_reviews["declined"] -= outcome_reviews["change_coming"]
+    outcome_reviews["open"] -= outcome_reviews["change_coming"] | outcome_reviews["declined"]
+    behind = set().union(*outcome_reviews.values())
+    nodes += [
+        {"key": "requirements", "label": "Requirements", "count": len(requirements), "unit": "requirements",
+         "hint": "Drafted from findings", "detail": "Requirements drafted from the findings; the band is the reviews linked "
+                                                    "to them as evidence."},
+        {"key": "change_coming", "label": "Change coming", "count": outcome_count["change_coming"], "unit": "requirements",
+         "hint": "Approved by the PM for the successor", "detail": "Requirements the PM approved for the next generation."},
+        {"key": "declined", "label": "Declined", "count": outcome_count["declined"], "unit": "requirements",
+         "hint": "Rejected by the PM", "detail": "Requirements the PM rejected, with the rationale in the timeline."},
+        {"key": "open", "label": "Open", "count": outcome_count["open"], "unit": "requirements",
+         "hint": "Waiting for councils or your decision", "detail": "Proposed, in review, challenged or postponed."},
+    ]
+    links += [{"source": "findings", "target": "requirements", "value": len(behind)}]
+    links += [{"source": "requirements", "target": k, "value": len(v)} for k, v in outcome_reviews.items()]
     counts = {n["key"]: n for n in nodes}
     counts["no_topic"]["count"] = len((set(stream_of) - excluded) - tagged)
     return {"nodes": nodes, "links": [l for l in links if l["value"] > 0], "link_unit": "reviews",
@@ -358,7 +407,8 @@ def pipeline(vehicle: str | None = Query(None, description="e.g. G60 or bmw:G60;
                                                       Theme.mention_review_count > 0))) if snapshot else []
     kinds = Counter(classify(t) for t in pooled)
     thresholds = _thresholds(session)
-    quadrants = Counter(quadrant(t, thresholds) for t in pooled)
+    pooled_prior = market_prior(pooled)
+    quadrants = Counter(quadrant(t, thresholds, pooled_prior) for t in pooled)
     for node in flow["nodes"]:
         node["count"] = {"signals": len(pooled), "findings": findings_count}.get(node["key"], node["count"])
     top = lambda k, key: [t.label for t in sorted((t for t in pooled if classify(t) == k), key=key, reverse=True)[:3]]
@@ -443,6 +493,53 @@ def pipeline(vehicle: str | None = Query(None, description="e.g. G60 or bmw:G60;
     name, detail = VEHICLE_INFO.get(target, (code, ""))
     return {"target_model": target, "vehicle": {"entity_id": target, "code": code, "name": name, "detail": detail},
             "stages": stages, "next_action": nxt}
+
+
+@router.get("/overview/flow", summary="All data, before any vehicle: streams -> triage -> which vehicle it belongs to")
+def overview_flow(session: Session = Depends(get_session, scope="function")):
+    from parallax.models import RecordTriage
+
+    scope = VehicleScope(session, None)
+    stream_n, dropped, unchecked = Counter(), Counter(), Counter()
+    to_scope: Counter = Counter()
+    for stream, kind, subjects, relevant, n in session.execute(
+            select(Source.stream, Record.record_kind, Record.subject_ids, RecordTriage.relevant, func.count())
+            .join(Record, Record.source_id == Source.source_id)
+            .outerjoin(RecordTriage, RecordTriage.record_id == Record.record_id)
+            .where(Record.superseded_by.is_(None))
+            .group_by(Source.stream, Record.record_kind, Record.subject_ids, RecordTriage.relevant)):
+        stream_n[stream] += n
+        if stream != "bmw" and kind == "feedback" and relevant is False:
+            dropped[stream] += n
+            continue
+        if stream != "bmw" and kind == "feedback" and relevant is None:
+            unchecked[stream] += n
+        to_scope[(stream, scope.of(subjects))] += n
+    code = scope.target_model.split(":")[-1]
+    nodes = [{"key": s_, "label": STREAM_LABELS.get(s_, s_), "count": n, "unit": "records",
+              "hint": {"bmw": "Feedback, study and sales from BMW", "social": "YouTube, app stores, forums",
+                       "competitors": "Editorial reviews, forums, spec sheets"}.get(s_, ""), "detail": ""}
+             for s_, n in stream_n.most_common()]
+    nodes.append({"key": "not_relevant", "label": "Not relevant", "count": sum(dropped.values()), "unit": "records",
+                  "hint": "Triage: nothing about the car", "detail": "Online reviews that triage marked as not relevant "
+                  "(greetings, spam, off-topic). " + triage_note()})
+    labels = {"target": f"{code}", "other_models": "Other BMW models", "competitor": "Competitors", "brand": "Brand-wide"}
+    hints = {"target": "Collected under this vehicle or its group", "other_models": "e.g. 7 Series, 1 Series",
+             "competitor": "Non-BMW vehicles", "brand": "No vehicle, e.g. My BMW app reviews"}
+    for key in SCOPES:
+        nodes.append({"key": key, "label": labels[key], "count": sum(n for (st, sc), n in to_scope.items() if sc == key),
+                      "unit": "records", "hint": hints[key], "detail": SCOPE_LABELS[key]})
+    links = [{"source": st, "target": "not_relevant", "value": n} for st, n in dropped.items()]
+    links += [{"source": st, "target": sc, "value": n} for (st, sc), n in to_scope.items()]
+    return {"nodes": nodes, "links": [l for l in links if l["value"] > 0], "link_unit": "records",
+            "unchecked_online": sum(unchecked.values()),
+            "note": "BMW records are owner data by source and are not triaged. " + triage_note()}
+
+
+def triage_note() -> str:
+    from parallax.triage import VALIDATION_NOTE
+
+    return VALIDATION_NOTE
 
 
 VEHICLE_INFO = {

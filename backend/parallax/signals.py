@@ -55,9 +55,23 @@ def need_share(theme: Theme) -> float:
     return round(need / total, 3)
 
 
-def quadrant(theme: Theme, thresholds: dict) -> str:
+def smoothed_need_share(theme: Theme, prior: float, strength: float) -> float:
+    """Share pulled toward the market average by `strength` pseudo-reviews. A signal with 5 reviews can only
+    sit at 0 %, 20 %, 40 % ... and at 100 % with one bad streak; smoothing shows that small signals are uncertain
+    instead of lining them up on a few heights. Large signals barely move."""
+    total = theme.mention_review_count or 0
+    return round((need_share(theme) * total + prior * strength) / (total + strength), 3) if total + strength else prior
+
+
+def market_prior(themes: list[Theme]) -> float:
+    reviews = sum(t.mention_review_count or 0 for t in themes)
+    return sum(need_share(t) * (t.mention_review_count or 0) for t in themes) / reviews if reviews else 0.5
+
+
+def quadrant(theme: Theme, thresholds: dict, prior: float | None = None) -> str:
     frequent = (theme.mention_review_count or 0) >= thresholds["frequent_min_reviews"]
-    needy = need_share(theme) >= thresholds["need_share_threshold"]
+    share = need_share(theme) if prior is None else smoothed_need_share(theme, prior, thresholds.get("smoothing_reviews", 5))
+    needy = share >= thresholds["need_share_threshold"]
     return {(True, True): "act", (True, False): "protect", (False, True): "watch", (False, False): "background"}[(frequent, needy)]
 
 
