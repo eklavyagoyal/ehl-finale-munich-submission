@@ -187,6 +187,8 @@ class Theme(Base):
     brand_record_ids: Mapped[list[str]] = mapped_column(ARRAY(Text), default=list)
     need_review_count: Mapped[int] = mapped_column(Integer, default=0)  # distinct reviews with a pain or a wish
     owner_review_count: Mapped[int] = mapped_column(Integer, default=0)  # BMW feedback + online reviews triaged as owner
+    weighted_review_count: Mapped[float] = mapped_column(Float, default=0.0)  # sum of evidence weights (policy)
+    weighted_need_count: Mapped[float] = mapped_column(Float, default=0.0)  # same, over reviews with a pain or a wish
     request_review_count: Mapped[int] = mapped_column(Integer)
     pain_review_count: Mapped[int] = mapped_column(Integer)
     praise_review_count: Mapped[int] = mapped_column(Integer)

@@ -134,14 +134,14 @@ def recover_interrupted_runs(session: Session) -> list[str]:
     stuck = session.scalars(select(SimRun).where(SimRun.status.in_(("queued", "running")))).all()
     for run in stuck:
         before = run.status
-        run.status, run.finished_at = "failed", _now()
+        run.status, run.finished_at = "interrupted", _now()
         run.error = "Interrupted: the server restarted while this run was in progress. Start it again."
-        run.progress = {**(run.progress or {}), "stage": "failed"}
+        run.progress = {**(run.progress or {}), "stage": "interrupted"}
         session.execute(update(SimStep).where(SimStep.run_id == run.id, SimStep.status == "running")
                         .values(status="failed", error="interrupted by a server restart", finished_at=_now()))
         record_event(session, category="system", actor_id="system:startup", action=f"{run.kind}.interrupted",
                      entity_type="sim_run", entity_id=str(run.id), run_id=run.id, before={"status": before},
-                     after={"status": "failed"}, rationale=run.error)
+                     after={"status": "interrupted"}, rationale=run.error)
     return [str(r.id) for r in stuck]
 
 

@@ -64,7 +64,16 @@ PARALLAX_EXTENSIONS: dict[str, Any] = {
     "min_cohort_size_for_share": 30,
     # Signal map (four fields): x = distinct reviews mentioning the feature, y = share of them reporting a
     # pain or a wish. A signal counts as "frequent" from this many reviews, as "mostly problems" from this share.
-    "signal_map": {"frequent_min_reviews": 30, "need_share_threshold": 0.5, "smoothing_reviews": 5},
+    "signal_map": {"frequent_min_reviews": 30, "need_share_threshold": 0.5, "smoothing_reviews": 5},  # weighted reviews
+    # Evidence weights: how much one review counts toward a signal. weight = source x author x text.
+    # BMW feedback comes from owners through BMW channels and is labelled by BMW, so it counts fully; an online
+    # review counts half, scaled by what triage knows about the author; emoji-laden and very short texts a bit less.
+    # A PM policy, shown in the UI; raw counts stay visible next to the weighted ones.
+    "evidence_weights": {
+        "source": {"bmw": 1.0, "social": 0.5, "competitors": 0.5},
+        "author": {"owner": 1.0, "unclear": 0.8, "not_owner": 0.6},
+        "emoji_factor": 0.95, "short_text": {"max_chars": 40, "factor": 0.9},
+    },
     # Triage of online reviews (parallax.triage). Off until the PM has checked the spot-check sample: when on,
     # online reviews marked not relevant or about another vehicle no longer count toward the vehicle's signals.
     "triage_filter": {"enabled": False, "exclude_not_relevant": True,

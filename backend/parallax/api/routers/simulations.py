@@ -58,8 +58,12 @@ def start(body: SimulationIn, session: Session = Depends(get_session, scope="fun
 
 
 @router.get("", response_model=list[RunOut])
-def list_runs(kind: str | None = None, limit: int = Query(50, le=200), session: Session = Depends(get_session, scope="function")):
+def list_runs(kind: str | None = None, limit: int = Query(50, le=200),
+              include_failed: bool = Query(False, description="Also list failed and interrupted runs (kept in the audit trail)"),
+              session: Session = Depends(get_session, scope="function")):
     query = select(SimRun)
+    if not include_failed:
+        query = query.where(SimRun.status.not_in(("failed", "interrupted")))
     if kind:
         query = query.where(SimRun.kind == kind)
     return [row(r) for r in session.scalars(query.order_by(SimRun.created_at.desc()).limit(limit)).all()]

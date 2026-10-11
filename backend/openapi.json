@@ -888,6 +888,25 @@
     }
    }
   },
+  "/api/weights": {
+   "get": {
+    "tags": [
+     "pipeline"
+    ],
+    "summary": "Every weight Parallax uses, in one place: evidence, owner markets, decision criteria",
+    "operationId": "weights_api_weights_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/overview/decisions": {
    "get": {
     "tags": [
@@ -2983,6 +3002,18 @@
        "default": 50,
        "title": "Limit"
       }
+     },
+     {
+      "name": "include_failed",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "boolean",
+       "description": "Also list failed and interrupted runs (kept in the audit trail)",
+       "default": false,
+       "title": "Include Failed"
+      },
+      "description": "Also list failed and interrupted runs (kept in the audit trail)"
      }
     ],
     "responses": {

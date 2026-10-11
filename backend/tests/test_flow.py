@@ -239,6 +239,9 @@ def test_pipeline_and_signals(client, drafted):
     assert stages["vehicle"]["code"] == "G60" and isinstance(sources["outside_scope"], list)
     signal_map = client.get("/api/signals/map", params={"market": "US", "min_reviews": 1}).json()
     assert signal_map["axes"]["x"]["center_on_threshold"] and "need_share_raw" in signal_map["items"][0]
+    assert signal_map["axes"]["x"]["key"] == "weighted_reviews" and signal_map["items"][0]["weighted_reviews"] > 0
+    weights = client.get("/api/weights").json()
+    assert weights["evidence"]["source"] and weights["owners"]["markets"] and len(weights["criteria"]) == 6
     overview = client.get("/api/overview/flow").json()
     assert {"bmw", "target", "brand"} <= {n["key"] for n in overview["nodes"]} and overview["links"]
     listed = client.get("/api/requirements").json()
@@ -253,7 +256,7 @@ def test_pipeline_and_signals(client, drafted):
     assert signal_map["items"] and all(0 <= i["need_share"] <= 1 and i["quadrant"] for i in signal_map["items"])
     feature = signal_map["items"][0]["feature_key"]
     opened = client.get(f"/api/signals/{feature}", params={"market": "US"}).json()
-    assert [s["key"] for s in opened["how_sorted"]] == ["collected", "tagged", "counted", "classified", "placed", "grouped"]
+    assert [s["key"] for s in opened["how_sorted"]] == ["collected", "tagged", "counted", "weighted", "classified", "placed", "grouped"]
     assert all(s["short"] and s["detail"] for s in opened["how_sorted"])
     assert client.get("/api/signals/no_such_feature", params={"market": "US"}).status_code == 404
 
@@ -288,7 +291,9 @@ def test_interrupted_runs_are_marked_failed(client, drafted):
     with session_scope() as session:
         assert str(run_id) in recover_interrupted_runs(session)
     done = client.get(f"/api/simulations/{run_id}").json()["run"]
-    assert done["status"] == "failed" and "restarted" in done["error"]
+    assert done["status"] == "interrupted" and "restarted" in done["error"]
+    assert all(r["id"] != str(run_id) for r in client.get("/api/simulations").json())
+    assert any(r["id"] == str(run_id) for r in client.get("/api/simulations", params={"include_failed": True}).json())
 
 
 def test_admin_reset_needs_cli_token_and_keeps_audit(drafted):

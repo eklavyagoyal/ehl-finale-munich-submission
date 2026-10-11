@@ -20,7 +20,7 @@ from parallax.models import Claim, Finding, IngestRun, Record, Requirement, SimR
 from parallax.policy import active_policy
 from parallax.scope import SCOPE_LABELS, SCOPES, VehicleScope
 from parallax.signals import (CHANNEL_LABELS, classify, explain_kind, finding_order, latest_findings, market_prior, need_share,
-                              quadrant, ranked_themes, smoothed_need_share)
+                              quadrant, ranked_themes, size, smoothed_need_share)
 from parallax.themes import latest_snapshot_id
 
 router = APIRouter(prefix="/api", tags=["pipeline"])
@@ -56,6 +56,7 @@ def _signal(theme: Theme, kind: str, texts: dict[str, str], drafted: set, findin
         "direct_reviews": theme.direct_review_count, "pain": theme.pain_review_count,
         "requests": theme.request_review_count, "praise": theme.praise_review_count,
         "need": theme.need_review_count, "need_share": need_share(theme), "quadrant": quadrant(theme, thresholds, prior),
+        "weighted_reviews": round(size(theme), 1),
         "competitor_reviews": theme.competitor_review_count, "brand_wide_reviews": theme.brand_review_count,
         "channels": theme.channels,
         "demand_0_5": theme.demand_score, "impact_0_5": theme.impact_score,
@@ -110,11 +111,12 @@ def signal_map(market: str | None = Query(None, description="US, EU, CN or omit 
     snapshot = latest_snapshot_id(session, settings.target_model)
     thresholds = _thresholds(session)
     axes = {
-        "x": {"key": "reviews", "label": "Reviews", "scale": "log", "threshold": thresholds["frequent_min_reviews"],
+        "x": {"key": "weighted_reviews", "label": "Weighted reviews", "scale": "log", "threshold": thresholds["frequent_min_reviews"],
               "center_on_threshold": True, "low_label": "Few reviews", "high_label": "Many reviews",
-              "hint": "How many owners mention it",
-              "detail": "Distinct collected reviews of this vehicle that mention the feature (one review counts once). "
-                        "Collected reviews, not customer prevalence."},
+              "hint": "How many owners mention it, weighted by source",
+              "detail": "Distinct collected reviews of this vehicle that mention the feature, each counted with its evidence "
+                        "weight (BMW feedback 1.0, online reviews 0.5 x author, less for emoji-laden or very short texts; "
+                        "see /api/weights). Collected reviews, not customer prevalence."},
         "y": {"key": "need_share", "label": "Problems & wishes", "scale": "linear", "min": 0, "max": 1,
               "threshold": thresholds["need_share_threshold"], "center_on_threshold": True,
               "low_label": "Mostly praise", "high_label": "Mostly problems & wishes",
@@ -137,12 +139,13 @@ def signal_map(market: str | None = Query(None, description="US, EU, CN or omit 
         drafted.setdefault((r.feature_key, r.market), []).append(r.id)
     findings = latest_findings(session, market, [t.feature_key for t in shown])
     items = []
-    for t in sorted(shown, key=lambda t: -t.mention_review_count):
+    for t in sorted(shown, key=lambda t: -size(t)):
         kind = classify(t)
         items.append({
             "theme_id": t.id, "feature_key": t.feature_key, "label": t.label, "area": t.area, "kind": kind,
-            "reviews": t.mention_review_count, "need_share": smoothed_need_share(t, prior, strength),
-            "need_share_raw": need_share(t), "quadrant": quadrant(t, thresholds, prior),
+            "reviews": t.mention_review_count, "weighted_reviews": round(size(t), 1),
+            "need_share": smoothed_need_share(t, prior, strength),
+            "need_share_raw": need_share(t, weighted=False), "quadrant": quadrant(t, thresholds, prior),
             "pain": t.pain_review_count, "requests": t.request_review_count, "praise": t.praise_review_count,
             "findings": sum(f.kind in FINDING_KINDS.get(kind, {f.kind}) for f in findings.get(t.feature_key, [])),
             "requirement_ids": drafted.get((t.feature_key, t.market), []),
@@ -257,11 +260,16 @@ def signal_detail(feature_key: str, market: str | None = Query(None, description
          "detail": "Code counts each review once per feature and market. A review can contain a problem and praise at once, "
                    "so the three numbers can add up to more than the reviews.",
          "data": {"by_claim_type": theme.counts_by_claim_type}},
+        {"key": "weighted", "label": "Weighted", "short": f"{reviews} reviews → {size(theme):.0f} weighted",
+         "detail": "Each review counts with its evidence weight: BMW feedback 1.0; online reviews 0.5, times 1.0 when the "
+                   "author owns the car, 0.8 when unclear, 0.6 when not; times 0.95 with emojis and 0.9 under 40 characters. "
+                   "The weights are a PM policy (GET /api/weights); the raw count stays visible.",
+         "data": {"weighted_reviews": round(size(theme), 1), "weighted_need_share": need_share(theme)}},
         {"key": "classified", "label": "Classified", "short": explain_kind(theme),
          "detail": "Rule, first match wins: pain from 40 % problems; wish from 30 % wishes; strength from 60 % praise with "
                    "under 15 % problems; otherwise mixed. Problems = defects and 'difficult to use'.",
          "data": {"kind": kind}},
-        {"key": "placed", "label": "Placed", "short": f"{q['label']}: {reviews} reviews, {round(100 * need_share(theme))} % problems or wishes",
+        {"key": "placed", "label": "Placed", "short": f"{q['label']}: {size(theme):.0f} weighted reviews, {round(100 * need_share(theme))} % problems or wishes",
          "detail": f"Frequent from {thresholds['frequent_min_reviews']} reviews; mostly problems from "
                    f"{round(100 * thresholds['need_share_threshold'])} % problems or wishes. Small signals are pulled "
                    f"toward the market average ({round(100 * prior)} %) by {thresholds.get('smoothing_reviews', 5)} "
@@ -340,11 +348,11 @@ def _processing_flow(session: Session, scope: VehicleScope, by_bmw: set, by_ai: 
                      "another car. " + ("They are excluded from the signals." if excluded else
                                          "They still count until the PM switches the triage filter on."))
     nodes = [
-        {"key": "bmw", "label": "BMW feedback", "count": len(bmw_ids), "unit": "reviews",
+        {"key": "bmw", "label": "BMW feedback", "count": len(bmw_ids), "unit": "reviews", "weight": "×1.0",
          "hint": "Owners, through BMW channels",
          "detail": "BMW's own feedback export: every row comes with vehicle, engine type, country and, for most rows, "
                    "BMW's topic and feedback type."},
-        {"key": "online", "label": "Online reviews", "count": len(online_ids), "unit": "reviews",
+        {"key": "online", "label": "Online reviews", "count": len(online_ids), "unit": "reviews", "weight": "×0.5 × author",
          "hint": f"{len(flagged):,} flagged by triage" if triaged else "Not triaged yet", "detail": online_detail},
     ]
     links = []
@@ -597,6 +605,40 @@ def overview_flow(session: Session = Depends(get_session, scope="function")):
     return {"nodes": nodes, "links": [l for l in links if l["value"] > 0], "link_unit": "records",
             "unchecked_online": sum(unchecked.values()),
             "note": "BMW records are owner data by source and are not triaged. " + triage_note()}
+
+
+@router.get("/weights", summary="Every weight Parallax uses, in one place: evidence, owner markets, decision criteria")
+def weights(session: Session = Depends(get_session, scope="function")):
+    policy = active_policy(session)
+    ext = policy.document["parallax"]
+    evidence = ext.get("evidence_weights", {})
+    markets = ext["persona_weighting"]["market_weights"]
+    total = sum(markets.values()) or 1
+    return {
+        "policy_version": policy.id,
+        "evidence": {
+            "rule": "weight of one review = source × author (online only) × text",
+            "source": [{"key": k, "label": STREAM_LABELS.get(k, k), "weight": v} for k, v in evidence.get("source", {}).items()],
+            "author": [{"key": k, "label": {"owner": "Owner", "unclear": "Not stated", "not_owner": "Not an owner"}.get(k, k),
+                        "weight": v} for k, v in evidence.get("author", {}).items()],
+            "text": [{"key": "emoji", "label": "Contains emojis", "weight": evidence.get("emoji_factor", 1.0)},
+                     {"key": "short", "label": f"Under {evidence.get('short_text', {}).get('max_chars', 0)} characters",
+                      "weight": evidence.get("short_text", {}).get("factor", 1.0)}],
+            "used_for": "Signal map (x = weighted reviews, y = weighted share of problems and wishes) and quadrants. "
+                        "Raw counts stay visible; the demand score keeps raw counts.",
+        },
+        "owners": {
+            "rule": "owner weight = market share of planned 2030 volume / owners in that market × validation multiplier",
+            "markets": [{"key": k, "weight": round(v / total, 2), "volume_2030": v} for k, v in markets.items()],
+            "validation": ext["persona_weighting"]["validation_multipliers"],
+            "basis": ext["persona_weighting"].get("market_weight_basis"),
+            "used_for": "Simulated impact and vehicle-market-fit ratings from the customer council.",
+        },
+        "criteria": [{"key": c["key"], "weight": c["weight"], "meaning": c.get("meaning")}
+                     for c in policy.document.get("decision_model", {}).get("criteria", [])],
+        "criteria_used_for": "Score = weighted sum of the six criteria (0-100); simulated and assumed ratings only widen the range.",
+        "company_council": "No numeric weight: departments give arguments, conditions and criterion ranges, not votes that are added up.",
+    }
 
 
 @router.get("/overview/decisions", summary="Start page: per vehicle where the pipeline stands and which decisions are open or made")

@@ -44,8 +44,15 @@ def classify(theme: Theme) -> str:
     return "mixed"
 
 
-def need_share(theme: Theme) -> float:
-    """Share of the signal's reviews reporting a problem or a wish (y axis of the signal map)."""
+def size(theme: Theme) -> float:
+    """Signal size on the map: weighted reviews (evidence weights in the policy); raw count for older snapshots."""
+    return theme.weighted_review_count or float(theme.mention_review_count or 0)
+
+
+def need_share(theme: Theme, weighted: bool = True) -> float:
+    """Share of the signal's reviews reporting a problem or a wish (y axis of the signal map), weighted by default."""
+    if weighted and theme.weighted_review_count:
+        return round(min(1.0, (theme.weighted_need_count or 0) / theme.weighted_review_count), 3)
     total = theme.mention_review_count or 0
     if not total:
         return 0.0
@@ -59,17 +66,17 @@ def smoothed_need_share(theme: Theme, prior: float, strength: float) -> float:
     """Share pulled toward the market average by `strength` pseudo-reviews. A signal with 5 reviews can only
     sit at 0 %, 20 %, 40 % ... and at 100 % with one bad streak; smoothing shows that small signals are uncertain
     instead of lining them up on a few heights. Large signals barely move."""
-    total = theme.mention_review_count or 0
+    total = size(theme)
     return round((need_share(theme) * total + prior * strength) / (total + strength), 3) if total + strength else prior
 
 
 def market_prior(themes: list[Theme]) -> float:
-    reviews = sum(t.mention_review_count or 0 for t in themes)
-    return sum(need_share(t) * (t.mention_review_count or 0) for t in themes) / reviews if reviews else 0.5
+    reviews = sum(size(t) for t in themes)
+    return sum(need_share(t) * size(t) for t in themes) / reviews if reviews else 0.5
 
 
 def quadrant(theme: Theme, thresholds: dict, prior: float | None = None) -> str:
-    frequent = (theme.mention_review_count or 0) >= thresholds["frequent_min_reviews"]
+    frequent = size(theme) >= thresholds["frequent_min_reviews"]
     share = need_share(theme) if prior is None else smoothed_need_share(theme, prior, thresholds.get("smoothing_reviews", 5))
     needy = share >= thresholds["need_share_threshold"]
     return {(True, True): "act", (True, False): "protect", (False, True): "watch", (False, False): "background"}[(frequent, needy)]

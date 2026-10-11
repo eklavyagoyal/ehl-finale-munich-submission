@@ -5,6 +5,7 @@ dataset/channel/subject/market/sampling apart, shares are within-cohort collecte
 (not customer prevalence), and other BMW models' records are excluded from the target scope.
 """
 
+import re
 import uuid
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -16,6 +17,20 @@ from parallax.models import Claim, Entity, Feature, Record, RecordTriage, Source
 from parallax.policy import active_policy, market_bucket
 
 REQUEST_TYPES = {"new_request", "discontinued", "competitor_parity"}
+EMOJI = re.compile("[\U0001F300-\U0001FAFF\U00002600-\U000027BF\U0001F1E6-\U0001F1FF]")
+
+
+def evidence_weight(weights: dict, stream: str, author: str | None, text: str) -> float:
+    """How much one review counts toward a signal: source x author (online only) x text quality."""
+    weight = weights.get("source", {}).get(stream, 0.5)
+    if stream != "bmw":
+        weight *= weights.get("author", {}).get(author or "unclear", 0.8)
+    if EMOJI.search(text or ""):
+        weight *= weights.get("emoji_factor", 1.0)
+    short = weights.get("short_text", {})
+    if len((text or "").strip()) < short.get("max_chars", 0):
+        weight *= short.get("factor", 1.0)
+    return round(weight, 4)
 PAIN_TYPES = {"defect"}
 
 
@@ -123,6 +138,8 @@ def build_themes(session: Session, *, target_model: str, include_examples: bool 
     cohort_size: dict[tuple, int] = defaultdict(int)
     buckets_of: dict[str, set[str]] = {}
     texts: dict[str, str] = {}
+    weights = ext.get("evidence_weights", {})
+    weight_of: dict[str, float] = {}
     for record_id, (record, source) in retained.items():
         key = (source.dataset_key, source.channel, tuple(sorted(record.subject_ids or [])),
                tuple(sorted(record.markets or [])), source.sampling.get("method"), source.sampling.get("query"))
@@ -130,6 +147,8 @@ def build_themes(session: Session, *, target_model: str, include_examples: bool 
         cohort_size[key] += 1
         buckets_of[record_id] = {market_bucket(policy, m) for m in (record.markets or [])}
         texts[record_id] = record.text_original or ""
+        t = triage.get(record_id)
+        weight_of[record_id] = evidence_weight(weights, source.stream, t.author if t else None, texts[record_id])
 
     claims = [
         claim for claim in session.scalars(
@@ -197,6 +216,8 @@ def build_themes(session: Session, *, target_model: str, include_examples: bool 
             brand_review_count=len(a.brand), brand_record_ids=sorted(a.brand)[:500],
             pain_review_count=len(a.pain), praise_review_count=len(a.by_type.get("praise", set())),
             need_review_count=len(a.pain | requests), owner_review_count=len(a.owners),
+            weighted_review_count=round(sum(weight_of[r] for r in a.parents), 2),
+            weighted_need_count=round(sum(weight_of[r] for r in a.pain | requests), 2),
             counts_by_claim_type={k: len(v) for k, v in sorted(a.by_type.items())},
             channels=sorted(a.channels), cohorts=cohorts, max_cohort_share=max_share,
             record_ids=sorted(a.parents), llm_eligible_record_count=len(a.eligible),
