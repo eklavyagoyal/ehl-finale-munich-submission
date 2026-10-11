@@ -1,10 +1,16 @@
 # Parallax UI contract: structure, order, text
 
-Agreed with Luis on 2026-10-11. This file fixes page structure, order and how much text appears. It changes only
-when Luis agrees. Design follows the minimal style: hairlines, about 10 % text, details on demand. The data comes
-from [API.md](API.md).
+Status 2026-10-11:
 
-## 1. Text levels
+- **Part A** is what Luis asked for. Build it now.
+- **Part B** is proposed and waits for Luis' OK. Do not build it before he agrees.
+
+Design follows the minimal style: hairlines, about 10 % text, details on demand. The data comes from
+[API.md](API.md). Any structure change beyond this file goes through Luis first.
+
+## Part A: requested by Luis
+
+### A1. Text levels
 
 Every element shows **one label plus one number or one line**. Longer text appears only on click (expand or side
 panel, with a quiet "More" affordance). No paragraph is visible by default on any page.
@@ -15,64 +21,38 @@ panel, with a quiet "More" affordance). No paragraph is visible by default on an
 | One line | `headline` (trace), `hint` (funnel, axes, quadrants), `short` (how_sorted) | always, muted |
 | Long form | `detail`, `why`, `output`, `caveat`, `description` | on click only |
 
-## 2. Scope lives in the URL
+### A2. Breadcrumbs and sidebar
 
-Everything about a vehicle sits under `/v/[code]`. The landing page only picks the vehicle.
+- Every page uses the same breadcrumb form: `Vehicles › G60 › <Stage> › <Item>`. Every crumb except the last is a
+  link, and "Vehicles" leads to `/`.
+- The market is **not** a crumb. It is a filter chip in the header row (US / EU / CN / All).
+- In the sidebar, **remove History** (the button; `/history` redirects to `/activity`). Activity stays at the
+  bottom.
 
-| Route | Page |
-| --- | --- |
-| `/` | Landing: vehicle cards (`GET /api/vehicles`), only G60 clickable |
-| `/v/g60` | Vehicle start: five stage cards (`GET /api/pipeline?vehicle=G60`) |
-| `/v/g60/sources` | Sources |
-| `/v/g60/processing` | Processing |
-| `/v/g60/signals?market=US` | Signals (four-field map) |
-| `/v/g60/signals/[feature_key]?market=US` | One signal opened (may also be a side panel over the map) |
-| `/v/g60/experts` | Expert pipeline |
-| `/v/g60/decision` | Decision list |
-| `/v/g60/decision/[REQ-ID]` | Requirement, tabs below |
-| `/activity` | Global activity (sidebar bottom) |
+### A3. Only G60 under G60
 
-Old routes (`/pipeline`, `/sources`, `/signals`, `/requirements/...`, `/history`) redirect to the new ones.
+The backend now scopes `/api/pipeline`, `/api/coverage` and `/api/vehicles` to the vehicle. The frontend does the
+following:
 
-## 3. Breadcrumbs
-
-The route defines them, always in this form: `Vehicles › G60 › <Stage> › <Item>`. Every crumb except the last is
-a link. The market is **not** a crumb. It is a filter chip in the header row (US / EU / CN / All). The landing page
-has no breadcrumb.
-
-## 4. Sidebar
-
-Stages in this order: Sources, Processing, Signals, Expert pipeline, Decision. At the bottom there is only
-Activity. **Remove History** (the button and the route; `/history` redirects to `/activity`). The "My tasks"
-counter stays top right.
-
-## 5. Pages
-
-**Vehicle start (`/v/g60`).** Five cards, each with a title, one big number and one muted line:
-
-- Sources: the vehicle's own records. `outside_scope` appears as one muted line ("+18k not about the G60") that
-  expands.
-- Processing: a mini funnel from `funnel`.
-- Signals: `by_quadrant` (e.g. "Act 23 · Protect 17").
-- Experts: runs.
-- Decision: open decisions.
-
-**Sources.** Show only the vehicle's own records; `GET /api/coverage` defaults to `scope=target`.
-
-- Matrix columns are **US / EU / CN / RoW** from `records_by_channel_bucket`. Countries appear on expand from
+- Sources matrix: columns **US / EU / CN / RoW** from `records_by_channel_bucket`. Countries appear on expand from
   `records_by_channel_market`.
 - A collapsed section "Not about the G60" lists `scopes` (competitors, other BMW models, brand-wide) and drills in
-  with `?scope=competitor|other_models|brand`.
+  with `/api/coverage?scope=competitor|other_models|brand`.
+- On the start page, `stages[0].outside_scope` is one muted line ("+18k not about the G60") that expands.
 - Drop the gap warning built on exact tags. It was wrong because DE is not tagged as EU.
 
-**Processing.** A horizontal funnel of the four steps in `stages[1].funnel`:
+### A4. Processing in one glance
 
-- Each step shows a number, a label and a muted hint; `detail` appears on click.
+A horizontal funnel of the four steps in `stages[1].funnel`:
+
+- Each step shows a number, a label and a muted `hint`; `detail` appears on click.
 - `gap` is a side branch ("7,841 without a topic", with detail on click).
 - `labeler_quality` is a small badge ("77 % same area as BMW"), with detail on click.
 - Nothing else goes on this page.
 
-**Signals.** The four-field map from `GET /api/signals/map?market=` comes first.
+### A5. Signals on one four-field map
+
+The map from `GET /api/signals/map?market=` sits at the top of the Signals page.
 
 Axes and quadrants:
 
@@ -83,7 +63,7 @@ Axes and quadrants:
 
 Dots:
 
-- Colour by `kind` (pain red, request blue, strength green, mixed grey), one size, hairline style.
+- Colour by `kind` (pain red, request blue, strength green, mixed grey), one size.
 - Only the top signals in Act and Protect get a text label. Hover shows label, reviews and %.
 - A dot with `requirement_ids` gets a small ring.
 
@@ -94,24 +74,26 @@ Clicking a dot opens `GET /api/signals/{feature_key}?market=` as a side panel:
 - Findings follow, `matches_signal` first, with the others collapsed as "+N other findings".
 - Quotes appear on expand, then the "Draft requirement" action.
 
-Below the map goes one compact list per quadrant (Act first), replacing the three kind columns. The
-frequency-vs-budget chart moves to the Decision page, because it is about simulated requirements.
-
-**Expert pipeline.** The requirement list plus run status. A failed run shows its `error` line, e.g. "Interrupted:
-the server restarted… Start it again.".
-
-**Decision.** The list plus the frequency-vs-budget chart (`GET /api/budgets`).
-
-**Requirement tabs, in this order:** Decision path (default) · Councils · Evidence · Simulation · Timeline.
-Overview folds into the header.
+### A6. Requirement pages
 
 - Decision path: each step shows only `title`, `headline` and the effect arrow. Expanding shows `why`, `output` and
   `caveat`.
-- Councils: show only the markets that answered. Since 2026-10-11 a US case is answered by the US owners only,
-  matching Sales US (`persona_scope=market`). Add one muted line: "Owners and Sales are asked per market; the other
-  departments are global."
+- Councils: show only the markets that answered. A US case is now answered by the US owners only, matching Sales
+  US (`persona_scope=market`). Add one muted line: "Owners and Sales are asked per market; the other departments
+  are global."
+- Expert pipeline: a failed run shows its `error` line ("Interrupted: the server restarted… Start it again.").
 
-## 6. Allowlist (`/bff`)
+### A7. Allowlist (`/bff`)
 
 Add: `GET /api/signals/map`, `GET /api/signals/{feature_key}`, and the new query parameters on `/api/coverage`
 (`scope`, `vehicle`), `/api/records` (`scope`, `bucket`, `vehicle`) and `/api/pipeline` (`vehicle`).
+
+## Part B: proposed, waiting for Luis
+
+- B1. The vehicle goes into the URL: `/v/g60`, `/v/g60/sources`, ..., `/v/g60/decision/[REQ-ID]`. Old routes
+  redirect.
+- B2. Below the map, one compact list per quadrant (Act first) replaces the three kind columns
+  (pain / request / strength).
+- B3. The frequency-vs-budget chart moves from Signals to Decision, because it is about simulated requirements.
+- B4. Requirement tabs become Decision path · Councils · Evidence · Simulation · Timeline, and Overview folds into
+  the header.
