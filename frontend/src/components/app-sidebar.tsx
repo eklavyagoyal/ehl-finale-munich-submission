@@ -21,6 +21,7 @@ import {
 import { useRequirements } from "@/lib/api/hooks";
 import { humanize } from "@/lib/format";
 import { STAGES } from "@/lib/stages";
+import { V } from "@/lib/routes";
 
 export function AppSidebar({ initialPm, signedIn }: { initialPm: string; signedIn: boolean }) {
   const pathname = usePathname();
@@ -34,7 +35,7 @@ export function AppSidebar({ initialPm, signedIn }: { initialPm: string; signedI
     icon: s.icon,
     count: s.key === "decision" ? requirements?.length : undefined,
   }));
-  const trail = [{ href: "/activity", label: "Activity", icon: Activity, count: undefined }];
+  const trail = [{ href: `${V}/activity`, label: "Activity", icon: Activity, count: undefined }];
 
   return (
     <Sidebar collapsible="icon">

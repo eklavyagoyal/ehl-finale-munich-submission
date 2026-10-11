@@ -9,6 +9,7 @@ import { useAudit } from "@/lib/api/hooks";
 import type { AuditEvent } from "@/lib/api/types";
 import { actorLabel, fmtDateTime, humanize } from "@/lib/format";
 import { cn } from "cn";
+import { V } from "@/lib/routes";
 
 const CATEGORIES = ["change", "decision", "ai", "evidence", "system"];
 
@@ -74,7 +75,7 @@ function ActivityRow({ event }: { event: AuditEvent }) {
       </span>
       <span className="truncate text-right font-mono text-xs text-muted-foreground">
         {event.requirement_id ? (
-          <Link href={`/requirements/${event.requirement_id}/timeline`} className="hover:text-foreground">
+          <Link href={`${V}/decision/${event.requirement_id}/timeline`} className="hover:text-foreground">
             {event.requirement_id}
           </Link>
         ) : event.run_id ? (

@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { useTasks } from "@/lib/api/hooks";
+import { V } from "@/lib/routes";
 
 // "My tasks" as a counter in the top-right corner of every page.
 export function TasksCounter() {
@@ -10,7 +11,7 @@ export function TasksCounter() {
   const count = data?.length;
   return (
     <Link
-      href="/tasks"
+      href={`${V}/tasks`}
       className="flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-xs text-muted-foreground hover:text-foreground"
     >
       My tasks

@@ -8,6 +8,7 @@ import { useVehicles } from "@/lib/api/hooks";
 import type { Vehicle } from "@/lib/api/types";
 import { fmtCount } from "@/lib/format";
 import { cn } from "cn";
+import { V } from "@/lib/routes";
 
 // Side views as hairlines: a sedan, the long-wheelbase sedan, the larger 7 Series and the 1 Series hatch.
 const SILHOUETTE: Record<string, string> = {
@@ -84,7 +85,7 @@ function VehicleCard({ vehicle: v }: { vehicle: Vehicle }) {
   const box = "flex flex-col gap-4 rounded-xl border p-5";
   if (!active) return <div className={cn(box, "border-dashed opacity-80")}>{inner}</div>;
   return (
-    <Link href="/pipeline" className={cn(box, "transition-colors hover:border-foreground/30")}>
+    <Link href={V} className={cn(box, "transition-colors hover:border-foreground/30")}>
       {inner}
     </Link>
   );

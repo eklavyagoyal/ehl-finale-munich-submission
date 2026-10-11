@@ -8,6 +8,7 @@ import { useTheme } from "@/lib/api/hooks";
 import type { Requirement } from "@/lib/api/types";
 import { actorLabel, fmtCount, humanize } from "@/lib/format";
 import { channelLabel } from "@/lib/provenance";
+import { V } from "@/lib/routes";
 
 // Where a requirement comes from, one step back per link: signal (Signals) -> claims (Processing) -> sources (Sources).
 export function OriginTrail({ requirement }: { requirement: Requirement }) {
@@ -31,16 +32,16 @@ export function OriginTrail({ requirement }: { requirement: Requirement }) {
   return (
     <nav aria-label="Origin" className="mt-1.5 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
       <span>From signal</span>
-      <Link href={`/signals?market=${encodeURIComponent(market)}#sig-${theme.feature_key}`} className="text-foreground hover:underline">
+      <Link href={`${V}/signals?market=${encodeURIComponent(market)}#sig-${theme.feature_key}`} className="text-foreground hover:underline">
         {theme.label}
       </Link>
-      <Link href={`/signals?market=${encodeURIComponent(market)}#sig-${theme.feature_key}`} className="tabular-nums hover:text-foreground hover:underline">
+      <Link href={`${V}/signals?market=${encodeURIComponent(market)}#sig-${theme.feature_key}`} className="tabular-nums hover:text-foreground hover:underline">
         {fmtCount(theme.mention_review_count)} reviews
       </Link>
       <ChevronRight className="size-3 text-muted-foreground/60" aria-hidden />
       <HoverCard openDelay={100} closeDelay={60}>
         <HoverCardTrigger asChild>
-          <Link href="/processing" className="tabular-nums hover:text-foreground hover:underline">
+          <Link href={`${V}/processing`} className="tabular-nums hover:text-foreground hover:underline">
             {fmtCount(claims)} claims
           </Link>
         </HoverCardTrigger>
@@ -58,7 +59,7 @@ export function OriginTrail({ requirement }: { requirement: Requirement }) {
       <ChevronRight className="size-3 text-muted-foreground/60" aria-hidden />
       <HoverCard openDelay={100} closeDelay={60}>
         <HoverCardTrigger asChild>
-          <Link href="/sources?tab=list" className="tabular-nums hover:text-foreground hover:underline">
+          <Link href={`${V}/sources?tab=list`} className="tabular-nums hover:text-foreground hover:underline">
             {fmtCount(datasets.size)} source{datasets.size === 1 ? "" : "s"}
           </Link>
         </HoverCardTrigger>

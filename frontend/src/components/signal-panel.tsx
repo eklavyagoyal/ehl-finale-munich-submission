@@ -12,6 +12,7 @@ import { useSignalDetail } from "@/lib/api/hooks";
 import type { Finding, Signal, SignalDetail } from "@/lib/api/types";
 import { fmtCount, humanize } from "@/lib/format";
 import { cn } from "cn";
+import { V } from "@/lib/routes";
 
 // One signal opened up: how it was pre-sorted (six steps), then its findings, then the draft action.
 export function SignalPanel({ featureKey, market, onClose }: { featureKey: string | null; market: string | null; onClose: () => void }) {
@@ -74,7 +75,7 @@ function PanelBody({ data, market, onDrafted }: { data: SignalDetail; market: st
       <section className="flex flex-wrap items-center gap-3">
         {data.requirement_ids.length > 0 ? (
           data.requirement_ids.map((id) => (
-            <Link key={id} href={`/requirements/${encodeURIComponent(id)}`} className="text-[13px] hover:underline">
+            <Link key={id} href={`${V}/decision/${encodeURIComponent(id)}`} className="text-[13px] hover:underline">
               {id} →
             </Link>
           ))
@@ -116,7 +117,7 @@ function FindingRow({ finding: f }: { finding: Finding }) {
           {f.quotes.slice(0, 3).map((q) => (
             <div key={q.record_id} className="flex flex-col gap-0.5">
               <p className="line-clamp-3">“{q.text}”</p>
-              <Link href={`/sources?tab=records&ids=${encodeURIComponent(q.record_id)}`} className="font-mono text-muted-foreground hover:underline">
+              <Link href={`${V}/sources?tab=records&ids=${encodeURIComponent(q.record_id)}`} className="font-mono text-muted-foreground hover:underline">
                 {q.record_id}
               </Link>
             </div>

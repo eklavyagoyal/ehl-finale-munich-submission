@@ -11,6 +11,7 @@ import { ToneBadge } from "@/components/tone-badge";
 import { useSource } from "@/lib/api/hooks";
 import { fmtDateTime, humanize } from "@/lib/format";
 import { isSynthetic } from "@/lib/provenance";
+import { V } from "@/lib/routes";
 
 export default function SourceDetailPage() {
   const id = decodeURIComponent(useParams<{ id: string }>().id);
@@ -19,7 +20,7 @@ export default function SourceDetailPage() {
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "Sources", href: "/sources?tab=list" }, { label: s?.title ?? id }]} />
+      <PageHeader crumbs={[{ label: "Sources", href: `${V}/sources?tab=list` }, { label: s?.title ?? id }]} />
       {error && <ErrorState error={error} />}
       {isLoading && <LoadingRows />}
       {data && s && (
@@ -94,7 +95,7 @@ export default function SourceDetailPage() {
             <aside className="flex flex-col text-sm">
               <section className="border-b border-border/60 pb-5">
                 <h2 className="mb-1 text-[13px] font-normal text-muted-foreground">Records</h2>
-                <Link href={`/sources?tab=records&channel=${encodeURIComponent(s.channel)}`} className="text-2xl font-semibold tabular-nums hover:underline">
+                <Link href={`${V}/sources?tab=records&channel=${encodeURIComponent(s.channel)}`} className="text-2xl font-semibold tabular-nums hover:underline">
                   {data.records}
                 </Link>
                 <p className="text-xs text-muted-foreground">Opens all records of this channel.</p>

@@ -19,6 +19,7 @@ import type { Coverage, CoverageScope, Source, SourcesStage } from "@/lib/api/ty
 import { fmtCount, fmtDateTime, humanize } from "@/lib/format";
 import { channelLabel, isSynthetic, STREAM_ORDER, streamLabel, toSummary } from "@/lib/provenance";
 import { cn } from "cn";
+import { V } from "@/lib/routes";
 
 const TABS = [
   { key: "overview", label: "Overview" },
@@ -41,7 +42,7 @@ function SourcesView() {
   const router = useRouter();
   const params = useSearchParams();
   // Signals moved to their own stage page.
-  if (params.get("tab") === "signals") redirect("/signals");
+  if (params.get("tab") === "signals") redirect(`${V}/signals`);
   const tab = (TABS.find((t) => t.key === params.get("tab"))?.key ?? "overview") as TabKey;
   const sources = useSources();
   const coverage = useCoverage();
@@ -58,7 +59,7 @@ function SourcesView() {
           <button
             key={t.key}
             type="button"
-            onClick={() => router.replace(t.key === "overview" ? "/sources" : `/sources?tab=${t.key}`)}
+            onClick={() => router.replace(t.key === "overview" ? `${V}/sources` : `${V}/sources?tab=${t.key}`)}
             aria-current={tab === t.key ? "page" : undefined}
             className={cn(
               "flex h-8 items-center gap-2 rounded-lg px-2.5 text-[13px]",
@@ -93,7 +94,7 @@ function SourcesView() {
 
 function recordsHref(filter: { channel?: string; market?: string; bucket?: string; scope?: string }) {
   const q = new URLSearchParams({ tab: "records", ...Object.fromEntries(Object.entries(filter).filter(([, v]) => v)) });
-  return `/sources?${q.toString()}`;
+  return `${V}/sources?${q.toString()}`;
 }
 
 function Overview() {
@@ -149,7 +150,7 @@ function StreamCard({ stream, coverage, sources }: { stream: string; coverage: C
 
   return (
     <Link
-      href={`/sources?tab=list&stream=${encodeURIComponent(stream)}`}
+      href={`${V}/sources?tab=list&stream=${encodeURIComponent(stream)}`}
       className="flex flex-col gap-3 rounded-xl border p-4 transition-colors hover:border-foreground/25"
     >
       <span className="flex items-center gap-2 text-[13px]">
@@ -403,7 +404,7 @@ function SourceList({ stream }: { stream?: string }) {
       {stream && (
         <p className="flex items-center gap-2 px-2 pb-2 text-xs text-muted-foreground">
           {streamLabel(stream)} only
-          <Link href="/sources?tab=list" className="text-foreground hover:underline">
+          <Link href={`${V}/sources?tab=list`} className="text-foreground hover:underline">
             Show all
           </Link>
         </p>
@@ -431,7 +432,7 @@ function SourceListRow({ source }: { source: Source }) {
         <span className="min-w-0">
           <span className="flex items-center gap-2">
             <SourceHoverCard source={toSummary(source)}>
-              <Link href={`/sources/${encodeURIComponent(source.source_id)}`} className="truncate font-medium hover:underline">
+              <Link href={`${V}/sources/${encodeURIComponent(source.source_id)}`} className="truncate font-medium hover:underline">
                 {source.title}
               </Link>
             </SourceHoverCard>
@@ -508,7 +509,7 @@ function Records({ initial }: { initial: { market?: string; bucket?: string; sco
             {ids.length > 0
               ? `${ids.length} selected record${ids.length === 1 ? "" : "s"}`
               : [channel && channelLabel(channel), bucket && `${bucket} market`, scope === "target" && "this vehicle"].filter(Boolean).join(" · ")}
-            <Button size="xs" variant="ghost" onClick={() => router.replace("/sources?tab=records")}>
+            <Button size="xs" variant="ghost" onClick={() => router.replace(`${V}/sources?tab=records`)}>
               Clear
             </Button>
           </span>

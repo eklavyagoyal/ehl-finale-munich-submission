@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { refreshAll, startRun, useTasks } from "@/lib/api/hooks";
 import type { Task } from "@/lib/api/types";
 import { fmtRange, fmtScore, humanize, STAGE_LABEL } from "@/lib/format";
+import { V } from "@/lib/routes";
 
 const GROUPS: { kind: string; title: string }[] = [
   { kind: "decide", title: "To decide" },
@@ -31,7 +32,7 @@ export default function TasksPage() {
         {data && data.length === 0 && (
           <EmptyState title="Nothing waits for you">
             New requirements appear here once evidence is imported and drafted. The{" "}
-            <Link href="/pipeline" className="text-foreground underline-offset-4 hover:underline">
+            <Link href={V} className="text-foreground underline-offset-4 hover:underline">
               pipeline
             </Link>{" "}
             shows the next step.
@@ -68,7 +69,7 @@ function TaskRow({ task }: { task: Task }) {
       const run = await startRun([task.requirement_id]);
       toast.success(`Run started for ${task.requirement_id}`);
       await refreshAll();
-      router.push(`/requirements/${task.requirement_id}/simulation?run=${run.id}`);
+      router.push(`${V}/decision/${task.requirement_id}/simulation?run=${run.id}`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : String(e));
     } finally {
@@ -105,7 +106,7 @@ function TaskRow({ task }: { task: Task }) {
       <span className="justify-self-end">
         {task.kind === "decide" && task.requirement_id && (
           <Button size="sm" variant="outline" asChild>
-            <Link href={`/requirements/${task.requirement_id}`}>Decide</Link>
+            <Link href={`${V}/decision/${task.requirement_id}`}>Decide</Link>
           </Button>
         )}
         {task.kind === "simulate" && (
@@ -115,13 +116,13 @@ function TaskRow({ task }: { task: Task }) {
         )}
         {task.kind === "review_evidence" && (
           <Button size="sm" variant="outline" asChild>
-            <Link href="/sources?tab=list">Review</Link>
+            <Link href={`${V}/sources?tab=list`}>Review</Link>
           </Button>
         )}
         {task.kind === "running" &&
           (task.run_id ? (
             <Button size="sm" variant="outline" asChild>
-              <Link href={`/experts?run=${task.run_id}`}>Watch</Link>
+              <Link href={`${V}/experts?run=${task.run_id}`}>Watch</Link>
             </Button>
           ) : (
             <span className="flex items-center gap-1.5 text-xs text-muted-foreground">

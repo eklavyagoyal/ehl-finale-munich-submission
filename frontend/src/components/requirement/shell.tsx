@@ -19,12 +19,13 @@ import { DecisionDialog } from "./decision-dialog";
 import { EditDialog } from "./edit-dialog";
 import { OriginTrail } from "./origin-trail";
 import { RunProgress } from "./run-progress";
+import { V } from "@/lib/routes";
 
 export function RequirementShell({ children }: { children: React.ReactNode }) {
   const { id, detail, error, isLoading, runId } = useRequirementContext();
   const { data: audit } = useRequirementAudit(id);
   const pathname = usePathname();
-  const base = `/requirements/${encodeURIComponent(id)}`;
+  const base = `${V}/decision/${encodeURIComponent(id)}`;
   const requirement = detail?.requirement;
 
   const tabs = [
@@ -39,7 +40,7 @@ export function RequirementShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <PageHeader
-        crumbs={[{ label: "Decision", href: "/requirements" }, { label: id }]}
+        crumbs={[{ label: "Decision", href: `${V}/decision` }, { label: id }]}
         market={requirement ? { value: requirement.market } : undefined}
       />
 
@@ -102,7 +103,7 @@ export function RunButton() {
       followRun(created.id);
       toast.success("Parallax run started");
       await refreshAll();
-      router.push(`/requirements/${encodeURIComponent(id)}/simulation?run=${created.id}`);
+      router.push(`${V}/decision/${encodeURIComponent(id)}/simulation?run=${created.id}`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : String(e));
     } finally {

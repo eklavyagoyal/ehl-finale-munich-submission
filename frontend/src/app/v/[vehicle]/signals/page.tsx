@@ -18,6 +18,7 @@ import type { Finding, Requirement, Signal, SignalKind } from "@/lib/api/types";
 import { fmtCount, humanize } from "@/lib/format";
 import { channelLabel } from "@/lib/provenance";
 import { cn } from "cn";
+import { V } from "@/lib/routes";
 
 const COLUMNS: { kind: SignalKind; title: string }[] = [
   { kind: "pain", title: "Pain points" },
@@ -244,7 +245,7 @@ function SignalRow({
                   {s.sample_quotes.map((q) => (
                     <div key={q.record_id} className="flex flex-col gap-0.5">
                       <p className="line-clamp-4">“{q.text}”</p>
-                      <Link href={`/sources?tab=records&ids=${encodeURIComponent(q.record_id)}`} className="font-mono text-muted-foreground hover:underline">
+                      <Link href={`${V}/sources?tab=records&ids=${encodeURIComponent(q.record_id)}`} className="font-mono text-muted-foreground hover:underline">
                         {q.record_id}
                       </Link>
                     </div>
@@ -268,7 +269,7 @@ function SignalRow({
             {s.channels.length > 3 && <span>+{s.channels.length - 3}</span>}
           </span>
           {requirement ? (
-            <Link href={`/requirements/${encodeURIComponent(requirement.id)}`} className="ml-auto shrink-0 text-foreground hover:underline">
+            <Link href={`${V}/decision/${encodeURIComponent(requirement.id)}`} className="ml-auto shrink-0 text-foreground hover:underline">
               {requirement.id}
             </Link>
           ) : (
@@ -321,7 +322,7 @@ function Findings({ findings, reviews }: { findings: Finding[]; reviews: number 
                 {f.quotes.slice(0, 3).map((q) => (
                   <div key={q.record_id} className="flex flex-col gap-0.5">
                     <p className="line-clamp-3">“{q.text}”</p>
-                    <Link href={`/sources?tab=records&ids=${encodeURIComponent(q.record_id)}`} className="font-mono text-muted-foreground hover:underline">
+                    <Link href={`${V}/sources?tab=records&ids=${encodeURIComponent(q.record_id)}`} className="font-mono text-muted-foreground hover:underline">
                       {q.record_id}
                     </Link>
                   </div>

@@ -17,6 +17,7 @@ import { BudgetBar, VerdictBar } from "./council-bits";
 import { useRequirementContext } from "./context";
 import { DecisionForm } from "./decision-dialog";
 import { RunButton } from "./shell";
+import { V } from "@/lib/routes";
 
 const BASIS: Record<TraceBasis, { label: string; tone: Tone }> = {
   evidence: { label: "Real data", tone: "green" },
@@ -78,7 +79,7 @@ function effectOf(step: TraceStep): TraceEffect | "unknown" {
 export function DecisionPath() {
   const { id } = useRequirementContext();
   const { data, error, isLoading } = useTrace(id);
-  const base = `/requirements/${encodeURIComponent(id)}`;
+  const base = `${V}/decision/${encodeURIComponent(id)}`;
 
   if (error) return <ErrorState error={error} />;
   if (isLoading || !data) return <LoadingRows />;

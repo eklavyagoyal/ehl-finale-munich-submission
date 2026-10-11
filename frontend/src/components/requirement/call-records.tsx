@@ -4,17 +4,18 @@ import Link from "next/link";
 
 import type { LlmCall } from "@/lib/api/types";
 import { fmtTime, humanize } from "@/lib/format";
+import { V } from "@/lib/routes";
 
 // Links a model call's input records: to the evidence row when the record is linked to this
 // requirement, otherwise to the records view filtered by id.
 export function recordHref(requirementId: string, recordId: string, linked: Set<string>): string {
   return linked.has(recordId)
-    ? `/requirements/${encodeURIComponent(requirementId)}/evidence#rec-${recordId}`
-    : `/sources?tab=records&ids=${encodeURIComponent(recordId)}`;
+    ? `${V}/decision/${encodeURIComponent(requirementId)}/evidence#rec-${recordId}`
+    : `${V}/sources?tab=records&ids=${encodeURIComponent(recordId)}`;
 }
 
 export function allRecordsHref(ids: string[]): string {
-  return `/sources?tab=records&ids=${encodeURIComponent(ids.join(","))}`;
+  return `${V}/sources?tab=records&ids=${encodeURIComponent(ids.join(","))}`;
 }
 
 export function CallDetail({

@@ -17,6 +17,7 @@ import { refreshAll, startRun, useConversation, useRequirements, useRun, useRunC
 import type { LlmCall, Requirement, ResearchItem, Run, RunResults } from "@/lib/api/types";
 import { agentLabel, fmtCount, fmtDateTime, humanize, STAGE_LABEL, STAGES, stanceTone, statusTone } from "@/lib/format";
 import { cn } from "cn";
+import { V } from "@/lib/routes";
 
 const ACTIVE = new Set(["queued", "running"]);
 const NO_LINKS = new Set<string>();
@@ -79,7 +80,7 @@ function StartRun() {
       setOpen(false);
       setSelected(new Set());
       await refreshAll();
-      router.replace(`/experts?run=${run.id}`);
+      router.replace(`${V}/experts?run=${run.id}`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : String(e));
     } finally {
@@ -151,7 +152,7 @@ function RunPicker({ runs, selected }: { runs: Run[]; selected: string | null })
         <button
           key={r.id}
           type="button"
-          onClick={() => router.replace(`/experts?run=${r.id}`)}
+          onClick={() => router.replace(`${V}/experts?run=${r.id}`)}
           aria-current={r.id === selected ? "true" : undefined}
           className={cn(
             "flex shrink-0 items-center gap-2 rounded-lg px-2.5 py-1.5 text-xs",
@@ -266,7 +267,7 @@ function RequirementResult({
   return (
     <section className="border-t py-5">
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-        <Link href={`/requirements/${encodeURIComponent(id)}/simulation?run=${runId}`} className="font-mono text-xs text-muted-foreground hover:underline">
+        <Link href={`${V}/decision/${encodeURIComponent(id)}/simulation?run=${runId}`} className="font-mono text-xs text-muted-foreground hover:underline">
           {id}
         </Link>
         <span className="font-medium">{requirement?.title ?? ""}</span>

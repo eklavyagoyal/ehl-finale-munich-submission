@@ -16,6 +16,7 @@ import { gateTone, humanize } from "@/lib/format";
 import { cn } from "cn";
 
 import { useRequirementContext } from "./context";
+import { V } from "@/lib/routes";
 
 type Action = "approve" | "reject" | "challenge" | "defer";
 
@@ -95,7 +96,7 @@ export function DecisionForm({ onDone }: { onDone?: () => void }) {
       onDone?.();
       if (result.followup_run_id) {
         followRun(result.followup_run_id);
-        router.push(`/requirements/${id}/simulation?run=${result.followup_run_id}`);
+        router.push(`${V}/decision/${id}/simulation?run=${result.followup_run_id}`);
       }
     } catch (e) {
       if (e instanceof ApiError && e.status === 409) {

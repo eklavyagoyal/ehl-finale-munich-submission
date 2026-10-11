@@ -5,6 +5,7 @@ import Link from "next/link";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { useBudgets } from "@/lib/api/hooks";
 import { fmtCount } from "@/lib/format";
+import { V } from "@/lib/routes";
 
 const W = 360;
 const H = 210;
@@ -66,7 +67,7 @@ export function SignalChart({ market }: { market: string | null }) {
           <HoverCard key={p.id} openDelay={80} closeDelay={60}>
             <HoverCardTrigger asChild>
               <Link
-                href={`/requirements/${encodeURIComponent(p.id)}/councils`}
+                href={`${V}/decision/${encodeURIComponent(p.id)}/councils`}
                 className="absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-1"
                 style={{ left: x(p.complaints), top: y(p.budget) }}
               >

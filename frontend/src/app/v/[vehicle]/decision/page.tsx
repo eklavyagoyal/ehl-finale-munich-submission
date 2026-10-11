@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { type RequirementQuery, useMeta, useRequirements } from "@/lib/api/hooks";
 import { fmtRange, fmtScore, humanize, stanceTone, statusTone } from "@/lib/format";
 import { cn } from "cn";
+import { V } from "@/lib/routes";
 
 const SORTS: { value: NonNullable<RequirementQuery["sort"]>; label: string }[] = [
   { value: "priority", label: "Priority" },
@@ -71,7 +72,7 @@ export default function RequirementsPage() {
           {data && data.length === 0 && (
             <EmptyState title="No requirements yet">
               Requirements exist once evidence is imported. Draft them from the signals in{" "}
-              <Link href="/signals" className="text-foreground underline-offset-4 hover:underline">
+              <Link href={`${V}/signals`} className="text-foreground underline-offset-4 hover:underline">
                 Signals
               </Link>
               .
@@ -80,7 +81,7 @@ export default function RequirementsPage() {
           {data?.map((r) => (
             <Link
               key={r.id}
-              href={`/requirements/${r.id}`}
+              href={`${V}/decision/${r.id}`}
               className="grid grid-cols-[150px_minmax(0,1fr)_60px_150px_120px_120px] items-center gap-4 border-t border-border/60 px-2 py-3 hover:bg-muted/40"
             >
               <span className="font-mono text-xs text-muted-foreground">

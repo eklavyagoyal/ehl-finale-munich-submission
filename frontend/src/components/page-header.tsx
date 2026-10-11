@@ -7,6 +7,7 @@ import { Fragment } from "react";
 import { TasksCounter } from "@/components/tasks-counter";
 import { useVehicles } from "@/lib/api/hooks";
 import { cn } from "cn";
+import { V } from "@/lib/routes";
 
 export interface Crumb {
   label: string;
@@ -20,12 +21,12 @@ export interface MarketFilter {
   options?: (string | null)[];
 }
 
-// The only header: "Vehicles › G60 › <Stage> › <Item>" at the top edge, then the market chip, page actions
+// The only header: "Overview › G60 › <Stage> › <Item>" at the top edge, then the market chip, page actions
 // and the tasks counter on the right. Every crumb except the last is a link. The market is a filter, not a crumb.
 export function PageHeader({ crumbs, market, children }: { crumbs: Crumb[]; market?: MarketFilter; children?: React.ReactNode }) {
   const { data: vehicles } = useVehicles();
   const code = (vehicles?.active ?? "bmw:G60").split(":").pop() ?? "G60";
-  const trail: Crumb[] = [{ label: "Vehicles", href: "/" }, { label: code, href: "/pipeline" }, ...crumbs];
+  const trail: Crumb[] = [{ label: "Overview", href: "/" }, { label: code, href: V }, ...crumbs];
 
   return (
     <div className="flex min-h-12 flex-wrap items-center gap-3 py-2">
