@@ -17,17 +17,31 @@ export function allRecordsHref(ids: string[]): string {
   return `/sources?tab=records&ids=${encodeURIComponent(ids.join(","))}`;
 }
 
-export function CallDetail({ call, requirementId, linked }: { call: LlmCall; requirementId: string; linked: Set<string> }) {
+export function CallDetail({
+  call,
+  requirementId,
+  linked,
+  who,
+  answer,
+}: {
+  call: LlmCall;
+  requirementId: string;
+  linked: Set<string>;
+  who?: string;
+  answer?: string;
+}) {
   const ids = call.input_record_ids;
   return (
     <div className="flex flex-col gap-1.5">
+      {who && <p className="font-medium">{who}</p>}
       <p>
-        <span className="font-medium">{humanize(call.purpose)}</span>
+        <span className={who ? undefined : "font-medium"}>{humanize(call.purpose)}</span>
         <span className="text-muted-foreground">
           {" "}
           · {call.model} · {call.input_tokens + call.output_tokens} tokens · {call.latency_ms} ms · {fmtTime(call.created_at)}
         </span>
       </p>
+      {answer && <p className="line-clamp-4 text-foreground/80">“{answer}”</p>}
       {ids.length === 0 ? (
         <p className="text-muted-foreground">Saw no evidence records.</p>
       ) : (

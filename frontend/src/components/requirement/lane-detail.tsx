@@ -14,6 +14,15 @@ export interface Lane {
   persona?: PersonaResponse;
   memo?: DepartmentMemo;
   judge?: Vote;
+  // From /conversation: who the persona is, and its answer to this requirement.
+  detail?: string;
+  answer?: string;
+  note?: string;
+}
+
+// TinyTroupe stores the raw transcript after "[raw]"; the first part is the owner's answer.
+export function cleanAnswer(text: string | null | undefined): string {
+  return (text ?? "").split("\n[raw] ")[0].trim();
 }
 
 export function LaneDetail({ lane }: { lane: Lane }) {
@@ -26,9 +35,12 @@ export function LaneDetail({ lane }: { lane: Lane }) {
         {lane.name}
         {lane.region && <span className="font-normal text-muted-foreground"> · {lane.region}</span>}
       </p>
+      {lane.detail && <p className="text-muted-foreground">{lane.detail}</p>}
+      {lane.note && <p className="text-muted-foreground">{lane.note}</p>}
+      {lane.answer && !lane.persona && <p className="text-foreground/80">“{lane.answer}”</p>}
       {lane.persona && (
         <>
-          <p className="text-foreground/80">“{lane.persona.response_text}”</p>
+          <p className="text-foreground/80">“{lane.answer || cleanAnswer(lane.persona.response_text)}”</p>
           <p className="text-muted-foreground">
             {[
               lane.persona.importance_0_5 != null && `importance ${lane.persona.importance_0_5.toFixed(1)}/5`,

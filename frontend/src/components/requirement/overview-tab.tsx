@@ -140,7 +140,7 @@ export function OverviewTab() {
                   </button>
                 </HoverCardTrigger>
                 <HoverCardContent align="start" className="w-80 text-xs">
-                  <p className="mb-2 text-muted-foreground">Judge votes in run {recommendation.run_id.slice(0, 8)}</p>
+                  <p className="mb-2 text-muted-foreground">Judge vote{detail.votes.length === 1 ? "" : "s"} in run {recommendation.run_id.slice(0, 8)}</p>
                   <div className="flex flex-col gap-2">
                     {detail.votes
                       .filter((v) => !v.run_id || v.run_id === recommendation.run_id)

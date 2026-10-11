@@ -7,13 +7,13 @@ import { toast } from "sonner";
 
 import { PageHeader } from "@/components/page-header";
 import { type Lane, LaneDetail } from "@/components/requirement/lane-detail";
-import { buildLanes, LanesView, Legend } from "@/components/requirement/simulation-tab";
+import { buildLanes, LanesView, Legend, ownersById } from "@/components/requirement/simulation-tab";
 import { EmptyState, ErrorState, LoadingRows } from "@/components/states";
 import { ToneBadge } from "@/components/tone-badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { refreshAll, startRun, useRequirements, useRun, useRunCalls, useRunResults, useRuns } from "@/lib/api/hooks";
+import { refreshAll, startRun, useConversation, useRequirements, useRun, useRunCalls, useRunResults, useRuns } from "@/lib/api/hooks";
 import type { LlmCall, Requirement, ResearchItem, Run, RunResults } from "@/lib/api/types";
 import { agentLabel, fmtCount, fmtDateTime, humanize, STAGE_LABEL, STAGES, stanceTone, statusTone } from "@/lib/format";
 import { cn } from "cn";
@@ -107,7 +107,7 @@ function StartRun() {
               <DialogHeader>
                 <DialogTitle>Run the expert pipeline</DialogTitle>
                 <DialogDescription>
-                  Owner personas in the US, Europe and China, the company departments, research, scoring and three judges review{" "}
+                  Owner personas in the US, Europe and China, the company departments, research, scoring, a challenger and a judge review{" "}
                   {selected.size} requirement{selected.size === 1 ? "" : "s"}. This uses the model budget and takes a few minutes.
                 </DialogDescription>
               </DialogHeader>
@@ -184,7 +184,9 @@ function RunView({ runId }: { runId: string }) {
   const results = useRunResults(status && !live ? runId : null);
   const { data: requirements } = useRequirements();
   const titles = new Map((requirements ?? []).map((r) => [r.id, r]));
-  const model = useMemo(() => buildLanes(undefined, calls.data ?? [], runId), [calls.data, runId]);
+  const conversation = useConversation(runId, status);
+  const owners = useMemo(() => ownersById(conversation.data?.owners_by_market), [conversation.data]);
+  const model = useMemo(() => buildLanes(undefined, calls.data ?? [], runId, owners), [calls.data, runId, owners]);
 
   if (run.error) return <ErrorState error={run.error} />;
   if (!run.data) return <LoadingRows />;
@@ -307,7 +309,7 @@ function RequirementResult({
             {outputs.research.length === 0 && <span className="text-muted-foreground">–</span>}
           </dd>
 
-          <dt className="text-[13px] text-muted-foreground">Judges</dt>
+          <dt className="text-[13px] text-muted-foreground">Judge</dt>
           <dd className="flex flex-wrap gap-1">
             {outputs.votes.map((v) => (
               <AgentChip key={v.agent_id} lane={laneFor(v.agent_id, calls, { judge: v })} stance={v.vote} label={`${agentLabel(v.agent_id).name} · ${humanize(v.vote)}`} />

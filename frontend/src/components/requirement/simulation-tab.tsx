@@ -2,19 +2,20 @@
 
 import { useMemo, useState } from "react";
 
-import { EmptyState, ErrorState, LoadingRows } from "@/components/states";
+import { ErrorState, LoadingRows } from "@/components/states";
 import { ToneBadge } from "@/components/tone-badge";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { useLlmCalls, useRun } from "@/lib/api/hooks";
-import type { Decision, LlmCall, RequirementDetail } from "@/lib/api/types";
+import { useConversation, useLlmCalls, useRun } from "@/lib/api/hooks";
+import type { ConversationOwner, Decision, LlmCall, RequirementDetail } from "@/lib/api/types";
 import { agentLabel, fmtDateTime, humanize, STAGE_LABEL, stanceTone } from "@/lib/format";
 import { cn } from "cn";
 
 import { useRequirementContext } from "./context";
 import { FlowView } from "./flow-view";
 import { CallDetail } from "./call-records";
-import { type Lane, LaneDetail } from "./lane-detail";
+import { cleanAnswer, type Lane, LaneDetail } from "./lane-detail";
+import { RunButton } from "./shell";
 
 const ACTIVE = new Set(["queued", "running"]);
 const REGION_ORDER: Record<string, number> = { US: 0, EU: 1, CN: 2 };
@@ -22,6 +23,7 @@ const AGENT_ORDER = ["agent:research", "agent:verifier", "agent:synthesizer", "a
 
 const PURPOSE_STAGE: Record<string, string> = {
   persona_reaction: "market_and_company_twin",
+  persona_simulation_step: "market_and_company_twin",
   ssr_responses: "market_and_company_twin",
   department_review: "market_and_company_twin",
   web_research: "research",
@@ -30,6 +32,8 @@ const PURPOSE_STAGE: Record<string, string> = {
   vote: "synthesis_and_vote",
   challenge: "synthesis_and_vote",
 };
+
+const PERSONA_PURPOSES = new Set(["persona_reaction", "persona_simulation_step"]);
 
 const STANCE_WORD: Record<string, string> = {
   positive: "For",
@@ -45,17 +49,23 @@ export function SimulationTab() {
   const run = useRun(runId);
   const live = !!run.data && ACTIVE.has(run.data.run.status);
   const calls = useLlmCalls(runId, id, live);
+  const conversation = useConversation(runId, run.data?.run.status);
+  const owners = useMemo(() => ownersById(conversation.data?.owners_by_market), [conversation.data]);
 
-  const model = useMemo(() => buildLanes(detail, calls.data ?? [], runId), [detail, calls.data, runId]);
+  const model = useMemo(() => buildLanes(detail, calls.data ?? [], runId, owners, id), [detail, calls.data, runId, owners, id]);
   const linked = useMemo(() => new Set((detail?.evidence ?? []).map((e) => e.record_id)), [detail]);
   const [view, setView] = useState<"lanes" | "flow">("lanes");
 
   if (!runId) {
     return (
-      <EmptyState title="No simulation yet">
-        Start “Run Parallax” above. Personas from the US, Europe and China and the company departments then review this requirement in
-        parallel, and every model call shows up here as a dot.
-      </EmptyState>
+      <div className="flex max-w-xl flex-col items-start gap-3 py-6">
+        <p className="text-sm font-medium">Not simulated yet</p>
+        <p className="text-[13px] text-muted-foreground">
+          Owners from the US, Europe and China and the company departments review this requirement in parallel; every model call shows up here
+          as a dot.
+        </p>
+        <RunButton />
+      </div>
     );
   }
   if (calls.error) return <ErrorState error={calls.error} />;
@@ -143,6 +153,11 @@ export function LanesView({
                 {STAGE_LABEL[s.stage] ?? humanize(s.stage)}
               </span>
             ))}
+          </div>
+          <span />
+          <div className="relative h-3 border-t border-border/60 text-[10px] text-muted-foreground/70 tabular-nums">
+            <span className="absolute top-0.5 left-[2%]">{model.axis.mode === "time" ? "0:00" : ""}</span>
+            <span className="absolute top-0.5 right-[2%]">{model.axis.label}</span>
           </div>
         </div>
 
@@ -250,7 +265,13 @@ function LaneRow({
                 />
               </HoverCardTrigger>
               <HoverCardContent side="top" className="w-72 text-xs">
-                <CallDetail call={call} requirementId={requirementId} linked={linked} />
+                <CallDetail
+                  call={call}
+                  requirementId={requirementId}
+                  linked={linked}
+                  who={lane.region ? `${lane.name} · ${lane.region}` : lane.name}
+                  answer={PERSONA_PURPOSES.has(call.purpose) ? lane.answer : undefined}
+                />
               </HoverCardContent>
             </HoverCard>
           );
@@ -279,10 +300,44 @@ export function Legend({ kind, label }: { kind: "call" | "verify" | "pm"; label:
 const STAGE_ORDER = ["market_and_company_twin", "research", "synthesis_and_vote", "other"];
 const MIN_BAND = 0.18;
 
-// Lanes are the real agent ids. Each run stage gets its own band on the x axis (at least 18 % wide),
-// and inside a band dots follow call order (rank of created_at). Parallel calls stay readable even
-// when a mock run finishes within a second, and short stages do not get squeezed against the edge.
+const MIN_TIME_SPAN_MS = 5000;
+
+function fmtSpan(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const sec = Math.round(seconds % 60);
+  return `${m}:${String(sec).padStart(2, "0")}`;
+}
+
+// One shared x axis for every lane. Real runs use wall-clock time, so dots of parallel agents line up.
+// Runs shorter than a few seconds (mock runs) fall back to call order with one band per stage, because
+// their timestamps would collapse into a single point.
 function placeCalls(sorted: LlmCall[]) {
+  const times = sorted.map((c) => Date.parse(c.created_at));
+  const t0 = Math.min(...times);
+  const t1 = Math.max(...times);
+  const position = new Map<number, number>();
+
+  if (sorted.length > 1 && t1 - t0 >= MIN_TIME_SPAN_MS) {
+    const ranges = new Map<string, [number, number]>();
+    sorted.forEach((call, i) => {
+      const x = 2 + (96 * (times[i] - t0)) / (t1 - t0);
+      position.set(call.id, x);
+      const stage = PURPOSE_STAGE[call.purpose] ?? "other";
+      const [lo, hi] = ranges.get(stage) ?? [x, x];
+      ranges.set(stage, [Math.min(lo, x), Math.max(hi, x)]);
+    });
+    const stages: { stage: string; center: number }[] = [];
+    for (const stage of STAGE_ORDER) {
+      const range = ranges.get(stage);
+      if (!range || stage === "other") continue;
+      const center = (range[0] + range[1]) / 2;
+      // Drop a label that would sit on top of the previous one.
+      if (stages.length && Math.abs(stages[stages.length - 1].center - center) < 12) continue;
+      stages.push({ stage, center });
+    }
+    return { position, stages, axis: { mode: "time" as const, label: fmtSpan((t1 - t0) / 1000) } };
+  }
+
   const byStage = new Map<string, LlmCall[]>();
   for (const call of sorted) {
     const stage = PURPOSE_STAGE[call.purpose] ?? "other";
@@ -292,7 +347,6 @@ function placeCalls(sorted: LlmCall[]) {
   const raw = present.map((s) => Math.max(byStage.get(s)!.length / Math.max(sorted.length, 1), MIN_BAND));
   const total = raw.reduce((a, b) => a + b, 0) || 1;
 
-  const position = new Map<number, number>();
   const stages: { stage: string; center: number }[] = [];
   let start = 2;
   present.forEach((stage, i) => {
@@ -306,16 +360,24 @@ function placeCalls(sorted: LlmCall[]) {
     if (stage !== "other") stages.push({ stage, center: start + width / 2 });
     start += width;
   });
-  return { position, stages };
+  return { position, stages, axis: { mode: "order" as const, label: "call order" } };
 }
+
+export function ownersById(byMarket: Record<string, ConversationOwner[]> | undefined): Map<string, ConversationOwner> {
+  return new Map(Object.values(byMarket ?? {}).flat().map((o) => [o.agent_id, o]));
+}
+
+const GROUP = { persona: "Customer council", dept: "Company council", other: "Agents" } as const;
 
 export function buildLanes(
   detail: Pick<RequirementDetail, "persona_responses" | "department_memos" | "votes"> | undefined,
   calls: LlmCall[],
   runId: string | null,
+  owners: Map<string, ConversationOwner> = new Map(),
+  requirementId?: string,
 ) {
   const sorted = [...calls].sort((a, b) => a.created_at.localeCompare(b.created_at) || a.id - b.id);
-  const { position, stages } = placeCalls(sorted);
+  const { position, stages, axis } = placeCalls(sorted);
 
   const sameRun = <T extends { run_id?: string }>(items: T[] | undefined) =>
     (items ?? []).filter((x) => !runId || !x.run_id || x.run_id === runId);
@@ -328,11 +390,18 @@ export function buildLanes(
     if (!lanes.has(agentId)) {
       const { group, name } = agentLabel(agentId);
       const kind = agentId.split(":")[0];
+      const owner = owners.get(agentId);
+      const answer = owner?.answers.find((a) => a.requirement_id === requirementId)?.reaction;
+      // Old runs logged all TinyTroupe calls under one id; it stays one lane for the simulated owners.
+      const troupe = agentId === "tinytroupe";
       lanes.set(agentId, {
         id: agentId,
-        group: kind === "persona" ? "Public panel" : kind === "dept" ? "Company departments" : "Agents",
-        region: group,
-        name,
+        group: kind === "persona" || troupe ? GROUP.persona : kind === "dept" ? GROUP.dept : GROUP.other,
+        region: owner?.market ?? group,
+        name: troupe ? "Simulated owners" : (owner?.name ?? name),
+        detail: owner ? [owner.display_name, owner.vehicle].filter(Boolean).join(" · ") : undefined,
+        answer: answer ? cleanAnswer(answer) : undefined,
+        note: troupe ? "TinyTroupe = simulated owners. This run logged their calls together." : undefined,
         calls: [],
       });
     }
@@ -365,9 +434,9 @@ export function buildLanes(
         ? 20
         : (REGION_ORDER[l.region] ?? 5) * 100;
   const all = [...lanes.values()].sort((a, b) => order(a) - order(b) || a.name.localeCompare(b.name));
-  const groups = ["Public panel", "Company departments", "Agents"]
+  const groups = [GROUP.persona, GROUP.dept, GROUP.other]
     .map((title) => ({ title, lanes: all.filter((l) => l.group === title) }))
     .filter((g) => g.lanes.length > 0);
 
-  return { groups, position, stages };
+  return { groups, position, stages, axis };
 }
