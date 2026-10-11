@@ -51,8 +51,8 @@ export default function ProcessingPage() {
 function Funnel({ counts }: { counts: ProcessingStage["counts"] }) {
   const feedback = counts.feedback_records;
   const share = (n: number) => (feedback ? Math.max(0, Math.min(1, n / feedback)) : 0);
-  const byProducer = parts(counts.claims_by_producer, PRODUCER);
-  const byStatus = parts(counts.claims_by_status, STATUS);
+  const byProducer = parts(counts.claims_by_producer ?? {}, PRODUCER);
+  const byStatus = parts(counts.claims_by_status ?? {}, STATUS);
   const claims = byStatus.reduce((n, p) => n + p.value, 0);
 
   return (

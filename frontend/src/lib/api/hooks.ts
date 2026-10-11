@@ -27,6 +27,10 @@ import type {
   Theme,
   ThemePage,
   Trace,
+  Budgets,
+  CoverageScope,
+  SignalDetail,
+  SignalMap,
   VehiclePage,
   Version,
   Council,
@@ -219,7 +223,8 @@ export function refreshAll() {
 
 export async function startRun(requirementIds: string[], challenge?: string) {
   return unwrap<Run>(
-    api.POST("/api/simulations", { body: { requirement_ids: requirementIds, challenge: challenge || null } }),
+    // persona_scope "market": owners answer only for their own market, like the regional sales departments.
+    api.POST("/api/simulations", { body: { requirement_ids: requirementIds, challenge: challenge || null, persona_scope: "market" } }),
   );
 }
 
@@ -263,22 +268,55 @@ export async function draftRequirements(market: string | null, limit: number, fe
   );
 }
 
-export function useCoverage() {
-  return useSWR("coverage", () => unwrap<Coverage>(api.GET("/api/coverage")));
+// Default: the vehicle's own records. Other scopes (competitor, other_models, brand) are drill-downs.
+export function useCoverage(scope?: CoverageScope) {
+  return useSWR(scope ? ["coverage", scope] : "coverage", () =>
+    unwrap<Coverage>(api.GET("/api/coverage", { params: { query: scope ? { scope } : {} } })),
+  );
+}
+
+export function useSignalMap(market: string | null) {
+  return useSWR(["signal-map", market ?? "pooled"], () =>
+    unwrap<SignalMap>(api.GET("/api/signals/map", { params: { query: { market: market ?? undefined } } })),
+  );
+}
+
+export function useSignalDetail(featureKey: string | null, market: string | null) {
+  return useSWR(featureKey ? ["signal-detail", featureKey, market ?? "pooled"] : null, () =>
+    unwrap<SignalDetail>(
+      api.GET("/api/signals/{feature_key}", { params: { path: { feature_key: featureKey! }, query: { market: market ?? undefined } } }),
+    ),
+  );
+}
+
+export function useBudgets(market: string | null) {
+  return useSWR(["budgets", market ?? "pooled"], () =>
+    unwrap<Budgets>(api.GET("/api/budgets", { params: { query: { market: market ?? undefined } } })),
+  );
 }
 
 export function useSources() {
   return useSWR("sources", () => unwrap<Source[]>(api.GET("/api/sources")));
 }
 
-export function useRecords(query: { q?: string; market?: string; channel?: string; ids?: string[]; offset?: number }) {
-  return useSWR(["records", query.q, query.market, query.channel, query.ids?.join(","), query.offset], () =>
+export function useRecords(query: {
+  q?: string;
+  market?: string;
+  bucket?: string;
+  scope?: "target" | "all";
+  channel?: string;
+  ids?: string[];
+  offset?: number;
+}) {
+  return useSWR(["records", query.q, query.market, query.bucket, query.scope, query.channel, query.ids?.join(","), query.offset], () =>
     unwrap<RecordPage>(
       api.GET("/api/records", {
         params: {
           query: {
             q: query.q || undefined,
             market: query.market,
+            bucket: query.bucket,
+            scope: query.scope,
             channel: query.channel,
             ids: query.ids?.length ? query.ids : undefined,
             limit: 50,

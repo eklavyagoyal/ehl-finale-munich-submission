@@ -13,7 +13,7 @@ import { fmtCount } from "@/lib/format";
 import { STAGE_HREF, STATUS_LABEL } from "@/lib/stages";
 import { cn } from "cn";
 
-const sum = (values: Record<string, number>) => Object.values(values).reduce((n, v) => n + v, 0);
+const sum = (values: Record<string, number> | undefined) => Object.values(values ?? {}).reduce((n, v) => n + v, 0);
 
 // One or two numbers per stage, straight from /pipeline counts.
 function metrics(stage: PipelineStage): { value: number; label: string }[] {
@@ -26,29 +26,33 @@ function metrics(stage: PipelineStage): { value: number; label: string }[] {
           label: stage.counts.pending_review ? `sources · ${stage.counts.pending_review} pending review` : "sources",
         },
       ];
-    case "processing":
+    case "processing": {
+      // Null-safe: the funnel is the primary shape; older payloads only had the claim counts.
+      const tagged = stage.funnel?.find((f) => f.key === "tagged")?.count ?? stage.counts?.records_with_claims ?? sum(stage.counts?.claims_by_status);
       return [
-        { value: sum(stage.counts.claims_by_status), label: "claims" },
-        { value: stage.counts.records_without_claims, label: "feedback records without claims" },
+        { value: tagged ?? 0, label: "reviews with a topic" },
+        { value: stage.gap?.count ?? stage.counts?.records_without_claims ?? 0, label: "without a topic" },
       ];
+    }
     case "signals":
       return [
-        { value: stage.counts.features_with_evidence, label: "signals" },
-        { value: stage.counts.by_kind.pain ?? 0, label: "pain points" },
+        { value: stage.counts?.features_with_evidence ?? 0, label: "signals" },
+        { value: stage.counts?.by_kind?.pain ?? 0, label: "pain points" },
       ];
     case "experts": {
-      const running = (stage.counts.runs_by_status.running ?? 0) + (stage.counts.runs_by_status.queued ?? 0);
+      const runs = stage.counts?.runs_by_status ?? {};
+      const running = (runs.running ?? 0) + (runs.queued ?? 0);
       return [
         running
           ? { value: running, label: running === 1 ? "run in progress" : "runs in progress" }
-          : { value: stage.counts.runs_by_status.completed ?? 0, label: "runs completed" },
+          : { value: runs.completed ?? 0, label: "runs completed" },
         { value: stage.counts.requirements, label: "requirements" },
       ];
     }
     case "decision":
       return [
-        { value: stage.counts.by_status.in_review ?? 0, label: "to decide" },
-        { value: stage.counts.by_status.approved ?? 0, label: "approved" },
+        { value: stage.counts?.by_status?.in_review ?? 0, label: "to decide" },
+        { value: stage.counts?.by_status?.approved ?? 0, label: "approved" },
       ];
   }
 }

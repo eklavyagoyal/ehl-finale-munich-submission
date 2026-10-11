@@ -361,8 +361,15 @@ export interface Coverage {
   // Channel x market counts in one response; a record tagged with two markets counts in both.
   // Optional because older API builds do not return it.
   records_by_channel_market?: { stream: string; channel: string; market: string; records: number }[];
+  // The same matrix in the policy's market buckets (US, EU, CN, RoW): DE, FR, GB count as EU.
+  records_by_channel_bucket?: { stream: string; channel: string; bucket: string; records: number }[];
+  scopes?: { scope: CoverageScope; label: string; records: number }[];
+  vehicle?: string;
+  scope?: CoverageScope;
   llm_rule: string;
 }
+
+export type CoverageScope = "target" | "competitor" | "other_models" | "brand" | "all";
 
 export interface SourceDetail {
   source: Source & {
@@ -397,6 +404,23 @@ export interface SourcesStage extends StageBase {
     by_stream: { stream: string; label: string; records: number }[];
   };
   last_import: string | null;
+  // Records of the data set that are not about this vehicle (competitors, other models, brand-wide).
+  outside_scope?: { scope: string; label: string; records: number }[];
+}
+
+export interface FunnelStep {
+  key: string;
+  count: number;
+  label: string;
+  hint: string;
+  detail: string;
+}
+
+export interface LabelerQuality {
+  area_agreement: number;
+  exact_recall: number | null;
+  sample: number | null;
+  run_id: string;
 }
 
 export interface ProcessingStage extends StageBase {
@@ -406,10 +430,14 @@ export interface ProcessingStage extends StageBase {
     feedback_records: number;
     records_with_claims: number;
     records_without_claims: number;
-    claims_by_status: Record<string, number>;
+    // Optional: the backend briefly dropped them; the funnel below is the primary view.
+    claims_by_status?: Record<string, number>;
     // "BMW labels", or the producer method: llm, human, provided_unknown, unknown.
-    claims_by_producer: Record<string, number>;
+    claims_by_producer?: Record<string, number>;
   };
+  funnel?: FunnelStep[];
+  gap?: { count: number; label: string; hint: string; detail: string };
+  labeler_quality?: LabelerQuality | null;
 }
 
 export interface SignalsStage extends StageBase {
@@ -434,6 +462,7 @@ export type PipelineStage = SourcesStage | ProcessingStage | SignalsStage | Expe
 
 export interface Pipeline {
   target_model: string;
+  vehicle?: { entity_id: string; code: string; name: string; detail: string };
   stages: PipelineStage[];
   next_action: { stage: StageKey; label: string; action?: string };
 }
@@ -462,6 +491,85 @@ export interface Signal {
   // Findings: the LLM groups reviews into concrete issues, the counts come from code.
   condensed?: boolean;
   findings?: Finding[];
+  need_share?: number;
+  quadrant?: Quadrant;
+  other_kind_findings?: number;
+}
+
+// GET /api/signals/map: every signal on reviews (x, log) vs share of problems and wishes (y).
+export type Quadrant = "act" | "protect" | "watch" | "background";
+
+export interface MapAxis {
+  key: string;
+  label: string;
+  scale: "log" | "linear";
+  threshold: number;
+  hint: string;
+  detail: string;
+  min?: number;
+  max?: number;
+}
+
+export interface MapItem {
+  theme_id: number;
+  feature_key: string;
+  label: string;
+  area: string | null;
+  kind: SignalKind;
+  reviews: number;
+  need_share: number;
+  quadrant: Quadrant;
+  pain: number;
+  requests: number;
+  praise: number;
+  findings: number;
+  requirement_ids: string[];
+}
+
+export interface SignalMap {
+  snapshot_id: string | null;
+  market: string | null;
+  axes: { x: MapAxis; y: MapAxis };
+  quadrants: { key: Quadrant; label: string; hint: string; signals: number }[];
+  hidden_below_min_reviews?: number;
+  items: MapItem[];
+}
+
+// GET /api/signals/{feature_key}: one signal opened up, with how it was pre-sorted.
+export interface SignalDetail {
+  feature_key: string;
+  label: string;
+  area: string | null;
+  market: string | null;
+  kind: SignalKind;
+  quadrant: Quadrant;
+  reviews: number;
+  need_share: number;
+  how_sorted: { key: string; label: string; short: string; detail: string; data?: Record<string, unknown> }[];
+  findings: Finding[];
+  sample_quotes: { record_id: string; text: string }[];
+  requirement_ids: string[];
+  theme_id: number;
+}
+
+// GET /api/budgets: the frequency-vs-budget chart in one call.
+export interface BudgetItem {
+  requirement_id: string;
+  title: string;
+  feature_key: string | null;
+  market: string | null;
+  complaints: number;
+  reviews: number;
+  mean_budget_points_of_100: number | null;
+  budget_by_market: Record<string, number>;
+  verdicts: Record<string, number>;
+  run_id: string | null;
+  has_budget: boolean;
+}
+
+export interface Budgets {
+  market: string | null;
+  items: BudgetItem[];
 }
 
 export interface Finding {
@@ -473,6 +581,8 @@ export interface Finding {
   share_of_theme: number;
   quotes: { record_id: string; text: string }[];
   record_ids: string[];
+  // True when the finding is of the signal's own kind (a pain signal leads with pains).
+  matches_signal?: boolean;
 }
 
 export interface SignalPage {
@@ -544,6 +654,8 @@ export interface TraceStep {
   key: string;
   order: number;
   title: string;
+  // One line shown by default; why/output/caveat are the long form on request.
+  headline?: string;
   question?: string;
   agents?: TraceAgent[];
   basis: TraceBasis;

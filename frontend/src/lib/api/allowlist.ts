@@ -1,6 +1,7 @@
 // Endpoints the cockpit may reach through the /bff proxy. Everything else is refused with 403,
 // so the public frontend cannot be used to call admin endpoints (ingest, policy, agents) with the
-// server token. Paths are relative to /api; "*" matches exactly one segment.
+// server token. Paths are relative to /api; "*" matches exactly one segment. Query parameters are not
+// filtered (e.g. scope, bucket and vehicle on coverage, records and pipeline pass through).
 // scripts/check-allowlist.ts verifies that every api.<METHOD>("/api/...") call in src/ is covered.
 export const ALLOWED: ReadonlyArray<readonly [method: string, path: string]> = [
   ["GET", "health"],
@@ -8,7 +9,10 @@ export const ALLOWED: ReadonlyArray<readonly [method: string, path: string]> = [
   ["GET", "vehicles"],
   ["GET", "pipeline"],
   ["GET", "signals"],
+  ["GET", "signals/map"],
+  ["GET", "signals/*"],
   ["POST", "signals/condense"],
+  ["GET", "budgets"],
   ["GET", "tasks"],
   ["GET", "requirements"],
   ["GET", "requirements/*"],

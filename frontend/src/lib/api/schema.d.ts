@@ -192,6 +192,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/signals/map": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Every signal of a market on one four-field map: reviews (x) vs share of problems and wishes (y) */
+        get: operations["signal_map_api_signals_map_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/signals/{feature_key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** One signal opened up: how it was collected, tagged, counted, classified and grouped */
+        get: operations["signal_detail_api_signals__feature_key__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/signals/condense": {
         parameters: {
             query?: never;
@@ -216,7 +250,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Start page: one card per stage with counts, status and the next action */
+        /** Start page of one vehicle: one card per stage with counts, status and the next action */
         get: operations["pipeline_api_pipeline_get"];
         put?: never;
         post?: never;
@@ -235,6 +269,23 @@ export interface paths {
         };
         /** Vehicles for the landing page: which one is active and how much data each has */
         get: operations["vehicles_api_vehicles_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/budgets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Complaints vs. customer budget per simulated requirement (one call for the frequency-vs-importance chart) */
+        get: operations["budgets_api_budgets_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -440,7 +491,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** What evidence exists, by channel / market / review state / LLM permission */
+        /** What evidence exists for a vehicle, by channel / market / review state / LLM permission */
         get: operations["coverage_api_coverage_get"];
         put?: never;
         post?: never;
@@ -913,6 +964,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/labeling/calibrate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Label BMW feedback blind and measure agreement with BMW's VFC labels (background run) */
+        post: operations["calibrate_api_labeling_calibrate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/labeling/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Label unlabeled feedback into claims (pending review); poll /api/simulations/{id} */
+        post: operations["run_labeling_api_labeling_run_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/reset": {
         parameters: {
             query?: never;
@@ -1017,6 +1102,20 @@ export interface components {
              * @default false
              */
             include_claims: boolean;
+        };
+        /** CalibrateIn */
+        CalibrateIn: {
+            /**
+             * N
+             * @description BMW feedback records to label blind
+             * @default 300
+             */
+            n: number;
+            /**
+             * Workers
+             * @default 16
+             */
+            workers: number;
         };
         /** ClaimReviewIn */
         ClaimReviewIn: {
@@ -1370,6 +1469,36 @@ export interface components {
             response?: {
                 [key: string]: unknown;
             } | null;
+        };
+        /** LabelIn */
+        LabelIn: {
+            /**
+             * Scope
+             * @default social
+             * @enum {string}
+             */
+            scope: "social" | "competitors" | "bmw_unclassified" | "all";
+            /**
+             * Limit
+             * @description Optional cap on records
+             */
+            limit?: number | null;
+            /**
+             * Workers
+             * @description Parallel model calls
+             * @default 24
+             */
+            workers: number;
+            /**
+             * Record Ids
+             * @description Label exactly these records
+             */
+            record_ids?: string[] | null;
+            /**
+             * Retry Run Id
+             * @description Retry the batches of this earlier labeling run that stored no claims
+             */
+            retry_run_id?: string | null;
         };
         /** PersonaResponseOut */
         PersonaResponseOut: {
@@ -1779,6 +1908,13 @@ export interface components {
             challenge?: string | null;
             /** Persona Engine */
             persona_engine?: ("tinytroupe" | "direct") | null;
+            /**
+             * Persona Scope
+             * @description market = owners of the case's market answer (default, like the regional sales departments); all = every owner
+             * @default market
+             * @enum {string}
+             */
+            persona_scope: "market" | "all";
         };
         /** SourceReviewIn */
         SourceReviewIn: {
@@ -2285,6 +2421,74 @@ export interface operations {
             };
         };
     };
+    signal_map_api_signals_map_get: {
+        parameters: {
+            query?: {
+                /** @description US, EU, CN or omit for all markets pooled */
+                market?: string | null;
+                /** @description Hide signals with fewer reviews (noise) */
+                min_reviews?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    signal_detail_api_signals__feature_key__get: {
+        parameters: {
+            query?: {
+                /** @description US, EU, CN or omit for pooled */
+                market?: string | null;
+            };
+            header?: never;
+            path: {
+                feature_key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     condense_api_signals_condense_post: {
         parameters: {
             query?: never;
@@ -2323,7 +2527,10 @@ export interface operations {
     };
     pipeline_api_pipeline_get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description e.g. G60 or bmw:G60; default: the active vehicle */
+                vehicle?: string | null;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2337,6 +2544,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -2357,6 +2573,38 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+        };
+    };
+    budgets_api_budgets_get: {
+        parameters: {
+            query?: {
+                /** @description Requirement market filter (US, EU, CN); omit for all */
+                market?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -2600,6 +2848,11 @@ export interface operations {
                 kind?: string | null;
                 q?: string | null;
                 ids?: string[] | null;
+                /** @description US, EU, CN: all countries of the policy's market bucket */
+                bucket?: string | null;
+                /** @description target = only the vehicle's own records */
+                scope?: "target" | "all";
+                vehicle?: string | null;
                 limit?: number;
                 offset?: number;
             };
@@ -2736,7 +2989,12 @@ export interface operations {
     };
     coverage_api_coverage_get: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description target = the vehicle's own records (default); all = everything */
+                scope?: "target" | "competitor" | "other_models" | "brand" | "all";
+                /** @description e.g. G60; default: the active vehicle */
+                vehicle?: string | null;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -2750,6 +3008,15 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
@@ -3791,6 +4058,78 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["ValidateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    calibrate_api_labeling_calibrate_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`. */
+                "x-actor"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CalibrateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    run_labeling_api_labeling_run_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`. */
+                "x-actor"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LabelIn"];
             };
         };
         responses: {
