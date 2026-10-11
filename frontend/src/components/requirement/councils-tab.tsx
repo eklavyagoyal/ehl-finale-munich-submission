@@ -34,7 +34,10 @@ export function CouncilsTab() {
     );
   }
 
-  const markets = Object.entries(data.customers?.by_market ?? {}).sort(
+  // Only markets whose owners answered: a US case is asked to US owners only (like Sales US).
+  const markets = Object.entries(data.customers?.by_market ?? {})
+    .filter(([, m]) => (m.personas?.length ?? 0) > 0)
+    .sort(
     ([a], [b]) => ((MARKET_ORDER.indexOf(a) + 9) % 9) - ((MARKET_ORDER.indexOf(b) + 9) % 9),
   );
 
@@ -42,7 +45,8 @@ export function CouncilsTab() {
     <div className="flex max-w-6xl flex-col gap-6">
       <div className="flex flex-wrap items-start gap-4">
         {data.question_to_owners && <OwnerQuestion text={data.question_to_owners} />}
-        <span className="ml-auto">
+        <span className="ml-auto flex flex-col items-end gap-1">
+          <span className="text-xs text-muted-foreground">Owners and Sales are asked per market; the other departments are global.</span>
           <ReliabilityInfo />
         </span>
       </div>
@@ -63,7 +67,7 @@ export function CouncilsTab() {
           {markets.map(([market, m]) => (
             <MarketBlock key={market} market={market} data={m} />
           ))}
-          {data.customers?.view && <p className="text-[13px] text-foreground/80">{data.customers.view}</p>}
+          {data.customers?.view && <More text={data.customers.view} />}
           <BudgetNote />
         </section>
 
@@ -98,8 +102,7 @@ export function CouncilsTab() {
           {(data.company?.departments ?? []).map((d) => (
             <DepartmentRow key={d.agent_id} dept={d} />
           ))}
-          {data.company?.view && <p className="text-[13px] text-foreground/80">{data.company.view}</p>}
-          <p className="text-xs text-muted-foreground">Verdict labels are muted on purpose: in validation they rarely differed. The arguments carry the signal.</p>
+          {data.company?.view && <More text={data.company.view} />}
         </section>
       </div>
     </div>
@@ -112,7 +115,7 @@ function OwnerQuestion({ text }: { text: string }) {
   return (
     <div className="flex max-w-3xl flex-col gap-1 text-[13px]">
       <p className="text-xs text-muted-foreground">Question the owners got</p>
-      <p className={cn("whitespace-pre-line", !open && "line-clamp-2")}>{open ? text : first}</p>
+      <p className={cn("whitespace-pre-line", !open && "line-clamp-1")}>{open ? text : first}</p>
       <button type="button" onClick={() => setOpen((o) => !o)} className="self-start text-xs text-muted-foreground hover:text-foreground">
         {open ? "Show less" : "Show the full question"}
       </button>
@@ -212,7 +215,7 @@ function DepartmentRow({ dept: d }: { dept: CouncilDepartment }) {
             {d.cost_view && d.cost_view !== "unknown" && <span className="text-xs text-muted-foreground">cost: {humanize(d.cost_view)}</span>}
             <span className="ml-auto text-[11px] text-muted-foreground/70">{humanize(d.verdict ?? "")}</span>
           </p>
-          {d.main_argument && <p className="line-clamp-2 text-foreground/80">{d.main_argument}</p>}
+          {d.main_argument && <p className="truncate text-foreground/80">{d.main_argument}</p>}
         </div>
       </HoverCardTrigger>
       <HoverCardContent align="start" className="w-80 text-xs">
@@ -224,5 +227,17 @@ function DepartmentRow({ dept: d }: { dept: CouncilDepartment }) {
         <p className="mt-1 text-muted-foreground">Simulated department · assumption</p>
       </HoverCardContent>
     </HoverCard>
+  );
+}
+
+// Long text stays one click away: a quiet "More" that opens the paragraph in place.
+function More({ text }: { text: string }) {
+  const [open, setOpen] = useState(false);
+  return open ? (
+    <p className="text-[13px] text-foreground/80">{text}</p>
+  ) : (
+    <button type="button" onClick={() => setOpen(true)} className="self-start text-xs text-muted-foreground hover:text-foreground">
+      More
+    </button>
   );
 }

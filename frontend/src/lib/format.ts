@@ -64,6 +64,11 @@ export function fmtRange(low: number | null | undefined, high: number | null | u
   return a === b ? a : `${a}–${b}`;
 }
 
+// Persona runs queue one at a time; a queued run is waiting for the one before it.
+export function runStatusLabel(status: string | null | undefined): string {
+  return status === "queued" ? "Waiting" : humanize(status);
+}
+
 export function fmtCount(value: number | null | undefined): string {
   return value == null ? "–" : value.toLocaleString("en-US");
 }

@@ -8,7 +8,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useConversation, useLlmCalls, useRun } from "@/lib/api/hooks";
 import type { ConversationOwner, Decision, LlmCall, RequirementDetail } from "@/lib/api/types";
-import { agentLabel, fmtDateTime, humanize, STAGE_LABEL, stanceTone } from "@/lib/format";
+import { agentLabel, fmtDateTime, humanize, runStatusLabel, STAGE_LABEL, stanceTone } from "@/lib/format";
 import { cn } from "cn";
 
 import { useRequirementContext } from "./context";
@@ -78,7 +78,7 @@ export function SimulationTab() {
     <div className="flex max-w-6xl flex-col gap-5">
       <div className="flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-muted-foreground">
         <span className="font-mono">Run {runId.slice(0, 8)}</span>
-        {r && <span>{humanize(r.status)}</span>}
+        {r && <span>{runStatusLabel(r.status)}</span>}
         <span className="tabular-nums">{calls.data.length} calls for this requirement</span>
         {r && <span className="tabular-nums">{tokens.toLocaleString("en-US")} tokens in the run</span>}
         {r?.challenge_question && <span>Challenge: “{r.challenge_question}”</span>}

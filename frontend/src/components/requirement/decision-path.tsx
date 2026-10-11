@@ -7,6 +7,7 @@ import { useState } from "react";
 import { ReliabilityInfo } from "@/components/reliability-info";
 import { ErrorState, LoadingRows } from "@/components/states";
 import { ToneBadge } from "@/components/tone-badge";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { useRun, useTrace } from "@/lib/api/hooks";
 import type { TraceBasis, TraceDriver, TraceEffect, TraceStep, TraceTension } from "@/lib/api/types";
 import { actorLabel, fmtCount, fmtDateTime, gateTone, humanize, stanceTone, type Tone } from "@/lib/format";
@@ -87,14 +88,6 @@ export function DecisionPath() {
   return (
     <div className="flex max-w-5xl flex-col gap-5">
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
-        {(Object.keys(BASIS) as TraceBasis[])
-          .filter((b) => b !== "none")
-          .map((b) => (
-            <span key={b} className="flex items-center gap-1.5">
-              <ToneBadge tone={BASIS[b].tone}>{BASIS[b].label}</ToneBadge>
-              {data.legend[b] && data.legend[b].toLowerCase() !== BASIS[b].label.toLowerCase() ? data.legend[b] : null}
-            </span>
-          ))}
         <span className="flex items-center gap-3">
           {(["supports", "against", "neutral"] as const).map((e) => {
             const Icon = EFFECT[e].icon;
@@ -121,65 +114,55 @@ export function DecisionPath() {
   );
 }
 
+// One line per step: title, headline and the effect arrow. Everything else (agents, basis, why, output,
+// caveat, drivers) opens on click. The decision and "not run yet" steps start open: they hold the action.
 function StepRow({ step, base }: { step: TraceStep; base: string }) {
   const always = step.key === "decision" || step.key === "not_simulated";
-  const [open, setOpen] = useState(false);
-  const expanded = always || open;
+  const [open, setOpen] = useState(always);
   const effect = effectOf(step);
   const Effect = EFFECT[effect].icon;
   const drivers = step.key === "judge" ? ((step.output as { drivers?: TraceDriver[] })?.drivers ?? []) : [];
-
-  const head = (
-    <>
-      <span className="pt-0.5">{step.agents?.length ? <AgentStack agents={step.agents} /> : null}</span>
-      <span className="flex min-w-0 flex-col gap-1">
-        <span className="text-sm">
-          <span className="font-medium">{step.title}</span>
-          {step.question && <span className="text-muted-foreground"> · {step.question}</span>}
-        </span>
-        {effect === "unknown" ? (
-          <span className="text-[13px] text-foreground/80">This run did not ask the owners for a verdict or budget points.</span>
-        ) : (
-          step.why && <span className={cn("text-[13px] text-foreground/80", !expanded && "line-clamp-2")}>{step.why}</span>
-        )}
-        {step.caveat && <span className="text-xs text-muted-foreground">{step.caveat}</span>}
-      </span>
-      <span className="flex items-center gap-2 pt-0.5">
-        <ToneBadge tone={BASIS[step.basis]?.tone ?? "muted"}>{BASIS[step.basis]?.label ?? humanize(step.basis)}</ToneBadge>
-        <span title={EFFECT[effect].label} className="flex w-5 justify-center">
-          <Effect className={cn("size-4", EFFECT[effect].className)} aria-label={EFFECT[effect].label} />
-        </span>
-        {!always && <ChevronDown className={cn("size-3.5 text-muted-foreground transition-transform", open && "rotate-180")} aria-hidden />}
-      </span>
-    </>
-  );
+  const headline = effect === "unknown" ? "No verdicts or budget points in this run" : (step.headline ?? step.question ?? "");
 
   return (
     <li className="relative pl-7">
       <span
         aria-hidden
         className={cn(
-          "absolute top-[18px] left-[3px] size-[9px] rounded-full border-2 border-background ring-1 ring-border",
+          "absolute top-[17px] left-[3px] size-[9px] rounded-full border-2 border-background ring-1 ring-border",
           effect === "supports" ? "bg-emerald-500" : effect === "against" ? "bg-red-400" : step.key === "decision" ? "bg-foreground" : "bg-muted-foreground/40",
         )}
       />
-      {always ? (
-        <div className="grid grid-cols-[132px_minmax(0,1fr)_auto] items-start gap-4 border-b border-border/60 py-3">{head}</div>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setOpen((o) => !o)}
-          aria-expanded={open}
-          className="grid w-full grid-cols-[132px_minmax(0,1fr)_auto] items-start gap-4 rounded-md border-b border-border/60 py-3 text-left hover:bg-muted/30"
-        >
-          {head}
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="grid w-full grid-cols-[200px_minmax(0,1fr)_auto] items-center gap-4 rounded-md border-b border-border/60 py-2.5 text-left hover:bg-muted/30"
+      >
+        <span className="truncate text-sm font-medium">{step.title}</span>
+        <span className="truncate text-[13px] text-muted-foreground">{headline}</span>
+        <span className="flex items-center gap-2">
+          <span title={EFFECT[effect].label} className="flex w-5 justify-center">
+            <Effect className={cn("size-4", EFFECT[effect].className)} aria-label={EFFECT[effect].label} />
+          </span>
+          <ChevronDown className={cn("size-3.5 text-muted-foreground transition-transform", open && "rotate-180")} aria-hidden />
+        </span>
+      </button>
 
-      {drivers.length > 0 && <Drivers drivers={drivers} />}
-
-      {expanded && (
-        <div className="flex flex-col gap-4 border-b border-border/60 pt-1 pb-5 pl-[148px]">
+      {open && (
+        <div className="flex flex-col gap-4 border-b border-border/60 pt-3 pb-5">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+            {step.agents?.length ? <AgentStack agents={step.agents} /> : null}
+            <ToneBadge tone={BASIS[step.basis]?.tone ?? "muted"}>{BASIS[step.basis]?.label ?? humanize(step.basis)}</ToneBadge>
+            {step.question && <span>{step.question}</span>}
+          </div>
+          {effect === "unknown" ? (
+            <p className="max-w-3xl text-[13px] text-foreground/80">This run did not ask the owners for a verdict or budget points.</p>
+          ) : (
+            step.why && <p className="max-w-3xl text-[13px] text-foreground/80">{step.why}</p>
+          )}
+          {step.caveat && <p className="max-w-3xl text-xs text-muted-foreground">{step.caveat}</p>}
+          {drivers.length > 0 && <Drivers drivers={drivers} />}
           <StepDetail step={step} />
           {step.tensions && step.tensions.length > 0 && <Tensions tensions={step.tensions} />}
           {DRILL[step.key] && (
@@ -196,7 +179,7 @@ function StepRow({ step, base }: { step: TraceStep; base: string }) {
 // Judge drivers stay visible: source → statement → direction, the "why" of the recommendation.
 function Drivers({ drivers }: { drivers: TraceDriver[] }) {
   return (
-    <ul className="flex flex-col gap-1 border-b border-border/60 py-2.5 pl-[148px] text-[13px]">
+    <ul className="flex max-w-3xl flex-col gap-1 text-[13px]">
       {drivers.slice(0, 6).map((d, i) => {
         const Icon = EFFECT[d.effect]?.icon ?? ArrowRight;
         return (
@@ -409,10 +392,15 @@ export function BudgetNote() {
   const { data } = useRun(runId);
   const n = data?.run.requirement_ids.length;
   return (
-    <p className="text-xs text-muted-foreground">
-      Budget: each owner splits 100 points{n ? ` across the ${n} proposal${n === 1 ? "" : "s"} of this run` : " across the proposals of the run"} and
-      “keep the price down”, so values compare only within one run.
-    </p>
+    <HoverCard openDelay={100}>
+      <HoverCardTrigger asChild>
+        <span className="cursor-default self-start text-xs text-muted-foreground underline decoration-dotted underline-offset-2">Budget of 100?</span>
+      </HoverCardTrigger>
+      <HoverCardContent className="w-72 text-xs">
+        Each owner splits 100 points{n ? ` across the ${n} proposal${n === 1 ? "" : "s"} of this run` : " across the proposals of the run"} and
+        “keep the price down”, so values compare only within one run.
+      </HoverCardContent>
+    </HoverCard>
   );
 }
 

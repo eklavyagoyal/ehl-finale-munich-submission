@@ -32,7 +32,7 @@ export function RunProgress({ runId }: { runId: string | null }) {
     <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground" role="status">
       <span className="flex items-center gap-1.5 text-foreground">
         <span className="size-1.5 animate-pulse rounded-full bg-blue-600" aria-hidden />
-        {status === "queued" ? "Queued" : "Running"}
+        {status === "queued" ? "Waiting for the run before it" : "Running"}
       </span>
       {STAGES.map((stage) => (
         <span key={stage} className={cn("flex items-center gap-1.5", stage === current && "text-foreground")}>

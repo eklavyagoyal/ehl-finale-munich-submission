@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { refreshAll, startRun, useConversation, useRequirements, useRun, useRunCalls, useRunResults, useRuns } from "@/lib/api/hooks";
 import type { LlmCall, Requirement, ResearchItem, Run, RunResults } from "@/lib/api/types";
-import { agentLabel, fmtCount, fmtDateTime, humanize, STAGE_LABEL, STAGES, stanceTone, statusTone } from "@/lib/format";
+import { agentLabel, fmtCount, fmtDateTime, humanize, runStatusLabel, STAGE_LABEL, STAGES, stanceTone, statusTone } from "@/lib/format";
 import { cn } from "cn";
 import { V } from "@/lib/routes";
 
@@ -169,6 +169,7 @@ function RunPicker({ runs, selected }: { runs: Run[]; selected: string | null })
           <span className="font-mono">{r.id.slice(0, 8)}</span>
           <span>
             {r.requirement_ids.length} req · {fmtDateTime(r.created_at)}
+            {r.status === "queued" && " · waiting"}
           </span>
         </button>
       ))}
@@ -199,7 +200,7 @@ function RunView({ runId }: { runId: string }) {
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground" role="status">
         <span className={cn("flex items-center gap-1.5", live && "text-foreground")}>
           {live && <span className="size-1.5 animate-pulse rounded-full bg-blue-600" aria-hidden />}
-          {humanize(r.status)}
+          {runStatusLabel(r.status)}
         </span>
         {STAGES.map((stage) => (
           <span key={stage} className={cn("flex items-center gap-1.5", stage === r.progress?.stage && "text-foreground")}>

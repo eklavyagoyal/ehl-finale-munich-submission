@@ -114,7 +114,7 @@ export function RunButton() {
   return (
     <Button size="sm" variant="outline" onClick={start} disabled={busy || active}>
       <Play data-icon="inline-start" />
-      {active ? "Running…" : busy ? "Starting…" : "Run Parallax"}
+      {active ? (run?.run.status === "queued" ? "Waiting…" : "Running…") : busy ? "Starting…" : "Run Parallax"}
     </Button>
   );
 }
