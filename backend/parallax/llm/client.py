@@ -38,6 +38,17 @@ def sha256(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
+def _strip_nul(value: Any) -> Any:
+    """Postgres text/JSONB cannot hold NUL characters; models occasionally emit them."""
+    if isinstance(value, str):
+        return value.replace("\x00", "")
+    if isinstance(value, list):
+        return [_strip_nul(v) for v in value]
+    if isinstance(value, dict):
+        return {k: _strip_nul(v) for k, v in value.items()}
+    return value
+
+
 def _trim(text: str) -> str:
     return text if len(text) <= MAX_LOGGED_CHARS else text[:MAX_LOGGED_CHARS] + f"... [{len(text) - MAX_LOGGED_CHARS} chars trimmed]"
 
@@ -148,8 +159,9 @@ class LLMClient:
             session.add(LLMCall(
                 run_id=run_id, agent_id=agent_id, requirement_id=requirement_id, purpose=purpose,
                 provider=self.provider, model=model, prompt_version=prompt_version, prompt_sha256=sha256(prompt_text),
-                input_record_ids=list(record_ids), request=request, response=response, input_tokens=input_tokens,
-                output_tokens=output_tokens, latency_ms=latency, status=status, error=error,
+                input_record_ids=list(record_ids), request=_strip_nul(request), response=_strip_nul(response),
+                input_tokens=input_tokens, output_tokens=output_tokens, latency_ms=latency, status=status,
+                error=_strip_nul(error),
             ))
             if run_id is not None:
                 session.execute(update(SimRun).where(SimRun.id == run_id).values(
