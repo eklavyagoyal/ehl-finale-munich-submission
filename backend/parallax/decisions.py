@@ -127,6 +127,7 @@ def review_sources_bulk(session: Session, *, stream: str | None, channel: str | 
             claim.review_status = review_status
         claims_updated = len(claims)
         record_event(session, category="evidence", actor_id=actor_id, action="evidence.claims.bulk_review",
-                     entity_type="source_set", entity_id=",".join(ids[:20]) + ("..." if len(ids) > 20 else ""),
-                     after={"claims": claims_updated, "review_status": review_status}, rationale=notes)
+                     entity_type="source_set", entity_id=f"{stream or channel or dataset_key}:{len(ids)} sources"[:240],
+                     after={"claims": claims_updated, "review_status": review_status}, rationale=notes,
+                     meta={"source_ids": ids})
     return {"sources": len(sources), "claims": claims_updated}

@@ -97,6 +97,10 @@ def launch(run_id: uuid.UUID) -> threading.Thread:
         from parallax import signals
 
         target = signals.execute
+    elif kind in ("labeling", "calibration"):
+        from parallax import labeling
+
+        target = labeling.execute
     elif kind == "council_validation":
         from parallax import council_validation
 

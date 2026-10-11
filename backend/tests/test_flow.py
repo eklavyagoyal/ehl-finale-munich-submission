@@ -186,6 +186,17 @@ def test_council_validation(client, drafted):
     assert set(result["T4_alignment"]["mean_budget_by_requirement"]) == set(drafted)
 
 
+def test_labeling_and_calibration(client, drafted):
+    run = client.post("/api/labeling/run", json={"scope": "all", "workers": 4}).json()
+    done = wait_for(client, run["id"])
+    assert done["status"] == "completed", done
+    assert done["progress"]["result"]["claims"] >= 1
+    claims = client.get("/api/claims", params={"review_status": "pending", "derived": False}).json()
+    assert any(c["producer"]["method"] == "llm" for c in claims["items"])
+    cal = wait_for(client, client.post("/api/labeling/calibrate", json={"n": 20, "workers": 4}).json()["id"])
+    assert cal["status"] == "completed" and cal["progress"]["result"]["sample"] >= 1
+
+
 def test_pipeline_and_signals(client, drafted):
     stages = client.get("/api/pipeline").json()
     assert [s["key"] for s in stages["stages"]] == ["sources", "processing", "signals", "experts", "decision"]

@@ -3190,6 +3190,124 @@
     }
    }
   },
+  "/api/labeling/calibrate": {
+   "post": {
+    "tags": [
+     "labeling"
+    ],
+    "summary": "Label BMW feedback blind and measure agreement with BMW's VFC labels (background run)",
+    "operationId": "calibrate_api_labeling_calibrate_post",
+    "parameters": [
+     {
+      "name": "x-actor",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`.",
+       "title": "X-Actor"
+      },
+      "description": "Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`."
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CalibrateIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/labeling/run": {
+   "post": {
+    "tags": [
+     "labeling"
+    ],
+    "summary": "Label unlabeled feedback into claims (pending review); poll /api/simulations/{id}",
+    "operationId": "run_labeling_api_labeling_run_post",
+    "parameters": [
+     {
+      "name": "x-actor",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`.",
+       "title": "X-Actor"
+      },
+      "description": "Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`."
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/LabelIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/admin/reset": {
    "post": {
     "tags": [
@@ -3513,6 +3631,27 @@
      "notes"
     ],
     "title": "BulkReviewIn"
+   },
+   "CalibrateIn": {
+    "properties": {
+     "n": {
+      "type": "integer",
+      "maximum": 2000.0,
+      "minimum": 20.0,
+      "title": "N",
+      "description": "BMW feedback records to label blind",
+      "default": 300
+     },
+     "workers": {
+      "type": "integer",
+      "maximum": 64.0,
+      "minimum": 1.0,
+      "title": "Workers",
+      "default": 16
+     }
+    },
+    "type": "object",
+    "title": "CalibrateIn"
    },
    "ClaimReviewIn": {
     "properties": {
@@ -4522,6 +4661,44 @@
      "created_at"
     ],
     "title": "LLMCallOut"
+   },
+   "LabelIn": {
+    "properties": {
+     "scope": {
+      "type": "string",
+      "enum": [
+       "social",
+       "competitors",
+       "bmw_unclassified",
+       "all"
+      ],
+      "title": "Scope",
+      "default": "social"
+     },
+     "limit": {
+      "anyOf": [
+       {
+        "type": "integer",
+        "minimum": 1.0
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Limit",
+      "description": "Optional cap on records"
+     },
+     "workers": {
+      "type": "integer",
+      "maximum": 64.0,
+      "minimum": 1.0,
+      "title": "Workers",
+      "description": "Parallel model calls",
+      "default": 24
+     }
+    },
+    "type": "object",
+    "title": "LabelIn"
    },
    "PersonaResponseOut": {
     "properties": {
