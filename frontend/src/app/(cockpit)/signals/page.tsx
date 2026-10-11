@@ -4,23 +4,28 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
-import { RebuildSignalsButton, DraftSelectedDialog } from "@/components/generate-dialog";
+import { CondenseButton, DraftSelectedDialog, RebuildSignalsButton } from "@/components/generate-dialog";
 import { PageHeader } from "@/components/page-header";
+import { SignalChart } from "@/components/signal-chart";
 import { ChannelIcon } from "@/components/provenance";
 import { ErrorState, LoadingRows } from "@/components/states";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { useHash } from "@/hooks/use-hash";
 import { useMeta, useRequirements, useSignals } from "@/lib/api/hooks";
-import type { Requirement, Signal, SignalKind } from "@/lib/api/types";
-import { fmtCount } from "@/lib/format";
+import type { Finding, Requirement, Signal, SignalKind } from "@/lib/api/types";
+import { fmtCount, humanize } from "@/lib/format";
 import { channelLabel } from "@/lib/provenance";
 import { cn } from "cn";
 
 const COLUMNS: { kind: SignalKind; title: string }[] = [
   { kind: "pain", title: "Pain points" },
-  { kind: "strength", title: "Strengths" },
   { kind: "request", title: "Requests" },
+  { kind: "strength", title: "Strengths" },
 ];
+
+// At most this many signals per column and findings per signal on the first level.
+const FIRST_LEVEL = 6;
+const FINDINGS_SHOWN = 3;
 
 const MIX = [
   { key: "pain", label: "pain", color: "bg-red-400" },
@@ -48,6 +53,7 @@ function SignalsView() {
     <>
       <PageHeader crumbs={[{ label: "G60" }, { label: "Signals" }]}>
         <RebuildSignalsButton />
+        <CondenseButton />
       </PageHeader>
       <p className="mt-1 text-[13px] text-muted-foreground">What do customers tell us?</p>
 
@@ -89,25 +95,28 @@ function SignalBoard({ market }: { market: string | null }) {
   const requirementFor = (s: Signal) => requirements?.find((r) => r.feature_key === s.feature_key && (r.market ?? null) === (s.market ?? null));
 
   return (
-    <div className="mt-4 flex max-w-6xl flex-col gap-5">
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
-        {mixed.data?.basis && <span>{mixed.data.basis}</span>}
-        <span className="flex items-center gap-3">
-          {MIX.map((m) => (
-            <span key={m.key} className="flex items-center gap-1">
-              <span className={cn("size-2 rounded-sm", m.color)} aria-hidden />
-              {m.label}
-            </span>
-          ))}
-        </span>
-        <span className="ml-auto flex items-center gap-3">
-          {selected.size > 0 && (
-            <button type="button" className="hover:text-foreground" onClick={() => setSelected(new Map())}>
-              Clear selection
-            </button>
-          )}
-          <DraftSelectedDialog market={market} selected={[...selected.values()]} onDone={() => setSelected(new Map())} />
-        </span>
+    <div className="mt-4 flex max-w-6xl flex-col gap-6">
+      <div className="flex flex-wrap items-start justify-between gap-6">
+        <div className="flex max-w-xl flex-col gap-3 text-xs text-muted-foreground">
+          {mixed.data?.basis && <span>{mixed.data.basis}</span>}
+          <span className="flex items-center gap-3">
+            {MIX.map((m) => (
+              <span key={m.key} className="flex items-center gap-1">
+                <span className={cn("size-2 rounded-sm", m.color)} aria-hidden />
+                {m.label}
+              </span>
+            ))}
+          </span>
+          <span className="flex items-center gap-3">
+            <DraftSelectedDialog market={market} selected={[...selected.values()]} onDone={() => setSelected(new Map())} />
+            {selected.size > 0 && (
+              <button type="button" className="hover:text-foreground" onClick={() => setSelected(new Map())}>
+                Clear selection
+              </button>
+            )}
+          </span>
+        </div>
+        <SignalChart market={market} />
       </div>
 
       <div className="grid gap-8 lg:grid-cols-3">
@@ -158,6 +167,10 @@ function SignalColumn({
   const { data, error, isLoading } = useSignals(market, kind, 15);
   const hash = useHash();
   const found = !!data?.items.some((s) => `sig-${s.feature_key}` === hash);
+  const [more, setMore] = useState(false);
+  const items = data?.items ?? [];
+  // A linked signal beyond the first level opens the column so it can be highlighted.
+  const shown = more || items.slice(FIRST_LEVEL).some((s) => `sig-${s.feature_key}` === hash) ? items : items.slice(0, FIRST_LEVEL);
   useEffect(() => {
     if (found) document.getElementById(hash)?.scrollIntoView({ block: "center" });
   }, [found, hash]);
@@ -171,7 +184,7 @@ function SignalColumn({
       {isLoading && <LoadingRows />}
       {data && data.items.length === 0 && <p className="py-3 text-[13px] text-muted-foreground">None in this market.</p>}
       <ul>
-        {data?.items.map((s) => (
+        {shown.map((s) => (
           <SignalRow
             key={s.feature_key}
             signal={s}
@@ -182,6 +195,11 @@ function SignalColumn({
           />
         ))}
       </ul>
+      {items.length > shown.length && (
+        <button type="button" onClick={() => setMore(true)} className="self-start py-2 text-xs text-muted-foreground hover:text-foreground">
+          Show {items.length - shown.length} more
+        </button>
+      )}
     </section>
   );
 }
@@ -238,6 +256,7 @@ function SignalRow({
           <span className="ml-auto shrink-0 text-xs text-muted-foreground tabular-nums">{fmtCount(s.reviews)} reviews</span>
         </div>
         <MixBar signal={s} />
+        {s.findings && s.findings.length > 0 && <Findings findings={s.findings} reviews={s.reviews} />}
         <div className="flex min-w-0 items-center gap-2 text-xs text-muted-foreground">
           <span className="flex min-w-0 items-center gap-1.5 truncate">
             {s.channels.slice(0, 3).map((c) => (
@@ -273,5 +292,52 @@ function MixBar({ signal: s }: { signal: Signal }) {
         <span key={m.key} className={m.color} style={{ width: `${(s[m.key] / total) * 100}%` }} />
       ))}
     </div>
+  );
+}
+
+// Concrete findings behind a signal: the model grouped the reviews, the counts come from code.
+function Findings({ findings, reviews }: { findings: Finding[]; reviews: number }) {
+  const [all, setAll] = useState(false);
+  const shown = all ? findings : findings.slice(0, FINDINGS_SHOWN);
+  return (
+    <ul className="flex flex-col gap-0.5 border-l border-border pl-2.5">
+      {shown.map((f) => (
+        <li key={f.id}>
+          <HoverCard openDelay={120} closeDelay={60}>
+            <HoverCardTrigger asChild>
+              <button type="button" className="grid w-full grid-cols-[minmax(0,1fr)_auto_auto] items-baseline gap-2 text-left text-xs">
+                <span className="truncate">{f.title}</span>
+                <span className="text-muted-foreground tabular-nums">{fmtCount(f.reviews)}</span>
+                <span className="w-9 text-right text-muted-foreground/70 tabular-nums">{Math.round(f.share_of_theme * 100)} %</span>
+              </button>
+            </HoverCardTrigger>
+            <HoverCardContent align="start" className="w-80 text-xs">
+              <p className="font-medium">{f.title}</p>
+              {f.description && <p className="mt-0.5 text-muted-foreground">{f.description}</p>}
+              <p className="mt-1 text-muted-foreground">
+                {fmtCount(f.reviews)} of {fmtCount(reviews)} reviews · {humanize(f.kind)}
+              </p>
+              <div className="mt-2 flex flex-col gap-2">
+                {f.quotes.slice(0, 3).map((q) => (
+                  <div key={q.record_id} className="flex flex-col gap-0.5">
+                    <p className="line-clamp-3">“{q.text}”</p>
+                    <Link href={`/sources?tab=records&ids=${encodeURIComponent(q.record_id)}`} className="font-mono text-muted-foreground hover:underline">
+                      {q.record_id}
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </li>
+      ))}
+      {findings.length > shown.length && (
+        <li>
+          <button type="button" onClick={() => setAll(true)} className="text-[11px] text-muted-foreground hover:text-foreground">
+            +{findings.length - shown.length} more findings
+          </button>
+        </li>
+      )}
+    </ul>
   );
 }

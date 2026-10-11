@@ -71,6 +71,17 @@ export function useCouncil(id: string | undefined) {
   );
 }
 
+// Councils of several simulated requirements for the signals chart. Bounded by the simulated
+// requirements in view (a handful), never polled. An aggregate endpoint would replace this.
+export function useCouncils(ids: string[]) {
+  return useSWR(ids.length ? ["councils", ids.join(",")] : null, async () => {
+    const list = await Promise.all(
+      ids.map((id) => unwrap<Council>(api.GET("/api/requirements/{requirement_id}/council", { params: { path: { requirement_id: id } } }))),
+    );
+    return new Map(list.map((c) => [c.requirement_id, c]));
+  }, { revalidateOnFocus: false });
+}
+
 // Can be large (TinyTroupe transcripts): fetched once per run and status, never polled.
 export function useConversation(runId: string | null | undefined, status?: string) {
   return useSWR(runId ? ["conversation", runId, status ?? ""] : null, () =>

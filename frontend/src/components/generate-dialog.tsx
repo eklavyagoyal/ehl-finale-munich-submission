@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { buildThemes, draftRequirements, refreshAll } from "@/lib/api/hooks";
+import { buildThemes, condenseSignals, draftRequirements, refreshAll, useRun } from "@/lib/api/hooks";
 import type { Signal } from "@/lib/api/types";
 
 // The AI drafts one candidate requirement per selected signal, with cited quotes. The PM reviews every draft.
@@ -96,5 +96,62 @@ export function RebuildSignalsButton() {
     <Button size="sm" variant="outline" onClick={rebuild} disabled={busy}>
       {busy ? "Rebuilding…" : "Rebuild signals"}
     </Button>
+  );
+}
+
+// Groups the top signals into concrete findings (LLM groups, code counts). Runs in the background;
+// the button follows the run and refreshes the signals when it is done.
+export function CondenseButton() {
+  const [open, setOpen] = useState(false);
+  const [runId, setRunId] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const run = useRun(runId);
+  const status = run.data?.run.status;
+  const active = !!runId && (!status || status === "queued" || status === "running");
+  const settled = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!runId || !status || status === "queued" || status === "running" || settled.current === runId) return;
+    settled.current = runId;
+    if (status === "completed") toast.success("Findings condensed");
+    else toast.warning(`Condensing ${status}${run.data?.run.error ? `: ${run.data.run.error}` : ""}`);
+    void refreshAll();
+  }, [runId, status, run.data?.run.error]);
+
+  async function start() {
+    setBusy(true);
+    try {
+      const result = await condenseSignals(["US", "EU", "CN", null]);
+      setRunId(result.run_id);
+      setOpen(false);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button size="sm" variant="outline" disabled={active}>
+          {active ? "Condensing…" : "Condense findings"}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Condense findings</DialogTitle>
+          <DialogDescription>
+            A model groups the reviews behind the top 8 signals per kind into concrete findings, for the US, Europe, China and all markets. The
+            counts come from code. This uses the model budget and runs in the background.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button onClick={start} disabled={busy}>
+            {busy ? "Starting…" : "Condense"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
