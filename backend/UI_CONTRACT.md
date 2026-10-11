@@ -87,6 +87,45 @@ Draw `stages[1].flow` as a left-to-right flow (Sankey-like, thin bands, hairline
 Add: `GET /api/signals/map`, `GET /api/signals/{feature_key}`, and the new query parameters on `/api/coverage`
 (`scope`, `vehicle`), `/api/records` (`scope`, `bucket`, `vehicle`) and `/api/pipeline` (`vehicle`).
 
+## Round three (Luis, 2026-10-11): replaces parts of A2, A4, A5 and A6
+
+R1. **The sidebar is always there, including on the overview.** It has two sections.
+
+- Data (independent of vehicles):
+  - **Overview**: what came in, plus the vehicle cards
+  - **Sources**: all sources and records, browsable, with `/api/coverage?scope=all` and `/api/records`
+  - **Processing**: the global flow from `GET /api/overview/flow`, i.e. streams → not relevant (triage) / G60 /
+    other BMW models / competitors / brand-wide
+- Vehicles: **G60**, which opens its own pipeline: Sources · Processing · Signals · Expert pipeline · Decision.
+  The other vehicles are greyed out as "coming".
+
+Breadcrumbs stay "Overview › G60 › Stage".
+
+R2. **The vehicle processing flow continues to the decision.** `stages[1].flow` now also has `requirements` →
+`change_coming` / `declined` / `open`. Node counts are requirements; band width is the reviews behind them. Draw
+nodes with count 0 as an empty end point with their label, so "Change coming" is visible before anything has been
+approved.
+
+R3. **The signal map has a centred cross.**
+
+- Both axes carry `center_on_threshold: true`. Use a piecewise scale so the threshold sits exactly in the middle:
+  - x: log from min to threshold on the left half, threshold to max on the right half
+  - y: 0 to threshold on the bottom half, threshold to 1 on the top half
+- The cross lines sit exactly in the centre.
+- Write `low_label` / `high_label` on the four sides ("Few reviews" left, "Many reviews" right, "Mostly praise"
+  bottom, "Mostly problems & wishes" top). Quadrant names go in the corners.
+- `need_share` is now smoothed (fewer stripes); `need_share_raw` appears on hover.
+- Give overlapping small dots a slight deterministic jitter (at most 3 px).
+
+R4. **The decision list shows how far each requirement got.**
+
+- Per row, `progress[]` is drawn as four small steps: Drafted · Councils · AI suggests · Your decision (filled =
+  done, `at` on hover).
+- "AI suggests: approve" must look clearly different from the status: the AI value is muted text, and only the
+  PM's decision gets a status pill.
+
+R5. Evidence and the Expert pipeline stay as they are; Luis wants to discuss them.
+
 ## Part B: decided
 
 - B1 (vehicle in the URL) is part of A2.
