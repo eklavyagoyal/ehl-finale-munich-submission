@@ -145,3 +145,18 @@ Run stages, in order:
 | `GET /api/audit?requirement_id=&actor_id=&category=change\|decision\|ai\|evidence\|system\|access` | Filtered audit trail (sidebar "Activity"; requirement tab "Timeline" together with `/versions`) |
 | `GET /api/learning/agreement` | Per agent: share of decisions where it agreed with the PM |
 | `GET /api/learning/decisions`, `GET /api/learning/lessons` | Decision history (sidebar "History") and lessons |
+
+## Flow endpoints (start page, signals, councils, decision path)
+
+| Call | Use in the UI |
+| --- | --- |
+| `GET /api/vehicles` | Landing page: vehicles with `status` (`active` / `data_available` / `not_imported`), record counts, plus "Across vehicles" |
+| `GET /api/pipeline` | Start page: five stages (sources → processing → signals → experts → decision) with `question`, `status`, `counts`, `next_action` |
+| `GET /api/signals?market=US\|EU\|CN&kind=pain\|request\|strength\|mixed\|all` | Signals page: per signal counts, `sample_quotes`, `has_requirement`, `condensed` and `findings[]` (title, description, kind, reviews, share, quotes) |
+| `POST /api/signals/condense {markets, kinds, limit}` | Condense top signals into findings (background run; poll `/api/simulations/{run_id}`) |
+| `GET /api/requirements/{id}/trace` | **Decision path**: ordered steps `evidence → customers → company → research → scores → synthesis → challenger → judge → decision`; each step has `agents`, `inputs`, `output`, `why`, `basis` (evidence / simulation / assumption / mixed / human), `effect` (supports / against / neutral), optional `caveat`, `tensions`, `drill_down` |
+| `GET /api/requirements/{id}/council` | Customer council by market (personas with verdict, budget points, quote) vs. company council (department verdict, main argument, cost view) and `tensions` |
+| `GET /api/simulations/{run_id}/conversation` | Who was asked what (`question_to_owners`) and every answer, grouped by market; departments; research; challenger; judge |
+| `GET /api/simulations/{run_id}/llm-calls` | Persona calls now carry `agent_id = persona:<id>` (one lane per persona) |
+
+Validation results to show honestly: the customer council is reliable (same verdict 90 % on a repeat run) and rejects decoys, US personas match the BMW study moderately (rho ~0.5-0.6), EU is weak, China untestable. Company council verdicts rarely differ: show its arguments and tensions, not the verdict counts.
