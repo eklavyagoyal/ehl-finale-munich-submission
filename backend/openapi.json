@@ -3214,6 +3214,46 @@
     }
    }
   },
+  "/api/simulations/llm-calls/{call_id}": {
+   "get": {
+    "tags": [
+     "simulations"
+    ],
+    "summary": "One model call opened up: what was sent, what came back, a one-line summary",
+    "operationId": "llm_call_api_simulations_llm_calls__call_id__get",
+    "parameters": [
+     {
+      "name": "call_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "integer",
+       "title": "Call Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/simulations/{run_id}/conversation": {
    "get": {
     "tags": [

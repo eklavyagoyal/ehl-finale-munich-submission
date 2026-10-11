@@ -68,6 +68,9 @@ def test_simulation_decision_challenge_and_audit(client, drafted):
                            "dept:finance", "dept:sales-us"}
     assert first["recommendation"] and len(first["votes"]) == 1
     assert first["recommendation"][0]["challenge"]["counter_position"]
+    calls = client.get(f"/api/simulations/{run['id']}/llm-calls").json()
+    opened = client.get(f"/api/simulations/llm-calls/{calls[0]['id']}").json()
+    assert opened["prompt"]["user"] and opened["response"] is not None and "summary" in opened
     talk = client.get(f"/api/simulations/{run['id']}/conversation").json()
     assert talk["question_to_owners"] and set(talk["owners_by_market"]) == {"US"}
     owner = talk["owners_by_market"]["US"][0]

@@ -111,6 +111,62 @@ def llm_calls(run_id: str, include_payloads: bool = False, requirement_id: str |
     return [row(c, exclude=exclude) for c in calls]
 
 
+SUMMARY_FIELDS = ("summary", "headline", "main_argument", "reaction", "rationale", "counter_position", "answer_summary",
+                  "customer_view", "verdict", "recommendation", "vote")
+
+
+def _call_summary(call: LLMCall) -> str | None:
+    """One line for the side panel: the most telling field of the answer, else its first sentence."""
+    response = call.response or {}
+    parsed = response.get("parsed")
+    if isinstance(parsed, dict):
+        for field in SUMMARY_FIELDS:
+            value = parsed.get(field)
+            if isinstance(value, str) and value.strip():
+                return value.strip()[:280]
+        for value in parsed.values():  # e.g. {"reactions": [...]} or {"items": [...]}
+            if isinstance(value, list) and value and isinstance(value[0], dict):
+                first = next((value[0][f] for f in SUMMARY_FIELDS if isinstance(value[0].get(f), str)), None)
+                if first:
+                    return f"{len(value)} items · first: {first.strip()[:240]}"
+    text = response.get("content")
+    if isinstance(text, str) and text.strip():
+        return text.strip().split("\n")[0][:280]
+    return None
+
+
+@router.get("/llm-calls/{call_id}", summary="One model call opened up: what was sent, what came back, a one-line summary")
+def llm_call(call_id: int, session: Session = Depends(get_session, scope="function")):
+    from parallax.models import Agent
+
+    call = session.get(LLMCall, call_id)
+    if call is None:
+        raise not_found("llm call", str(call_id))
+    agent = session.get(Agent, call.agent_id) if call.agent_id else None
+    request = call.request or {}
+    if "messages" in request:  # TinyTroupe: the persona definition is the first message, the stimulus the last
+        messages = request["messages"]
+        prompt = {"system": next((m["content"] for m in messages if m.get("role") == "system"), None),
+                  "user": "\n\n".join(m["content"] for m in messages if m.get("role") != "system")[-6000:]}
+    else:
+        prompt = {"system": request.get("system"), "user": request.get("user")}
+    response = call.response or {}
+    return {
+        "id": call.id, "run_id": str(call.run_id) if call.run_id else None, "agent_id": call.agent_id,
+        "agent_name": agent.display_name if agent else call.agent_id, "requirement_id": call.requirement_id,
+        "purpose": call.purpose, "model": call.model, "prompt_version": call.prompt_version, "status": call.status,
+        "error": call.error, "input_tokens": call.input_tokens, "output_tokens": call.output_tokens,
+        "latency_ms": call.latency_ms, "created_at": call.created_at.isoformat(),
+        "summary": _call_summary(call),
+        "prompt": {k: (v[:12000] if isinstance(v, str) else v) for k, v in prompt.items()},
+        "response": response.get("parsed") if response.get("parsed") is not None else response.get("content"),
+        "citations": response.get("citations") or [],
+        "input_record_ids": call.input_record_ids,
+        "note": None if response.get("parsed") is not None or response.get("content") else
+                "The answer text of this call was not stored (persona calls of runs before this feature).",
+    }
+
+
 @router.get("/{run_id}/conversation",
             summary="Who was asked what and how they answered: owners by market, departments, research, challenger, judges")
 def conversation(run_id: str, session: Session = Depends(get_session, scope="function")):

@@ -201,7 +201,7 @@ class LLMClient:
         if self.mode == "mock":
             rng = random.Random(sha256(f"{purpose}|{agent_id}|{requirement_id}|{prompt_text}")[:16])
             result = mock(rng) if mock else fake_instance(schema, rng)
-            self._log(**log, response=result.model_dump(mode="json"), input_tokens=len(prompt_text) // 4,
+            self._log(**log, response={"parsed": result.model_dump(mode="json"), "mock": True}, input_tokens=len(prompt_text) // 4,
                       output_tokens=len(result.model_dump_json()) // 4, status="ok")
             return result
         kwargs: dict[str, Any] = {"model": model, "instructions": system, "input": user, "text_format": schema}

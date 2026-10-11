@@ -295,7 +295,11 @@ def _install_logging_client() -> None:
                 llm._log(**log, response=None, input_tokens=0, output_tokens=0, status="error", error=repr(error)[:2000])
                 raise
             usage = getattr(result, "usage", None)
-            llm._log(**log, response={"id": getattr(result, "id", None)},
+            try:
+                content = result.choices[0].message.content
+            except (AttributeError, IndexError, TypeError):
+                content = None
+            llm._log(**log, response={"id": getattr(result, "id", None), "content": (content or "")[:8000]},
                      input_tokens=getattr(usage, "prompt_tokens", 0) or 0,
                      output_tokens=getattr(usage, "completion_tokens", 0) or 0, status="ok")
             return result

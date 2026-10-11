@@ -174,6 +174,7 @@ Run stages, in order:
 | `GET /api/simulations?include_failed=false` | Run list hides failed and interrupted runs by default (kept in the audit trail). Runs killed by a restart have status `interrupted`. |
 | `POST /api/simulations {requirement_ids, persona_scope}` | `persona_scope = market` (default): owners answer only for their own market, like the regional sales departments; `all` asks every owner |
 | `GET /api/simulations/{run_id}/conversation` | Who was asked what (`question_to_owners`) and every answer, grouped by market; departments; research; challenger; judge |
+| `GET /api/simulations/llm-calls/{call_id}` | **One agent call opened up** (click on a dot): `agent_name`, `purpose`, `model`, `summary` (one line), `prompt` {system, user}, `response` (structured answer or persona text), `citations`, `input_record_ids`, tokens and latency. Persona answers are stored from now on; older persona calls carry a `note` |
 | `GET /api/simulations/{run_id}/llm-calls` | Persona calls now carry `agent_id = persona:<id>` (one lane per persona) |
 
 Triage filter: policy `triage_filter.enabled` (default **off**). When on, online reviews marked not relevant or about another car no longer count toward the vehicle's signals. Turn it on only after the PM checked the spot-check sample. Themes carry `owner_review_count` (BMW feedback + online reviews triaged as owner). Persona runs (simulation, follow-up, validations) queue and run one at a time.
