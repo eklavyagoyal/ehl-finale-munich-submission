@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/parallax-architecture.svg" alt="Parallax architecture: evidence becomes signals, requirements pass through customer and company councils, and the product manager makes the decision." width="100%">
+  <img src="docs/assets/parallax-cover.png" alt="Parallax — AI for Product Decision Making, over the BMW vehicle photograph from our pitch deck." width="100%">
 </p>
 
 <h1 align="center">Parallax</h1>
