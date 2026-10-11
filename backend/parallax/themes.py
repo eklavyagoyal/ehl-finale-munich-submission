@@ -23,6 +23,7 @@ PAIN_TYPES = {"defect"}
 class _Acc:
     parents: set = field(default_factory=set)
     competitor: set = field(default_factory=set)
+    brand: set = field(default_factory=set)
     direct: set = field(default_factory=set)
     by_type: dict = field(default_factory=lambda: defaultdict(set))
     pain: set = field(default_factory=set)
@@ -140,6 +141,9 @@ def build_themes(session: Session, *, target_model: str, include_examples: bool 
             if scope == "competitor":
                 a.competitor.add(parent)
                 continue
+            if scope == "brand_or_unresolved":
+                a.brand.add(parent)  # e.g. My BMW app reviews: shown as brand-wide context, not G60 demand
+                continue
             a.parents.add(parent)
             if target_model in (record.subject_ids or []):
                 a.direct.add(parent)
@@ -158,7 +162,7 @@ def build_themes(session: Session, *, target_model: str, include_examples: bool 
     created = 0
     min_cohort = ext.get("min_cohort_size_for_share", 0)
     for (bucket, feature_key), a in acc.items():
-        if not a.parents and not a.pending and not a.competitor:
+        if not a.parents and not a.pending and not a.competitor and not a.brand:
             continue
         cohorts = []
         for key, parents in a.cohort_parents.items():
@@ -178,6 +182,7 @@ def build_themes(session: Session, *, target_model: str, include_examples: bool 
             mention_review_count=len(a.parents), direct_review_count=len(a.direct),
             pending_claim_review_count=len(a.pending - a.parents), request_review_count=len(requests),
             competitor_review_count=len(a.competitor), competitor_record_ids=sorted(a.competitor)[:500],
+            brand_review_count=len(a.brand), brand_record_ids=sorted(a.brand)[:500],
             pain_review_count=len(a.pain), praise_review_count=len(a.by_type.get("praise", set())),
             counts_by_claim_type={k: len(v) for k, v in sorted(a.by_type.items())},
             channels=sorted(a.channels), cohorts=cohorts, max_cohort_share=max_share,

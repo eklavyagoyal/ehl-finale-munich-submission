@@ -162,6 +162,9 @@ class Theme(Base):
     # Reviews about competitor models: competitive context, never counted as target-model demand.
     competitor_review_count: Mapped[int] = mapped_column(Integer, default=0)
     competitor_record_ids: Mapped[list[str]] = mapped_column(ARRAY(Text), default=list)
+    # Brand-wide or unresolved feedback (e.g. My BMW app reviews): context, never target-model demand.
+    brand_review_count: Mapped[int] = mapped_column(Integer, default=0)
+    brand_record_ids: Mapped[list[str]] = mapped_column(ARRAY(Text), default=list)
     request_review_count: Mapped[int] = mapped_column(Integer)
     pain_review_count: Mapped[int] = mapped_column(Integer)
     praise_review_count: Mapped[int] = mapped_column(Integer)

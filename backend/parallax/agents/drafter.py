@@ -69,6 +69,7 @@ def _theme_payload(theme: Theme, quotes: list[dict], findings: list | None = Non
         "direct_target_model_reviews": theme.direct_review_count, "claim_types": theme.counts_by_claim_type,
         "channels": theme.channels, "max_within_cohort_share": round(theme.max_cohort_share, 4),
         "competitor_reviews_same_feature": theme.competitor_review_count,
+        "brand_wide_reviews_same_feature (not G60-specific, e.g. My BMW app)": theme.brand_review_count,
         "quotes": quotes or "NONE (no evidence cleared for external model use; work from counts and labels only)",
     }
 

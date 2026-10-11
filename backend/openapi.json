@@ -4695,6 +4695,33 @@
       "title": "Workers",
       "description": "Parallel model calls",
       "default": 24
+     },
+     "record_ids": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Record Ids",
+      "description": "Label exactly these records"
+     },
+     "retry_run_id": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Retry Run Id",
+      "description": "Retry the batches of this earlier labeling run that stored no claims"
      }
     },
     "type": "object",

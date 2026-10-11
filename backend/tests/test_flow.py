@@ -37,6 +37,9 @@ def test_themes_count_reviews_once_per_feature(client, drafted):
     carplay = next(t for t in themes if t["feature_key"] == "apple_carplay")
     assert carplay["mention_review_count"] == 3 and carplay["direct_review_count"] == 3
     assert carplay["pain_review_count"] == 1 and carplay["request_review_count"] == 2
+    pooled = client.get("/api/themes").json()["items"]
+    climate = next(t for t in pooled if t["feature_key"] == "remote_climate_scheduling")
+    assert climate["mention_review_count"] == 0 and climate["brand_review_count"] == 1  # app review: brand-wide only
 
 
 def test_requirement_has_the_eight_fields_and_gates(client, drafted):

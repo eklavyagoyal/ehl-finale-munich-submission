@@ -276,7 +276,8 @@ def list_themes(market: str | None = Query(None, description="US, EU, CN, RoW, o
     if area:
         query = query.where(Theme.area == area)
     items = session.scalars(query.order_by(Theme.demand_score.desc(), Theme.mention_review_count.desc()).limit(limit)).all()
-    return {"snapshot_id": str(snap), "items": [row(t, exclude={"record_ids"}) | {"record_count": len(t.record_ids)} for t in items]}
+    return {"snapshot_id": str(snap), "items": [row(t, exclude={"record_ids", "competitor_record_ids", "brand_record_ids"})
+                                                | {"record_count": len(t.record_ids)} for t in items]}
 
 
 @router.get("/themes/{theme_id}")
