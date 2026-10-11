@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DataOverview, TriageOverview } from "@/components/data-overview";
+import { AboutBar, TriageLine, WhereItComesFrom } from "@/components/data-overview";
 import { useCoverage, useMeta, usePipeline, useRecords, useSources, useTriageSummary, useVehicles } from "@/lib/api/hooks";
 import type { Coverage, CoverageScope, Source, SourcesStage } from "@/lib/api/types";
 import { fmtCount, fmtDateTime, humanize } from "@/lib/format";
@@ -143,11 +143,12 @@ function Overview() {
 
   return (
     <div className="flex flex-col gap-12">
-      {/* What came in, across everything: streams, what it is about, triage. Only on the unscoped page. */}
+      {/* What came in, across everything, as a picture. Only on the unscoped page. */}
       {!vehicle && (
         <section className="flex flex-col gap-6">
-          <DataOverview coverage={data} active={vehicles?.active} />
-          {triage.data && <TriageOverview triage={triage.data} />}
+          <WhereItComesFrom coverage={data} />
+          <AboutBar coverage={data} code={(vehicles?.active ?? "bmw:G60").split(":").pop() ?? "G60"} />
+          {triage.data && <TriageLine triage={triage.data} />}
         </section>
       )}
       <section className="flex flex-col gap-2">
@@ -166,11 +167,23 @@ function Overview() {
         </EmptyState>
       ) : (
         <>
-          <MarketMatrix coverage={data} />
+          {vehicle ? <MarketMatrix coverage={data} /> : <ShowTable coverage={data} />}
           {vehicle && <OutsideScope coverage={data} code={(data.vehicle ?? "bmw:G60").split(":").pop() ?? "G60"} />}
         </>
       )}
     </div>
+  );
+}
+
+// The channel × market table, collapsed behind a quiet toggle on the unscoped page.
+function ShowTable({ coverage }: { coverage: Coverage }) {
+  const [open, setOpen] = useState(false);
+  return open ? (
+    <MarketMatrix coverage={coverage} />
+  ) : (
+    <button type="button" onClick={() => setOpen(true)} className="self-start text-xs text-muted-foreground hover:text-foreground">
+      Show table
+    </button>
   );
 }
 
