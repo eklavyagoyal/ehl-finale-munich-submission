@@ -126,6 +126,37 @@ R4. **The decision list shows how far each requirement got.**
 
 R5. Evidence and the Expert pipeline stay as they are; Luis wants to discuss them.
 
+## Round four (Luis, 2026-10-11)
+
+V1. **No second Sources page per vehicle.**
+
+- Remove G60 → Sources. The G60 pipeline becomes Processing · Signals · Expert pipeline · Decision.
+- The Sources card on the G60 start page links to `/sources?scope=target`. `stages[0]` stays in the API.
+- "Connect a source" appears only under Data → Sources.
+
+V2. **Overview = decisions overview** (`GET /api/overview/decisions`).
+
+- Remove the vehicle cards and the intro text.
+- Show:
+  - one row per vehicle: signals · requirements · councils run · AI suggests · decisions as change coming /
+    declined / open · last activity. G60 is active; the others are greyed out as "coming".
+  - **Needs your decision**: `needs_decision[]` with AI suggestion and score range, each linking to the
+    requirement.
+  - **Recent decisions** and the agreement with the AI.
+- The data numbers (streams, triage, spot check) move to the top of Data → Sources.
+
+V3. **Signals has only one action.** "Rebuild signals" and "Condense findings" move to the Processing page as
+"Update". Only "Draft requirements (n)" stays on Signals, shown when something is selected.
+
+V4. **Expert pipeline = the flow view.**
+
+- Reuse the existing Flow view from the Simulation tab (agent avatars, lines, click for details) as the main view.
+  Do **not** design a new one; Luis' main complaint is that the layout keeps changing.
+- Requirement chips go at the top, each showing `signal_label` plus a short title, so the requirements are
+  distinguishable. Status sits next to each chip.
+- Run / waiting stays as it is.
+- The old two-part list goes away, or moves below the flow, collapsed.
+
 ## Part B: decided
 
 - B1 (vehicle in the URL) is part of A2.
