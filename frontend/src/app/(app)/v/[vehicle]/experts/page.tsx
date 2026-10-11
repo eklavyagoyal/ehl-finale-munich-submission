@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useMemo, useState } from "react";
@@ -7,6 +8,7 @@ import { toast } from "sonner";
 
 import { PageHeader } from "@/components/page-header";
 import { type Lane, LaneDetail } from "@/components/requirement/lane-detail";
+import { FlowView } from "@/components/requirement/flow-view";
 import { buildLanes, LanesView, Legend, ownersById } from "@/components/requirement/simulation-tab";
 import { EmptyState, ErrorState, LoadingRows } from "@/components/states";
 import { ToneBadge } from "@/components/tone-badge";
@@ -221,18 +223,65 @@ function RunView({ runId }: { runId: string }) {
       </div>
       {r.error && <p className="text-sm text-red-700 dark:text-red-300">{r.error}</p>}
 
-      {calls.error && <ErrorState error={calls.error} />}
-      {calls.data && <LanesView model={model} requirementId="" linked={NO_LINKS} decisions={[]} live={live} empty={calls.data.length === 0} />}
+      <RequirementChips ids={r.requirement_ids} requirements={titles} />
 
-      {live && <p className="text-[13px] text-muted-foreground">Results per requirement appear when the run has finished.</p>}
-      {results.error && <ErrorState error={results.error} />}
-      {results.data && (
-        <div className="flex flex-col">
-          {r.requirement_ids.map((id) => (
-            <RequirementResult key={id} id={id} runId={runId} requirement={titles.get(id)} outputs={results.data!.requirements[id]} calls={calls.data ?? []} />
-          ))}
-        </div>
+      {/* The same flow as on a requirement's Simulation tab: avatars, straight lines, click for details. */}
+      {calls.error && <ErrorState error={calls.error} />}
+      {calls.data && (
+        <FlowView
+          lanes={model.groups.flatMap((g) => g.lanes)}
+          calls={calls.data}
+          decisions={[]}
+          title={r.requirement_ids.map((id) => titles.get(id)?.signal_label ?? id).join(" · ")}
+          live={live}
+          requirementId=""
+          linked={NO_LINKS}
+        />
       )}
+
+      <details className="group">
+        <summary className="flex cursor-pointer list-none items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground">
+          <ChevronDown className="size-3.5 transition-transform group-open:rotate-180" aria-hidden />
+          Details: every call per agent and every answer per requirement
+        </summary>
+        <div className="mt-4 flex flex-col gap-8">
+          {calls.data && <LanesView model={model} requirementId="" linked={NO_LINKS} decisions={[]} live={live} empty={calls.data.length === 0} />}
+          {live && <p className="text-[13px] text-muted-foreground">Results per requirement appear when the run has finished.</p>}
+          {results.error && <ErrorState error={results.error} />}
+          {results.data && (
+            <div className="flex flex-col">
+              {r.requirement_ids.map((id) => (
+                <RequirementResult key={id} id={id} runId={runId} requirement={titles.get(id)} outputs={results.data!.requirements[id]} calls={calls.data ?? []} />
+              ))}
+            </div>
+          )}
+        </div>
+      </details>
+    </div>
+  );
+}
+
+// Which requirements this run covers: the signal they came from plus a short title, so look-alike titles
+// ("…: meet customer expectations") stay distinguishable. Status sits next to each chip.
+function RequirementChips({ ids, requirements }: { ids: string[]; requirements: Map<string, Requirement> }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {ids.map((id) => {
+        const r = requirements.get(id);
+        const short = r ? (r.title.includes(":") ? r.title.split(":").slice(1).join(":").trim() : r.title) : "";
+        return (
+          <Link
+            key={id}
+            href={`${V}/decision/${encodeURIComponent(id)}`}
+            className="flex max-w-sm items-baseline gap-2 rounded-full border px-3 py-1 text-[13px] hover:border-foreground/30"
+            title={r?.title ?? id}
+          >
+            <span className="shrink-0 font-medium">{r?.signal_label ?? (r ? r.title.split(":")[0] : id)}</span>
+            {short && <span className="truncate text-muted-foreground">{short}</span>}
+            {r && <span className="shrink-0 text-xs text-muted-foreground">· {humanize(r.status)}</span>}
+          </Link>
+        );
+      })}
     </div>
   );
 }
