@@ -7,6 +7,8 @@ import { Suspense, useEffect, useState } from "react";
 import { CondenseButton, DraftSelectedDialog, RebuildSignalsButton } from "@/components/generate-dialog";
 import { PageHeader } from "@/components/page-header";
 import { SignalChart } from "@/components/signal-chart";
+import { SignalMap } from "@/components/signal-map";
+import { SignalPanel } from "@/components/signal-panel";
 import { ChannelIcon } from "@/components/provenance";
 import { ErrorState, LoadingRows } from "@/components/states";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
@@ -65,6 +67,7 @@ function SignalsView() {
 
 function SignalBoard({ market }: { market: string | null }) {
   const [selected, setSelected] = useState<Map<string, Signal>>(new Map());
+  const [opened, setOpened] = useState<string | null>(null);
   const { data: requirements } = useRequirements();
   const mixed = useSignals(market, "mixed", 100);
   const toggle = (s: Signal) =>
@@ -79,9 +82,23 @@ function SignalBoard({ market }: { market: string | null }) {
 
   return (
     <div className="mt-4 flex max-w-6xl flex-col gap-6">
-      <div className="flex flex-wrap items-start justify-between gap-6">
+      <SignalMap market={market} onOpen={setOpened} />
+      <SignalPanel featureKey={opened} market={market} onClose={() => setOpened(null)} />
+
+      <div className="flex flex-wrap items-start justify-between gap-6 border-t pt-6">
         <div className="flex max-w-xl flex-col gap-3 text-xs text-muted-foreground">
-          {mixed.data?.basis && <span>{mixed.data.basis}</span>}
+          {mixed.data?.basis && (
+            <HoverCard openDelay={100}>
+              <HoverCardTrigger asChild>
+                <button type="button" className="self-start underline decoration-dotted underline-offset-4">
+                  How these are counted
+                </button>
+              </HoverCardTrigger>
+              <HoverCardContent align="start" className="w-80 text-xs">
+                {mixed.data.basis}
+              </HoverCardContent>
+            </HoverCard>
+          )}
           <span className="flex items-center gap-3">
             {MIX.map((m) => (
               <span key={m.key} className="flex items-center gap-1">

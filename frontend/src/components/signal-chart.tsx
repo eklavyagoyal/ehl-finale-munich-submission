@@ -3,48 +3,29 @@
 import Link from "next/link";
 
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import { useCouncils, useRequirements, useSignals } from "@/lib/api/hooks";
-import type { Council, Requirement } from "@/lib/api/types";
+import { useBudgets } from "@/lib/api/hooks";
 import { fmtCount } from "@/lib/format";
 
 const W = 360;
 const H = 210;
 const PAD = { left: 34, right: 12, top: 12, bottom: 30 };
 
-type Point = { requirement: Requirement; label: string; complaints: number; budget: number; owners: number; runId: string | null };
-
-// Mean budget of the owners that count for this view: one market, or every owner for "All".
-function budgetOf(council: Council, market: string | null): { budget: number; owners: number } | null {
-  const markets = Object.entries(council.customers?.by_market ?? {}).filter(([m]) => !market || m === market);
-  let points = 0;
-  let owners = 0;
-  for (const [, m] of markets) {
-    const b = m.summary.mean_budget_points_of_100;
-    if (b == null) continue;
-    points += b * m.summary.personas;
-    owners += m.summary.personas;
-  }
-  return owners ? { budget: points / owners, owners } : null;
-}
+type Point = { id: string; label: string; complaints: number; budget: number; runId: string | null };
 
 // Frequency vs importance: how often customers complain (real reviews) against how much budget the
-// simulated owners would spend on it. Only requirements that went through the expert pipeline have a y value.
+// simulated owners would spend on it. One /budgets call; only simulated requirements have a y value.
 export function SignalChart({ market }: { market: string | null }) {
-  const { data: requirements } = useRequirements();
-  const signals = useSignals(market, "all", 100);
-  // In a market view a requirement belongs to that market; in "All" every simulated requirement counts.
-  const simulated = (requirements ?? []).filter((r) => r.last_run_id && r.feature_key && (!market || r.market === market));
-  const councils = useCouncils(simulated.map((r) => r.id));
-  const complaintsBy = new Map((signals.data?.items ?? []).map((s) => [s.feature_key, s]));
-
-  const points: Point[] = [];
-  for (const r of simulated) {
-    const council = councils.data?.byId.get(r.id);
-    const signal = complaintsBy.get(r.feature_key!);
-    const b = council && budgetOf(council, market);
-    if (!signal || !b) continue;
-    points.push({ requirement: r, label: signal.label, complaints: signal.pain, budget: b.budget, owners: b.owners, runId: council!.run_id });
-  }
+  const budgets = useBudgets(market);
+  const items = budgets.data?.items ?? [];
+  const points: Point[] = items
+    .map((b) => {
+      const budget = market ? (b.budget_by_market?.[market] ?? b.mean_budget_points_of_100) : b.mean_budget_points_of_100;
+      return b.has_budget && budget != null
+        ? { id: b.requirement_id, label: b.title.split(":")[0], complaints: b.complaints, budget, runId: b.run_id }
+        : null;
+    })
+    .filter((p): p is Point => p !== null);
+  const withoutBudget = items.length - points.length;
   const runs = new Set(points.map((p) => p.runId));
   const maxX = Math.max(5, ...points.map((p) => p.complaints)) * 1.1;
   const maxY = Math.max(40, ...points.map((p) => p.budget)) * 1.1;
@@ -82,10 +63,10 @@ export function SignalChart({ market }: { market: string | null }) {
           </g>
         </svg>
         {points.map((p) => (
-          <HoverCard key={p.requirement.id} openDelay={80} closeDelay={60}>
+          <HoverCard key={p.id} openDelay={80} closeDelay={60}>
             <HoverCardTrigger asChild>
               <Link
-                href={`/requirements/${encodeURIComponent(p.requirement.id)}/councils`}
+                href={`/requirements/${encodeURIComponent(p.id)}/councils`}
                 className="absolute flex -translate-x-1/2 -translate-y-1/2 items-center gap-1"
                 style={{ left: x(p.complaints), top: y(p.budget) }}
               >
@@ -95,20 +76,20 @@ export function SignalChart({ market }: { market: string | null }) {
             </HoverCardTrigger>
             <HoverCardContent className="w-64 text-xs">
               <p className="font-medium">{p.label}</p>
-              <p className="text-muted-foreground">{p.requirement.id}</p>
+              <p className="text-muted-foreground">{p.id}</p>
               <p className="mt-1.5">
-                {fmtCount(p.complaints)} complaint reviews · {p.budget.toFixed(0)} of 100 budget points ({p.owners} owners)
+                {fmtCount(p.complaints)} complaint reviews · {p.budget.toFixed(0)} of 100 budget points
               </p>
             </HoverCardContent>
           </HoverCard>
         ))}
         {points.length === 0 && (
           <p className="absolute inset-x-10 top-1/2 -translate-y-1/2 text-center text-xs text-muted-foreground">
-            {councils.error || signals.error
-              ? `Could not load the councils: ${(councils.error ?? signals.error) instanceof Error ? (councils.error ?? signals.error).message : "request failed"}`
-              : councils.isLoading || signals.isLoading
+            {budgets.error
+              ? `Could not load the budgets: ${budgets.error instanceof Error ? budgets.error.message : "request failed"}`
+              : budgets.isLoading
                 ? "Loading…"
-                : simulated.length
+                : items.length
                   ? "The simulated requirements have no budget points from owners yet."
                   : "Run the expert pipeline on requirements of this market to see the owners' budget here."}
           </p>
@@ -118,7 +99,7 @@ export function SignalChart({ market }: { market: string | null }) {
         Budget: each owner splits 100 points across the proposals of one run and “keep the price down”
         {runs.size > 1 ? `; these points come from ${runs.size} runs and compare only within a run` : ""}.
         {!market && " All markets: every owner of the requirement counts."}
-        {councils.data?.failed ? ` ${councils.data.failed} council${councils.data.failed === 1 ? "" : "s"} could not be loaded.` : ""}
+        {withoutBudget > 0 ? ` ${withoutBudget} simulated without budget points.` : ""}
       </p>
     </figure>
   );
