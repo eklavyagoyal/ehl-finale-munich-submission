@@ -82,6 +82,17 @@ def _user(batch: list[Record]) -> str:
     return "\n".join(lines)
 
 
+def _clean(value):
+    """Postgres text/JSONB cannot store NUL characters, which some scraped texts contain."""
+    if isinstance(value, str):
+        return value.replace("\x00", "")
+    if isinstance(value, list):
+        return [_clean(v) for v in value]
+    if isinstance(value, dict):
+        return {k: _clean(v) for k, v in value.items()}
+    return value
+
+
 def _claim_rows(batch: list[Record], out: LabelBatch, catalog: dict[str, Feature], model: str, run_id: uuid.UUID) -> tuple[list[dict], dict]:
     by_id = {r.record_id: r for r in batch}
     rows, stats = [], Counter()
@@ -105,13 +116,13 @@ def _claim_rows(batch: list[Record], out: LabelBatch, catalog: dict[str, Feature
                 continue
             seen.add(dedup)
             digest = hashlib.sha256(f"{record.record_id}|{key}|{claim.claim_type}|{quote}".encode()).hexdigest()[:20]
-            rows.append({
+            rows.append(_clean({
                 "claim_id": f"llm-{digest}", "record_id": record.record_id, "feature_key": key,
                 "feature_label": catalog[key].label if key else claim.feature_label, "claim_type": claim.claim_type,
                 "summary": claim.summary, "quotes": [quote], "competitors_mentioned": claim.competitors_mentioned,
                 "producer": {"method": "llm", "name": model, "version": PROMPT_VERSION, "run_id": str(run_id)},
                 "review_status": "pending", "source_fields": {"labeler": "parallax"}, "derived": False,
-            })
+            }))
             stats["claims"] += 1
         stats["records_labeled"] += 1
         if not item.claims:
@@ -143,6 +154,21 @@ def candidates(session: Session, scope: str, limit: int | None, min_chars: int =
     allowed = set(check_records(session, ids).allowed)
     ids = [rid for rid in ids if rid in allowed]
     return ids[:limit] if limit else ids
+
+
+def failed_batches_of(session: Session, run_id: uuid.UUID) -> list[str]:
+    """Record ids of labeling batches from an earlier run that produced no stored claim at all
+    (a batch of ~40 texts without a single claim means its insert failed)."""
+    from parallax.models import LLMCall
+
+    calls = session.scalars(select(LLMCall).where(LLMCall.run_id == run_id, LLMCall.purpose == "labeling")).all()
+    labeled = {rid for rid, in session.execute(select(Claim.record_id).where(Claim.derived.is_(False)))}
+    retry: list[str] = []
+    for call in calls:
+        ids = call.input_record_ids or []
+        if len(ids) >= 10 and not any(rid in labeled for rid in ids):
+            retry.extend(ids)
+    return retry
 
 
 def _progress(run_id: uuid.UUID, **values) -> None:
@@ -194,22 +220,25 @@ def run_labeling(run_id: uuid.UUID, llm: LLMClient, record_ids: list[str], batch
                 session.execute(statement.on_conflict_do_nothing(index_elements=["claim_id"]))
         return rows, stats
 
+    failed_ids: list[str] = []
     with ThreadPoolExecutor(max_workers=workers) as pool:
-        futures = [pool.submit(work, ids) for ids in batches]
+        futures = {pool.submit(work, ids): ids for ids in batches}
         for future in as_completed(futures):
             try:
                 rows, stats = future.result()
                 totals.update(stats)
                 for row in rows:
                     outputs.setdefault(row["record_id"], []).append(row)
-            except Exception as error:  # keep going; failed batches are counted
+            except Exception as error:  # keep going; failed batches are counted and can be retried
                 totals["failed_batches"] += 1
+                failed_ids.extend(futures[future])
                 _progress(run_id, last_error=repr(error)[:300])
             done += 1
             if done % 5 == 0 or done == len(batches):
                 _progress(run_id, stage="labeling", batches_done=done, batches_total=len(batches),
                           **{k: v for k, v in totals.items() if isinstance(v, int)})
-    return {"records": len(record_ids), "batches": len(batches), **dict(totals), "outputs": outputs}
+    return {"records": len(record_ids), "batches": len(batches), **dict(totals), "failed_record_ids": failed_ids,
+            "outputs": outputs}
 
 
 def calibrate(run_id: uuid.UUID, llm: LLMClient, n: int = 300, workers: int = 16) -> dict:
@@ -283,7 +312,10 @@ def execute(run_id: uuid.UUID) -> None:
             summary = calibrate(run_id, llm, int(options.get("n", 300)), workers)
         else:
             with session_scope() as session:
-                ids = candidates(session, options.get("scope", "social"), options.get("limit"))
+                if options.get("retry_run_id"):
+                    ids = failed_batches_of(session, uuid.UUID(options["retry_run_id"]))
+                else:
+                    ids = options.get("record_ids") or candidates(session, options.get("scope", "social"), options.get("limit"))
             _progress(run_id, stage="labeling", candidates=len(ids))
             summary = run_labeling(run_id, llm, ids, workers=workers)
             summary.pop("outputs", None)

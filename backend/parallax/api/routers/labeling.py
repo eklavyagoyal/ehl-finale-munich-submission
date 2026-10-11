@@ -31,6 +31,8 @@ class LabelIn(BaseModel):
     scope: Literal["social", "competitors", "bmw_unclassified", "all"] = "social"
     limit: int | None = Field(None, ge=1, description="Optional cap on records")
     workers: int = Field(24, ge=1, le=64, description="Parallel model calls")
+    record_ids: list[str] | None = Field(None, description="Label exactly these records")
+    retry_run_id: str | None = Field(None, description="Retry the batches of this earlier labeling run that stored no claims")
 
 
 @router.post("/run", summary="Label unlabeled feedback into claims (pending review); poll /api/simulations/{id}")
