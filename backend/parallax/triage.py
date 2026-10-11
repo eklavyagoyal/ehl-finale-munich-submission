@@ -33,7 +33,7 @@ from parallax.llm.gate import check_records
 from parallax.llm.prompts import SAFETY
 from parallax.models import Entity, Record, RecordTriage, SimRun, Source
 
-PROMPT_VERSION = "triage-v1"
+PROMPT_VERSION = "triage-v2"
 BATCH = 40
 MIN_CHARS = 15
 ONLINE_STREAMS = ("social", "competitors")
@@ -63,13 +63,26 @@ class TriageBatch(BaseModel):
 SYSTEM = """\
 You triage online reviews and comments for BMW product planning, the way BMW's own feedback export is
 organised per row (vehicle, engine type, author, relevance). The target vehicle is {target}.
-vehicle: target = the text is about the target vehicle ({target_names}); older_generation = an earlier
-generation of the same model; other_bmw = another BMW model; competitor = a non-BMW car; unclear = cannot tell
-(e.g. a generic comment under a video about the target vehicle).
-relevant = false for spam, jokes, emojis, greetings, app-login or account problems unrelated to the car,
-dealer small talk, politics, and anything without content about the car.
-Judge only from the text and its collection context. Do not guess ownership: "I love mine" = owner,
-"I want one" = not_owner, no hint = unclear.
+
+vehicle = the car the text evaluates or describes (not the car the author happens to own):
+  target = {target_names}. An owner of an older car judging the new one is still about the target.
+  older_generation = only about an earlier generation of the same model; other_bmw = another BMW model;
+  competitor = a non-BMW car; unclear = cannot tell (e.g. a generic comment, or an app review without a car).
+relevant = true if the text gives any opinion, experience, wish or problem about an aspect of the car or its
+  software (looks and design, interior, driving, comfort, range, infotainment, app features, quality, price
+  for value), even when it is short or blunt. false only when no aspect is named: greetings, congratulations,
+  emojis, bare "great car" / "sehr zufrieden", spam, politics, jokes, dealer small talk, off-topic.
+author = owner only with an explicit hint ("my car", "I drive", "since I got mine"); not_owner only with an
+  explicit hint ("I want one", "after the test drive", "as a reviewer"); otherwise unclear.
+
+Examples (text -> vehicle, author, relevant):
+- "it looks so god awful, the previous one was the best looking 5 series" -> target, unclear, true (design)
+- "As a G30 owner I wanted one of these, but after the test drive the interior felt cheap" -> target, not_owner, true
+- "sehr zufrieden!" -> unclear, unclear, false (no aspect)
+- "Génial ! Félicitations !" -> unclear, unclear, false
+- "The amps control for my X5 50e is what I asked for" -> other_bmw, owner, true
+- "Window-open notification in the app would be great" -> unclear, unclear, true (app feature)
+Judge only from the text and its collection context.
 {safety}"""
 
 TARGET_NAMES = {"bmw:G60": "BMW 5 Series sedan from 2023/2024 on, G60, incl. i5, 520i/530i/540i, 530e/550e, M60"}
