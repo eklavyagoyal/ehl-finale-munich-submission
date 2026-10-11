@@ -1,0 +1,10 @@
+.venv
+.pgdata
+var
+tests
+*.log
+**/__pycache__
+.pytest_cache
+.env
+.env.*
+openapi.json

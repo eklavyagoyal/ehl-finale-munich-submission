@@ -1,0 +1,78 @@
+{
+  "id": "persona:eu-gb-bev-company-car",
+  "kind": "market_persona",
+  "display_name": "UK i5 company-car driver",
+  "market": "EU",
+  "country": "GB",
+  "vehicle": "bmw:G60",
+  "vehicle_label": "BMW i5 eDrive40",
+  "powertrain": "BEV",
+  "segment": "BEV company car chosen for benefit-in-kind tax",
+  "details_status": "skeleton",
+  "persona": {
+    "name": "Sophie",
+    "age": 35,
+    "nationality": "British",
+    "residence": "Manchester, United Kingdom",
+    "occupation": {
+      "title": "Management consultant",
+      "description": "Travels to client sites across northern England."
+    },
+    "style": "TODO",
+    "personality": {
+      "traits": []
+    },
+    "preferences": {
+      "likes": [],
+      "dislikes": []
+    },
+    "behaviors": {
+      "routines": [
+        "Relies on public rapid chargers on client days",
+        "Uses the My BMW app to precondition the car"
+      ]
+    },
+    "other_facts": [
+      "Company car: BMW i5 eDrive40 (G60 BEV)"
+    ]
+  },
+  "environment": {
+    "daily_use": "Client travel",
+    "charging": "No home charger; public charging",
+    "climate": "Wet, mild"
+  },
+  "grounding": {
+    "description": "Real owner voices from this segment, injected as 'what owners like you report'. Only gate-cleared records are used.",
+    "record_filter": {
+      "market_bucket": "EU",
+      "subject_ids_any": [
+        "bmw:G60",
+        "bmw:G60_G68"
+      ],
+      "channels": [
+        "bmw_feedback",
+        "app_store",
+        "google_play",
+        "youtube",
+        "forum",
+        "editorial_review"
+      ],
+      "powertrain_label_values": [
+        "BEVE",
+        "BEV"
+      ]
+    },
+    "study_cohort": null
+  },
+  "validation": {
+    "path": "eu_study",
+    "reference": {
+      "channel": "bmw_customer_study",
+      "subject_id": "bmw:G60",
+      "markets": [
+        "EU"
+      ]
+    },
+    "note": "Grounded on verbatims, validated against the CN_EU_2025 study, EU G60 column (never seen by the persona)."
+  }
+}

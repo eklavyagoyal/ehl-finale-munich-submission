@@ -1,0 +1,324 @@
+"""End-to-end through the API in mock mode: ingest -> themes -> seed -> draft -> simulate -> PM decisions -> audit."""
+
+import time
+
+import pytest
+from sqlalchemy import text
+
+from tests.conftest import FIXTURES
+
+
+def wait_for(client, run_id, timeout=120):
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        run = client.get(f"/api/simulations/{run_id}").json()["run"]
+        if run["status"] not in ("queued", "running"):
+            return run
+        time.sleep(0.5)
+    raise AssertionError("run did not finish")
+
+
+@pytest.fixture(scope="module")
+def drafted(client):
+    response = client.post("/api/ingest", json={"kind": "batches", "path": str(FIXTURES / "batches")})
+    assert response.status_code == 200, response.text
+    counts = response.json()["counts"]
+    assert counts["records"] == 12 and counts["derived_claims"] >= 4
+    built = client.post("/api/themes/build", json={"include_examples": True, "include_pending_claims": True}).json()
+    assert built["themes"] > 0
+    assert client.post("/api/agents/seed").json()["created"] > 0
+    draft = client.post("/api/requirements/draft", json={"market": "US", "limit": 3}).json()
+    assert len(draft["created"]) >= 2, draft
+    return [item["id"] for item in draft["created"]]
+
+
+def test_themes_count_reviews_once_per_feature(client, drafted):
+    themes = client.get("/api/themes", params={"market": "US"}).json()["items"]
+    carplay = next(t for t in themes if t["feature_key"] == "apple_carplay")
+    assert carplay["mention_review_count"] == 3 and carplay["direct_review_count"] == 3
+    assert carplay["pain_review_count"] == 1 and carplay["request_review_count"] == 2
+    pooled = client.get("/api/themes").json()["items"]
+    climate = next(t for t in pooled if t["feature_key"] == "remote_climate_scheduling")
+    assert climate["mention_review_count"] == 0 and climate["brand_review_count"] == 1  # app review: brand-wide only
+
+
+def test_requirement_has_the_eight_fields_and_gates(client, drafted):
+    detail = client.get(f"/api/requirements/{drafted[0]}").json()
+    req = detail["requirement"]
+    for field in ("id", "description", "score", "prioritization_rationale", "evidence_level", "assumptions", "uncertainties", "status"):
+        assert field in req
+    assert any(e["relation"] == "supporting" and e["quote_verified"] for e in detail["evidence"])
+    assert detail["gates"]["evidence_traceability"]["value"] == "pass"
+    assert detail["gates"]["model_market_applicability"]["value"] == "pass"
+    assert req["kano_class"] in {"must_be", "performance", "attractive", "indifferent", "reverse", "unclear"}
+
+
+def test_simulation_decision_challenge_and_audit(client, drafted):
+    run = client.post("/api/simulations", json={"requirement_ids": drafted}).json()
+    finished = wait_for(client, run["id"])
+    assert finished["status"] == "completed", finished
+    results = client.get(f"/api/simulations/{run['id']}/results").json()["requirements"]
+    first = results[drafted[0]]
+    # Owners answer for their own market only: a US case is answered by the five US owners.
+    assert {r["agent_id"].split(":")[1][:2] for r in first["persona_responses"]} == {"us"}
+    assert len(first["persona_responses"]) == 5
+    # Committee for a US case: PM, design, engineering, quality, finance and only the US sales lead.
+    departments = {m["agent_id"] for m in first["department_memos"]}
+    assert departments == {"dept:product-management", "dept:design", "dept:engineering", "dept:quality",
+                           "dept:finance", "dept:sales-us"}
+    assert first["recommendation"] and len(first["votes"]) == 1
+    assert first["recommendation"][0]["challenge"]["counter_position"]
+    calls = client.get(f"/api/simulations/{run['id']}/llm-calls").json()
+    opened = client.get(f"/api/simulations/llm-calls/{calls[0]['id']}").json()
+    assert opened["prompt"]["user"] and opened["response"] is not None and "summary" in opened
+    talk = client.get(f"/api/simulations/{run['id']}/conversation").json()
+    assert talk["question_to_owners"] and set(talk["owners_by_market"]) == {"US"}
+    owner = talk["owners_by_market"]["US"][0]
+    assert owner["name"] and owner["answers"][0]["reaction"] and owner["answers"][0]["requirement_title"]
+    assert talk["requirements"][drafted[0]]["challenger"] and len(talk["requirements"][drafted[0]]["judges"]) == 1
+    board = client.get(f"/api/requirements/{drafted[0]}/council").json()
+    assert board["status"] == "simulated" and board["customers"]["by_market"]["US"]["summary"]["personas"] == 5
+    assert all(d["verdict"] in ("for", "against", "conditional") for d in board["company"]["departments"])
+    assert board["tensions"] and board["challenger"] and board["question_to_owners"]
+    persona = board["customers"]["by_market"]["US"]["personas"][0]
+    assert persona["verdict"] and persona["budget_points"] is not None
+    chart = client.get("/api/budgets", params={"market": "US"}).json()["items"]
+    assert any(i["requirement_id"] == drafted[0] and i["has_budget"] for i in chart)
+    path = client.get(f"/api/requirements/{drafted[0]}/trace").json()
+    keys = [step["key"] for step in path["steps"]]
+    assert keys == ["evidence", "customers", "company", "research", "scores", "synthesis", "challenger", "judge", "decision"]
+    assert path["steps"][7]["output"]["drivers"] and all(step["basis"] for step in path["steps"])
+    assert all(step["headline"] for step in path["steps"]) and "US owners" in path["steps"][1]["headline"]
+    detail = client.get(f"/api/requirements/{drafted[0]}").json()
+    assert detail["requirement"]["status"] == "in_review"
+    assert detail["requirement"]["score_low"] <= detail["requirement"]["score"] <= detail["requirement"]["score_high"]
+
+    # Only humans decide.
+    assert client.post(f"/api/requirements/{drafted[0]}/decision", headers={"X-Actor": "agent:synthesizer"},
+                       json={"action": "approve", "rationale": "x"}).status_code == 403
+    approved = client.post(f"/api/requirements/{drafted[0]}/decision", json={"action": "approve", "rationale": "Clear pain point."})
+    assert approved.status_code == 200
+    assert approved.json()["requirement"]["status"] == "approved"
+    assert approved.json()["decision"]["ai_recommendation"] is not None
+
+    challenged = client.post(f"/api/requirements/{drafted[1]}/decision",
+                             json={"action": "challenge", "rationale": "Unclear for EU", "challenge_question": "Would EU owners care?"})
+    followup = challenged.json()["followup_run_id"]
+    assert followup and wait_for(client, followup)["status"] == "completed"
+
+    # Edits create versions with rationale.
+    edit = client.patch(f"/api/requirements/{drafted[2]}", json={"changes": {"title": "Sharper title"}, "rationale": "clarity"})
+    assert edit.status_code == 200
+    versions = client.get(f"/api/requirements/{drafted[2]}/versions").json()
+    assert versions[-1]["snapshot"]["title"] == "Sharper title" and versions[-1]["change_reason"] == "clarity"
+
+    trail = client.get(f"/api/requirements/{drafted[0]}/audit").json()
+    actions = [event["action"] for event in trail]
+    for expected in ("requirement.create", "requirement.score", "recommendation.create", "pm.approve"):
+        assert expected in actions
+    assert {"agent", "human", "system"} & {event["actor_type"] for event in trail}
+    assert client.get("/api/audit", params={"category": "access"}).json()["total"] > 0
+    assert client.get("/api/learning/agreement").json()
+
+
+def test_audit_is_append_only(client, drafted):
+    from parallax.db import get_engine
+
+    with pytest.raises(Exception):
+        with get_engine().begin() as connection:
+            connection.execute(text("UPDATE audit_events SET action = 'tampered'"))
+    with pytest.raises(Exception):
+        with get_engine().begin() as connection:
+            connection.execute(text("DELETE FROM audit_events"))
+
+
+def test_llm_gate_blocks_unreviewed_sources(client, drafted):
+    from parallax.db import session_scope
+    from parallax.llm.gate import check_records
+
+    with session_scope() as session:
+        result = check_records(session, ["example-review-001-v1", "synthetic-g60-us-001-v1"], allow_unreviewed=False)
+    assert result.allowed == ["synthetic-g60-us-001-v1"]
+    assert result.excluded == {"example-review-001-v1": "source_not_accepted"}
+
+
+def test_open_gates_block_approval_and_pm_overrides_stick(client, drafted):
+    created = client.post("/api/requirements", json={
+        "title": "Reliable wireless CarPlay", "description": "Phone projection never drops during a drive.",
+        "market": "US", "feature_key": "apple_carplay", "rationale": "PM idea from the theme list"}).json()
+    rid = created["id"]
+    assert created["gates"]["evidence_traceability"] == "unknown"
+    blocked = client.post(f"/api/requirements/{rid}/decision", json={"action": "approve", "rationale": "looks right"})
+    assert blocked.status_code == 409
+
+    override = client.post(f"/api/requirements/{rid}/gates/evidence_traceability",
+                           json={"value": "pass", "rationale": "Checked the three CarPlay reviews myself."})
+    assert override.json()["evidence_traceability"]["value"] == "pass"
+    edit = client.patch(f"/api/requirements/{rid}", json={"changes": {"prioritization_rationale": "PM: top pain point in US."},
+                                                        "rationale": "own wording"})
+    assert edit.status_code == 200
+
+    challenged = client.post(f"/api/requirements/{rid}/decision",
+                             json={"action": "challenge", "rationale": "Need department view", "challenge_question": "Effort?"})
+    assert wait_for(client, challenged.json()["followup_run_id"])["status"] == "completed"
+    detail = client.get(f"/api/requirements/{rid}").json()
+    assert detail["gates"]["evidence_traceability"]["value"] == "pass"
+    assert detail["gates"]["evidence_traceability"]["owner"] == "pm:test"
+    assert detail["requirement"]["prioritization_rationale"] == "PM: top pain point in US."
+    assert client.post(f"/api/requirements/{rid}/decision", json={"action": "approve", "rationale": "ok now"}).status_code == 200
+
+    trail = client.get(f"/api/requirements/{rid}/audit").json()
+    assert any(e["action"] == "requirement.priority" and e["actor_id"] == "code:rank" for e in trail)
+
+
+def test_records_market_filter_and_coverage_matrix(client, drafted):
+    records = client.get("/api/records", params={"market": "US", "channel": "bmw_feedback", "limit": 1})
+    assert records.status_code == 200 and records.json()["total"] == 8
+    coverage = client.get("/api/coverage").json()
+    assert coverage["scope"] == "target"
+    assert {"stream": "bmw", "channel": "bmw_feedback", "market": "US", "records": 8} in coverage["records_by_channel_market"]
+    assert {s["scope"] for s in coverage["scopes"]} == {"target", "competitor", "other_models", "brand"}
+    everything = client.get("/api/coverage", params={"scope": "all"}).json()
+    assert sum(s["records"] for s in everything["scopes"]) == sum(r["records"] for r in everything["records_by_channel"])
+    eu = client.get("/api/records", params={"bucket": "EU", "scope": "target", "limit": 1}).json()["total"]
+    buckets = [b for b in coverage["records_by_channel_bucket"] if b["bucket"] == "EU"]
+    assert eu <= sum(b["records"] for b in buckets) or not buckets
+
+
+def test_condense_and_vehicles(client, drafted):
+    run = client.post("/api/signals/condense", json={"markets": ["US"], "kinds": ["pain"], "limit": 2}).json()
+    assert wait_for(client, run["run_id"])["status"] == "completed"
+    pains = client.get("/api/signals", params={"market": "US", "kind": "pain"}).json()["items"]
+    assert any(p["condensed"] and p["findings"] and p["findings"][0]["quotes"] for p in pains)
+    vehicles = client.get("/api/vehicles").json()
+    assert vehicles["active"] == "bmw:G60" and any(v["status"] == "active" for v in vehicles["items"])
+
+
+def test_council_validation(client, drafted):
+    run = client.post("/api/agents/council-validation", json={"requirement_ids": drafted}).json()
+    done = wait_for(client, run["id"])
+    assert done["status"] == "completed", done
+    result = done["progress"]["result"]
+    assert result["T2_reliability"]["owner_verdict_agreement"] is not None
+    assert result["T3_discrimination"]["mean_budget_decoys"] is not None
+    assert set(result["T4_alignment"]["mean_budget_by_requirement"]) == set(drafted)
+
+
+def test_labeling_and_calibration(client, drafted):
+    run = client.post("/api/labeling/run", json={"scope": "all", "workers": 4}).json()
+    done = wait_for(client, run["id"])
+    assert done["status"] == "completed", done
+    assert done["progress"]["result"]["claims"] >= 1
+    claims = client.get("/api/claims", params={"review_status": "pending", "derived": False}).json()
+    assert any(c["producer"]["method"] == "llm" for c in claims["items"])
+    cal = wait_for(client, client.post("/api/labeling/calibrate", json={"n": 20, "workers": 4}).json()["id"])
+    assert cal["status"] == "completed" and cal["progress"]["result"]["sample"] >= 1
+
+
+def test_pipeline_and_signals(client, drafted):
+    stages = client.get("/api/pipeline").json()
+    assert [s["key"] for s in stages["stages"]] == ["sources", "processing", "signals", "experts", "decision"]
+    assert stages["next_action"]["label"]
+    pains = client.get("/api/signals", params={"market": "US", "kind": "pain"}).json()["items"]
+    assert pains and all(p["kind"] == "pain" for p in pains)
+    assert pains[0]["sample_quotes"]
+    processing = stages["stages"][1]
+    # Keys the deployed frontend reads must stay (it crashed when they went missing).
+    assert {"feedback_records", "records_with_claims", "records_without_claims", "claims_by_status",
+            "claims_by_producer"} <= set(processing["counts"])
+    assert {"sources", "records", "pending_review", "by_stream"} <= set(stages["stages"][0]["counts"])
+    assert [f["key"] for f in processing["funnel"]] == ["reviews", "tagged", "signals", "findings"]
+    assert all(f["label"] and f["hint"] and f["detail"] for f in processing["funnel"])
+    flow = processing["flow"]
+    keys = {n["key"] for n in flow["nodes"]}
+    assert {"bmw", "online", "bmw_labels", "ai_labeler", "no_topic", "signals", "findings", "requirements",
+            "change_coming", "declined", "open"} <= keys
+    assert all(l["source"] in keys and l["target"] in keys and l["value"] > 0 for l in flow["links"])
+    column = {n["key"]: n["column"] for n in flow["nodes"]}
+    assert column["findings"] < column["requirements"] < column["change_coming"] == column["declined"] == column["open"]
+    into_labels = sum(l["value"] for l in flow["links"] if l["source"] in ("bmw", "online") and l["target"] != "excluded")
+    assert into_labels == processing["counts"]["feedback_records"]
+    sources = stages["stages"][0]
+    assert stages["vehicle"]["code"] == "G60" and isinstance(sources["outside_scope"], list)
+    signal_map = client.get("/api/signals/map", params={"market": "US", "min_reviews": 1}).json()
+    assert signal_map["axes"]["x"]["center_on_threshold"] and "need_share_raw" in signal_map["items"][0]
+    assert signal_map["axes"]["x"]["key"] == "weighted_reviews" and signal_map["items"][0]["weighted_reviews"] > 0
+    weights = client.get("/api/weights").json()
+    assert weights["evidence"]["source"] and weights["owners"]["markets"] and len(weights["criteria"]) == 6
+    overview = client.get("/api/overview/flow").json()
+    assert {"bmw", "target", "brand"} <= {n["key"] for n in overview["nodes"]} and overview["links"]
+    listed = client.get("/api/requirements").json()
+    assert "signal_label" in listed[0]
+    board = client.get("/api/overview/decisions").json()
+    assert board["vehicles"][0]["code"] == "G60" and set(board["vehicles"][0]["decisions"]) == {"change_coming", "declined", "open"}
+    client.post("/api/themes/build", json={"include_examples": True})  # synthetic fixtures are example sources
+    compared = client.get("/api/signals/compare", params={"market": "US"}).json()
+    assert {"before", "after", "summary", "changes"} <= set(compared) and "top_unchanged" in compared["summary"]
+    assert [step["key"] for step in listed[0]["progress"]] == ["drafted", "councils", "recommendation", "decision"]
+    assert signal_map["axes"]["x"]["label"] and [q["key"] for q in signal_map["quadrants"]] == ["act", "protect", "watch", "background"]
+    assert signal_map["items"] and all(0 <= i["need_share"] <= 1 and i["quadrant"] for i in signal_map["items"])
+    feature = signal_map["items"][0]["feature_key"]
+    opened = client.get(f"/api/signals/{feature}", params={"market": "US"}).json()
+    assert [s["key"] for s in opened["how_sorted"]] == ["collected", "tagged", "counted", "weighted", "classified", "placed", "grouped"]
+    assert all(s["short"] and s["detail"] for s in opened["how_sorted"])
+    assert client.get("/api/signals/no_such_feature", params={"market": "US"}).status_code == 404
+
+
+def test_triage_marks_online_reviews(client, drafted):
+    run = client.post("/api/triage/run", json={"workers": 4}).json()
+    done = wait_for(client, run["id"])
+    assert done["status"] == "completed", done
+    summary = client.get("/api/triage/summary").json()
+    assert summary["validated"] is False and summary["triaged"] >= 1
+    assert set(summary["overall"]["author"]) <= {"owner", "not_owner", "unclear"}
+    sample = client.get("/api/triage/sample", params={"n": 5}).json()["items"]
+    assert sample and all(item["text"] is not None and item["reason"] for item in sample)
+    # Nothing is excluded while the filter is off (default).
+    rebuilt = client.post("/api/themes/build", json={}).json()
+    assert rebuilt["triage_filter"] is False and rebuilt["excluded_by_triage"] == 0
+    processing = client.get("/api/pipeline").json()["stages"][1]
+    assert processing["flow"]["triage"]["triaged"] >= 0 and processing["flow"]["triage"]["filter_enabled"] is False
+
+
+def test_interrupted_runs_are_marked_failed(client, drafted):
+    from parallax.db import session_scope
+    from parallax.models import SimRun
+    from parallax.orchestrator import recover_interrupted_runs
+
+    with session_scope() as session:
+        run = SimRun(kind="simulation", status="running", requirement_ids=[drafted[0]], requested_by="pm:test",
+                     config={}, progress={"stage": "market_and_company_twin"})
+        session.add(run)
+        session.flush()
+        run_id = run.id
+    with session_scope() as session:
+        assert str(run_id) in recover_interrupted_runs(session)
+    done = client.get(f"/api/simulations/{run_id}").json()["run"]
+    assert done["status"] == "interrupted" and "restarted" in done["error"]
+    assert all(r["id"] != str(run_id) for r in client.get("/api/simulations").json())
+    assert any(r["id"] == str(run_id) for r in client.get("/api/simulations", params={"include_failed": True}).json())
+
+
+def test_admin_reset_needs_cli_token_and_keeps_audit(drafted):
+
+    from fastapi.testclient import TestClient
+
+    from parallax.api.app import app
+    from parallax.config import get_settings
+
+    settings = get_settings()
+    settings.api_token, settings.cli_token = "service-token", "cli-token"
+    try:
+        client = TestClient(app)
+        body = {"confirm": "DELETE ALL DATA", "rationale": "test"}
+        assert client.post("/api/admin/reset", json=body).status_code == 401
+        assert client.post("/api/admin/reset", json=body, headers={"Authorization": "Bearer service-token"}).status_code == 403
+        audit_before = client.get("/api/audit", headers={"Authorization": "Bearer cli-token"}).json()["total"]
+        done = client.post("/api/admin/reset", json=body, headers={"Authorization": "Bearer cli-token", "X-Actor": "pm:test"})
+        assert done.status_code == 200 and done.json()["deleted"]["records"] >= 1
+        after = client.get("/api/coverage", headers={"Authorization": "Bearer cli-token"}).json()
+        assert after["records_by_channel"] == []
+        assert client.get("/api/audit", headers={"Authorization": "Bearer cli-token"}).json()["total"] > audit_before
+        assert len(client.get("/api/agents", headers={"Authorization": "Bearer cli-token"}).json()) > 0
+    finally:
+        settings.api_token, settings.cli_token = None, None

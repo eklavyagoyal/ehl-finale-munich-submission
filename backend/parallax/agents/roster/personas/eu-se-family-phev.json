@@ -1,0 +1,77 @@
+{
+  "id": "persona:eu-se-family-phev",
+  "kind": "market_persona",
+  "display_name": "SE family PHEV owner",
+  "market": "EU",
+  "country": "SE",
+  "vehicle": "bmw:G60",
+  "vehicle_label": "BMW 530e",
+  "powertrain": "PHEV",
+  "segment": "Family with winter driving and sustainability focus",
+  "details_status": "skeleton",
+  "persona": {
+    "name": "Anna",
+    "age": 39,
+    "nationality": "Swedish",
+    "residence": "Gothenburg, Sweden",
+    "occupation": {
+      "title": "Civil engineer",
+      "description": "Two children, environmentally conscious household."
+    },
+    "style": "TODO",
+    "personality": {
+      "traits": []
+    },
+    "preferences": {
+      "likes": [],
+      "dislikes": []
+    },
+    "behaviors": {
+      "routines": [
+        "Winter mornings with preheating",
+        "Family holidays with full luggage"
+      ]
+    },
+    "other_facts": [
+      "Owns a BMW 530e (G60 PHEV)"
+    ]
+  },
+  "environment": {
+    "daily_use": "Commute and family trips",
+    "charging": "Home charging",
+    "climate": "Long, dark winters"
+  },
+  "grounding": {
+    "description": "Real owner voices from this segment, injected as 'what owners like you report'. Only gate-cleared records are used.",
+    "record_filter": {
+      "market_bucket": "EU",
+      "subject_ids_any": [
+        "bmw:G60",
+        "bmw:G60_G68"
+      ],
+      "channels": [
+        "bmw_feedback",
+        "app_store",
+        "google_play",
+        "youtube",
+        "forum",
+        "editorial_review"
+      ],
+      "powertrain_label_values": [
+        "PHEV"
+      ]
+    },
+    "study_cohort": null
+  },
+  "validation": {
+    "path": "eu_study",
+    "reference": {
+      "channel": "bmw_customer_study",
+      "subject_id": "bmw:G60",
+      "markets": [
+        "EU"
+      ]
+    },
+    "note": "Grounded on verbatims, validated against the CN_EU_2025 study, EU G60 column (never seen by the persona)."
+  }
+}

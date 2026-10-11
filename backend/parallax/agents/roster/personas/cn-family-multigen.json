@@ -1,0 +1,75 @@
+{
+  "id": "persona:cn-family-multigen",
+  "kind": "market_persona",
+  "display_name": "CN multi-generation family, 525Li",
+  "market": "CN",
+  "country": "CN",
+  "vehicle": "bmw:G68",
+  "vehicle_label": "BMW 525Li (G68)",
+  "powertrain": "ICE",
+  "segment": "Family car for three generations",
+  "details_status": "skeleton",
+  "persona": {
+    "name": "Li Na",
+    "age": 42,
+    "nationality": "Chinese",
+    "residence": "Chengdu, China",
+    "occupation": {
+      "title": "Hospital administrator",
+      "description": "Drives parents and child; values rear comfort and space."
+    },
+    "style": "TODO",
+    "personality": {
+      "traits": []
+    },
+    "preferences": {
+      "likes": [],
+      "dislikes": []
+    },
+    "behaviors": {
+      "routines": [
+        "Weekend trips with parents in the rear seats",
+        "Holiday drives with lots of luggage"
+      ]
+    },
+    "other_facts": [
+      "Owns a BMW 525Li long wheelbase (G68)"
+    ]
+  },
+  "environment": {
+    "daily_use": "School runs and family outings",
+    "household": "Three generations",
+    "climate": "Hot, humid"
+  },
+  "grounding": {
+    "description": "Real owner voices from this segment, injected as 'what owners like you report'. Only gate-cleared records are used.",
+    "record_filter": {
+      "market_bucket": "CN",
+      "subject_ids_any": [
+        "bmw:G60",
+        "bmw:G60_G68",
+        "bmw:G68"
+      ],
+      "channels": [
+        "bmw_feedback",
+        "app_store",
+        "google_play",
+        "youtube",
+        "forum",
+        "editorial_review"
+      ],
+      "powertrain_label_values": []
+    },
+    "study_cohort": {
+      "subject_id": "bmw:G68",
+      "markets": [
+        "CN"
+      ]
+    }
+  },
+  "validation": {
+    "path": "none",
+    "reference": null,
+    "note": "No China feedback exists; grounded on the G68 China study itself, so no independent check is possible. Output is an assumption."
+  }
+}

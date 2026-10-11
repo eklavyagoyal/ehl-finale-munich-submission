@@ -1,0 +1,9 @@
+.venv/
+.pgdata/
+.env
+*.log
+.pytest_cache/
+# TinyTroupe writes an API cache and simulation logs next to the process
+openai_api_cache.json
+tinytroupe_cache/
+var/

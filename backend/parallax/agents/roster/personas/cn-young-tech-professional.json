@@ -1,0 +1,75 @@
+{
+  "id": "persona:cn-young-tech-professional",
+  "kind": "market_persona",
+  "display_name": "CN young tech professional, i5 Li",
+  "market": "CN",
+  "country": "CN",
+  "vehicle": "bmw:G68",
+  "vehicle_label": "BMW i5 eDrive35L (G68)",
+  "powertrain": "BEV",
+  "segment": "Self-driving digital native comparing domestic EV brands",
+  "details_status": "skeleton",
+  "persona": {
+    "name": "Chen Yu",
+    "age": 32,
+    "nationality": "Chinese",
+    "residence": "Shenzhen, China",
+    "occupation": {
+      "title": "Product manager at a technology company",
+      "description": "Early adopter of smart devices; compares cars on apps and video platforms."
+    },
+    "style": "TODO",
+    "personality": {
+      "traits": []
+    },
+    "preferences": {
+      "likes": [],
+      "dislikes": []
+    },
+    "behaviors": {
+      "routines": [
+        "Uses voice commands for navigation and media",
+        "Compares cars with Xiaomi SU7, NIO ET7 and Zeekr 007"
+      ]
+    },
+    "other_facts": [
+      "Owns a BMW i5 eDrive35L (G68 BEV)"
+    ]
+  },
+  "environment": {
+    "daily_use": "Commute, weekend trips with friends",
+    "charging": "Charging pile at apartment complex",
+    "digital": "Expects a smartphone-like cockpit"
+  },
+  "grounding": {
+    "description": "Real owner voices from this segment, injected as 'what owners like you report'. Only gate-cleared records are used.",
+    "record_filter": {
+      "market_bucket": "CN",
+      "subject_ids_any": [
+        "bmw:G60",
+        "bmw:G60_G68",
+        "bmw:G68"
+      ],
+      "channels": [
+        "bmw_feedback",
+        "app_store",
+        "google_play",
+        "youtube",
+        "forum",
+        "editorial_review"
+      ],
+      "powertrain_label_values": []
+    },
+    "study_cohort": {
+      "subject_id": "bmw:G68",
+      "markets": [
+        "CN"
+      ]
+    }
+  },
+  "validation": {
+    "path": "none",
+    "reference": null,
+    "note": "No China feedback exists; grounded on the G68 China study itself, so no independent check is possible. Output is an assumption."
+  }
+}
