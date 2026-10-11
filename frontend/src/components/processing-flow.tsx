@@ -3,6 +3,8 @@
 import { useState } from "react";
 
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { evidenceFactors } from "@/components/weights-panel";
+import { useWeights } from "@/lib/api/hooks";
 import type { FlowNode, ProcessingFlow } from "@/lib/api/types";
 import { fmtCount } from "@/lib/format";
 import { cn } from "cn";
@@ -51,6 +53,7 @@ export function ProcessingFlowChart({ flow }: { flow: ProcessingFlow }) {
   const [open, setOpen] = useState<string | null>(null);
   const [hoverLink, setHoverLink] = useState<number | null>(null);
   const { nodes, links, scale, columnCount } = layout(flow);
+  const { data: weights } = useWeights();
   const openNode = nodes.find((n) => n.key === open);
 
   return (
@@ -96,12 +99,14 @@ export function ProcessingFlowChart({ flow }: { flow: ProcessingFlow }) {
                   style={{ left: `${((last ? n.x : n.x + NODE_W) / W) * 100}%`, top: `${((n.y + Math.max(n.h, 2) / 2) / H) * 100}%` }}
                 >
                   <span className={cn("text-[13px] font-medium tabular-nums", open === n.key && "underline underline-offset-4")}>{fmtCount(n.count)}</span>
-                  <span className="text-xs text-muted-foreground">
-                    {n.label}
-                  </span>
+                  <span className="text-xs text-muted-foreground">{n.label}</span>
+                  {n.weight && <span className="text-[10px] text-muted-foreground/70 tabular-nums">{n.weight}</span>}
                 </button>
               </HoverCardTrigger>
-              <HoverCardContent className="w-60 text-xs">{n.hint}</HoverCardContent>
+              <HoverCardContent className="w-64 text-xs">
+                <p>{n.hint}</p>
+                {n.weight && evidenceFactors(weights, n.key) && <p className="mt-1.5 text-muted-foreground">{evidenceFactors(weights, n.key)}</p>}
+              </HoverCardContent>
             </HoverCard>
           );
         })}

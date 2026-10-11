@@ -18,6 +18,7 @@ import {
 import { createElement, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useWeights } from "@/lib/api/hooks";
 import type { ConversationOwner, LlmCall, Run } from "@/lib/api/types";
 import { fmtCount } from "@/lib/format";
 import { cn } from "cn";
@@ -68,6 +69,15 @@ const NODES: DiagramNode[] = [
 ];
 
 const BY_KEY = new Map(NODES.map((n) => [n.key, n]));
+
+const CRITERION_SHORT: Record<string, string> = {
+  demand: "Demand",
+  impact: "Impact",
+  competitive_gap: "Gap",
+  vehicle_market_fit: "Fit",
+  delivery_fit: "Delivery",
+  reuse: "Reuse",
+};
 
 type Side = "l" | "r" | "t" | "b";
 const port = (key: NodeKey, side: Side) => {
@@ -168,6 +178,23 @@ export function PipelineDiagram({
   const liveNodes = new Set(live ? (STAGE_NODES[run?.progress?.stage ?? ""] ?? []) : []);
   const active = (key: NodeKey) => current === key || (step === null && liveNodes.has(key));
   const openNode = open ? BY_KEY.get(open)! : null;
+  const { data: weights } = useWeights();
+  // Small muted weights where they act: owner markets at the customer council, criteria at the score.
+  const notes: Partial<Record<NodeKey, string[]>> = weights
+    ? {
+        customers: [
+          [...weights.owners.markets]
+            .sort((a, b) => ((["US", "EU", "CN"].indexOf(a.key) + 9) % 9) - ((["US", "EU", "CN"].indexOf(b.key) + 9) % 9))
+            .map((m) => `${m.key} ${m.weight.toFixed(2)}`)
+            .join(" · "),
+        ],
+        company: ["arguments, no vote weight"],
+        score: [
+          weights.criteria.slice(0, 3).map((c) => `${CRITERION_SHORT[c.key] ?? c.key} ${c.weight}`).join(" · "),
+          weights.criteria.slice(3).map((c) => `${CRITERION_SHORT[c.key] ?? c.key} ${c.weight}`).join(" · "),
+        ],
+      }
+    : {};
 
   return (
     <div className="flex flex-col gap-3">
@@ -274,6 +301,21 @@ export function PipelineDiagram({
                 </span>
               </span>
             </button>
+          );
+        })}
+
+        {(Object.entries(notes) as [NodeKey, string[]][]).map(([key, lines]) => {
+          const n = BY_KEY.get(key)!;
+          return (
+            <span
+              key={`note-${key}`}
+              className="pointer-events-none absolute flex -translate-x-1/2 flex-col items-center text-[10px] leading-tight whitespace-nowrap text-muted-foreground/80 tabular-nums"
+              style={{ left: `${(n.x / W) * 100}%`, top: `${((n.y + BOX_H / 2 + 5) / H) * 100}%` }}
+            >
+              {lines.map((line) => (
+                <span key={line}>{line}</span>
+              ))}
+            </span>
           );
         })}
       </div>

@@ -5,6 +5,7 @@ import { useState } from "react";
 
 import { UpdateMenu } from "@/components/generate-dialog";
 import { PageHeader } from "@/components/page-header";
+import { WeightsLink } from "@/components/weights-panel";
 import { ProcessingFlowChart } from "@/components/processing-flow";
 import { ErrorState, LoadingRows } from "@/components/states";
 import { usePipeline } from "@/lib/api/hooks";
@@ -28,6 +29,7 @@ export default function ProcessingPage() {
         <div className="mt-8 flex max-w-6xl flex-col gap-4">
           <ProcessingFlowChart flow={stage.flow} />
           {stage.labeler_quality && <QualityBadge quality={stage.labeler_quality} />}
+          <WeightsLink />
         </div>
       ) : (
         stage && <Funnel stage={stage} />

@@ -1,6 +1,7 @@
 "use client";
 
 import { PageHeader } from "@/components/page-header";
+import { WeightsLink } from "@/components/weights-panel";
 import { ProcessingFlowChart } from "@/components/processing-flow";
 import { ErrorState, LoadingRows } from "@/components/states";
 import { useOverviewFlow } from "@/lib/api/hooks";
@@ -23,6 +24,7 @@ export default function GlobalProcessingPage() {
             <p className="text-[11px] text-muted-foreground">{fmtCount(data.unchecked_online)} online reviews not triaged yet; they flow on as if relevant.</p>
           ) : null}
           {data.note && <p className="max-w-3xl text-[11px] text-muted-foreground">{data.note}</p>}
+          <WeightsLink />
         </div>
       )}
     </>

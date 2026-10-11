@@ -35,6 +35,7 @@ import type {
   TriageSummary,
   ProcessingFlow,
   DecisionsOverview,
+  Weights,
   VehiclePage,
   Version,
   Council,
@@ -292,6 +293,10 @@ export function useSignalDetail(featureKey: string | null, market: string | null
       api.GET("/api/signals/{feature_key}", { params: { path: { feature_key: featureKey! }, query: { market: market ?? undefined } } }),
     ),
   );
+}
+
+export function useWeights() {
+  return useSWR("weights", () => unwrap<Weights>(api.GET("/api/weights")), { revalidateOnFocus: false });
 }
 
 export function useDecisionsOverview() {

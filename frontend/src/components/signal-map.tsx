@@ -47,7 +47,9 @@ export function SignalMap({
   if (isLoading || !data) return <LoadingRows rows={4} />;
 
   const { x: ax, y: ay } = data.axes;
-  const reviews = data.items.map((i) => i.reviews);
+  // x is whatever the axis names: weighted reviews (source × author × text) since round six, raw reviews before.
+  const xv = (i: MapItem) => (ax.key === "weighted_reviews" ? (i.weighted_reviews ?? i.reviews) : i.reviews);
+  const reviews = data.items.map(xv);
   const xmin = Math.max(1, Math.min(ax.threshold / 4, ...reviews) / 1.2);
   const xmax = Math.max(ax.threshold * 4, ...reviews) * 1.2;
   const lx = (v: number) => Math.log10(Math.max(v, xmin));
@@ -73,7 +75,7 @@ export function SignalMap({
   const seen = new Map<string, number>();
   const jitter = new Map(
     data.items.map((i) => {
-      const cell = `${Math.round(x(i.reviews) / 4)}|${Math.round(y(i.need_share) / 4)}`;
+      const cell = `${Math.round(x(xv(i)) / 4)}|${Math.round(y(i.need_share) / 4)}`;
       const k = seen.get(cell) ?? 0;
       seen.set(cell, k + 1);
       return [i.feature_key, k === 0 ? [0, 0] : [Math.cos(k * 2.4) * JITTER_PX, Math.sin(k * 2.4) * JITTER_PX]] as const;
@@ -85,7 +87,7 @@ export function SignalMap({
     (["act", "protect"] as Quadrant[]).flatMap((q) =>
       data.items
         .filter((i) => i.quadrant === q)
-        .sort((a, b) => b.reviews - a.reviews)
+        .sort((a, b) => xv(b) - xv(a))
         .slice(0, LABELS_PER_QUADRANT)
         .map((i) => i.feature_key),
     ),
@@ -142,7 +144,7 @@ export function SignalMap({
           aria-label={`${item.label}: ${item.reviews} reviews, ${Math.round(item.need_share * 100)} % problems or wishes`}
           className="absolute flex items-center gap-1"
           style={{
-            left: pct(x(item.reviews), W),
+            left: pct(x(xv(item)), W),
             top: pct(y(item.need_share), H),
             transform: `translate(calc(-50% + ${jitter.get(item.feature_key)?.[0] ?? 0}px), calc(-50% + ${jitter.get(item.feature_key)?.[1] ?? 0}px))`,
           }}
@@ -162,11 +164,13 @@ export function SignalMap({
       {hover && (
         <div
           className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[calc(100%+10px)] rounded-md border bg-popover px-2.5 py-1.5 text-xs shadow-sm"
-          style={{ left: pct(x(hover.reviews), W), top: pct(y(hover.need_share), H) }}
+          style={{ left: pct(x(xv(hover)), W), top: pct(y(hover.need_share), H) }}
         >
           <p className="font-medium whitespace-nowrap">{hover.label}</p>
           <p className="whitespace-nowrap text-muted-foreground tabular-nums">
-            {fmtCount(hover.reviews)} reviews · {Math.round((hover.need_share_raw ?? hover.need_share) * 100)} % problems or wishes
+            {fmtCount(hover.reviews)} reviews
+            {hover.weighted_reviews != null ? ` · ${fmtCount(Math.round(hover.weighted_reviews))} weighted` : ""} ·{" "}
+            {Math.round((hover.need_share_raw ?? hover.need_share) * 100)} % problems or wishes
           </p>
         </div>
       )}

@@ -437,6 +437,8 @@ export interface FlowNode {
   detail: string;
   // Explicit column (0..n) from the backend; without it the frontend uses the longest-path depth.
   column?: number;
+  // How much one review of this node counts, e.g. "×1.0" or "×0.5 × author".
+  weight?: string;
 }
 
 export interface ProcessingFlow {
@@ -584,6 +586,8 @@ export interface MapItem {
   area: string | null;
   kind: SignalKind;
   reviews: number;
+  // Reviews weighted by source × author × text; the map's x axis (axes.x.key) uses this.
+  weighted_reviews?: number;
   // Smoothed toward the market average; need_share_raw is the plain share.
   need_share: number;
   need_share_raw?: number;
@@ -870,4 +874,26 @@ export interface DecisionsOverview {
   }[];
   recent_decisions: { requirement_id: string; title: string | null; action: string; by: string; at: string; agreed_with_ai: boolean | null }[];
   agreement_with_ai: { decisions: number; agreed: number };
+}
+
+// GET /api/weights: every weight Parallax uses.
+export interface Weights {
+  policy_version: number | string;
+  evidence: {
+    rule: string;
+    source: { key: string; label: string; weight: number }[];
+    author: { key: string; label: string; weight: number }[];
+    text: { key: string; label: string; weight: number }[];
+    used_for: string;
+  };
+  owners: {
+    rule: string;
+    markets: { key: string; weight: number; volume_2030: number }[];
+    validation: Record<string, number>;
+    basis?: string | null;
+    used_for: string;
+  };
+  criteria: { key: string; weight: number; meaning?: string | null }[];
+  criteria_used_for: string;
+  company_council: string;
 }

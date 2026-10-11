@@ -311,6 +311,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/weights": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Every weight Parallax uses, in one place: evidence, owner markets, decision criteria */
+        get: operations["weights_api_weights_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/overview/decisions": {
         parameters: {
             query?: never;
@@ -2796,6 +2813,26 @@ export interface operations {
             };
         };
     };
+    weights_api_weights_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
     overview_decisions_api_overview_decisions_get: {
         parameters: {
             query?: never;
@@ -3874,6 +3911,8 @@ export interface operations {
             query?: {
                 kind?: string | null;
                 limit?: number;
+                /** @description Also list failed and interrupted runs (kept in the audit trail) */
+                include_failed?: boolean;
             };
             header?: never;
             path?: never;
