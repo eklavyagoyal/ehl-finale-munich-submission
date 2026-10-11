@@ -998,6 +998,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/triage/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Triage online reviews (background run; poll /api/simulations/{id}) */
+        post: operations["run_api_triage_run_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/triage/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Online data after triage: overall and for the records collected under the vehicle */
+        get: operations["summary_api_triage_summary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/triage/sample": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Spot-check sample of triaged reviews (text next to the labels) */
+        get: operations["sample_api_triage_sample_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/reset": {
         parameters: {
             query?: never;
@@ -2064,6 +2115,31 @@ export interface components {
              * @default false
              */
             include_pending_claims: boolean;
+        };
+        /** TriageIn */
+        TriageIn: {
+            /**
+             * Limit
+             * @description Optional cap on records
+             */
+            limit?: number | null;
+            /**
+             * Workers
+             * @description Parallel model calls
+             * @default 32
+             */
+            workers: number;
+            /**
+             * Record Ids
+             * @description Triage exactly these records
+             */
+            record_ids?: string[] | null;
+            /**
+             * Retriage
+             * @description Also redo records already triaged with the current prompt version
+             * @default false
+             */
+            retriage: boolean;
         };
         /** ValidateIn */
         ValidateIn: {
@@ -4132,6 +4208,108 @@ export interface operations {
                 "application/json": components["schemas"]["LabelIn"];
             };
         };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    run_api_triage_run_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`. */
+                "x-actor"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TriageIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    summary_api_triage_summary_get: {
+        parameters: {
+            query?: {
+                /** @description e.g. G60; default: the active vehicle */
+                vehicle?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    sample_api_triage_sample_get: {
+        parameters: {
+            query?: {
+                n?: number;
+                seed?: number;
+                /** @description not_relevant | owner | omit for all */
+                only?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description Successful Response */
             200: {

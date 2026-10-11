@@ -416,6 +416,50 @@ export interface FunnelStep {
   detail: string;
 }
 
+export interface FlowNode {
+  key: string;
+  label: string;
+  count: number;
+  unit: string;
+  hint: string;
+  detail: string;
+}
+
+export interface ProcessingFlow {
+  nodes: FlowNode[];
+  links: { source: string; target: string; value: number }[];
+  link_unit?: string;
+  triage?: { triaged: number; flagged: number; filter_enabled: boolean };
+}
+
+// GET /api/triage/summary: online reviews checked for vehicle, engine, author and relevance.
+export interface TriageSummary {
+  target_model: string;
+  validated: boolean;
+  note: string;
+  prompt_version?: string;
+  online_records: number;
+  triaged: number;
+  overall: { vehicle: Record<string, number>; engine: Record<string, number>; author: Record<string, number>; relevant: Record<string, number>; method?: Record<string, number> };
+  vehicle_scope: {
+    collected_under_vehicle: number;
+    vehicle: Record<string, number>;
+    engine: Record<string, number>;
+    author: Record<string, number>;
+    relevant: Record<string, number>;
+    usable: number;
+    usable_owners: number;
+    usable_rule: string;
+  };
+  bmw_feedback?: string;
+  last_run: { id: string; status: string } | null;
+}
+
+export interface TriageSample {
+  note: string;
+  items: { record_id: string; channel: string; text: string; vehicle: string; engine: string; author: string; relevant: boolean; reason: string | null }[];
+}
+
 export interface LabelerQuality {
   area_agreement: number;
   exact_recall: number | null;
@@ -436,6 +480,8 @@ export interface ProcessingStage extends StageBase {
     claims_by_producer?: Record<string, number>;
   };
   funnel?: FunnelStep[];
+  // Left-to-right flow: sources → labels / no topic → signals → findings. Link values are reviews.
+  flow?: ProcessingFlow;
   gap?: { count: number; label: string; hint: string; detail: string };
   labeler_quality?: LabelerQuality | null;
 }

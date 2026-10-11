@@ -31,6 +31,8 @@ import type {
   CoverageScope,
   SignalDetail,
   SignalMap,
+  TriageSample,
+  TriageSummary,
   VehiclePage,
   Version,
   Council,
@@ -288,6 +290,14 @@ export function useSignalDetail(featureKey: string | null, market: string | null
       api.GET("/api/signals/{feature_key}", { params: { path: { feature_key: featureKey! }, query: { market: market ?? undefined } } }),
     ),
   );
+}
+
+export function useTriageSummary() {
+  return useSWR("triage-summary", () => unwrap<TriageSummary>(api.GET("/api/triage/summary")), { revalidateOnFocus: false });
+}
+
+export function useTriageSample(open: boolean, n = 30) {
+  return useSWR(open ? ["triage-sample", n] : null, () => unwrap<TriageSample>(api.GET("/api/triage/sample", { params: { query: { n } } })));
 }
 
 export function useBudgets(market: string | null) {

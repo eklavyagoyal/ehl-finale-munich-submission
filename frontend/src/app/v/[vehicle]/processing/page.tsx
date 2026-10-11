@@ -4,9 +4,10 @@ import { ChevronRight, CornerDownRight } from "lucide-react";
 import { useState } from "react";
 
 import { PageHeader } from "@/components/page-header";
+import { ProcessingFlowChart } from "@/components/processing-flow";
 import { ErrorState, LoadingRows } from "@/components/states";
 import { usePipeline } from "@/lib/api/hooks";
-import type { FunnelStep, ProcessingStage } from "@/lib/api/types";
+import type { FunnelStep, LabelerQuality, ProcessingStage } from "@/lib/api/types";
 import { fmtCount } from "@/lib/format";
 import { cn } from "cn";
 
@@ -20,7 +21,14 @@ export default function ProcessingPage() {
       <p className="mt-1 text-[13px] text-muted-foreground">What did we extract from it?</p>
       {error && <ErrorState error={error} />}
       {isLoading && <LoadingRows />}
-      {stage && <Funnel stage={stage} />}
+      {stage?.flow?.nodes?.length ? (
+        <div className="mt-8 flex max-w-6xl flex-col gap-4">
+          <ProcessingFlowChart flow={stage.flow} />
+          {stage.labeler_quality && <QualityBadge quality={stage.labeler_quality} />}
+        </div>
+      ) : (
+        stage && <Funnel stage={stage} />
+      )}
     </>
   );
 }
@@ -94,6 +102,25 @@ function Funnel({ stage }: { stage: ProcessingStage }) {
       </div>
 
       {open && detail && <p className="max-w-2xl text-[13px] text-foreground/80">{detail}</p>}
+    </div>
+  );
+}
+
+// How well our labeler agrees with BMW's own labels; the numbers open on click.
+function QualityBadge({ quality }: { quality: LabelerQuality }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex flex-col gap-1.5">
+      <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="self-start rounded-full border px-2.5 py-0.5 text-xs text-muted-foreground hover:text-foreground">
+        AI labeler: {Math.round(quality.area_agreement * 100)} % same area as BMW
+      </button>
+      {open && (
+        <p className="max-w-2xl text-[13px] text-foreground/80">
+          Blind test against BMW&apos;s own labels{quality.sample ? ` on ${fmtCount(quality.sample)} reviews` : ""}: same area in{" "}
+          {Math.round(quality.area_agreement * 100)} % of cases
+          {quality.exact_recall != null ? `, exact feature in ${Math.round(quality.exact_recall * 100)} %` : ""}.
+        </p>
+      )}
     </div>
   );
 }
