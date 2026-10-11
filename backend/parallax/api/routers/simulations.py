@@ -163,7 +163,7 @@ def llm_call(call_id: int, session: Session = Depends(get_session, scope="functi
         "citations": response.get("citations") or [],
         "input_record_ids": call.input_record_ids,
         "note": None if response.get("parsed") is not None or response.get("content") else
-                "The answer text of this call was not stored (persona calls of runs before this feature).",
+                "The answer text of this call was not stored (older runs logged only the request).",
     }
 
 
