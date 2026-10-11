@@ -28,7 +28,7 @@ Validate from the repository root:
 ```sh
 uv run --with 'jsonschema[format]==4.26.0' python scripts/validate_research.py research/examples
 uv run --with 'jsonschema[format]==4.26.0' python scripts/validate_research.py research/batches
-uv run --with 'jsonschema[format]==4.26.0' python -m unittest discover -s tests -v
+uv run --with 'jsonschema[format]==4.26.0' --with openpyxl==3.1.5 python -m unittest discover -s tests -v
 ```
 
 The second command becomes usable when the first real batch exists. It fails on missing or empty input rather than reporting a successful empty import. Validation checks structure and references; it does not verify source truth, infer permissions, or approve content for export.
@@ -36,6 +36,18 @@ The second command becomes usable when the first real batch exists. It fails on 
 `schema.json` is the contract for sources, records, and claims. `catalog/` holds shared entity IDs and feature vocabulary. `decision-model.json` contains proposed decision criteria. `prompts/synthesize.md` is the initial evidence-analysis prompt. Source originals stay in the existing ignored `data/` directory, and generated analysis stays in the existing ignored `outputs/` directory.
 
 For the first handoff, submit one representative batch plus a short `notes.md` covering scope, counts, limitations, unresolved mappings, any catalog additions, and validation results. Include requests/defects and multiple claims from a review where the source supports them; do not fabricate examples to fill a checklist. Finish the pilot before broad collection. If permission to commit content is unresolved, prepare the export under ignored `outputs/research/submissions/` and report its location; do not publish it as a shared batch yet.
+
+## Export the BMW workbooks
+
+The BMW originals stay in the ignored `data/`. `scripts/export_bmw.py` turns them into one batch per artifact under the ignored `outputs/research/submissions/bmw/`: G60 feedback (one record per feedback ID; every VFC classification row kept as an original label), the CN/EU and US study sheets (one metric per attribute and cohort, scales kept apart) and sales volumes (G60/G68 stays `bmw:G60_G68`). VFC topics that no catalog label matches are appended to `catalog/features.json`, so the backend can map the labels to features.
+
+```sh
+uv run --with openpyxl==3.1.5 python scripts/export_bmw.py                              # G60 feedback, study, sales
+uv run --with openpyxl==3.1.5 python scripts/export_bmw.py --feedback-models F70 G60 G70
+uv run --with 'jsonschema[format]==4.26.0' python scripts/validate_research.py outputs/research/submissions/bmw
+```
+
+Permissions stay null and review status pending. Set them only after the team has decided, for example `--external-llm true --permission-note "<who, when, basis>"`. Each batch's `notes.md` lists counts (classification rows versus feedback IDs), limitations and anything the exporter could not resolve. The backend imports the result from its own `backend/` directory, with absolute paths into this checkout: `.venv/bin/python -m parallax.cli ingest <checkout>/outputs/research/submissions/bmw --research-root <checkout>/research`. Keep `--date` fixed when re-exporting the same files (for example `--date 20261010`); a new date creates a new batch ID.
 
 ## Build the first context packet
 
