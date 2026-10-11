@@ -11,6 +11,7 @@ import { actorLabel, fmtDateTime, humanize } from "@/lib/format";
 import { cn } from "cn";
 
 import { agentIcon } from "./agent-icon";
+import { useOpenCall } from "./call-panel";
 import { allRecordsHref, recordHref } from "./call-records";
 import { type Lane, LaneDetail } from "./lane-detail";
 
@@ -73,6 +74,7 @@ export function FlowView({
   linked: Set<string>;
 }) {
   const layout = useMemo(() => buildLayout(lanes), [lanes]);
+  const openCall = useOpenCall();
   const sorted = useMemo(() => [...calls].sort((a, b) => a.created_at.localeCompare(b.created_at) || a.id - b.id), [calls]);
   const [step, setStep] = useState<number | null>(null);
   const [playing, setPlaying] = useState(false);
@@ -181,7 +183,7 @@ export function FlowView({
 
       <div className="overflow-x-auto">
         <div className="relative min-w-[880px]" style={{ aspectRatio: `${W} / ${H}` }}>
-          <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 size-full" aria-hidden>
+          <svg viewBox={`0 0 ${W} ${H}`} className="pointer-events-none absolute inset-0 size-full">
             <g fill="none" stroke="var(--border)" strokeWidth={1} shapeRendering="crispEdges">
               {layout.paths.map((d, i) => (
                 <path key={i} d={d} />
@@ -201,10 +203,13 @@ export function FlowView({
             </g>
             {dots.map(({ call, p, index }) => {
               if (index >= shown) return null;
+              const open = () => openCall(call.id);
               const verify = call.purpose === "research_verification" || call.agent_id === "agent:verifier";
               const current = index === shown - 1 && step !== null;
               return (
-                <g key={call.id}>
+                <g key={call.id} onClick={open} className="pointer-events-auto cursor-pointer">
+                  <title>{`${humanize(call.purpose)} · ${call.model} · click to open`}</title>
+                  <circle cx={p.x} cy={p.y} r={7} fill="transparent" />
                   {current && <circle cx={p.x} cy={p.y} r={8} fill="#2563eb" opacity={0.15} />}
                   {verify ? (
                     <circle cx={p.x} cy={p.y} r={4} fill="var(--background)" stroke="#2563eb" strokeWidth={1.5} />

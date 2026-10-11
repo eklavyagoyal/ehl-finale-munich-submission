@@ -34,6 +34,7 @@ export const ALLOWED: ReadonlyArray<readonly [method: string, path: string]> = [
   ["GET", "simulations"],
   ["GET", "simulations/*"],
   ["GET", "simulations/*/llm-calls"],
+  ["GET", "simulations/llm-calls/*"],
   ["GET", "simulations/*/results"],
   ["GET", "simulations/*/conversation"],
   ["POST", "simulations"],

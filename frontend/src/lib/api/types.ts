@@ -897,3 +897,28 @@ export interface Weights {
   criteria_used_for: string;
   company_council: string;
 }
+
+// GET /api/simulations/llm-calls/{id}: one model call opened up.
+export interface LlmCallDetail {
+  id: number;
+  run_id: string | null;
+  agent_id: string | null;
+  agent_name: string;
+  requirement_id: string | null;
+  purpose: string;
+  model: string;
+  prompt_version?: string | null;
+  status: string;
+  error?: string | null;
+  input_tokens: number;
+  output_tokens: number;
+  latency_ms: number;
+  created_at: string;
+  summary: string | null;
+  prompt: { system?: string | null; user?: string | null };
+  // A structured answer (object) or the persona's text.
+  response: unknown;
+  citations: { url: string; title?: string | null }[];
+  input_record_ids: string[];
+  note?: string | null;
+}

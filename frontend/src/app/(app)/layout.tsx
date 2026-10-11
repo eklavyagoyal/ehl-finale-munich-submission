@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 
 import { AppSidebar } from "@/components/app-sidebar";
+import { CallPanelProvider } from "@/components/requirement/call-panel";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { ACTOR_COOKIE, sanitizePm } from "@/lib/actor";
 import { authEnabled, readSession, SESSION_COOKIE } from "@/lib/session";
@@ -14,7 +15,9 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
     <SidebarProvider>
       <AppSidebar initialPm={pm} signedIn={!!signedIn} />
       <SidebarInset>
-        <main className="flex min-w-0 flex-1 flex-col px-6 pb-10 md:px-10">{children}</main>
+        <main className="flex min-w-0 flex-1 flex-col px-6 pb-10 md:px-10">
+          <CallPanelProvider>{children}</CallPanelProvider>
+        </main>
       </SidebarInset>
     </SidebarProvider>
   );

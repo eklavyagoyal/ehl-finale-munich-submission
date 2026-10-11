@@ -36,6 +36,7 @@ import type {
   ProcessingFlow,
   DecisionsOverview,
   Weights,
+  LlmCallDetail,
   VehiclePage,
   Version,
   Council,
@@ -292,6 +293,14 @@ export function useSignalDetail(featureKey: string | null, market: string | null
     unwrap<SignalDetail>(
       api.GET("/api/signals/{feature_key}", { params: { path: { feature_key: featureKey! }, query: { market: market ?? undefined } } }),
     ),
+  );
+}
+
+// One model call with prompt and answer; fetched only when its panel opens.
+export function useLlmCallDetail(callId: number | null) {
+  return useSWR(callId != null ? ["llm-call", callId] : null, () =>
+    unwrap<LlmCallDetail>(api.GET("/api/simulations/llm-calls/{call_id}", { params: { path: { call_id: callId! } } })),
+    { revalidateOnFocus: false, shouldRetryOnError: false },
   );
 }
 

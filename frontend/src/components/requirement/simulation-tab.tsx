@@ -14,6 +14,7 @@ import { cn } from "cn";
 import { useRequirementContext } from "./context";
 import { FlowView } from "./flow-view";
 import { CallDetail } from "./call-records";
+import { useOpenCall } from "./call-panel";
 import { cleanAnswer, type Lane, LaneDetail } from "./lane-detail";
 import { RunButton } from "./shell";
 
@@ -217,6 +218,7 @@ function LaneRow({
   requirementId: string;
   linked: Set<string>;
 }) {
+  const openCall = useOpenCall();
   const xs = lane.calls.map((c) => position.get(c.id) ?? 0);
   const first = Math.min(...xs);
   const last = Math.max(...xs);
@@ -255,8 +257,9 @@ function LaneRow({
               <HoverCardTrigger asChild>
                 <button
                   type="button"
+                  onClick={() => openCall(call.id)}
                   className={cn(
-                    "absolute top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full",
+                    "absolute top-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full",
                     verify ? "size-2.5 border-[1.5px] border-blue-600 bg-background" : "size-1.5 bg-blue-600",
                     call.status !== "ok" && "bg-red-500",
                   )}
