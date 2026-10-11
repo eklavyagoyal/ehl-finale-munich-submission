@@ -26,7 +26,8 @@ from parallax.llm.gate import check_records
 from parallax.llm.prompts import SAFETY
 from parallax.models import Claim, Feature, Record, SimRun, Source
 
-PROMPT_VERSION = "labeler-v1"
+PROMPT_VERSION = "labeler-v2-fewshot"
+FEWSHOT = 30
 CHANNEL_SCOPES = {
     "social": {"app_store", "google_play", "youtube", "reddit", "forum"},
     "competitors": {"editorial_review", "forum", "manufacturer_website", "bmw_option_list", "other"},
@@ -65,6 +66,10 @@ specific fitting key, or null with a short feature_label when nothing fits. A re
 claims of different types. Vague text ("great car", emojis, app login spam) gets an empty list.
 The quote must be copied exactly from the record (original language, no translation, no ellipsis).
 {safety}
+Match the granularity of BMW's own classification shown in the examples: prefer the key BMW would use
+(general keys such as "seats" or "exterior_design" unless a more specific key clearly fits).
+EXAMPLES OF BMW'S OWN LABELING (text -> keys)
+{examples}
 FEATURE CATALOG (key: label)
 {catalog}"""
 
@@ -146,13 +151,25 @@ def _progress(run_id: uuid.UUID, **values) -> None:
         run.progress = {**(run.progress or {}), **values}
 
 
+def fewshot_examples(session: Session, exclude: set[str], n: int = FEWSHOT) -> str:
+    """BMW feedback with BMW's VFC-derived labels, so our labels share BMW's granularity."""
+    by_record: dict[str, set] = defaultdict(set)
+    for claim in session.scalars(select(Claim).where(Claim.derived.is_(True), Claim.feature_key.is_not(None))):
+        if claim.record_id not in exclude:
+            by_record[claim.record_id].add(f"{claim.feature_key} ({claim.claim_type})")
+    chosen = sorted(by_record, key=lambda rid: hashlib.sha256(f"fewshot|{rid}".encode()).hexdigest())[:n]
+    texts = {r.record_id: (r.text_original or "") for r in session.scalars(select(Record).where(Record.record_id.in_(chosen)))}
+    return "\n".join(f'- "{texts.get(rid, "")[:220]}" -> {", ".join(sorted(by_record[rid]))}' for rid in chosen if texts.get(rid))
+
+
 def run_labeling(run_id: uuid.UUID, llm: LLMClient, record_ids: list[str], batch_size: int = 40, workers: int = 12,
-                 persist: bool = True) -> dict:
+                 persist: bool = True, exclude_from_examples: set[str] | None = None) -> dict:
     settings = get_settings()
     model = settings.model_fast
     with session_scope() as session:
         catalog = {f.feature_key: f for f in session.scalars(select(Feature))}
-    system = SYSTEM.format(safety=SAFETY, catalog=_catalog_text(list(catalog.values())))
+        examples = fewshot_examples(session, set(exclude_from_examples or ()) | set(record_ids))
+    system = SYSTEM.format(safety=SAFETY, catalog=_catalog_text(list(catalog.values())), examples=examples or "(none)")
     batches = [record_ids[i:i + batch_size] for i in range(0, len(record_ids), batch_size)]
     llm.set_budget(run_id, len(batches) + 20)
     totals, done, outputs = Counter(), 0, {}
@@ -206,7 +223,9 @@ def calibrate(run_id: uuid.UUID, llm: LLMClient, n: int = 300, workers: int = 16
         pool = sorted(bmw)
     random.Random(42).shuffle(pool)
     sample = pool[:n]
-    result = run_labeling(run_id, llm, sample, persist=False, workers=workers)
+    result = run_labeling(run_id, llm, sample, persist=False, workers=workers, exclude_from_examples=set(sample))
+    with session_scope() as session:
+        area = {f.feature_key: f.area for f in session.scalars(select(Feature))}
     ours = {rid: {row["feature_key"] for row in rows if row["feature_key"]} for rid, rows in result["outputs"].items()}
     our_types = {(row["record_id"], row["feature_key"]): row["claim_type"] for rows in result["outputs"].values() for row in rows}
     hit = sum(len(bmw[rid] & ours.get(rid, set())) for rid in sample)
@@ -215,6 +234,11 @@ def calibrate(run_id: uuid.UUID, llm: LLMClient, n: int = 300, workers: int = 16
     any_overlap = sum(bool(bmw[rid] & ours.get(rid, set())) for rid in sample)
     matched = [(rid, key) for rid in sample for key in bmw[rid] & ours.get(rid, set())]
     type_agree = sum(types[m] == our_types.get(m) for m in matched)
+    bmw_areas = {rid: {area.get(k) for k in bmw[rid]} - {None} for rid in sample}
+    our_areas = {rid: {area.get(k) for k in ours.get(rid, set())} - {None} for rid in sample}
+    area_hit = sum(len(bmw_areas[rid] & our_areas[rid]) for rid in sample)
+    area_bmw = sum(len(bmw_areas[rid]) for rid in sample)
+    area_ours = sum(len(our_areas[rid]) for rid in sample)
     disagreements = [{"record_id": rid, "bmw": sorted(bmw[rid]), "ours": sorted(ours.get(rid, set()))}
                      for rid in sample if not bmw[rid] & ours.get(rid, set())][:15]
     return {
@@ -223,6 +247,8 @@ def calibrate(run_id: uuid.UUID, llm: LLMClient, n: int = 300, workers: int = 16
         "precision_vs_bmw": round(hit / our_total, 3) if our_total else None,
         "records_with_at_least_one_match": round(any_overlap / len(sample), 3) if sample else None,
         "claim_type_agreement_on_matches": round(type_agree / len(matched), 3) if matched else None,
+        "area_recall_vs_bmw": round(area_hit / area_bmw, 3) if area_bmw else None,
+        "area_precision_vs_bmw": round(area_hit / area_ours, 3) if area_ours else None,
         "note": "BMW's VFC labels are one reference, not ground truth; our labeler may find extra valid features.",
         "examples_without_match": disagreements,
     }
