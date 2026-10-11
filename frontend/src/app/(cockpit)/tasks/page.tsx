@@ -31,7 +31,7 @@ export default function TasksPage() {
         {data && data.length === 0 && (
           <EmptyState title="Nothing waits for you">
             New requirements appear here once evidence is imported and drafted. The{" "}
-            <Link href="/" className="text-foreground underline-offset-4 hover:underline">
+            <Link href="/pipeline" className="text-foreground underline-offset-4 hover:underline">
               pipeline
             </Link>{" "}
             shows the next step.

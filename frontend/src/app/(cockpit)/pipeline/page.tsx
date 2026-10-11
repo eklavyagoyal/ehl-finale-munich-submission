@@ -59,7 +59,7 @@ export default function PipelinePage() {
 
   return (
     <>
-      <PageHeader crumbs={[{ label: data?.target_model.split(":").pop() ?? "G60" }, { label: "Pipeline" }]} />
+      <PageHeader crumbs={[{ label: "Vehicles", href: "/" }, { label: data?.target_model.split(":").pop() ?? "G60" }]} />
       {error && <ErrorState error={error} />}
       {isLoading && <LoadingRows />}
       {data && (

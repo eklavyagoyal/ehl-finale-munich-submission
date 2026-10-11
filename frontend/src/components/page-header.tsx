@@ -14,8 +14,10 @@ export function PageHeader({ crumbs, children }: { crumbs: Crumb[]; children?: R
   return (
     <div className="flex min-h-12 flex-wrap items-center gap-3 py-2">
       <nav aria-label="Breadcrumb" className="flex min-w-0 flex-wrap items-center gap-1.5 text-[13px] text-muted-foreground">
-        {crumbs.map((crumb, index) => {
+        {crumbs.map((c, index) => {
           const last = index === crumbs.length - 1;
+          // The vehicle crumb ("G60") always leads back to that vehicle's pipeline.
+          const crumb = index === 0 && !c.href && !last ? { ...c, href: "/pipeline" } : c;
           return (
             <Fragment key={`${crumb.label}-${index}`}>
               {index > 0 && <ChevronRight className="size-3.5 text-muted-foreground/60" aria-hidden />}
