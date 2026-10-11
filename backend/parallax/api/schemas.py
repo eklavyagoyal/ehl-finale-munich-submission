@@ -46,6 +46,7 @@ class RequirementOut(Out):
     gates: dict[str, str]
     ai_recommendation: str | None
     progress: list[dict[str, Any]] = []
+    signal_label: str | None = None
 
 
 class GateOut(Out):

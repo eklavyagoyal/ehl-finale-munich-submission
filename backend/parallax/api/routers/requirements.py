@@ -30,6 +30,7 @@ from parallax.models import (
     RequirementVersion,
     ResearchRequest,
     Synthesis,
+    Theme,
     Vote,
 )
 from parallax.orchestrator import launch
@@ -47,6 +48,8 @@ def summary(requirement: Requirement, session: Session) -> dict:
                           .order_by(Recommendation.id.desc()).limit(1)).first()
     data["ai_recommendation"] = rec.recommendation if rec else None
     data["progress"] = _progress(requirement, session, rec)
+    theme = session.get(Theme, requirement.theme_id) if requirement.theme_id else None
+    data["signal_label"] = theme.label if theme else requirement.feature_key  # tells look-alike titles apart
     return data
 
 

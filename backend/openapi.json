@@ -568,6 +568,141 @@
     }
    }
   },
+  "/api/signals/snapshots": {
+   "get": {
+    "tags": [
+     "pipeline"
+    ],
+    "summary": "Signal snapshots (one per rebuild), newest first: the 'before' and 'after' points for comparisons",
+    "operationId": "signal_snapshots_api_signals_snapshots_get",
+    "parameters": [
+     {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 100,
+       "default": 20,
+       "title": "Limit"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/signals/compare": {
+   "get": {
+    "tags": [
+     "pipeline"
+    ],
+    "summary": "What changed between two signal snapshots (default: the latest against the one before)",
+    "operationId": "signal_compare_api_signals_compare_get",
+    "parameters": [
+     {
+      "name": "before",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Before"
+      }
+     },
+     {
+      "name": "after",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "After"
+      }
+     },
+     {
+      "name": "market",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "US, EU, CN or omit for pooled",
+       "title": "Market"
+      },
+      "description": "US, EU, CN or omit for pooled"
+     },
+     {
+      "name": "top",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "maximum": 50,
+       "minimum": 3,
+       "default": 10,
+       "title": "Top"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/signals/{feature_key}": {
    "get": {
     "tags": [
@@ -741,6 +876,25 @@
     ],
     "summary": "All data, before any vehicle: streams -> triage -> which vehicle it belongs to",
     "operationId": "overview_flow_api_overview_flow_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/overview/decisions": {
+   "get": {
+    "tags": [
+     "pipeline"
+    ],
+    "summary": "Start page: per vehicle where the pipeline stands and which decisions are open or made",
+    "operationId": "overview_decisions_api_overview_decisions_get",
     "responses": {
      "200": {
       "description": "Successful Response",
@@ -6006,6 +6160,17 @@
       "type": "array",
       "title": "Progress",
       "default": []
+     },
+     "signal_label": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Signal Label"
      }
     },
     "type": "object",

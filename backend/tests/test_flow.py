@@ -242,6 +242,12 @@ def test_pipeline_and_signals(client, drafted):
     overview = client.get("/api/overview/flow").json()
     assert {"bmw", "target", "brand"} <= {n["key"] for n in overview["nodes"]} and overview["links"]
     listed = client.get("/api/requirements").json()
+    assert "signal_label" in listed[0]
+    board = client.get("/api/overview/decisions").json()
+    assert board["vehicles"][0]["code"] == "G60" and set(board["vehicles"][0]["decisions"]) == {"change_coming", "declined", "open"}
+    client.post("/api/themes/build", json={"include_examples": True})  # synthetic fixtures are example sources
+    compared = client.get("/api/signals/compare", params={"market": "US"}).json()
+    assert {"before", "after", "summary", "changes"} <= set(compared) and "top_unchanged" in compared["summary"]
     assert [step["key"] for step in listed[0]["progress"]] == ["drafted", "councils", "recommendation", "decision"]
     assert signal_map["axes"]["x"]["label"] and [q["key"] for q in signal_map["quadrants"]] == ["act", "protect", "watch", "background"]
     assert signal_map["items"] and all(0 <= i["need_share"] <= 1 and i["quadrant"] for i in signal_map["items"])

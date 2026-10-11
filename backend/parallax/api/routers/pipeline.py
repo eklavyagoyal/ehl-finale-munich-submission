@@ -153,6 +153,63 @@ def signal_map(market: str | None = Query(None, description="US, EU, CN or omit 
             "hidden_below_min_reviews": len(themes) - len(shown), "items": items}
 
 
+@router.get("/signals/snapshots", summary="Signal snapshots (one per rebuild), newest first: the 'before' and 'after' points for comparisons")
+def signal_snapshots(limit: int = Query(20, le=100), session: Session = Depends(get_session, scope="function")):
+    target = get_settings().target_model
+    rows = session.execute(
+        select(Theme.snapshot_id, func.min(Theme.created_at), func.count(),
+               func.sum(Theme.mention_review_count).filter(Theme.market.is_(None)))
+        .where(Theme.target_model == target).group_by(Theme.snapshot_id)
+        .order_by(func.min(Theme.created_at).desc()).limit(limit)).all()
+    return {"items": [{"snapshot_id": str(sid), "created_at": at.isoformat() if at else None, "themes": n,
+                       "pooled_mentions": int(m or 0)} for sid, at, n, m in rows]}
+
+
+@router.get("/signals/compare", summary="What changed between two signal snapshots (default: the latest against the one before)")
+def signal_compare(before: str | None = None, after: str | None = None,
+                   market: str | None = Query(None, description="US, EU, CN or omit for pooled"),
+                   top: int = Query(10, ge=3, le=50), session: Session = Depends(get_session, scope="function")):
+    snaps = signal_snapshots(limit=2, session=session)["items"]
+    after = after or (snaps[0]["snapshot_id"] if snaps else None)
+    before = before or (snaps[1]["snapshot_id"] if len(snaps) > 1 else None)
+    if not after or not before:
+        raise HTTPException(404, "need two signal snapshots to compare")
+    thresholds = _thresholds(session)
+
+    def load(snapshot: str) -> dict[str, Theme]:
+        query = select(Theme).where(Theme.snapshot_id == snapshot, Theme.mention_review_count > 0)
+        query = query.where(Theme.market == market) if market else query.where(Theme.market.is_(None))
+        return {t.feature_key: t for t in session.scalars(query)}
+
+    old, new = load(before), load(after)
+    rank = lambda themes: {k: i for i, k in enumerate(sorted(themes, key=lambda k: -themes[k].mention_review_count), 1)}
+    old_rank, new_rank = rank(old), rank(new)
+    frequent = thresholds["frequent_min_reviews"]
+
+    def stats(themes: dict[str, Theme]) -> dict:
+        return {"signals": len(themes), "reviews": sum(t.mention_review_count for t in themes.values()),
+                "frequent_signals": sum(t.mention_review_count >= frequent for t in themes.values()),
+                "multi_channel_signals": sum(len(t.channels or []) >= 2 for t in themes.values())}
+
+    old_top = {k for k, r in old_rank.items() if r <= top}
+    new_top = {k for k, r in new_rank.items() if r <= top}
+    changes = []
+    for key in set(old) | set(new):
+        o, n = old.get(key), new.get(key)
+        delta = (n.mention_review_count if n else 0) - (o.mention_review_count if o else 0)
+        if delta or (o is None) != (n is None):
+            changes.append({"feature_key": key, "label": (n or o).label, "before": o.mention_review_count if o else 0,
+                            "after": n.mention_review_count if n else 0, "delta": delta,
+                            "rank_before": old_rank.get(key), "rank_after": new_rank.get(key),
+                            "channels_after": n.channels if n else [], "new": o is None})
+    changes.sort(key=lambda c: -abs(c["delta"]))
+    return {"before": before, "after": after, "market": market,
+            "summary": {"before": stats(old), "after": stats(new), "top": top,
+                        "top_unchanged": len(old_top & new_top), "entered_top": sorted(new_top - old_top),
+                        "left_top": sorted(old_top - new_top)},
+            "changes": changes[:100]}
+
+
 @router.get("/signals/{feature_key}", summary="One signal opened up: how it was collected, tagged, counted, classified and grouped")
 def signal_detail(feature_key: str, market: str | None = Query(None, description="US, EU, CN or omit for pooled"),
                   session: Session = Depends(get_session, scope="function")):
@@ -540,6 +597,48 @@ def overview_flow(session: Session = Depends(get_session, scope="function")):
     return {"nodes": nodes, "links": [l for l in links if l["value"] > 0], "link_unit": "records",
             "unchecked_online": sum(unchecked.values()),
             "note": "BMW records are owner data by source and are not triaged. " + triage_note()}
+
+
+@router.get("/overview/decisions", summary="Start page: per vehicle where the pipeline stands and which decisions are open or made")
+def overview_decisions(session: Session = Depends(get_session, scope="function")):
+    from parallax.models import PMDecision, Recommendation
+
+    target = get_settings().target_model
+    requirements = list(session.scalars(select(Requirement)))
+    latest_rec = {}
+    for rec in session.scalars(select(Recommendation).order_by(Recommendation.id)):
+        latest_rec[rec.requirement_id] = rec.recommendation
+    vehicles = []
+    for entity_id, (name, detail) in VEHICLE_INFO.items():
+        mine = [r for r in requirements if r.target_model == entity_id]
+        snapshot = latest_snapshot_id(session, entity_id)
+        signals = session.scalar(select(func.count()).select_from(Theme).where(
+            Theme.snapshot_id == snapshot, Theme.market.is_(None), Theme.mention_review_count > 0)) if snapshot else 0
+        outcomes = Counter(OUTCOMES.get(r.status, "open") for r in mine)
+        vehicles.append({
+            "entity_id": entity_id, "code": entity_id.split(":")[-1], "name": name, "detail": detail,
+            "status": "active" if entity_id == target else "coming", "signals": signals or 0,
+            "requirements": len(mine), "councils_run": sum(1 for r in mine if r.last_run_id),
+            "ai_suggests": dict(Counter(latest_rec[r.id] for r in mine if r.id in latest_rec)),
+            "decisions": {k: outcomes.get(k, 0) for k in ("change_coming", "declined", "open")},
+            "last_activity": max((r.updated_at for r in mine), default=None),
+        })
+    needs = [r for r in requirements if r.status == "in_review"]
+    needs.sort(key=lambda r: (r.priority_rank or 999, r.id))
+    decisions = list(session.scalars(select(PMDecision).order_by(PMDecision.id.desc()).limit(10)))
+    titles = {r.id: r.title for r in requirements}
+    all_decisions = list(session.scalars(select(PMDecision)))
+    rated = [d for d in all_decisions if d.agreed_with_ai is not None]
+    return {
+        "vehicles": vehicles,
+        "needs_decision": [{"requirement_id": r.id, "title": r.title, "vehicle": r.target_model.split(":")[-1], "market": r.market,
+                            "ai_suggests": latest_rec.get(r.id), "score_low": r.score_low, "score_high": r.score_high,
+                            "priority_rank": r.priority_rank} for r in needs],
+        "recent_decisions": [{"requirement_id": d.requirement_id, "title": titles.get(d.requirement_id), "action": d.action,
+                              "by": d.actor_id, "at": d.created_at.isoformat(), "agreed_with_ai": d.agreed_with_ai}
+                             for d in decisions],
+        "agreement_with_ai": {"decisions": len(rated), "agreed": sum(1 for d in rated if d.agreed_with_ai)},
+    }
 
 
 def triage_note() -> str:
