@@ -2,13 +2,14 @@
 
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 import { PageHeader } from "@/components/page-header";
 import { ErrorState, LoadingRows } from "@/components/states";
 import { StageStatusDot } from "@/components/stage-status";
 import { Button } from "@/components/ui/button";
 import { usePipeline } from "@/lib/api/hooks";
-import type { PipelineStage } from "@/lib/api/types";
+import type { PipelineStage, SourcesStage } from "@/lib/api/types";
 import { fmtCount } from "@/lib/format";
 import { STAGE_HREF, STATUS_LABEL } from "@/lib/stages";
 import { cn } from "cn";
@@ -110,8 +111,38 @@ export default function PipelinePage() {
               </li>
             ))}
           </ol>
+          <OutsideScopeLine stage={data.stages.find((st): st is SourcesStage => st.key === "sources")} code={data.vehicle?.code ?? "G60"} />
         </div>
       )}
     </>
+  );
+}
+
+const compact = (n: number) => (n >= 1000 ? `${Math.round(n / 1000)}k` : String(n));
+
+// One muted line for everything that is not about this vehicle; it expands to the scopes.
+function OutsideScopeLine({ stage, code }: { stage?: SourcesStage; code: string }) {
+  const [open, setOpen] = useState(false);
+  const outside = stage?.outside_scope ?? [];
+  if (outside.length === 0) return null;
+  const total = outside.reduce((n, o) => n + o.records, 0);
+  return (
+    <div className="-mt-6 flex flex-col gap-1 text-xs text-muted-foreground">
+      <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="self-start hover:text-foreground">
+        +{compact(total)} not about the {code}
+      </button>
+      {open && (
+        <p className="flex flex-wrap gap-x-4 gap-y-1">
+          {outside.map((o) => (
+            <span key={o.scope}>
+              {o.label} <span className="tabular-nums">{fmtCount(o.records)}</span>
+            </span>
+          ))}
+          <Link href="/sources" className="hover:text-foreground hover:underline">
+            Open in Sources →
+          </Link>
+        </p>
+      )}
+    </div>
   );
 }

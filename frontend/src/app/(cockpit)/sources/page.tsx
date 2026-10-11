@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { ChevronDown, Plus } from "lucide-react";
 import Link from "next/link";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { Fragment, Suspense, useState } from "react";
@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCoverage, useMeta, usePipeline, useRecords, useSources } from "@/lib/api/hooks";
-import type { Coverage, Source, SourcesStage } from "@/lib/api/types";
+import type { Coverage, CoverageScope, Source, SourcesStage } from "@/lib/api/types";
 import { fmtCount, fmtDateTime, humanize } from "@/lib/format";
 import { channelLabel, isSynthetic, STREAM_ORDER, streamLabel, toSummary } from "@/lib/provenance";
 import { cn } from "cn";
@@ -79,6 +79,8 @@ function SourcesView() {
             key={params.toString()}
             initial={{
               market: params.get("market") ?? undefined,
+              bucket: params.get("bucket") ?? undefined,
+              scope: params.get("scope") === "target" ? "target" : undefined,
               channel: params.get("channel") ?? undefined,
               ids: params.getAll("ids").flatMap((v) => v.split(",")).filter(Boolean),
             }}
@@ -89,14 +91,13 @@ function SourcesView() {
   );
 }
 
-function recordsHref(filter: { channel?: string; market?: string }) {
+function recordsHref(filter: { channel?: string; market?: string; bucket?: string; scope?: string }) {
   const q = new URLSearchParams({ tab: "records", ...Object.fromEntries(Object.entries(filter).filter(([, v]) => v)) });
   return `/sources?${q.toString()}`;
 }
 
 function Overview() {
   const { data, error, isLoading } = useCoverage();
-  const { data: meta } = useMeta();
   const { data: sources } = useSources();
   const { data: pipeline } = usePipeline();
   const lastImport = pipeline?.stages.find((s): s is SourcesStage => s.key === "sources")?.last_import;
@@ -104,7 +105,8 @@ function Overview() {
   if (error) return <ErrorState error={error} />;
   if (isLoading || !data) return <LoadingRows />;
   const total = data.records_by_channel.reduce((n, r) => n + r.records, 0);
-  const streams = [...new Set(["bmw", "social", "competitors", ...data.records_by_channel.map((r) => r.stream)])].sort(
+  // Only streams with records about this vehicle; everything else sits under "Not about the G60".
+  const streams = [...new Set(data.records_by_channel.filter((r) => r.records > 0).map((r) => r.stream))].sort(
     (a, b) => streamOrder(a) - streamOrder(b),
   );
 
@@ -125,7 +127,10 @@ function Overview() {
           Requirements appear once research batches are ingested and accepted. The import itself runs in the backend.
         </EmptyState>
       ) : (
-        <MarketMatrix coverage={data} targetMarkets={meta?.markets ?? []} />
+        <>
+          <MarketMatrix coverage={data} />
+          <OutsideScope coverage={data} code={(data.vehicle ?? "bmw:G60").split(":").pop() ?? "G60"} />
+        </>
       )}
     </div>
   );
@@ -213,79 +218,88 @@ function ConnectSourceCard() {
   );
 }
 
-// Channel x market from coverage.records_by_channel_market: one request for the whole matrix.
-function MarketMatrix({ coverage, targetMarkets }: { coverage: Coverage; targetMarkets: string[] }) {
-  const cells = coverage.records_by_channel_market;
-  const matrix = new Map((cells ?? []).map((c) => [`${c.channel}|${c.market}`, c.records]));
-  const channels = [...new Set([...coverage.records_by_channel.map((r) => r.channel), ...(cells ?? []).map((c) => c.channel)])];
-  const tagged = coverage.records_by_market.map((m) => m.market).filter((m): m is string => !!m);
-  const markets = [...new Set([...targetMarkets, ...tagged])];
+const BUCKETS = ["US", "EU", "CN", "RoW"];
+
+// Channel x market bucket (US / EU / CN / RoW, as the signals count them) from one /coverage response.
+// A row expands to the exact country tags behind it.
+function MarketMatrix({ coverage }: { coverage: Coverage }) {
+  const [open, setOpen] = useState<Set<string>>(new Set());
+  const cells = coverage.records_by_channel_bucket;
+  const matrix = new Map((cells ?? []).map((c) => [`${c.channel}|${c.bucket}`, c.records]));
+  const countries = new Map<string, { market: string; records: number }[]>();
+  for (const c of coverage.records_by_channel_market ?? []) countries.set(c.channel, [...(countries.get(c.channel) ?? []), { market: c.market, records: c.records }]);
   const streamOf = new Map([...(cells ?? []), ...coverage.records_by_channel].map((r) => [r.channel, r.stream]));
+  const channels = [...streamOf.keys()];
   const streams = [...new Set(streamOf.values())].sort((a, b) => streamOrder(a) - streamOrder(b));
-  const missing =
-    cells &&
-    streams.flatMap((stream) =>
-      targetMarkets
-        .filter((market) => channels.filter((c) => streamOf.get(c) === stream).every((c) => (matrix.get(`${c}|${market}`) ?? 0) === 0))
-        .map((market) => `No ${streamLabel(stream)} records tagged ${market}`),
-    );
+  const toggle = (channel: string) =>
+    setOpen((prev) => {
+      const next = new Set(prev);
+      if (next.has(channel)) next.delete(channel);
+      else next.add(channel);
+      return next;
+    });
   const CHANNEL_COL = 240;
-  const MARKET_COL = 76;
+  const BUCKET_COL = 84;
 
   return (
-    <>
-      <section>
-        <h2 className="border-b px-2 pb-2.5 text-[13px] font-normal text-muted-foreground">Records by channel and market</h2>
-        <div className="overflow-x-auto">
-          <table className="table-fixed text-sm" style={{ width: CHANNEL_COL + markets.length * MARKET_COL }}>
-            <colgroup>
-              <col style={{ width: CHANNEL_COL }} />
-              {markets.map((m) => (
-                <col key={m} style={{ width: MARKET_COL }} />
-              ))}
-            </colgroup>
-            <thead>
-              <tr className="text-xs text-muted-foreground">
-                <th scope="col" className="px-2 py-2.5 text-left font-normal">
-                  Channel
+    <section>
+      <h2 className="border-b px-2 pb-2.5 text-[13px] font-normal text-muted-foreground">Records by channel and market</h2>
+      <div className="overflow-x-auto">
+        <table className="table-fixed text-sm" style={{ width: CHANNEL_COL + BUCKETS.length * BUCKET_COL }}>
+          <colgroup>
+            <col style={{ width: CHANNEL_COL }} />
+            {BUCKETS.map((b) => (
+              <col key={b} style={{ width: BUCKET_COL }} />
+            ))}
+          </colgroup>
+          <thead>
+            <tr className="text-xs text-muted-foreground">
+              <th scope="col" className="px-2 py-2.5 text-left font-normal">
+                Channel
+              </th>
+              {BUCKETS.map((b) => (
+                <th key={b} scope="col" className="px-2 py-2.5 text-right font-mono font-normal">
+                  {b}
                 </th>
-                {markets.map((m) => (
-                  <th key={m} scope="col" className="px-2 py-2.5 text-right font-mono font-normal">
-                    {m}
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {streams.map((stream) => (
+              <Fragment key={stream}>
+                <tr>
+                  <th scope="colgroup" colSpan={BUCKETS.length + 1} className="px-2 pt-4 pb-1 text-left text-xs font-medium">
+                    {streamLabel(stream)}
                   </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {streams.map((stream) => (
-                <Fragment key={stream}>
-                  <tr>
-                    <th scope="colgroup" colSpan={markets.length + 1} className="px-2 pt-4 pb-1 text-left text-xs font-medium">
-                      {streamLabel(stream)}
-                    </th>
-                  </tr>
-                  {channels
-                    .filter((c) => streamOf.get(c) === stream)
-                    .map((channel) => (
-                      <tr key={channel} className="border-t border-border/60">
+                </tr>
+                {channels
+                  .filter((c) => streamOf.get(c) === stream)
+                  .map((channel) => (
+                    <Fragment key={channel}>
+                      <tr className="border-t border-border/60">
                         <th scope="row" className="px-2 py-2 text-left font-normal">
-                          <Link href={recordsHref({ channel })} title={channelLabel(channel)} className="flex min-w-0 items-center gap-1.5 hover:underline">
+                          <button
+                            type="button"
+                            onClick={() => toggle(channel)}
+                            aria-expanded={open.has(channel)}
+                            title={`${channelLabel(channel)}: show countries`}
+                            className="flex w-full min-w-0 items-center gap-1.5 text-left hover:underline"
+                          >
                             <ChannelIcon channel={channel} />
                             <span className="truncate">{channelLabel(channel)}</span>
-                          </Link>
+                            <ChevronDown className={cn("size-3 shrink-0 text-muted-foreground transition-transform", open.has(channel) && "rotate-180")} aria-hidden />
+                          </button>
                         </th>
-                        {markets.map((market) => {
-                          const n = cells ? (matrix.get(`${channel}|${market}`) ?? 0) : undefined;
+                        {BUCKETS.map((bucket) => {
+                          const n = cells ? (matrix.get(`${channel}|${bucket}`) ?? 0) : undefined;
                           return (
-                            <td key={market} className="px-2 py-2 text-right tabular-nums">
+                            <td key={bucket} className="px-2 py-2 text-right tabular-nums">
                               {n === undefined ? (
                                 <span className="text-muted-foreground/50">·</span>
                               ) : n === 0 ? (
-                                <span className="text-muted-foreground/60" title={`No records tagged ${market} in ${channelLabel(channel)}`}>
-                                  –
-                                </span>
+                                <span className="text-muted-foreground/60">–</span>
                               ) : (
-                                <Link href={recordsHref({ channel, market })} className="hover:underline">
+                                <Link href={recordsHref({ channel, bucket, scope: "target" })} className="hover:underline">
                                   {fmtCount(n)}
                                 </Link>
                               )}
@@ -293,33 +307,88 @@ function MarketMatrix({ coverage, targetMarkets }: { coverage: Coverage; targetM
                           );
                         })}
                       </tr>
-                    ))}
-                </Fragment>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="mt-2 px-2 text-xs text-muted-foreground">
-          {cells
-            ? "Counted exactly as tagged: a record tagged DE is not counted under EU, a record with two markets counts in both. Click a number to see the records."
-            : "This API version does not return the market matrix yet."}{" "}
-          {coverage.llm_rule}
-        </p>
-      </section>
-
-      {missing && missing.length > 0 && (
-        <section className="max-w-xl">
-          <h2 className="border-b px-2 pb-2.5 text-[13px] font-normal text-muted-foreground">Gaps in the target markets</h2>
-          <ul className="flex flex-col">
-            {missing.map((m) => (
-              <li key={m} className="border-b border-border/60 px-2 py-2 text-sm text-amber-800 dark:text-amber-200">
-                {m}
-              </li>
+                      {open.has(channel) && (
+                        <tr>
+                          <td colSpan={BUCKETS.length + 1} className="px-2 pb-2.5 pl-8 text-xs text-muted-foreground">
+                            {(countries.get(channel) ?? []).length === 0
+                              ? "No country tags."
+                              : (countries.get(channel) ?? [])
+                                  .sort((a, b) => b.records - a.records)
+                                  .map((c) => (
+                                    <Link key={c.market} href={recordsHref({ channel, market: c.market, scope: "target" })} className="mr-3 inline-block hover:text-foreground hover:underline">
+                                      <span className="font-mono">{c.market}</span> {fmtCount(c.records)}
+                                    </Link>
+                                  ))}
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
+                  ))}
+              </Fragment>
             ))}
-          </ul>
-        </section>
+          </tbody>
+        </table>
+      </div>
+      {!cells && <p className="mt-2 px-2 text-xs text-muted-foreground">This API version does not return the market buckets yet.</p>}
+    </section>
+  );
+}
+
+// Everything in the data set that is not about this vehicle, collapsed; each scope drills into its own matrix.
+function OutsideScope({ coverage, code }: { coverage: Coverage; code: string }) {
+  const [open, setOpen] = useState(false);
+  const outside = (coverage.scopes ?? []).filter((s) => s.scope !== "target" && s.records > 0);
+  if (outside.length === 0) return null;
+  const total = outside.reduce((n, s) => n + s.records, 0);
+  return (
+    <section className="flex flex-col gap-2">
+      <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="flex items-center gap-1.5 self-start text-[13px] text-muted-foreground hover:text-foreground">
+        <ChevronDown className={cn("size-3.5 transition-transform", open && "rotate-180")} aria-hidden />
+        Not about the {code}
+        <span className="tabular-nums">· {fmtCount(total)} records</span>
+      </button>
+      {open && (
+        <div className="flex flex-col gap-1 pl-5">
+          {outside.map((s) => (
+            <ScopeRow key={s.scope} scope={s.scope} label={s.label} records={s.records} />
+          ))}
+        </div>
       )}
-    </>
+    </section>
+  );
+}
+
+function ScopeRow({ scope, label, records }: { scope: CoverageScope; label: string; records: number }) {
+  const [open, setOpen] = useState(false);
+  const { data } = useCoverage(open ? scope : undefined);
+  const rows = open && data?.scope === scope ? data.records_by_channel_bucket ?? [] : [];
+  const byChannel = new Map<string, Map<string, number>>();
+  for (const r of rows) byChannel.set(r.channel, new Map([...(byChannel.get(r.channel) ?? []), [r.bucket, r.records]]));
+  return (
+    <div className="text-[13px]">
+      <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="flex items-center gap-2 hover:underline">
+        <span>{label}</span>
+        <span className="text-muted-foreground tabular-nums">{fmtCount(records)}</span>
+      </button>
+      {open && (
+        <div className="mt-1 mb-2 flex flex-col gap-0.5 pl-3 text-xs text-muted-foreground">
+          {!data || data.scope !== scope ? (
+            <span>Loading…</span>
+          ) : (
+            [...byChannel.entries()].map(([channel, buckets]) => (
+              <span key={channel} className="flex gap-3">
+                <span className="w-44 truncate">{channelLabel(channel)}</span>
+                {BUCKETS.map((b) => (
+                  <span key={b} className="w-16 text-right tabular-nums">
+                    <span className="font-mono">{b}</span> {fmtCount(buckets.get(b) ?? 0)}
+                  </span>
+                ))}
+              </span>
+            ))
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -387,7 +456,7 @@ function SourceListRow({ source }: { source: Source }) {
   );
 }
 
-function Records({ initial }: { initial: { market?: string; channel?: string; ids: string[] } }) {
+function Records({ initial }: { initial: { market?: string; bucket?: string; scope?: "target"; channel?: string; ids: string[] } }) {
   const router = useRouter();
   const [q, setQ] = useState("");
   const [market, setMarket] = useState<string | undefined>(initial.market);
@@ -396,9 +465,11 @@ function Records({ initial }: { initial: { market?: string; channel?: string; id
   const ids = initial.ids;
   const { data: meta } = useMeta();
   const { data: sources } = useSources();
-  const { data, error, isLoading } = useRecords({ q, market, channel, ids, offset });
+  const bucket = initial.bucket;
+  const scope = initial.scope;
+  const { data, error, isLoading } = useRecords({ q, market, bucket, scope, channel, ids, offset });
   const bySource = new Map((sources ?? []).map((s) => [s.source_id, s]));
-  const filtered = !!channel || ids.length > 0;
+  const filtered = !!channel || !!bucket || ids.length > 0;
 
   return (
     <div className="flex flex-col gap-3">
@@ -434,7 +505,9 @@ function Records({ initial }: { initial: { market?: string; channel?: string; id
         </Select>
         {filtered && (
           <span className="flex items-center gap-2 text-xs text-muted-foreground">
-            {ids.length > 0 ? `${ids.length} selected record${ids.length === 1 ? "" : "s"}` : channelLabel(channel)}
+            {ids.length > 0
+              ? `${ids.length} selected record${ids.length === 1 ? "" : "s"}`
+              : [channel && channelLabel(channel), bucket && `${bucket} market`, scope === "target" && "this vehicle"].filter(Boolean).join(" · ")}
             <Button size="xs" variant="ghost" onClick={() => router.replace("/sources?tab=records")}>
               Clear
             </Button>
