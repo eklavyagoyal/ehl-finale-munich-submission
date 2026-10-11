@@ -90,15 +90,15 @@ def signals(market: str | None = Query(None, description="US, EU, CN or omit for
 
 QUADRANTS = [
     {"key": "act", "label": "Act", "hint": "Many reviews, mostly problems or wishes"},
-    {"key": "protect", "label": "Protect", "hint": "Many reviews, few problems"},
+    {"key": "protect", "label": "Protect", "hint": "Many reviews, mostly praise or neutral"},
     {"key": "watch", "label": "Watch", "hint": "Few reviews, mostly problems or wishes"},
-    {"key": "background", "label": "Background", "hint": "Few reviews, few problems"},
+    {"key": "background", "label": "Background", "hint": "Few reviews, mostly praise or neutral"},
 ]
 
 
 @router.get("/signals/map", summary="Every signal of a market on one four-field map: reviews (x) vs share of problems and wishes (y)")
 def signal_map(market: str | None = Query(None, description="US, EU, CN or omit for all markets pooled"),
-               min_reviews: int = Query(3, ge=1, description="Hide signals with fewer reviews (noise)"),
+               min_reviews: int = Query(5, ge=1, description="Hide signals with fewer reviews (noise)"),
                session: Session = Depends(get_session, scope="function")):
     settings = get_settings()
     snapshot = latest_snapshot_id(session, settings.target_model)
@@ -327,8 +327,10 @@ def pipeline(vehicle: str | None = Query(None, description="e.g. G60 or bmw:G60;
                     "records_by_producer": {"BMW labels": len(by_bmw), "AI labeler": len(by_ai)}},
          "funnel": funnel,
          "gap": {"count": max(0, target_feedback - tagged), **_text(
-             "No topic", "Mention no catalog feature",
-             "Reviews without any catalog feature, e.g. 'great car' or dealer experience. They stay searchable but feed no signal.")},
+             "No topic", "No catalog feature found",
+             "Mostly reviews that name no catalog feature (e.g. 'great car', dealer experience); also texts under 15 "
+             "characters and claims dropped because their quote did not match the review. They stay searchable but feed "
+             "no signal.")},
          "labeler_quality": quality},
         {"key": "signals", "title": "Signals", "question": "What do customers tell us?",
          "status": status(bool(pooled), bool(snapshot)),
@@ -376,11 +378,18 @@ def vehicles(session: Session = Depends(get_session, scope="function")):
     from parallax.models import Entity
 
     target = get_settings().target_model
-    counts: dict[str, int] = {}
-    for subjects, n in session.execute(select(Record.subject_ids, func.count()).where(Record.superseded_by.is_(None))
-                                       .group_by(Record.subject_ids)):
-        for subject in subjects or ["brand_or_unresolved"]:
-            counts[subject] = counts.get(subject, 0) + n
+    # Same scope rule as the pipeline: a vehicle's records include its groups (e.g. "5 Series"), so the card
+    # number equals the number on the vehicle's start page.
+    rows = session.execute(select(Record.subject_ids, func.count()).where(Record.superseded_by.is_(None))
+                           .group_by(Record.subject_ids)).all()
+    scopes = {entity_id: VehicleScope(session, entity_id) for entity_id in VEHICLE_INFO}
+    counts: Counter = Counter()
+    brand = 0
+    for subjects, n in rows:
+        for entity_id, scope in scopes.items():
+            if scope.of(subjects) == "target":
+                counts[entity_id] += n
+        brand += n if scopes[target].of(subjects) == "brand" else 0
     entities = {e.entity_id: e for e in session.scalars(select(Entity).where(Entity.entity_id.like("bmw:%")))}
     items = []
     for entity_id, (name, detail) in VEHICLE_INFO.items():
@@ -389,8 +398,7 @@ def vehicles(session: Session = Depends(get_session, scope="function")):
                       "records": records, "in_catalog": entity_id in entities,
                       "status": "active" if entity_id == target else ("data_available" if records else "not_imported")})
     items.append({"entity_id": "brand", "code": "ALL", "name": "Across vehicles", "detail": "Brand-wide and unresolved feedback (e.g. My BMW app)",
-                  "records": counts.get("brand_or_unresolved", 0) + counts.get("bmw:brand", 0), "in_catalog": True,
-                  "status": "data_available" if counts.get("brand_or_unresolved") else "not_imported"})
+                  "records": brand, "in_catalog": True, "status": "data_available" if brand else "not_imported"})
     return {"active": target, "items": items}
 
 

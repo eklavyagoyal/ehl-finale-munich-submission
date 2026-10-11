@@ -540,7 +540,7 @@
        "type": "integer",
        "minimum": 1,
        "description": "Hide signals with fewer reviews (noise)",
-       "default": 3,
+       "default": 5,
        "title": "Min Reviews"
       },
       "description": "Hide signals with fewer reviews (noise)"
