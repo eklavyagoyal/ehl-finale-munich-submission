@@ -194,6 +194,26 @@ These replace the matching points above. Do not undo them.
 - One quiet "Weights" link (e.g. at the bottom of Processing) opens all weights in one panel.
 - The run history no longer contains failed or interrupted runs; the list endpoint hides them by default.
 
+## Round seven (Luis, 2026-10-11): Data → Sources as a picture, not stacked numbers
+
+Keep the stream cards (BMW / Social / Competitor) and "Connect a source"; Luis likes them. Change the rest of the
+unscoped Sources overview:
+
+1. **One visual at the top: "Where it comes from".**
+   - Left: a light, low-detail world map (hairline outline, inline SVG) with one circle each for US, EU, CN and a
+     small RoW. Area is proportional to records (sqrt radius). Number below the circle; channel split on hover.
+     From the sum of `records_by_channel_bucket` per bucket.
+   - Right: the channels as proportional tiles or circles with their **icons** (YouTube, Google Play, App Store,
+     BMW, forum, editorial, web), size = records. Label and count on hover.
+     Brand icons from simple-icons or inline SVG; lucide has no brand logos.
+2. **Remove the stacked number rows** "By stream" and "About"; they repeat the cards.
+   - "About which vehicle" becomes one thin stacked bar: G60 · competitors · other BMW models · brand-wide,
+     labelled at the segments, numbers on hover (`/api/coverage?scope=all` → `scopes`).
+   - Triage becomes one muted line: "Triage: 19,885 of 29,612 online reviews relevant · not validated · Spot check".
+     Details on click.
+3. Cards and "Connect a source" stay below the visual.
+4. The channel × market table moves under a quiet "Show table" toggle, collapsed by default.
+
 ## Part B: decided
 
 - B1 (vehicle in the URL) is part of A2.
