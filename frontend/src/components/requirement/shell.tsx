@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock, FileText, LayoutGrid, Play, Users } from "lucide-react";
+import { Clock, FileText, LayoutGrid, Play, Route, Scale, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -28,7 +28,9 @@ export function RequirementShell({ children }: { children: React.ReactNode }) {
   const requirement = detail?.requirement;
 
   const tabs = [
-    { href: base, label: "Overview", icon: LayoutGrid },
+    { href: base, label: "Decision path", icon: Route },
+    { href: `${base}/councils`, label: "Councils", icon: Scale },
+    { href: `${base}/overview`, label: "Overview", icon: LayoutGrid },
     { href: `${base}/simulation`, label: "Simulation", icon: Users },
     { href: `${base}/evidence`, label: "Evidence", icon: FileText, count: detail?.evidence.length },
     { href: `${base}/timeline`, label: "Timeline", icon: Clock, count: audit?.length },
@@ -89,7 +91,7 @@ export function RequirementShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-function RunButton() {
+export function RunButton() {
   const router = useRouter();
   const { id, runId, followRun } = useRequirementContext();
   const { data: run } = useRun(runId);
