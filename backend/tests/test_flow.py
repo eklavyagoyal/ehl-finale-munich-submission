@@ -77,6 +77,8 @@ def test_simulation_decision_challenge_and_audit(client, drafted):
     assert board["tensions"] and board["challenger"] and board["question_to_owners"]
     persona = board["customers"]["by_market"]["US"]["personas"][0]
     assert persona["verdict"] and persona["budget_points"] is not None
+    chart = client.get("/api/budgets", params={"market": "US"}).json()["items"]
+    assert any(i["requirement_id"] == drafted[0] and i["has_budget"] for i in chart)
     path = client.get(f"/api/requirements/{drafted[0]}/trace").json()
     keys = [step["key"] for step in path["steps"]]
     assert keys == ["evidence", "customers", "company", "research", "scores", "synthesis", "challenger", "judge", "decision"]

@@ -80,6 +80,8 @@ def tasks(session: Session = Depends(get_session, scope="function")):
                       "failed_gates": [g for g, v in gates.items() if v == "fail"]})
     running = session.scalars(select(SimRun).where(SimRun.status.in_(["queued", "running"]))).all()
     for run in running:
+        if run.kind not in ("simulation", "followup"):
+            continue  # condensing, labeling and validation jobs are not PM tasks
         items.append({"kind": "running", "label": f"Run {str(run.id)[:8]} is {run.status}", "run_id": str(run.id),
                       "requirement_ids": list(run.requirement_ids or []), "stage": (run.progress or {}).get("stage")})
     pending_sources = session.scalar(select(func.count()).select_from(Source).where(Source.review_status == "pending"))

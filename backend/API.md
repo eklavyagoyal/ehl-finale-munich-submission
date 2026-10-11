@@ -154,6 +154,7 @@ Run stages, in order:
 | `GET /api/pipeline` | Start page: five stages (sources → processing → signals → experts → decision) with `question`, `status`, `counts`, `next_action` |
 | `GET /api/signals?market=US\|EU\|CN&kind=pain\|request\|strength\|mixed\|all` | Signals page: per signal counts, `sample_quotes`, `has_requirement`, `condensed` and `findings[]` (title, description, kind, reviews, share, quotes) |
 | `POST /api/signals/condense {markets, kinds, limit}` | Condense top signals into findings (background run; poll `/api/simulations/{run_id}`) |
+| `GET /api/budgets?market=US` | Frequency-vs-importance chart in one call: per simulated requirement `complaints`, `reviews`, `mean_budget_points_of_100`, `budget_by_market`, `verdicts`, `has_budget` |
 | `GET /api/requirements/{id}/trace` | **Decision path**: ordered steps `evidence → customers → company → research → scores → synthesis → challenger → judge → decision`; each step has `agents`, `inputs`, `output`, `why`, `basis` (evidence / simulation / assumption / mixed / human), `effect` (supports / against / neutral), optional `caveat`, `tensions`, `drill_down` |
 | `GET /api/requirements/{id}/council` | Customer council by market (personas with verdict, budget points, quote) vs. company council (department verdict, main argument, cost view) and `tensions` |
 | `GET /api/simulations/{run_id}/conversation` | Who was asked what (`question_to_owners`) and every answer, grouped by market; departments; research; challenger; judge |

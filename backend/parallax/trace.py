@@ -96,6 +96,12 @@ def build_trace(session: Session, requirement: Requirement) -> dict:
     all_budget = [b for m in markets.values() for b in m["budget"]]
     mean_budget = round(sum(all_budget) / len(all_budget), 1) if all_budget else None
     must = sum(m["verdicts"].get("must_have", 0) for m in markets.values())
+    if mean_budget is None:
+        customer_why = "This run did not ask the owners for verdicts or budget points (older run); see their free-text reactions."
+        customer_effect = "neutral"
+    else:
+        customer_why = f"{must} of {len(owners)} owners call it a must-have; on average {mean_budget} of 100 budget points."
+        customer_effect = "supports" if mean_budget >= 20 else ("against" if mean_budget < 10 else "neutral")
     steps.append({
         "key": "customers", "title": "Customer council", "question": "Would owners pay for it?",
         "agents": [{"id": a, "name": agents[a].display_name, "kind": "persona"} for a in sorted({p.agent_id for p in owners}) if a in agents],
@@ -103,8 +109,8 @@ def build_trace(session: Session, requirement: Requirement) -> dict:
         "inputs": {"asked": "React to each proposal, give a verdict and split 100 points between proposals and 'keep the price down'",
                    "owners": len(owners)},
         "output": market_rows,
-        "why": f"{must} of {len(owners)} owners call it a must-have; on average {mean_budget} of 100 budget points.",
-        "effect": "supports" if (mean_budget or 0) >= 20 else ("against" if (mean_budget or 0) < 10 else "neutral"),
+        "why": customer_why,
+        "effect": customer_effect,
         "caveat": "Simulated owners. Validated against the BMW customer study for the US (rho about 0.5-0.6); EU weak, China untestable.",
         "drill_down": f"/api/requirements/{requirement.id}/council · /api/simulations/{run_id}/conversation",
     })

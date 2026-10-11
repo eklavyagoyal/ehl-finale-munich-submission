@@ -319,9 +319,10 @@ def council(requirement_id: str, session: Session = Depends(get_session, scope="
         people = market["personas"]
         verdicts = Counter(x["verdict"] or "unknown" for x in people)
         budgets = [x["budget_points"] for x in people if x["budget_points"] is not None]
+        importance = [x["importance_0_5"] for x in people if x["importance_0_5"] is not None]
         market["summary"] = {"personas": len(people), "verdicts": dict(verdicts),
                              "mean_budget_points_of_100": round(sum(budgets) / len(budgets), 1) if budgets else None,
-                             "mean_importance_0_5": round(sum(x["importance_0_5"] for x in people) / len(people), 2)}
+                             "mean_importance_0_5": round(sum(importance) / len(importance), 2) if importance else None}
     memos = session.scalars(select(DepartmentMemo).where(DepartmentMemo.run_id == run_id,
                                                          DepartmentMemo.requirement_id == requirement_id)).all()
     departments = [{

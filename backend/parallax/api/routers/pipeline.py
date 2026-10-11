@@ -23,6 +23,7 @@ from parallax.themes import latest_snapshot_id
 router = APIRouter(prefix="/api", tags=["pipeline"])
 
 STREAM_LABELS = {"bmw": "BMW", "social": "Social media", "competitors": "Competitors"}
+EXPERT_RUN_KINDS = ("simulation", "followup")
 
 
 def _finding(f: Finding) -> dict:
@@ -110,7 +111,7 @@ def pipeline(session: Session = Depends(get_session, scope="function")):
     top = lambda k, key: [t.label for t in sorted((t for t in pooled if classify(t) == k), key=key, reverse=True)[:3]]
     # 4 experts, 5 decision
     req_status = dict(session.execute(select(Requirement.status, func.count()).group_by(Requirement.status)).all())
-    runs = dict(session.execute(select(SimRun.status, func.count()).where(SimRun.kind != "validation")
+    runs = dict(session.execute(select(SimRun.status, func.count()).where(SimRun.kind.in_(EXPERT_RUN_KINDS))
                                 .group_by(SimRun.status)).all())
     requirements = sum(req_status.values())
 
@@ -188,3 +189,38 @@ def vehicles(session: Session = Depends(get_session, scope="function")):
                   "records": counts.get("brand_or_unresolved", 0) + counts.get("bmw:brand", 0), "in_catalog": True,
                   "status": "data_available" if counts.get("brand_or_unresolved") else "not_imported"})
     return {"active": target, "items": items}
+
+
+@router.get("/budgets", summary="Complaints vs. customer budget per simulated requirement (one call for the frequency-vs-importance chart)")
+def budgets(market: str | None = Query(None, description="Requirement market filter (US, EU, CN); omit for all"),
+            session: Session = Depends(get_session, scope="function")):
+    from parallax.agents.roster import active_agents
+    from parallax.models import PersonaResponse
+    from parallax.requirements import themes_for
+
+    personas = {a.id: a.market for a in active_agents(session, "market_persona")}
+    query = select(Requirement).where(Requirement.last_run_id.is_not(None))
+    if market:
+        query = query.where(Requirement.market == market)
+    items = []
+    for req in session.scalars(query.order_by(Requirement.id)):
+        responses = session.scalars(select(PersonaResponse).where(PersonaResponse.run_id == req.last_run_id,
+                                                                  PersonaResponse.requirement_id == req.id)).all()
+        by_market: dict[str, list[float]] = {}
+        verdicts: dict[str, int] = {}
+        for r in responses:
+            if r.budget_points is not None:
+                by_market.setdefault(personas.get(r.agent_id) or "other", []).append(r.budget_points)
+            if r.verdict:
+                verdicts[r.verdict] = verdicts.get(r.verdict, 0) + 1
+        all_points = [b for values in by_market.values() for b in values]
+        theme = next((t for t in themes_for(session, req) if t.market == req.market), None)
+        items.append({
+            "requirement_id": req.id, "title": req.title, "feature_key": req.feature_key, "market": req.market,
+            "complaints": theme.pain_review_count if theme else None, "reviews": theme.mention_review_count if theme else None,
+            "mean_budget_points_of_100": round(sum(all_points) / len(all_points), 1) if all_points else None,
+            "budget_by_market": {m: round(sum(v) / len(v), 1) for m, v in by_market.items()},
+            "verdicts": verdicts, "run_id": str(req.last_run_id), "has_budget": bool(all_points),
+        })
+    return {"market": market, "items": items,
+            "note": "complaints = distinct reviews reporting a defect or difficulty; budget = simulated owners' share of 100 points"}

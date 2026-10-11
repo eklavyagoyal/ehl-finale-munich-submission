@@ -603,6 +603,55 @@
     }
    }
   },
+  "/api/budgets": {
+   "get": {
+    "tags": [
+     "pipeline"
+    ],
+    "summary": "Complaints vs. customer budget per simulated requirement (one call for the frequency-vs-importance chart)",
+    "operationId": "budgets_api_budgets_get",
+    "parameters": [
+     {
+      "name": "market",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "Requirement market filter (US, EU, CN); omit for all",
+       "title": "Market"
+      },
+      "description": "Requirement market filter (US, EU, CN); omit for all"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/ingest": {
    "post": {
     "tags": [
