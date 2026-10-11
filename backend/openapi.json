@@ -506,6 +506,126 @@
     }
    }
   },
+  "/api/signals/map": {
+   "get": {
+    "tags": [
+     "pipeline"
+    ],
+    "summary": "Every signal of a market on one four-field map: reviews (x) vs share of problems and wishes (y)",
+    "operationId": "signal_map_api_signals_map_get",
+    "parameters": [
+     {
+      "name": "market",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "US, EU, CN or omit for all markets pooled",
+       "title": "Market"
+      },
+      "description": "US, EU, CN or omit for all markets pooled"
+     },
+     {
+      "name": "min_reviews",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "type": "integer",
+       "minimum": 1,
+       "description": "Hide signals with fewer reviews (noise)",
+       "default": 3,
+       "title": "Min Reviews"
+      },
+      "description": "Hide signals with fewer reviews (noise)"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/signals/{feature_key}": {
+   "get": {
+    "tags": [
+     "pipeline"
+    ],
+    "summary": "One signal opened up: how it was collected, tagged, counted, classified and grouped",
+    "operationId": "signal_detail_api_signals__feature_key__get",
+    "parameters": [
+     {
+      "name": "feature_key",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Feature Key"
+      }
+     },
+     {
+      "name": "market",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "US, EU, CN or omit for pooled",
+       "title": "Market"
+      },
+      "description": "US, EU, CN or omit for pooled"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/signals/condense": {
    "post": {
     "tags": [
@@ -570,14 +690,44 @@
     "tags": [
      "pipeline"
     ],
-    "summary": "Start page: one card per stage with counts, status and the next action",
+    "summary": "Start page of one vehicle: one card per stage with counts, status and the next action",
     "operationId": "pipeline_api_pipeline_get",
+    "parameters": [
+     {
+      "name": "vehicle",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "e.g. G60 or bmw:G60; default: the active vehicle",
+       "title": "Vehicle"
+      },
+      "description": "e.g. G60 or bmw:G60; default: the active vehicle"
+     }
+    ],
     "responses": {
      "200": {
       "description": "Successful Response",
       "content": {
        "application/json": {
         "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
        }
       }
      }
@@ -1144,6 +1294,56 @@
       }
      },
      {
+      "name": "bucket",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "US, EU, CN: all countries of the policy's market bucket",
+       "title": "Bucket"
+      },
+      "description": "US, EU, CN: all countries of the policy's market bucket"
+     },
+     {
+      "name": "scope",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "target",
+        "all"
+       ],
+       "type": "string",
+       "description": "target = only the vehicle's own records",
+       "default": "all",
+       "title": "Scope"
+      },
+      "description": "target = only the vehicle's own records"
+     },
+     {
+      "name": "vehicle",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Vehicle"
+      }
+     },
+     {
       "name": "limit",
       "in": "query",
       "required": false,
@@ -1416,14 +1616,63 @@
     "tags": [
      "evidence"
     ],
-    "summary": "What evidence exists, by channel / market / review state / LLM permission",
+    "summary": "What evidence exists for a vehicle, by channel / market / review state / LLM permission",
     "operationId": "coverage_api_coverage_get",
+    "parameters": [
+     {
+      "name": "scope",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "enum": [
+        "target",
+        "competitor",
+        "other_models",
+        "brand",
+        "all"
+       ],
+       "type": "string",
+       "description": "target = the vehicle's own records (default); all = everything",
+       "default": "target",
+       "title": "Scope"
+      },
+      "description": "target = the vehicle's own records (default); all = everything"
+     },
+     {
+      "name": "vehicle",
+      "in": "query",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "e.g. G60; default: the active vehicle",
+       "title": "Vehicle"
+      },
+      "description": "e.g. G60; default: the active vehicle"
+     }
+    ],
     "responses": {
      "200": {
       "description": "Successful Response",
       "content": {
        "application/json": {
         "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
        }
       }
      }
@@ -5957,6 +6206,16 @@
        }
       ],
       "title": "Persona Engine"
+     },
+     "persona_scope": {
+      "type": "string",
+      "enum": [
+       "market",
+       "all"
+      ],
+      "title": "Persona Scope",
+      "description": "market = owners of the case's market answer (default, like the regional sales departments); all = every owner",
+      "default": "market"
      }
     },
     "type": "object",

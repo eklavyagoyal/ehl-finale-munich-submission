@@ -2,7 +2,7 @@
 
 One simulation run handles up to N requirement cases at once:
 
-  A  market twin (all personas, all cases)  ||  company twin (every department x case)   parallel
+  A  market twin (owners of the case's market)  ||  company twin (every department x case)   parallel
   B  research loop: info requests -> web research -> verifier (expensive model)          per case
   C  scoring: decision-model MCDA over observed / estimated / simulated / assumed ratings
   D  synthesis: one crystallized brief per case
@@ -112,6 +112,23 @@ def launch(run_id: uuid.UUID) -> threading.Thread:
     return thread
 
 
+def recover_interrupted_runs(session: Session) -> list[str]:
+    """Runs execute in threads of the API process: after a restart (e.g. a deploy) nobody works on them any more.
+    Mark them failed with a reason instead of leaving them 'running' forever."""
+    stuck = session.scalars(select(SimRun).where(SimRun.status.in_(("queued", "running")))).all()
+    for run in stuck:
+        before = run.status
+        run.status, run.finished_at = "failed", _now()
+        run.error = "Interrupted: the server restarted while this run was in progress. Start it again."
+        run.progress = {**(run.progress or {}), "stage": "failed"}
+        session.execute(update(SimStep).where(SimStep.run_id == run.id, SimStep.status == "running")
+                        .values(status="failed", error="interrupted by a server restart", finished_at=_now()))
+        record_event(session, category="system", actor_id="system:startup", action=f"{run.kind}.interrupted",
+                     entity_type="sim_run", entity_id=str(run.id), run_id=run.id, before={"status": before},
+                     after={"status": "failed"}, rationale=run.error)
+    return [str(r.id) for r in stuck]
+
+
 def _run_kind(run_id: uuid.UUID) -> str:
     with session_scope() as session:
         return session.get(SimRun, run_id).kind
@@ -215,26 +232,36 @@ def _persona_weights(policy: dict, personas: list[Agent]) -> dict[str, float]:
     return weights
 
 
-def run_market_twin(run_id: uuid.UUID, requirement_ids: list[str], challenge: str | None, engine_name: str) -> dict:
+def run_market_twin(run_id: uuid.UUID, requirement_ids: list[str], challenge: str | None, engine_name: str,
+                    persona_scope: str = "market") -> dict:
     settings = get_settings()
     llm = get_llm()
     with session_scope() as session:
         policy = active_policy(session).document
-        personas = active_agents(session, "market_persona")
         requirements = [session.get(Requirement, rid) for rid in requirement_ids]
+        # Owners answer for their own market only, like the regional sales departments; pooled cases go to everyone.
+        # persona_scope="all" asks every owner (e.g. to check whether a US idea carries over to Europe).
+        plan: dict[tuple[str, ...], list[Agent]] = defaultdict(list)
+        for persona in active_agents(session, "market_persona"):
+            mine = tuple(r.id for r in requirements if persona_scope == "all" or r.market is None or r.market == persona.market)
+            if mine:
+                plan[mine].append(persona)
+        personas = [p for group in plan.values() for p in group]
         groundings = {p.id: persona_grounding(session, p, policy, settings.grounding_quotes_per_persona) for p in personas}
         weights = _persona_weights(policy, personas)
     if not personas:
         return {"personas": 0}
+    by_id = {r.id: r for r in requirements}
     with _step(run_id, "market_twin", agent_id="engine:" + engine_name) as detail:
         engine = TinyTroupeEngine() if engine_name == "tinytroupe" else DirectEngine()
-        if isinstance(engine, TinyTroupeEngine):
-            results = engine.evaluate_many(llm, [(p, groundings[p.id]) for p in personas], requirements, run_id, challenge)
-        else:
-            results: list[PersonaResult] = []
+        results: list[PersonaResult] = []
+        for ids, group in plan.items():
+            cases = [by_id[rid] for rid in ids]
+            if isinstance(engine, TinyTroupeEngine):
+                results += engine.evaluate_many(llm, [(p, groundings[p.id]) for p in group], cases, run_id, challenge)
+                continue
             with ThreadPoolExecutor(max_workers=6) as pool:
-                futures = [pool.submit(engine.evaluate, llm, p, groundings[p.id], requirements, run_id, challenge)
-                           for p in personas]
+                futures = [pool.submit(engine.evaluate, llm, p, groundings[p.id], cases, run_id, challenge) for p in group]
                 for future in as_completed(futures):
                     results.append(future.result())
         anchor_sets = policy["parallax"]["ssr_anchor_sets"]
@@ -262,8 +289,12 @@ def run_market_twin(run_id: uuid.UUID, requirement_ids: list[str], challenge: st
             _simulated_ratings(session, run_id, requirement_ids, rows, weights, {p.id: p for p in personas})
         from parallax.agents.market_twin import stimulus
 
-        detail.update({"personas": len(results), "responses": len(rows), "engine": engine_name,
-                       "question": stimulus(requirements, challenge),
+        groups = sorted(plan.items(), key=lambda item: -len(item[1]))
+        detail.update({"personas": len(results), "responses": len(rows), "engine": engine_name, "persona_scope": persona_scope,
+                       "question": stimulus([by_id[rid] for rid in groups[0][0]], challenge),
+                       "questions_by_group": [{"requirement_ids": list(ids), "markets": sorted({p.market for p in group}),
+                                               "personas": [p.id for p in group],
+                                               "question": stimulus([by_id[rid] for rid in ids], challenge)} for ids, group in groups],
                        "grounding": {pid: g.gate for pid, g in groundings.items()}})
     return {"personas": len(results), "responses": len(rows)}
 
@@ -548,6 +579,7 @@ def execute(run_id: uuid.UUID) -> None:
             requirement_ids = list(run.requirement_ids)
             challenge = run.challenge_question
             engine_name = run.config.get("persona_engine", settings.persona_engine)
+            persona_scope = run.config.get("options", {}).get("persona_scope", "market")
             # Regional departments (e.g. Sales US) review only their market's cases and pooled cases.
             dept_markets = {a.id: a.market for a in active_agents(session, "department")}
             case_markets = {rid: session.get(Requirement, rid).market for rid in requirement_ids}
@@ -558,7 +590,7 @@ def execute(run_id: uuid.UUID) -> None:
         _progress(run_id, stage="market_and_company_twin")
         info_requests: dict[str, list] = defaultdict(list)
         with ThreadPoolExecutor(max_workers=max(2, settings.max_parallel_cases * 2)) as pool:
-            market_future = pool.submit(run_market_twin, run_id, requirement_ids, challenge, engine_name)
+            market_future = pool.submit(run_market_twin, run_id, requirement_ids, challenge, engine_name, persona_scope)
             dept_futures = {pool.submit(run_department, run_id, d, rid, challenge): rid
                             for rid in requirement_ids for d, market in dept_markets.items()
                             if market is None or case_markets[rid] is None or market == case_markets[rid]}

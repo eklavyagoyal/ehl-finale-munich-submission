@@ -184,6 +184,7 @@ def build_themes(session: Session, *, target_model: str, include_examples: bool 
             competitor_review_count=len(a.competitor), competitor_record_ids=sorted(a.competitor)[:500],
             brand_review_count=len(a.brand), brand_record_ids=sorted(a.brand)[:500],
             pain_review_count=len(a.pain), praise_review_count=len(a.by_type.get("praise", set())),
+            need_review_count=len(a.pain | requests),
             counts_by_claim_type={k: len(v) for k, v in sorted(a.by_type.items())},
             channels=sorted(a.channels), cohorts=cohorts, max_cohort_share=max_share,
             record_ids=sorted(a.parents), llm_eligible_record_count=len(a.eligible),

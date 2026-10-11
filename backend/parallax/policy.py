@@ -62,6 +62,9 @@ PARALLAX_EXTENSIONS: dict[str, Any] = {
     # Within-cohort shares from tiny cohorts (e.g. one editorial article) are meaningless;
     # below this cohort size the share counts as 0 for the demand anchors.
     "min_cohort_size_for_share": 30,
+    # Signal map (four fields): x = distinct reviews mentioning the feature, y = share of them reporting a
+    # pain or a wish. A signal counts as "frequent" from this many reviews, as "mostly problems" from this share.
+    "signal_map": {"frequent_min_reviews": 30, "need_share_threshold": 0.5},
     # Observed demand anchors (0-5), first matching rule from the top wins. Shares are
     # within-cohort collected-review shares, never customer prevalence.
     "demand_anchors": [

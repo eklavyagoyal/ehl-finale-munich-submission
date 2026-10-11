@@ -173,8 +173,11 @@ def main(argv: list[str] | None = None) -> int:
         from parallax.db import session_scope
 
         _db_init()
+        from parallax.orchestrator import recover_interrupted_runs
+
         with session_scope() as session:
             print(json.dumps({"agents": seed_agents(session, "system:startup")}), flush=True)
+            print(json.dumps({"interrupted_runs_marked_failed": recover_interrupted_runs(session)}), flush=True)
         print(json.dumps({"llm_check": _model_check()}), flush=True)
         uvicorn.run("parallax.api.app:app", host="0.0.0.0", port=int(os.environ.get("PORT", "8000")),
                     proxy_headers=True, forwarded_allow_ips="*")

@@ -44,6 +44,40 @@ def classify(theme: Theme) -> str:
     return "mixed"
 
 
+def need_share(theme: Theme) -> float:
+    """Share of the signal's reviews reporting a problem or a wish (y axis of the signal map)."""
+    total = theme.mention_review_count or 0
+    if not total:
+        return 0.0
+    need = theme.need_review_count or 0
+    if not need and (theme.pain_review_count or theme.request_review_count):
+        need = min(total, theme.pain_review_count + theme.request_review_count)  # snapshot built before the column existed
+    return round(need / total, 3)
+
+
+def quadrant(theme: Theme, thresholds: dict) -> str:
+    frequent = (theme.mention_review_count or 0) >= thresholds["frequent_min_reviews"]
+    needy = need_share(theme) >= thresholds["need_share_threshold"]
+    return {(True, True): "act", (True, False): "protect", (False, True): "watch", (False, False): "background"}[(frequent, needy)]
+
+
+def explain_kind(theme: Theme) -> str:
+    """The classification rule that fired, with this signal's own numbers."""
+    total = theme.mention_review_count or 0
+    if not total:
+        return "No reviews"
+    pain, requests, praise = (round(100 * n / total) for n in
+                              (theme.pain_review_count, theme.request_review_count, theme.praise_review_count))
+    return {"pain": f"Pain: {pain} % report a problem (from 40 %)",
+            "request": f"Wish: {requests} % ask for something (from 30 %)",
+            "strength": f"Strength: {praise} % praise, {pain} % problems (from 60 % / under 15 %)",
+            "mixed": f"Mixed: {pain} % problems, {requests} % wishes, {praise} % praise, no rule reached"}[classify(theme)]
+
+
+CHANNEL_LABELS = {"bmw_feedback": "BMW feedback", "youtube": "YouTube", "google_play": "Google Play", "app_store": "App Store",
+                  "other": "Other web", "forum": "Forum", "editorial_review": "Editorial review"}
+
+
 RANK = {"pain": lambda t: (t.pain_review_count, t.impact_score or 0), "strength": lambda t: (t.praise_review_count,),
         "request": lambda t: (t.request_review_count,), "mixed": lambda t: (t.mention_review_count,),
         "all": lambda t: (t.demand_score, t.pain_review_count, t.mention_review_count)}

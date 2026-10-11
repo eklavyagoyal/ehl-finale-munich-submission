@@ -165,6 +165,7 @@ class Theme(Base):
     # Brand-wide or unresolved feedback (e.g. My BMW app reviews): context, never target-model demand.
     brand_review_count: Mapped[int] = mapped_column(Integer, default=0)
     brand_record_ids: Mapped[list[str]] = mapped_column(ARRAY(Text), default=list)
+    need_review_count: Mapped[int] = mapped_column(Integer, default=0)  # distinct reviews with a pain or a wish
     request_review_count: Mapped[int] = mapped_column(Integer)
     pain_review_count: Mapped[int] = mapped_column(Integer)
     praise_review_count: Mapped[int] = mapped_column(Integer)

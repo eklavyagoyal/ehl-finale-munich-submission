@@ -151,8 +151,19 @@ def review_sources_bulk(body: BulkReviewIn, session: Session = Depends(get_sessi
 @router.get("/records")
 def list_records(feature_key: str | None = None, market: str | None = None, channel: str | None = None,
                  kind: str | None = None, q: str | None = None, ids: list[str] | None = Query(default=None),
+                 bucket: str | None = Query(None, description="US, EU, CN: all countries of the policy's market bucket"),
+                 scope: Literal["target", "all"] = Query("all", description="target = only the vehicle's own records"),
+                 vehicle: str | None = None,
                  limit: int = Query(50, le=500), offset: int = 0, session: Session = Depends(get_session, scope="function")):
+    from parallax.policy import active_policy
+    from parallax.scope import VehicleScope
+
     query = select(Record, Source.channel).join(Source, Source.source_id == Record.source_id).where(Record.superseded_by.is_(None))
+    if scope == "target":
+        query = query.where(VehicleScope(session, vehicle).target_filter())
+    if bucket:
+        members = active_policy(session).document["parallax"]["market_buckets"].get(bucket, [bucket])
+        query = query.where(Record.markets.op("&&")(literal(members, type_=PG_ARRAY(Text))))
     if ids:
         query = query.where(Record.record_id.in_(ids))
     if feature_key:
@@ -214,31 +225,48 @@ def review_claim(claim_id: str, body: ClaimReviewIn, session: Session = Depends(
     return row(claim)
 
 
-@router.get("/coverage", summary="What evidence exists, by channel / market / review state / LLM permission")
-def coverage(session: Session = Depends(get_session, scope="function")):
-    by_channel = session.execute(
-        select(Source.stream, Source.channel, Source.review_status, Source.external_llm, func.count(Record.record_id))
-        .join(Record, Record.source_id == Source.source_id).where(Record.superseded_by.is_(None))
-        .group_by(Source.stream, Source.channel, Source.review_status, Source.external_llm)
-    ).all()
-    markets = session.execute(
-        select(func.unnest(Record.markets).label("market"), func.count()).where(Record.superseded_by.is_(None))
-        .group_by("market").order_by(func.count().desc())
-    ).all()
+ScopeParam = Literal["target", "competitor", "other_models", "brand", "all"]
+
+
+@router.get("/coverage", summary="What evidence exists for a vehicle, by channel / market / review state / LLM permission")
+def coverage(scope: ScopeParam = Query("target", description="target = the vehicle's own records (default); all = everything"),
+             vehicle: str | None = Query(None, description="e.g. G60; default: the active vehicle"),
+             session: Session = Depends(get_session, scope="function")):
+    from collections import Counter
+
+    from parallax.policy import active_policy, market_bucket
+    from parallax.scope import SCOPE_LABELS, SCOPES, VehicleScope
+
+    vs = VehicleScope(session, vehicle)
+    policy = active_policy(session).document
+    by_channel, by_market, cross, by_bucket, outside = Counter(), Counter(), Counter(), Counter(), Counter()
+    for stream, channel, status, external, subjects, markets, n in session.execute(
+            select(Source.stream, Source.channel, Source.review_status, Source.external_llm, Record.subject_ids,
+                   Record.markets, func.count())
+            .join(Record, Record.source_id == Source.source_id).where(Record.superseded_by.is_(None))
+            .group_by(Source.stream, Source.channel, Source.review_status, Source.external_llm, Record.subject_ids, Record.markets)):
+        where = vs.of(subjects)
+        outside[where] += n
+        if scope != "all" and where != scope:
+            continue
+        by_channel[(stream, channel, status, external)] += n
+        for market in markets or []:
+            by_market[market] += n
+            cross[(stream, channel, market)] += n
+        for bucket in {market_bucket(policy, m) for m in markets or []}:
+            by_bucket[(stream, channel, bucket)] += n
     claims = session.execute(select(Claim.review_status, Claim.derived, func.count()).group_by(Claim.review_status, Claim.derived)).all()
-    market = func.unnest(Record.markets).label("market")
-    cross = session.execute(
-        select(Source.stream, Source.channel, market, func.count())
-        .join(Record, Record.source_id == Source.source_id).where(Record.superseded_by.is_(None))
-        .group_by(Source.stream, Source.channel, market)
-    ).all()
     return {
+        "vehicle": vs.target_model, "scope": scope,
         "records_by_channel": [{"stream": s, "channel": c, "review_status": r, "external_llm": e, "records": n}
-                               for s, c, r, e, n in by_channel],
-        "records_by_market": [{"market": m, "records": n} for m, n in markets],
+                               for (s, c, r, e), n in sorted(by_channel.items(), key=lambda kv: -kv[1])],
+        "records_by_market": [{"market": m, "records": n} for m, n in by_market.most_common()],
         "claims": [{"review_status": r, "derived_from_bmw_labels": d, "claims": n} for r, d, n in claims],
-        # Channel x market matrix in one query, so clients never fan out one request per cell.
-        "records_by_channel_market": [{"stream": s, "channel": c, "market": m, "records": n} for s, c, m, n in cross],
+        # Channel x market matrix in one query, so clients never fan out one request per cell. Exact tags: DE is not EU.
+        "records_by_channel_market": [{"stream": s, "channel": c, "market": m, "records": n} for (s, c, m), n in cross.items()],
+        # The same matrix in the policy's market buckets (US, EU, CN, RoW): DE, FR, GB ... count as EU, like the signals.
+        "records_by_channel_bucket": [{"stream": s, "channel": c, "bucket": b, "records": n} for (s, c, b), n in by_bucket.items()],
+        "scopes": [{"scope": k, "label": SCOPE_LABELS[k], "records": outside[k]} for k in SCOPES],
         "llm_rule": "Only accepted sources with external_llm == true reach an external model.",
     }
 

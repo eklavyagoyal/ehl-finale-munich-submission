@@ -39,6 +39,8 @@ class SimulationIn(BaseModel):
     requirement_ids: list[str] = Field(min_length=1, max_length=20, description="Cases run in parallel (default 5 at a time)")
     challenge: str | None = Field(None, description="Optional PM question every agent must address")
     persona_engine: Literal["tinytroupe", "direct"] | None = None
+    persona_scope: Literal["market", "all"] = Field("market", description="market = owners of the case's market answer "
+                                                    "(default, like the regional sales departments); all = every owner")
 
 
 @router.post("", summary="Start a Parallax run (market twin || company twin -> research -> scoring -> synthesis -> vote)",
@@ -46,7 +48,8 @@ class SimulationIn(BaseModel):
 def start(body: SimulationIn, session: Session = Depends(get_session, scope="function"), who: str = Depends(actor)):
     try:
         run = create_run(session, requirement_ids=body.requirement_ids, actor_id=who, challenge=body.challenge,
-                         options={"persona_engine": body.persona_engine} if body.persona_engine else {})
+                         options={**({"persona_engine": body.persona_engine} if body.persona_engine else {}),
+                                  "persona_scope": body.persona_scope})
     except ValueError as error:
         raise HTTPException(400, str(error))
     session.commit()

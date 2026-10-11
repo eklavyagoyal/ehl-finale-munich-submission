@@ -59,7 +59,9 @@ def test_simulation_decision_challenge_and_audit(client, drafted):
     assert finished["status"] == "completed", finished
     results = client.get(f"/api/simulations/{run['id']}/results").json()["requirements"]
     first = results[drafted[0]]
-    assert len(first["persona_responses"]) == 12
+    # Owners answer for their own market only: a US case is answered by the five US owners.
+    assert {r["agent_id"].split(":")[1][:2] for r in first["persona_responses"]} == {"us"}
+    assert len(first["persona_responses"]) == 5
     # Committee for a US case: PM, design, engineering, quality, finance and only the US sales lead.
     departments = {m["agent_id"] for m in first["department_memos"]}
     assert departments == {"dept:product-management", "dept:design", "dept:engineering", "dept:quality",
@@ -67,7 +69,7 @@ def test_simulation_decision_challenge_and_audit(client, drafted):
     assert first["recommendation"] and len(first["votes"]) == 1
     assert first["recommendation"][0]["challenge"]["counter_position"]
     talk = client.get(f"/api/simulations/{run['id']}/conversation").json()
-    assert talk["question_to_owners"] and set(talk["owners_by_market"]) == {"US", "EU", "CN"}
+    assert talk["question_to_owners"] and set(talk["owners_by_market"]) == {"US"}
     owner = talk["owners_by_market"]["US"][0]
     assert owner["name"] and owner["answers"][0]["reaction"] and owner["answers"][0]["requirement_title"]
     assert talk["requirements"][drafted[0]]["challenger"] and len(talk["requirements"][drafted[0]]["judges"]) == 1
@@ -83,6 +85,7 @@ def test_simulation_decision_challenge_and_audit(client, drafted):
     keys = [step["key"] for step in path["steps"]]
     assert keys == ["evidence", "customers", "company", "research", "scores", "synthesis", "challenger", "judge", "decision"]
     assert path["steps"][7]["output"]["drivers"] and all(step["basis"] for step in path["steps"])
+    assert all(step["headline"] for step in path["steps"]) and "US owners" in path["steps"][1]["headline"]
     detail = client.get(f"/api/requirements/{drafted[0]}").json()
     assert detail["requirement"]["status"] == "in_review"
     assert detail["requirement"]["score_low"] <= detail["requirement"]["score"] <= detail["requirement"]["score_high"]
@@ -168,8 +171,15 @@ def test_open_gates_block_approval_and_pm_overrides_stick(client, drafted):
 def test_records_market_filter_and_coverage_matrix(client, drafted):
     records = client.get("/api/records", params={"market": "US", "channel": "bmw_feedback", "limit": 1})
     assert records.status_code == 200 and records.json()["total"] == 8
-    matrix = client.get("/api/coverage").json()["records_by_channel_market"]
-    assert {"stream": "bmw", "channel": "bmw_feedback", "market": "US", "records": 8} in matrix
+    coverage = client.get("/api/coverage").json()
+    assert coverage["scope"] == "target"
+    assert {"stream": "bmw", "channel": "bmw_feedback", "market": "US", "records": 8} in coverage["records_by_channel_market"]
+    assert {s["scope"] for s in coverage["scopes"]} == {"target", "competitor", "other_models", "brand"}
+    everything = client.get("/api/coverage", params={"scope": "all"}).json()
+    assert sum(s["records"] for s in everything["scopes"]) == sum(r["records"] for r in everything["records_by_channel"])
+    eu = client.get("/api/records", params={"bucket": "EU", "scope": "target", "limit": 1}).json()["total"]
+    buckets = [b for b in coverage["records_by_channel_bucket"] if b["bucket"] == "EU"]
+    assert eu <= sum(b["records"] for b in buckets) or not buckets
 
 
 def test_condense_and_vehicles(client, drafted):
@@ -209,6 +219,36 @@ def test_pipeline_and_signals(client, drafted):
     pains = client.get("/api/signals", params={"market": "US", "kind": "pain"}).json()["items"]
     assert pains and all(p["kind"] == "pain" for p in pains)
     assert pains[0]["sample_quotes"]
+    processing = stages["stages"][1]
+    assert [f["key"] for f in processing["funnel"]] == ["reviews", "tagged", "signals", "findings"]
+    assert all(f["label"] and f["hint"] and f["detail"] for f in processing["funnel"])
+    sources = stages["stages"][0]
+    assert stages["vehicle"]["code"] == "G60" and isinstance(sources["outside_scope"], list)
+    signal_map = client.get("/api/signals/map", params={"market": "US", "min_reviews": 1}).json()
+    assert signal_map["axes"]["x"]["label"] and [q["key"] for q in signal_map["quadrants"]] == ["act", "protect", "watch", "background"]
+    assert signal_map["items"] and all(0 <= i["need_share"] <= 1 and i["quadrant"] for i in signal_map["items"])
+    feature = signal_map["items"][0]["feature_key"]
+    opened = client.get(f"/api/signals/{feature}", params={"market": "US"}).json()
+    assert [s["key"] for s in opened["how_sorted"]] == ["collected", "tagged", "counted", "classified", "placed", "grouped"]
+    assert all(s["short"] and s["detail"] for s in opened["how_sorted"])
+    assert client.get("/api/signals/no_such_feature", params={"market": "US"}).status_code == 404
+
+
+def test_interrupted_runs_are_marked_failed(client, drafted):
+    from parallax.db import session_scope
+    from parallax.models import SimRun
+    from parallax.orchestrator import recover_interrupted_runs
+
+    with session_scope() as session:
+        run = SimRun(kind="simulation", status="running", requirement_ids=[drafted[0]], requested_by="pm:test",
+                     config={}, progress={"stage": "market_and_company_twin"})
+        session.add(run)
+        session.flush()
+        run_id = run.id
+    with session_scope() as session:
+        assert str(run_id) in recover_interrupted_runs(session)
+    done = client.get(f"/api/simulations/{run_id}").json()["run"]
+    assert done["status"] == "failed" and "restarted" in done["error"]
 
 
 def test_admin_reset_needs_cli_token_and_keeps_audit(drafted):
