@@ -105,6 +105,9 @@ def test_simulation_decision_challenge_and_audit(client, drafted):
                              json={"action": "challenge", "rationale": "Unclear for EU", "challenge_question": "Would EU owners care?"})
     followup = challenged.json()["followup_run_id"]
     assert followup and wait_for(client, followup)["status"] == "completed"
+    second = client.get(f"/api/requirements/{drafted[1]}/trace").json()
+    assert second["round"] == 2 and "challenge" in [s["key"] for s in second["steps"]]
+    assert "Would EU owners care?" in next(s for s in second["steps"] if s["key"] == "challenge")["headline"]
 
     # Edits create versions with rationale.
     edit = client.patch(f"/api/requirements/{drafted[2]}", json={"changes": {"title": "Sharper title"}, "rationale": "clarity"})

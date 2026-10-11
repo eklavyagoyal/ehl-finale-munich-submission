@@ -4,7 +4,7 @@ from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from parallax import decisions
@@ -62,10 +62,14 @@ def _progress(requirement: Requirement, session: Session, rec) -> list[dict]:
     decision = session.scalars(select(PMDecision).where(PMDecision.requirement_id == requirement.id)
                                .order_by(PMDecision.id.desc()).limit(1)).first()
     decided = requirement.status in ("approved", "rejected", "deferred")
+    rounds = session.scalar(select(func.count()).select_from(SimRun).where(
+        SimRun.kind.in_(("simulation", "followup")), SimRun.status.in_(("completed", "partial")),
+        SimRun.requirement_ids.any(requirement.id))) or 0
     return [
         {"key": "drafted", "label": "Drafted", "done": True, "at": requirement.created_at.isoformat(), "value": requirement.created_by},
         {"key": "councils", "label": "Councils", "done": bool(run and run.status in ("completed", "partial")),
-         "at": run.finished_at.isoformat() if run and run.finished_at else None, "value": run.status if run else "not_run"},
+         "at": run.finished_at.isoformat() if run and run.finished_at else None,
+         "value": (f"round {rounds} (answers your challenge)" if run and run.kind == "followup" else run.status) if run else "not_run"},
         {"key": "recommendation", "label": "AI suggests", "done": rec is not None, "at": None,
          "value": rec.recommendation if rec else None},
         {"key": "decision", "label": "Your decision", "done": decided,

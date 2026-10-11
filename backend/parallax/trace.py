@@ -25,6 +25,7 @@ from parallax.models import (
     RequirementEvidence,
     ResearchRequest,
     Requirement,
+    SimRun,
     Source,
     Synthesis,
     Vote,
@@ -85,6 +86,27 @@ def build_trace(session: Session, requirement: Requirement) -> dict:
                       "why": "Run Parallax to get the customer council, company council, research and a recommendation.",
                       "effect": "neutral"})
         return _envelope(requirement, steps, session)
+
+    # 1b the PM's challenge (a follow-up round answers it) ----------------------------------------------
+    rounds = _rounds(session, requirement)
+    current = rounds[-1] if rounds else None
+    if current and current["challenge_question"]:
+        previous = rounds[-2] if len(rounds) > 1 else None
+        challenge_decision = session.scalars(select(PMDecision).where(
+            PMDecision.requirement_id == requirement.id, PMDecision.action == "challenge").order_by(PMDecision.id.desc())).first()
+        steps.append({
+            "key": "challenge", "title": "Your challenge", "question": "What did you ask the agents to answer?",
+            "headline": f"Round {current['round']}: “{current['challenge_question']}”",
+            "agents": [{"id": "pm", "name": "Product manager", "kind": "human"}], "basis": "human",
+            "inputs": {"challenge_question": current["challenge_question"],
+                       "rationale": challenge_decision.rationale if challenge_decision else None},
+            "output": {"previous_round": previous, "this_round": current},
+            "why": (f"You challenged round {previous['round']} (AI suggested {previous['recommendation'] or 'n/a'}); every agent "
+                    f"in round {current['round']} had to address your question." if previous else
+                    "Every agent in this round had to address your question."),
+            "effect": "neutral",
+            "drill_down": f"/api/simulations/{current['run_id']}/conversation",
+        })
 
     # 2 customer council --------------------------------------------------------------------------
     owners = session.scalars(select(PersonaResponse).where(PersonaResponse.run_id == run_id,
@@ -231,6 +253,21 @@ def build_trace(session: Session, requirement: Requirement) -> dict:
     return _envelope(requirement, steps, session)
 
 
+def _rounds(session: Session, requirement: Requirement) -> list[dict]:
+    """Every expert run this requirement went through, oldest first: round 1, then one per PM challenge."""
+    runs = [r for r in session.scalars(select(SimRun).where(SimRun.kind.in_(("simulation", "followup")),
+                                                             SimRun.status.in_(("completed", "partial")))
+                                       .order_by(SimRun.created_at))
+            if requirement.id in (r.requirement_ids or [])]
+    out = []
+    for index, run in enumerate(runs, 1):
+        rec = session.scalars(select(Recommendation).where(Recommendation.run_id == run.id,
+                                                           Recommendation.requirement_id == requirement.id)).first()
+        out.append({"round": index, "run_id": str(run.id), "kind": run.kind, "challenge_question": run.challenge_question,
+                    "at": (run.finished_at or run.created_at).isoformat(), "recommendation": rec.recommendation if rec else None})
+    return out
+
+
 def _envelope(requirement: Requirement, steps: list[dict], session: Session) -> dict:
     gates = reqs.current_gates(session, requirement.id)
     decisions = session.scalars(select(PMDecision).where(PMDecision.requirement_id == requirement.id).order_by(PMDecision.id)).all()
@@ -250,7 +287,9 @@ def _envelope(requirement: Requirement, steps: list[dict], session: Session) -> 
     })
     for index, step in enumerate(steps, 1):
         step["order"] = index
+    rounds = _rounds(session, requirement)
     return {"requirement_id": requirement.id, "title": requirement.title, "market": requirement.market,
+            "rounds": rounds, "round": len(rounds),
             "legend": {"evidence": "real data", "simulation": "simulated owners", "assumption": "simulated departments",
                        "mixed": "combines several", "human": "your decision"},
             "text_levels": "headline = one line shown by default; why/output = the long form on request",
