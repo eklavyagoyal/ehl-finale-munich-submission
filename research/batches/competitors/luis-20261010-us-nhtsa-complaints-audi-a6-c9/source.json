@@ -1,0 +1,43 @@
+{
+  "document_type": "source",
+  "schema_version": "1.0",
+  "source_id": "luis-20261010-us-nhtsa-complaints-audi-a6-c9",
+  "dataset_key": "nhtsa:complaints",
+  "stream": "competitors",
+  "channel": "other",
+  "title": "US · NHTSA owner complaints · Audi A6 (C9)",
+  "locator": "https://api.nhtsa.gov/complaints/complaintsByVehicle",
+  "collected_at": "2026-10-10T16:15:06Z",
+  "collector": "luis (Claude Code research agents, run luis-competitors-2026-10-10)",
+  "is_example": false,
+  "normalized_record_count": 6,
+  "sampling": {
+    "method": "NHTSA complaints API (complaintsByVehicle) for every NHTSA model name matching the vehicle, model years 2026-2027; all returned complaints, deduplicated by ODI number. Script: competitors/tools/nhtsa.py",
+    "query": "make=AUDI; model regex=^(A6|S6)\\b; exclude=E-TRON|ALLROAD|AVANT|RS; model years 2026-2027",
+    "date_start": "2026-03-13",
+    "date_end": "2026-09-05",
+    "retrieved_count": 6,
+    "complete": true,
+    "limitations": [
+      "Complaints are self-reported and almost all describe defects; volume scales with fleet size and age.",
+      "NHTSA model buckets are noisy (e.g. EQE sedan and SUV share buckets; complaints mentioning 'SUV' were dropped).",
+      "Narratives are NHTSA's published text (public domain); 17-character VIN-like tokens were replaced.",
+      "A complaint filed for several vehicles appears once per vehicle batch (dedup_key = ODI number + vehicle)."
+    ]
+  },
+  "provenance": {
+    "origin": "official",
+    "verification": "provenance_checked",
+    "notes": "Fetched directly from api.nhtsa.gov by competitors/tools/nhtsa.py; raw JSON kept in data/nhtsa/."
+  },
+  "artifact": {
+    "path": "data/nhtsa/audi_a6_c9.json",
+    "sha256": "cdff8e6a0281c9b1aa703856787c0f1e0b51d1944b7b152ce40bf036bd5a430c"
+  },
+  "export_permissions": {
+    "git": true,
+    "external_llm": null,
+    "notes": "Stored on branch luis-competitors by the collector's decision. External LLM use not decided by the team yet."
+  },
+  "review_status": "pending"
+}

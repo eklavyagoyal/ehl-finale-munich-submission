@@ -1,0 +1,94 @@
+vehicle,complaints_total,recall_related_total,theme,complaints,share_of_vehicle_complaints
+BMW 5 Series (G60),49,22,ride_handling,29,0.592
+BMW 5 Series (G60),49,22,overall_quality_ownership,18,0.367
+BMW 5 Series (G60),49,22,adas_parking,15,0.306
+BMW 5 Series (G60),49,22,powertrain_performance,6,0.122
+BMW 5 Series (G60),49,22,range_charging_efficiency,3,0.061
+BMW 5 Series (G60),49,22,hmi_infotainment,2,0.041
+BMW 5 Series (G60),49,22,connectivity_app_digital,1,0.02
+BMW 5 Series (G60),49,22,lighting_visibility,1,0.02
+BMW 5 Series (G60),49,22,safety,1,0.02
+BMW 5 Series (G60),49,22,interior_design_quality,1,0.02
+Mercedes-Benz E-Class (W214),36,10,hmi_infotainment,12,0.333
+Mercedes-Benz E-Class (W214),36,10,ride_handling,8,0.222
+Mercedes-Benz E-Class (W214),36,10,powertrain_performance,8,0.222
+Mercedes-Benz E-Class (W214),36,10,adas_parking,6,0.167
+Mercedes-Benz E-Class (W214),36,10,range_charging_efficiency,5,0.139
+Mercedes-Benz E-Class (W214),36,10,overall_quality_ownership,3,0.083
+Mercedes-Benz E-Class (W214),36,10,lighting_visibility,3,0.083
+Mercedes-Benz E-Class (W214),36,10,access_locking,2,0.056
+Mercedes-Benz E-Class (W214),36,10,safety,2,0.056
+Mercedes-Benz E-Class (W214),36,10,interior_design_quality,1,0.028
+Mercedes-Benz E-Class (W214),36,10,seats_comfort,1,0.028
+Mercedes-Benz EQE sedan (V295),60,7,ride_handling,22,0.367
+Mercedes-Benz EQE sedan (V295),60,7,adas_parking,16,0.267
+Mercedes-Benz EQE sedan (V295),60,7,powertrain_performance,14,0.233
+Mercedes-Benz EQE sedan (V295),60,7,overall_quality_ownership,7,0.117
+Mercedes-Benz EQE sedan (V295),60,7,range_charging_efficiency,5,0.083
+Mercedes-Benz EQE sedan (V295),60,7,interior_design_quality,4,0.067
+Mercedes-Benz EQE sedan (V295),60,7,safety,4,0.067
+Mercedes-Benz EQE sedan (V295),60,7,hmi_infotainment,4,0.067
+Mercedes-Benz EQE sedan (V295),60,7,lighting_visibility,3,0.05
+Mercedes-Benz EQE sedan (V295),60,7,access_locking,3,0.05
+Mercedes-Benz EQE sedan (V295),60,7,climate,1,0.017
+Audi A6 e-tron (PPE),3,0,connectivity_app_digital,1,0.333
+Audi A6 e-tron (PPE),3,0,powertrain_performance,1,0.333
+Audi A6 e-tron (PPE),3,0,adas_parking,1,0.333
+Audi A6 e-tron (PPE),3,0,overall_quality_ownership,1,0.333
+Audi A6 (C9),6,0,adas_parking,4,0.667
+Audi A6 (C9),6,0,ride_handling,2,0.333
+Audi A6 (C9),6,0,powertrain_performance,2,0.333
+Audi A6 (C9),6,0,hmi_infotainment,1,0.167
+Tesla Model 3 (Highland),364,14,adas_parking,156,0.429
+Tesla Model 3 (Highland),364,14,overall_quality_ownership,93,0.255
+Tesla Model 3 (Highland),364,14,ride_handling,89,0.245
+Tesla Model 3 (Highland),364,14,lighting_visibility,42,0.115
+Tesla Model 3 (Highland),364,14,powertrain_performance,24,0.066
+Tesla Model 3 (Highland),364,14,safety,13,0.036
+Tesla Model 3 (Highland),364,14,access_locking,11,0.03
+Tesla Model 3 (Highland),364,14,hmi_infotainment,11,0.03
+Tesla Model 3 (Highland),364,14,range_charging_efficiency,10,0.027
+Tesla Model 3 (Highland),364,14,seats_comfort,4,0.011
+Tesla Model 3 (Highland),364,14,connectivity_app_digital,3,0.008
+Tesla Model S (2021 refresh),482,51,adas_parking,172,0.357
+Tesla Model S (2021 refresh),482,51,ride_handling,163,0.338
+Tesla Model S (2021 refresh),482,51,overall_quality_ownership,104,0.216
+Tesla Model S (2021 refresh),482,51,lighting_visibility,37,0.077
+Tesla Model S (2021 refresh),482,51,powertrain_performance,26,0.054
+Tesla Model S (2021 refresh),482,51,range_charging_efficiency,25,0.052
+Tesla Model S (2021 refresh),482,51,safety,23,0.048
+Tesla Model S (2021 refresh),482,51,access_locking,18,0.037
+Tesla Model S (2021 refresh),482,51,hmi_infotainment,14,0.029
+Tesla Model S (2021 refresh),482,51,connectivity_app_digital,8,0.017
+Tesla Model S (2021 refresh),482,51,seats_comfort,5,0.01
+Tesla Model S (2021 refresh),482,51,climate,1,0.002
+Genesis G80 (RG3),42,6,adas_parking,14,0.333
+Genesis G80 (RG3),42,6,ride_handling,12,0.286
+Genesis G80 (RG3),42,6,overall_quality_ownership,7,0.167
+Genesis G80 (RG3),42,6,powertrain_performance,5,0.119
+Genesis G80 (RG3),42,6,hmi_infotainment,2,0.048
+Genesis G80 (RG3),42,6,lighting_visibility,2,0.048
+Genesis G80 (RG3),42,6,safety,2,0.048
+Genesis G80 (RG3),42,6,range_charging_efficiency,2,0.048
+Genesis G80 (RG3),42,6,access_locking,1,0.024
+Genesis G80 (RG3),42,6,interior_design_quality,1,0.024
+Lexus ES (XZ10),135,50,safety,46,0.341
+Lexus ES (XZ10),135,50,powertrain_performance,29,0.215
+Lexus ES (XZ10),135,50,adas_parking,27,0.2
+Lexus ES (XZ10),135,50,ride_handling,25,0.185
+Lexus ES (XZ10),135,50,overall_quality_ownership,16,0.119
+Lexus ES (XZ10),135,50,lighting_visibility,5,0.037
+Lexus ES (XZ10),135,50,hmi_infotainment,3,0.022
+Lexus ES (XZ10),135,50,range_charging_efficiency,3,0.022
+Lexus ES (XZ10),135,50,access_locking,3,0.022
+Lexus ES (XZ10),135,50,interior_design_quality,1,0.007
+Lexus ES (XZ10),135,50,seats_comfort,1,0.007
+Cadillac CT5,109,25,powertrain_performance,32,0.294
+Cadillac CT5,109,25,overall_quality_ownership,23,0.211
+Cadillac CT5,109,25,access_locking,20,0.183
+Cadillac CT5,109,25,ride_handling,20,0.183
+Cadillac CT5,109,25,adas_parking,19,0.174
+Cadillac CT5,109,25,safety,8,0.073
+Cadillac CT5,109,25,hmi_infotainment,4,0.037
+Cadillac CT5,109,25,lighting_visibility,3,0.028
+Cadillac CT5,109,25,range_charging_efficiency,2,0.018

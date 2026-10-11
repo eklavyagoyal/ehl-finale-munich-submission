@@ -1,0 +1,518 @@
+{
+  "description": "Announced/reported/rumoured changes 2026-2030. Announcements are not availability evidence, so they are not exported as records.",
+  "outlook": [
+    {
+      "record_id": "bmw_baseline_outlook-O001",
+      "kind": "outlook",
+      "markets": [
+        "EU",
+        "US",
+        "CN"
+      ],
+      "brand": "Mercedes-Benz",
+      "model": "E-Class / EQE (electric E-Class successor)",
+      "current_generation": "W214 E-Class (2023); V295 EQE (2022)",
+      "announcement": "Successor to the EQE will be an electric E-Class, brought forward to H2 2027 (originally 2028), built on the smaller MB.EA-M architecture",
+      "customer_facing_changes": [
+        "Electric version of the core E-Class nameplate instead of a separate EQE",
+        "Classic three-box 'status-oriented business sedan' design, likely about 5 m long (slightly elongated)",
+        "Built on MB.EA-M (MB.EA-L not ready)",
+        "Current EQE reportedly to get a 2026 update incl. 800 V technology",
+        "EQE US production reportedly paused indefinitely from 1 Sep 2025"
+      ],
+      "theme": "powertrain_performance",
+      "url": "https://www.electrive.com/2025/08/20/mercedes-launches-the-electric-e-class-a-year-earlier-than-planned",
+      "published": "2025-08",
+      "evidence_tier": "D",
+      "confidence": "reported",
+      "notes": "electrive relays the blog JESMB, which refers to a CEO Ola Källenius announcement; no direct Mercedes release fetched. No fetched source covers MB.OS arriving in the E-Class or a W214 facelift; Autocar (EQE end of production in 2026) and Motor Authority were blocked (402/403).",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O002",
+      "kind": "outlook",
+      "markets": [
+        "EU",
+        "US"
+      ],
+      "brand": "Audi",
+      "model": "A6 e-tron",
+      "current_generation": "A6 e-tron (PPE, 2024)",
+      "announcement": "Model year 2027 tech refresh for A6 e-tron and Q6 e-tron (announced Feb 2026)",
+      "customer_facing_changes": [
+        "Physical buttons return on the steering wheel; a scroll wheel replaces touch-sensitive controls for volume and menus",
+        "Refreshed MMI interface with updated graphics, fewer long lists",
+        "Updated voice-control capabilities",
+        "'Power Nap' mode for relaxing while charging",
+        "Available high-resolution 4K dashcam"
+      ],
+      "theme": "hmi_infotainment",
+      "url": "https://www.kbb.com/car-news/audi-a6-e-tron-and-q6-e-tron-lineups-see-big-tech-upgrades-for-2027",
+      "published": "2026-02",
+      "evidence_tier": "D",
+      "confidence": "announced",
+      "notes": "KBB report of Audi's announcement. Audi reverses touch-only controls; relevant against the G60's touch-based climate and controls.",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O003",
+      "kind": "outlook",
+      "markets": [
+        "CN"
+      ],
+      "brand": "Audi",
+      "model": "A6L e-tron (FAW-Audi, China LWB)",
+      "current_generation": "new model (2026)",
+      "announcement": "China-specific long-wheelbase A6L e-tron on pre-sale from late March 2026, four variants, 313,000-443,000 CNY pre-sale prices",
+      "customer_facing_changes": [
+        "Long wheelbase 3,076 mm (direct answer to 5 Series Li / i5 Li)",
+        "107 kWh battery, up to 815 km range (cycle not named)",
+        "800 V architecture, 270 kW max charging, 302 km added in 10 min",
+        "Huawei Qiankun ADS: urban point-to-point NOA and complex-scenario parking",
+        "AR head-up display"
+      ],
+      "theme": "adas_parking",
+      "url": "https://cnevpost.com/2026/03/25/audi-begins-pre-sales-a6l-e-tron-china/",
+      "published": "2026-03",
+      "evidence_tier": "D",
+      "confidence": "announced",
+      "notes": "OEM pre-sale reported by CnEVPost. A German premium rival adopting Huawei ADS in China raises the bar for G68 ADAS (G68: L2, no NOA listed).",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O004",
+      "kind": "outlook",
+      "markets": [
+        "EU",
+        "US",
+        "CN"
+      ],
+      "brand": "Tesla",
+      "model": "Model S",
+      "current_generation": "Model S (2012, refreshed 2021)",
+      "announcement": "Production of Model S and Model X ended at Fremont (Tesla post, 10 May 2026); line repurposed for Optimus humanoid robots",
+      "customer_facing_changes": [
+        "No new Model S built after May 2026; no successor announced",
+        "Tesla's large-sedan presence shrinks to Model 3 / Model Y in the volume segment",
+        "Fremont S/X line converted to Optimus production"
+      ],
+      "theme": "overall_quality_ownership",
+      "url": "https://www.etvbharat.com/en/technology/tesla-ends-production-of-model-s-and-model-x-at-fremont-plant-enn26051101437",
+      "published": "2026-05",
+      "evidence_tier": "D",
+      "confidence": "announced",
+      "notes": "Plan first announced by Elon Musk on the Q4 2025 earnings call (Fox Business, 28 Jan 2026: https://www-ak-ms.foxbusiness.com/fox-news-auto/tesla-ends-production-model-s-model-x-vehicles-focus-robots-2026). Service/update support for existing owners not covered by the sources. Implication: the 5 Series successor is unlikely to face a Tesla large sedan.",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O005",
+      "kind": "outlook",
+      "markets": [
+        "EU"
+      ],
+      "brand": "Tesla",
+      "model": "Model 3 (FSD Supervised)",
+      "current_generation": "Model 3 (Highland, 2023)",
+      "announcement": "FSD (Supervised) approved country by country in Europe: Netherlands provisional approval early April 2026, Slovenia sixth European country (Sept 2026); EU-wide vote possibly from Oct 2026",
+      "customer_facing_changes": [
+        "Point-to-point supervised assisted driving (L2) on European roads in a growing set of countries",
+        "Driver must still pay attention",
+        "Potential EU-wide availability if the EU vote passes"
+      ],
+      "theme": "adas_parking",
+      "url": "https://www.thestar.com.my/tech/tech-news/2026/09/08/slovenia-clears-tesla039s-fsd-driver-assistance-ahead-of-eu-vote",
+      "published": "2026-09",
+      "evidence_tier": "D",
+      "confidence": "reported",
+      "notes": "Reuters via The Star. FSD is a software package across Tesla models, not Model 3-specific. Search snippets say the EU vote was deferred to December 2026; not verified by fetch. Compare G60 EU: hands-off only on German Autobahn up to 130 km/h (E0008).",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O006",
+      "kind": "outlook",
+      "markets": [
+        "EU",
+        "US"
+      ],
+      "brand": "Genesis",
+      "model": "G80",
+      "current_generation": "RG3 G80 (2020, facelift 2024)",
+      "announcement": "Next-generation G80 reportedly delayed across all powertrains; next G80 EV not expected before 2029; possible EREV G80 near end of decade",
+      "customer_facing_changes": [
+        "Current gas and hybrid G80 continue until about the end of the decade",
+        "No new G80 EV before 2029 (Electrified G80 dropped in North America; still sold in Europe as of 2025)",
+        "Possible range-extender (EREV) G80 later"
+      ],
+      "theme": "powertrain_performance",
+      "url": "https://electrek.co/2025/09/10/genes-delaying-this-next-generation-ev/",
+      "published": "2025-09",
+      "evidence_tier": "D",
+      "confidence": "rumoured",
+      "notes": "Based on Korean blogger Motorsjason (also TheKoreanCarBlog), relayed by Electrek; Genesis did not confirm. Implication: an ageing G80 when the 5 Series successor arrives.",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O007",
+      "kind": "outlook",
+      "markets": [
+        "EU",
+        "US",
+        "CN"
+      ],
+      "brand": "Lexus",
+      "model": "ES",
+      "current_generation": "8th generation ES (world premiere Apr 2025)",
+      "announcement": "All-new ES with hybrid (ES 300h/350h) and first battery-electric versions (ES 350e/500e); phased regional rollout from mid-2026",
+      "customer_facing_changes": [
+        "First BEV ES: CLTC target approx. 685 km (350e) / 610 km (500e) on 19\" tyres",
+        "150 kW DC, 10-80 % in approx. 30 min at 25 °C",
+        "Larger body: length 5,140 mm (+165), wheelbase 2,950 mm (+80)",
+        "'Responsive Hidden Switches' blending physical controls into the interior",
+        "'Sensory Concierge' syncing lighting, climate and fragrance; panoramic roof with dimming (prototype)"
+      ],
+      "theme": "powertrain_performance",
+      "url": "https://global.toyota/en/newsroom/lexus/42650696.html",
+      "published": "2025-04",
+      "evidence_tier": "D",
+      "confidence": "announced",
+      "notes": "Official Toyota/Lexus newsroom. Already on sale in some markets by Oct 2026; the BEV charging (150 kW, ~30 min) is no better than the i5. Screen size, Arene software and US EPA figures appear in search snippets but were not verified by fetch (Lexus Australia page returned 403).",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O008",
+      "kind": "outlook",
+      "markets": [
+        "EU",
+        "US"
+      ],
+      "brand": "Volvo",
+      "model": "ES90",
+      "current_generation": "ES90 (SPA2, 2025)",
+      "announcement": "Google Gemini replaces Google Assistant via OTA on 16 Volvo models incl. ES90, starting 30 Apr 2026 in the US, other markets following",
+      "customer_facing_changes": [
+        "Conversational LLM assistant (Gemini) instead of canned voice commands",
+        "Trip planning and music via natural prompts (e.g. find a stop that sells croissants on the route)",
+        "Delivered over the air to existing cars back to 2020",
+        "Requires an online car and, at launch, a US English Google account"
+      ],
+      "theme": "hmi_infotainment",
+      "url": "https://theweeklydriver.com/2026/04/volvo-google-gemini-2026-rollout",
+      "published": "2026-04",
+      "evidence_tier": "D",
+      "confidence": "announced",
+      "notes": "Hardware context (KBB, Feb 2025: https://www.kbb.com/car-news/2026-volvo-es90-the-classic-volvo-luxury-sedan-electrified): dual NVIDIA DRIVE AGX Orin, one lidar, five radars, eight cameras, continuous OTA updates. ES90 US availability unclear (search snippet: Consumer Reports says no current US plans; not verified). Google built-in is not offered on Chinese-market Volvos, so CN not tagged.",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O009",
+      "kind": "outlook",
+      "markets": [
+        "CN"
+      ],
+      "brand": "Xiaomi",
+      "model": "SU7 (next generation)",
+      "current_generation": "SU7 2nd generation (launched 19 Mar 2026)",
+      "announcement": "Next-gen SU7 launched 19 Mar 2026 at 219,900 / 249,900 / 303,900 CNY (Standard / Pro / Max); over 15,000 locked orders in 34 minutes",
+      "customer_facing_changes": [
+        "Lidar and Nvidia Thor (700 TOPS) standard on all versions",
+        "Assisted driving powered by Xiaomi's 'XLA' cognitive large language model",
+        "CLTC range 720 km (Standard, 73 kWh); 902 km (Pro, 96.3 kWh); 835 km (Max, 101.7 kWh)",
+        "Silicon-carbide high-voltage platform; Max adds 670 km in 15 min",
+        "Wheelbase 3,000 mm"
+      ],
+      "theme": "adas_parking",
+      "url": "https://cnevpost.com/2026/03/19/xiaomi-launches-next-gen-su7-further-challenge-tesla/",
+      "published": "2026-03",
+      "evidence_tier": "D",
+      "confidence": "announced",
+      "notes": "OEM launch reported by CnEVPost. A larger 'SU7 L' executive sedan (>5.2 m, >3.1 m wheelbase) appears only in search snippets citing Sina Tech; not verified, so no record.",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O010",
+      "kind": "outlook",
+      "markets": [
+        "EU"
+      ],
+      "brand": "Xiaomi",
+      "model": "SU7 / YU7 (overseas sales)",
+      "current_generation": "SU7 / YU7",
+      "announcement": "Xiaomi will only consider selling cars outside China from 2027 (CEO Lei Jun, Jul 2025)",
+      "customer_facing_changes": [
+        "Possible arrival of Xiaomi EVs in export markets from 2027",
+        "Domestic market has priority until then because of strong SU7/YU7 orders"
+      ],
+      "theme": "equipment_value",
+      "url": "https://en.aletihad.ae/news/business/4587378/xiaomi-to-consider-selling-cars-outside-china-from-2027--ceo",
+      "published": "2025-07",
+      "evidence_tier": "D",
+      "confidence": "reported",
+      "notes": "Reuters via Aletihad. The page does not name Europe or specific models; search snippets (not fetched) say Xiaomi later named Europe as first destination with sales from Q3/Q4 2027.",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O011",
+      "kind": "outlook",
+      "markets": [
+        "CN"
+      ],
+      "brand": "Zeekr",
+      "model": "007 / 007 GT (updated)",
+      "current_generation": "007 (2023, 800 V)",
+      "announcement": "Updated 007 and 007 GT on pre-sale from 2 Apr 2026, launch 10 Apr 2026",
+      "customer_facing_changes": [
+        "Upgrade from 800 V to 900 V architecture",
+        "6C charging: 10-80 % in about 10 min",
+        "Range up to 905 km (cycle not named); 75 and 103 kWh packs",
+        "Nvidia Drive Thor-U assisted-driving chip",
+        "Up to 370 kW single-motor; 0-100 km/h in 2.73 s (dual motor)"
+      ],
+      "theme": "range_charging_efficiency",
+      "url": "https://cnevpost.com/2026/04/02/zeekr-starts-pre-sales-updated-007-series/",
+      "published": "2026-04",
+      "evidence_tier": "D",
+      "confidence": "announced",
+      "notes": "OEM pre-sale reported by CnEVPost; updated-model prices not stated (current 007 from 209,900 CNY). 10-80 % in ~10 min vs i5 205 kW / 30 min (EU) and 30-80 % in 0.6 h (CN i5 Li).",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O012",
+      "kind": "outlook",
+      "markets": [
+        "CN"
+      ],
+      "brand": "Huawei HIMA",
+      "model": "Luxeed S7",
+      "current_generation": "Luxeed S7 (2023, updated Aug 2025)",
+      "announcement": "Updated Luxeed S7 on sale from 23 Mar 2026, from 239,800 CNY (+10,000 CNY), seven months after the previous update",
+      "customer_facing_changes": [
+        "896-channel image-grade lidar standard on all trims",
+        "Huawei Qiankun ADS 4 assisted driving",
+        "New exterior colours",
+        "Fast update cadence (two updates within about seven months)"
+      ],
+      "theme": "adas_parking",
+      "url": "https://cnevpost.com/2026/03/23/luxeed-launches-updated-r7-s7/",
+      "published": "2026-03",
+      "evidence_tier": "D",
+      "confidence": "announced",
+      "notes": "Luxeed S7 is the HIMA sedan closest to the 5 Series Li price band. Range/charging and HarmonyOS version not stated on the page.",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O013",
+      "kind": "outlook",
+      "markets": [
+        "CN"
+      ],
+      "brand": "Huawei HIMA",
+      "model": "Maextro S800 (updated)",
+      "current_generation": "Maextro S800 (2025)",
+      "announcement": "Updated Maextro S800 (and AITO M9) to get Huawei's highest line-count mass-produced lidar (500-line per MIIT filing) and the upcoming Qiankun ADS 5.0; details at HIMA tech launch on 4 Mar 2026",
+      "customer_facing_changes": [
+        "500-line lidar (reportedly upgradeable to 1,000 lines)",
+        "Qiankun ADS 5.0 expected (current car: ADS 4.0 with 192-line lidar + 3 solid-state lidars)",
+        "S800 was China's best-selling luxury saloon as of Jan 2026"
+      ],
+      "theme": "adas_parking",
+      "url": "https://carnewschina.com/2026/03/02/huawei-will-put-worlds-highest-line-count-mass-produced-lidar-on-its-updated-maextro-s800-and-aito-m9/",
+      "published": "2026-03",
+      "evidence_tier": "D",
+      "confidence": "reported",
+      "notes": "Lidar spec from MIIT filing; ADS 5.0 'expected'. S800 is a 7 Series / S-Class-level rival but sets the HIMA technology ceiling. Inconsistency: Luxeed S7 (O012) is reported with an 896-channel lidar, while the S800's 500-line unit is called the world's highest line-count; channel vs line counting likely differs.",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O014",
+      "kind": "outlook",
+      "markets": [
+        "CN"
+      ],
+      "brand": "Huawei HIMA",
+      "model": "Qiankun ADS (all HIMA brands)",
+      "current_generation": "Qiankun ADS 4 (2025)",
+      "announcement": "Huawei targets large-scale L3 highway deployment in 2026 and large-scale L3 adoption in 2027, plus L4 urban pilots, subject to regulatory approval (Jin Yuzhi, WNEVC, Sept 2025)",
+      "customer_facing_changes": [
+        "Highway L3 (eyes-off under conditions) on Huawei-equipped cars from 2026 where approved",
+        "L3 at scale from 2027; L4 urban pilots from 2026",
+        "Qiankun ADS already in over one million vehicles across 28 models"
+      ],
+      "theme": "adas_parking",
+      "url": "https://carnewschina.com/2025/09/29/huawei-qiankun-ads-sets-2027-target-for-large-scale-l3-autonomous-driving-rollout/",
+      "published": "2025-09",
+      "evidence_tier": "D",
+      "confidence": "announced",
+      "notes": "Statement by the CEO of Huawei's Smart Car Solutions BU, reported by CarNewsChina. Huawei ADS also supplies Audi's A6L e-tron in China (O003). Search snippets mention HIMA L3 internal testing in Shenzhen (AITO M9, Maextro S800); not verified by fetch.",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O015",
+      "kind": "outlook",
+      "markets": [
+        "EU",
+        "US",
+        "CN"
+      ],
+      "brand": "BMW",
+      "model": "Neue Klasse technologies (iX3) - context for 5 Series",
+      "current_generation": "Neue Klasse iX3 (2025)",
+      "announcement": "Neue Klasse technologies shown at CES 2026; to be integrated into 40 new models and model updates by 2027 and to shape the whole range",
+      "customer_facing_changes": [
+        "BMW Intelligent Personal Assistant extended with Amazon Alexa+ (LLM) from H2 2026 at the latest in Germany and the USA, on OS 9 and OS X",
+        "BMW Panoramic iDrive: mix of digital functions and physical elements",
+        "Gen6 eDrive: 800 V, up to 400 kW DC, 10-80 % in 21 min; iX3 50 xDrive up to 805 km WLTP",
+        "Highway Assistant hands-free up to 130 km/h (85 mph) with automated lane changes; Highway and City Assistant stops and restarts at traffic lights (country-dependent)",
+        "BMW Operating System X with app/entertainment ecosystem"
+      ],
+      "theme": "range_charging_efficiency",
+      "url": "https://www.press.bmwgroup.com/global/article/detail/T0454649EN/the-bmw-ix3-ushers-in-next-generation-innovations-at-ces-2026?language=en",
+      "published": "2026-01",
+      "evidence_tier": "D",
+      "confidence": "announced",
+      "notes": "Context only (BMW's own direction). Gap vs current G60: i5 205 kW / 30 min vs NK 400 kW / 21 min; G60 runs OS 8.5 per DE list, so the Alexa+ scope (OS 9 / OS X) does not obviously include today's G60 outside China (Xinhua calls the CN 5 Series LWB system 'ninth generation').",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O016",
+      "kind": "outlook",
+      "markets": [
+        "EU",
+        "US",
+        "CN"
+      ],
+      "brand": "BMW",
+      "model": "5 Series (G60 LCI) and Neue Klasse 5 Series (NC0)",
+      "current_generation": "G60 / G61 (2023)",
+      "announcement": "G60 LCI expected July 2027; Neue Klasse 5 Series 'NC0' expected July 2030 on the full NK platform",
+      "customer_facing_changes": [
+        "LCI: Panoramic Vision windshield display (as in 7 Series LCI)",
+        "LCI: optional passenger display",
+        "LCI: chassis control suspension replaces current adaptive options",
+        "LCI: tiered highway and city drive assists as options for the first time",
+        "NC0: full NK platform with 800 V charging and native Panoramic iDrive X"
+      ],
+      "theme": "hmi_infotainment",
+      "url": "https://www.bimmerfile.com/2026/05/26/the-next-bmw-5-series-a-major-update-now-a-bigger-change-coming/",
+      "published": "2026-05",
+      "evidence_tier": "D",
+      "confidence": "rumoured",
+      "notes": "Enthusiast-site analysis; no BMW confirmation or named source. Context only. The LCI is the version that will actually meet most of the 2027-2030 competitor moves listed here.",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O017",
+      "kind": "outlook",
+      "markets": [
+        "CN"
+      ],
+      "brand": "industry",
+      "model": "L3 conditional automation approvals (China)",
+      "current_generation": "n/a",
+      "announcement": "MIIT approved the first two L3 production models on 15 Dec 2025 (Deepal SL03, Arcfox Alpha S); both got dedicated L3 licence plates; analysts expect more approvals in 2026",
+      "customer_facing_changes": [
+        "L3 on single lanes of selected highways/urban expressways: Deepal up to 50 km/h in congestion (Chongqing), Arcfox up to 80 km/h (Beijing)",
+        "System is force-disabled outside approved roads; driver must stay seated and ready to take over",
+        "Counterpoint expects approvals for BYD, FAW, GAC, NIO, SAIC and L3 launches by Xpeng, Tesla and Huawei partners in H2 2026"
+      ],
+      "theme": "adas_parking",
+      "url": "https://cnevpost.com/2025/12/23/arcfox-deepal-secure-1st-dedicated-license-plates-l3/",
+      "published": "2025-12",
+      "evidence_tier": "D",
+      "confidence": "announced",
+      "notes": "Regulatory approval is official (MIIT); the outlook part (further approvals) is analyst forecast. Search snippet (not fetched) mentions a mandatory national L3/L4 standard effective July 2027. The G68 i5 lists L2 driver assistance only (E0050).",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O018",
+      "kind": "outlook",
+      "markets": [
+        "US",
+        "EU"
+      ],
+      "brand": "industry",
+      "model": "LLM voice assistants in cars",
+      "current_generation": "n/a",
+      "announcement": "Generative-AI assistants arriving via OTA: Volvo/Google Gemini on 16 models from 30 Apr 2026; Mercedes layered ChatGPT on MBUX; Stellantis ChatGPT in some Chrysler models; BMW builds its own assistant",
+      "customer_facing_changes": [
+        "Natural, intent-based conversation instead of fixed voice commands",
+        "Prompt-based trip planning and media control",
+        "Retrofitted to existing cars over the air (Volvo back to 2020 model years)"
+      ],
+      "theme": "hmi_infotainment",
+      "url": "https://theweeklydriver.com/2026/04/volvo-google-gemini-2026-rollout",
+      "published": "2026-04",
+      "evidence_tier": "D",
+      "confidence": "announced",
+      "notes": "China equivalent: BMW China announced DeepSeek for the 5 Series LWB / i5 from Q3 2025 (Xinhua, E0046); BMW Alexa+ from H2 2026 in DE/US (O015). By the 5 Series successor an LLM assistant will be table stakes in all three markets.",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "bmw_baseline_outlook-O019",
+      "kind": "outlook",
+      "markets": [
+        "CN"
+      ],
+      "brand": "industry",
+      "model": "Megawatt / ultra-fast charging (China)",
+      "current_generation": "n/a",
+      "announcement": "BYD Super e-Platform (Mar 2025): 1,000 V, up to 1,000 kW charging, 10C batteries; Han L / Tang L launched Apr 2025 from 270,000 CNY; 4,000+ megawatt flash chargers planned",
+      "customer_facing_changes": [
+        "About 400 km (CLTC) added in 5 minutes (Han L), 370 km (Tang L)",
+        "Dedicated megawatt charger network with stationary storage where needed",
+        "Sets a reference that 10-80 % in about 10-15 min (Zeekr 007 6C, Xiaomi SU7 Max) is the new Chinese norm"
+      ],
+      "theme": "range_charging_efficiency",
+      "url": "https://www.electrive.com/2025/03/18/byd-introduces-megawatt-charging-for-electric-cars",
+      "published": "2025-03",
+      "evidence_tier": "D",
+      "confidence": "announced",
+      "notes": "electrive notes reported charger power is inconsistent (1,000 vs 1,360 kW) and that peak power is short-lived. CN i5 Li: 30-80 % in 0.6 h; NK Gen6: 10-80 % in 21 min (O015).",
+      "agent": "bmw_baseline_outlook"
+    },
+    {
+      "record_id": "us_mercedes-O001",
+      "kind": "outlook",
+      "markets": [
+        "US"
+      ],
+      "brand": "Mercedes-Benz",
+      "model": "E-Class sedan",
+      "current_generation": "W214",
+      "announcement": "Comprehensive facelift of the combustion/PHEV E-Class reported for 2027, launching alongside the new electric (seventh-generation) E-Class.",
+      "customer_facing_changes": [
+        "Exterior design adopts the design language of the new electric E-Class",
+        "Combustion and PHEV versions continue in sedan and estate form on the MRA II platform"
+      ],
+      "theme": "exterior_design",
+      "url": "https://mercedesblog.com/the-future-electric-mercedes-e-class-arrives-in-2027-and-replaces-the-eqe/",
+      "published": "2025-11",
+      "evidence_tier": "D",
+      "confidence": "reported",
+      "agent": "us_mercedes"
+    },
+    {
+      "record_id": "us_mercedes-O002",
+      "kind": "outlook",
+      "markets": [
+        "US"
+      ],
+      "brand": "Mercedes-Benz",
+      "model": "EQE sedan",
+      "current_generation": "V295",
+      "announcement": "Seventh-generation electric E-Class reported to debut in 2027 and replace the EQE sedan.",
+      "customer_facing_changes": [
+        "Traditional three-box sedan silhouette with a long, status-oriented wheelbase instead of the EQE's one-bow shape (reported)",
+        "MB.EA platform shared with the GLC EQ and electric C-Class (reported)",
+        "800 V architecture with up to 350 kW DC charging (expected)",
+        "Single-motor RWD and dual-motor AWD versions, adaptive air suspension and rear-wheel steering (expected)",
+        "EQ naming dropped and EVs styled like combustion models (Mercedes statement)"
+      ],
+      "theme": "range_charging_efficiency",
+      "url": "https://mercedesblog.com/the-future-electric-mercedes-e-class-arrives-in-2027-and-replaces-the-eqe/",
+      "published": "2025-11",
+      "evidence_tier": "D",
+      "confidence": "reported",
+      "agent": "us_mercedes"
+    }
+  ]
+}

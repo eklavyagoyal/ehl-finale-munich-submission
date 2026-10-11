@@ -1,0 +1,42 @@
+{
+  "document_type": "source",
+  "schema_version": "1.0",
+  "source_id": "yelya-20261010-app_store-my-bmw-1519034860-au",
+  "dataset_key": "app_store:1519034860:AU",
+  "stream": "social",
+  "channel": "app_store",
+  "title": "My BMW (App Store 1519034860) customer reviews, AU storefront",
+  "locator": "https://apps.apple.com/au/app/id1519034860",
+  "collected_at": "2026-10-10T16:41:33Z",
+  "collector": "yelya",
+  "is_example": false,
+  "normalized_record_count": 303,
+  "sampling": {
+    "method": "App Store reviews, newest first, all available up to the scraper limit; scrapers/app_reviews.py",
+    "query": null,
+    "date_start": "2024-01-01",
+    "date_end": "2026-09-24",
+    "retrieved_count": 303,
+    "complete": false,
+    "limitations": [
+      "Apple's public review feed exposes only the ~500 most recent reviews per storefront; it also skips the occasional empty page, so a few reviews can be missing.",
+      "Market is the storefront country, not the reviewer's residence.",
+      "Reviews concern the companion app, not a specific vehicle model; subject_ids stay empty until the catalog has an app entity."
+    ]
+  },
+  "provenance": {
+    "origin": "third_party",
+    "verification": "provenance_checked",
+    "notes": "Collected with scrapers/app_reviews.py from the public App Store review endpoints. DimXxxID values are this warehouse's surrogate keys (see scrapers/warehouse.py), resolved into markets."
+  },
+  "artifact": {
+    "path": "outputs/warehouse/fact_review.parquet",
+    "sha256": "0e98a956bfc0371e6f20d26b4d539b6b32388b4b30e38fc8701eff9096a36e8b"
+  },
+  "export_permissions": {
+    "git": null,
+    "external_llm": null,
+    "notes": "Unresolved: scraped third-party review text; keep out of Git and external LLMs until decided."
+  },
+  "review_status": "pending"
+}

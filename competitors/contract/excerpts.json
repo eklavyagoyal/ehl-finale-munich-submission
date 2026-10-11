@@ -1,0 +1,257 @@
+{
+  "description": "Exact excerpts (whitespace-normalised page text) accepted after review; used by export_contract.py.",
+  "excerpts": {
+    "bmw_baseline_outlook-E0029": {
+      "url": "https://www.press.bmwgroup.com/usa/article/detail/T0418778EN_US/the-new-bmw-5-series-sedan?language=en_US",
+      "fetched_at": "2026-10-10T16:19:17Z",
+      "excerpt": "eDrive40: 335 hp, estimated 295-mile range. Highway Assistant allows attentive hands-free driving at up to",
+      "feature": "F08_hands_free_highway",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "bmw_baseline_outlook-E0034": {
+      "url": "https://www.press.bmwgroup.com/usa/article/detail/T0418778EN_US/the-new-bmw-5-series-sedan?language=en_US",
+      "fetched_at": "2026-10-10T16:19:17Z",
+      "excerpt": "i5 is also equipped with rear-axle air suspension as standard. The self-levelling suspension ensures optimum",
+      "feature": "F13_air_suspension",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "bmw_baseline_outlook-E0037": {
+      "url": "https://www.press.bmwgroup.com/usa/article/detail/T0418778EN_US/the-new-bmw-5-series-sedan?language=en_US",
+      "fetched_at": "2026-10-10T16:19:17Z",
+      "excerpt": "to 11 kW. When connected to a DC fast charger, the charging rate of 205",
+      "feature": "F16_dc_charging",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "bmw_baseline_outlook-E0046": {
+      "url": "https://www.news.cn/auto/20250427/7a444691d682422ca0393c88deb32195/c.html",
+      "fetched_at": "2026-10-10T16:19:21Z",
+      "excerpt": "宝马中国宣布DeepSeek“上车” 以AI赋能宝马人机交互体",
+      "feature": "F04_voice_assistant",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "bmw_baseline_outlook-E0052": {
+      "url": "https://chejiahao.autohome.com.cn/info/24819297",
+      "fetched_at": "2026-10-10T16:19:23Z",
+      "excerpt": "时标配双拼色舒适座椅、前排座椅通风、后排座椅加热、四区自动空调及 5G 网络，配",
+      "feature": "F10_ventilated_front_seats",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "bmw_baseline_outlook-E0055": {
+      "url": "https://data.carnewschina.com/database/bmw/bmw-i5/2026/params",
+      "fetched_at": "2026-10-10T16:19:26Z",
+      "excerpt": "speed driving warning yes yes yes Air suspension yes yes yes Automatic ramp exit/entry no",
+      "feature": "F13_air_suspension",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "bmw_baseline_outlook-E0058": {
+      "url": "https://data.carnewschina.com/database/bmw/bmw-i5/2026/params",
+      "fetched_at": "2026-10-10T16:19:26Z",
+      "excerpt": "km 713 km 651 km DC charging (30-80%) 0.6 hours 0.6 hours 0.6 hours Battery",
+      "feature": "F16_dc_charging",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "cn_german_g68-E0088": {
+      "url": "https://www.bitauto.com/article/1003104100060/",
+      "fetched_at": "2026-10-10T16:19:27Z",
+      "excerpt": "5 系、奔驰 E 级已在高阶智驾上有所布局，而 A6L 目前的智能驾驶配置仍以",
+      "feature": "F08_hands_free_highway",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "cn_german_g68-E0030": {
+      "url": "https://www.bitauto.com/article/1003107306091/",
+      "fetched_at": "2026-10-10T16:19:28Z",
+      "excerpt": "角度/腿托/电动调节、前排座椅通风、二排座椅加热/通风、21扬声器柏林之声音响等",
+      "feature": "F10_ventilated_front_seats",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "cn_german_g68-E0048": {
+      "url": "https://www.autohome.com.cn/advice/202605/1314555.html",
+      "fetched_at": "2026-10-10T16:20:32Z",
+      "excerpt": "，全新奥迪A6L是可以选装华为乾崑智驾的，不过目前厂家还没公布选装价格等细节消息",
+      "feature": "F08_hands_free_highway",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "cn_german_g68-E0053": {
+      "url": "https://www.autohome.com.cn/advice/202605/1314555.html",
+      "fetched_at": "2026-10-10T16:20:32Z",
+      "excerpt": "的是，都到大顶配了，后轮转向和空气悬架还是要选装，不过对于预算充足的大哥来说，这",
+      "feature": "F13_air_suspension",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "cn_german_g68-E0068": {
+      "url": "https://cnevpost.com/2026/03/25/audi-begins-pre-sales-a6l-e-tron-china/",
+      "fetched_at": "2026-10-10T16:20:33Z",
+      "excerpt": "new car is equipped with Huawei's Qiankun ADS driver assistance system, which enables point-to-point navigate-on-autopilot",
+      "feature": "F08_hands_free_highway",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "cn_german_g68-E0076": {
+      "url": "https://cnevpost.com/2026/03/25/audi-begins-pre-sales-a6l-e-tron-china/",
+      "fetched_at": "2026-10-10T16:20:33Z",
+      "excerpt": "boasts a maximum charging power of 270 kW, allowing the battery to replenish 302 kilometers",
+      "feature": "F16_dc_charging",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "cn_nev-E0013": {
+      "url": "https://carnewschina.com/2026/03/19/xiaomi-su7-new-gen-launched-with-up-to-680-hp-starts-at-31870-usd-in-china/",
+      "fetched_at": "2026-10-10T16:20:34Z",
+      "excerpt": "five-link suspension. Higher trims add dual-chamber air suspension with adaptive damping, along with predictive control",
+      "feature": "F13_air_suspension",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "cn_nev-E0028": {
+      "url": "https://cnevpost.com/2024/04/25/nio-launches-2024-et7/",
+      "fetched_at": "2026-10-10T16:20:35Z",
+      "excerpt": "one year of free access to NOP+ (Navigate on Pilot Plus) driver assistance feature. Customers",
+      "feature": "F08_hands_free_highway",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "cn_nev-E0056": {
+      "url": "https://cnevpost.com/2026/04/10/zeekr-launches-updated-007-series/",
+      "fetched_at": "2026-10-10T16:20:35Z",
+      "excerpt": "super-fast charging rate of up to 6C. The new cars can charge from 10% to",
+      "feature": "F16_dc_charging",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "cn_nev-E0068": {
+      "url": "https://cnevpost.com/2026/03/23/luxeed-launches-updated-r7-s7/",
+      "fetched_at": "2026-10-10T16:20:36Z",
+      "excerpt": "They are also equipped with Huawei's Qiankun ADS 4 assisted driving system, designed to provide",
+      "feature": "F08_hands_free_highway",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "cn_nev-E0076": {
+      "url": "https://www.autohome.com.cn/news/202508/1308427.html",
+      "fetched_at": "2026-10-10T16:21:37Z",
+      "excerpt": "km、785km、703km，充电5分钟，续航增加215公里，电耗仅12.4kW",
+      "feature": "F16_dc_charging",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "cn_nev-E0096": {
+      "url": "https://carnewschina.com/2025/01/25/sunday-china-drive-stelato-s9-redefining-luxury-evs-with-advanced-tech-and-competitive-pricing/",
+      "fetched_at": "2026-10-10T16:21:38Z",
+      "excerpt": "the 800V architecture allows for ultra-fast charging, adding 200 km of range in five minutes.",
+      "feature": "F16_dc_charging",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "eu_challengers-E0003": {
+      "url": "https://www.autoexpress.co.uk/volvo/es90",
+      "fetched_at": "2026-10-10T16:21:40Z",
+      "excerpt": "three, plus a bank of touch-sensitive climate controls across the bottom. The only physical switches",
+      "feature": "F03_physical_climate_controls",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "eu_challengers-E0013": {
+      "url": "https://www.autoexpress.co.uk/volvo/es90",
+      "fetched_at": "2026-10-10T16:21:40Z",
+      "excerpt": "on that promise. Higher-spec versions feature air suspension to provide an even more comfortable ride.",
+      "feature": "F13_air_suspension",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "eu_challengers-E0016": {
+      "url": "https://www.adac.de/rund-ums-fahrzeug/autokatalog/marken-modelle/volvo/es90/1generation/339499",
+      "fetched_at": "2026-10-10T16:21:41Z",
+      "excerpt": "Typ 2 DC-Schnell-Ladeanschluss am Fahrzeug CCS AC-Ladefunktion 3-phasig Ladeleistung (kW) AC:11,0 DC:310,0 Ladezeiten 100%: 540",
+      "feature": "F16_dc_charging",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "eu_challengers-E0036": {
+      "url": "https://www.adac.de/rund-ums-fahrzeug/autokatalog/marken-modelle/nio/nio-et7/",
+      "fetched_at": "2026-10-10T16:21:42Z",
+      "excerpt": ". Die maximale Ladeladeleistung beträgt dabei 126 kW und im Schnitt 97 kW. Damit liegt",
+      "feature": "F16_dc_charging",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "eu_challengers-E0056": {
+      "url": "https://www.autoexpress.co.uk/tesla/model-s",
+      "fetched_at": "2026-10-10T16:21:45Z",
+      "excerpt": "has a maximum charging speed of 250kW, which sits between the Mercedes EQS ’s 200kW",
+      "feature": "F16_dc_charging",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "eu_challengers-E0063": {
+      "url": "https://www.adac.de/rund-ums-fahrzeug/autokatalog/marken-modelle/tesla/tesla-model-3/",
+      "fetched_at": "2026-10-10T16:21:48Z",
+      "excerpt": "Tesla sich bei der Steuerung von Klimaanlage, Sound, Navigation und Co. komplett auf den zentralen",
+      "feature": "F03_physical_climate_controls",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "eu_challengers-E0076": {
+      "url": "https://www.autoexpress.co.uk/tesla/model-3",
+      "fetched_at": "2026-10-10T16:21:50Z",
+      "excerpt": "has a maximum charging speed of 175kW, compared with 250kW for the rest of the",
+      "feature": "F16_dc_charging",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "eu_german-E0003": {
+      "url": "https://assets.adac.de/image/upload/Autodatenbank/Autotest/at6421-mercedes-benz-e-220-d-t-modell-amg-line-premium-4matic-9g-tronic/mercedes-benz-e-220-d-t-modell-amg-line-premium-4matic-9g-tronic.pdf",
+      "fetched_at": "2026-10-10T16:21:52Z",
+      "excerpt": "meisten Fällen ausreichend großen Touchflächen. Die Klimabedienung wird im unteren Bildschirmbereich fix angezeigt, ist in",
+      "feature": "F03_physical_climate_controls",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "eu_german-E0013": {
+      "url": "https://assets.adac.de/image/upload/Autodatenbank/Autotest/at6421-mercedes-benz-e-220-d-t-modell-amg-line-premium-4matic-9g-tronic/mercedes-benz-e-220-d-t-modell-amg-line-premium-4matic-9g-tronic.pdf",
+      "fetched_at": "2026-10-10T16:21:52Z",
+      "excerpt": "Die E-Klasse bietet mit der optionalen Luftfederung und der Transport 1,8 20-Zoll-Mischbereifung einen in dieser",
+      "feature": "F13_air_suspension",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "eu_german-E0021": {
+      "url": "https://www.adac.de/rund-ums-fahrzeug/autokatalog/marken-modelle/mercedes-benz/mercedes-eqe/",
+      "fetched_at": "2026-10-10T16:21:53Z",
+      "excerpt": "zu müssen: Indem man einfach die Sprachbedienung nutzt. Die Verständigung inzwischen sogar in freier Sprache",
+      "feature": "F04_voice_assistant",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "eu_german-E0032": {
+      "url": "https://assets.adac.de/image/upload/v1663925323/ADAC-eV/KOR/Text/PDF/mercedes-benz-eqe-350_agpcku.pdf",
+      "fetched_at": "2026-10-10T16:21:54Z",
+      "excerpt": "Schnell CCS Serie - bis zu 170 kW 30 min *10 bis 80 % LADEKURVE",
+      "feature": "F16_dc_charging",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "eu_german-E0049": {
+      "url": "https://assets.adac.de/image/upload/Autodatenbank/Autotest/AT6627-audi-a6-avant-20-tdi-mhev-plus-quattro-s-tronic/audi-a6-avant-20-tdi-mhev-plus-quattro-s-tronic.pdf",
+      "fetched_at": "2026-10-10T16:21:55Z",
+      "excerpt": "Preis-Leistungs- Verhältnis. hoher Federungskomfort (mit opt. Luftfederfahrwerk), umfangreiche Komfort- und Sicherheitsausstattungen (hohe Aufpreise), handliche und",
+      "feature": "F13_air_suspension",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "eu_german-E0067": {
+      "url": "https://assets.adac.de/image/upload/Autodatenbank/Autotest/at6483-audi-a6-avant-e-tron-performance/audi-a6-avant-e-tron-performance.pdf",
+      "fetched_at": "2026-10-10T16:21:55Z",
+      "excerpt": "Der Fe- derungskomfort mit der optionalen Luftfederung ist erstklassig, gleiches gilt für das geringe Innengeräuschniveau.",
+      "feature": "F13_air_suspension",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "us_mercedes-E0010": {
+      "url": "https://www.mbusa.com/en/vehicles/class/e-class/sedan",
+      "fetched_at": "2026-10-10T16:21:56Z",
+      "excerpt": "for added comfort on long drives. Ventilation and massage, along with heated armrests and rapid",
+      "feature": "F10_ventilated_front_seats",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "us_mercedes-E0013": {
+      "url": "https://autos.yahoo.com/new-vehicles-and-reviews/articles/bmw-540i-vs-mercedes-benz-163100204.html",
+      "fetched_at": "2026-10-10T16:21:58Z",
+      "excerpt": "steering. It's also available with Merc's Airmatic air suspension, which provides a distinctly serene ride.",
+      "feature": "F13_air_suspension",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "us_tesla_audi-E0008": {
+      "url": "https://www.thedrive.com/car-reviews/2024-tesla-model-3-review",
+      "fetched_at": "2026-10-10T16:22:04Z",
+      "excerpt": "was a dual-motor car with the Autopilot “Full Self-Driving” system equipped and subscribed to. I",
+      "feature": "F08_hands_free_highway",
+      "reviewed": "keyword match checked against record by collector"
+    },
+    "us_tesla_audi-E0016": {
+      "url": "https://www.thedrive.com/car-reviews/2024-tesla-model-3-review",
+      "fetched_at": "2026-10-10T16:22:04Z",
+      "excerpt": "<< Max Charging Speed 170 kW 250 kW EPA Range 272 miles 341 miles Quick",
+      "feature": "F16_dc_charging",
+      "reviewed": "keyword match checked against record by collector"
+    }
+  }
+}

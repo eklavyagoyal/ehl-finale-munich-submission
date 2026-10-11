@@ -1,0 +1,348 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:nhtsa:genesis_g80:11736914": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "access_locking",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11659272": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11613618": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11566744": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11507928": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11494305": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "adas_parking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11451267": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11444048": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11425645": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11758246": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11713529": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11677255": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11634705": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11492322": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11472023": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11445977": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11528366": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11524183": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11757190": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11719085": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11703013": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11689627": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11637262": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11586158": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11547702": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "interior_design_quality"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11519107": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11517566": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11612115": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11530817": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11620643": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11700956": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11691447": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11660904": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11767905": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11762164": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11755586": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11746598": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "ride_handling",
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11730299": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11723338": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11714226": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "adas_parking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11707234": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:genesis_g80:11701531": {
+   "vehicle_key": "genesis_g80",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  }
+ },
+ "claims": {}
+}

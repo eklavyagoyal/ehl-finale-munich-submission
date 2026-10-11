@@ -1,0 +1,573 @@
+market,source,engine,theme,feedback_type,feedbacks
+EU,Source A,BEV,access_locking,Defect,3
+EU,Source A,BEV,access_locking,Wants,1
+EU,Source A,BEV,adas_parking,Defect,1
+EU,Source A,BEV,adas_parking,Difficult to Use,1
+EU,Source A,BEV,adas_parking,Likes,1
+EU,Source A,BEV,audio_acoustics,Likes,2
+EU,Source A,BEV,climate,Defect,1
+EU,Source A,BEV,climate,Difficult to Use,1
+EU,Source A,BEV,connectivity_app_digital,Difficult to Use,2
+EU,Source A,BEV,connectivity_app_digital,Wants,1
+EU,Source A,BEV,equipment_value,Likes,1
+EU,Source A,BEV,equipment_value,Wants,3
+EU,Source A,BEV,exterior_design,Defect,1
+EU,Source A,BEV,hmi_infotainment,Defect,1
+EU,Source A,BEV,hmi_infotainment,Difficult to Use,3
+EU,Source A,BEV,hmi_infotainment,Likes,3
+EU,Source A,BEV,hmi_infotainment,Wants,1
+EU,Source A,BEV,interior_design_quality,Defect,2
+EU,Source A,BEV,interior_design_quality,Difficult to Use,2
+EU,Source A,BEV,lighting_visibility,Difficult to Use,1
+EU,Source A,BEV,lighting_visibility,Wants,1
+EU,Source A,BEV,overall_quality_ownership,Difficult to Use,3
+EU,Source A,BEV,overall_quality_ownership,Wants,1
+EU,Source A,BEV,powertrain_performance,Defect,1
+EU,Source A,BEV,powertrain_performance,Likes,1
+EU,Source A,BEV,range_charging_efficiency,Defect,2
+EU,Source A,BEV,range_charging_efficiency,Difficult to Use,9
+EU,Source A,BEV,range_charging_efficiency,Likes,3
+EU,Source A,BEV,range_charging_efficiency,Wants,3
+EU,Source A,BEV,ride_handling,Defect,1
+EU,Source A,BEV,ride_handling,Likes,18
+EU,Source A,BEV,ride_handling,Wants,1
+EU,Source A,BEV,safety,Defect,1
+EU,Source A,BEV,safety,Likes,1
+EU,Source A,BEV,seats_comfort,Defect,1
+EU,Source A,BEV,seats_comfort,Difficult to Use,2
+EU,Source A,BEV,seats_comfort,Wants,1
+EU,Source A,BEV,space_practicality,Defect,1
+EU,Source A,BEV,unclassified,none,34
+EU,Source A,ICE,adas_parking,Defect,1
+EU,Source A,ICE,adas_parking,Difficult to Use,1
+EU,Source A,ICE,adas_parking,Likes,2
+EU,Source A,ICE,adas_parking,Wants,1
+EU,Source A,ICE,audio_acoustics,Likes,1
+EU,Source A,ICE,audio_acoustics,Wants,1
+EU,Source A,ICE,climate,Difficult to Use,1
+EU,Source A,ICE,connectivity_app_digital,Difficult to Use,1
+EU,Source A,ICE,exterior_design,Defect,1
+EU,Source A,ICE,hmi_infotainment,Defect,2
+EU,Source A,ICE,hmi_infotainment,Difficult to Use,3
+EU,Source A,ICE,hmi_infotainment,Likes,1
+EU,Source A,ICE,hmi_infotainment,Wants,1
+EU,Source A,ICE,interior_design_quality,Defect,1
+EU,Source A,ICE,interior_design_quality,Wants,1
+EU,Source A,ICE,lighting_visibility,Defect,1
+EU,Source A,ICE,lighting_visibility,Likes,1
+EU,Source A,ICE,lighting_visibility,Wants,1
+EU,Source A,ICE,overall_quality_ownership,Likes,1
+EU,Source A,ICE,powertrain_performance,Likes,4
+EU,Source A,ICE,ride_handling,Defect,1
+EU,Source A,ICE,ride_handling,Difficult to Use,1
+EU,Source A,ICE,ride_handling,Likes,7
+EU,Source A,ICE,safety,Likes,2
+EU,Source A,ICE,seats_comfort,Defect,1
+EU,Source A,ICE,space_practicality,Defect,1
+EU,Source A,ICE,space_practicality,Likes,1
+EU,Source A,ICE,space_practicality,Wants,1
+EU,Source A,ICE,unclassified,none,21
+EU,Source A,PHEV,access_locking,Defect,1
+EU,Source A,PHEV,audio_acoustics,Defect,2
+EU,Source A,PHEV,audio_acoustics,Wants,1
+EU,Source A,PHEV,climate,Likes,1
+EU,Source A,PHEV,hmi_infotainment,Difficult to Use,3
+EU,Source A,PHEV,hmi_infotainment,Likes,1
+EU,Source A,PHEV,hmi_infotainment,Wants,1
+EU,Source A,PHEV,interior_design_quality,Likes,1
+EU,Source A,PHEV,powertrain_performance,Likes,4
+EU,Source A,PHEV,range_charging_efficiency,Defect,1
+EU,Source A,PHEV,range_charging_efficiency,Difficult to Use,4
+EU,Source A,PHEV,range_charging_efficiency,Likes,4
+EU,Source A,PHEV,ride_handling,Difficult to Use,1
+EU,Source A,PHEV,ride_handling,Likes,8
+EU,Source A,PHEV,safety,Likes,1
+EU,Source A,PHEV,unclassified,none,18
+US,Source A,BEV,access_locking,Defect,13
+US,Source A,BEV,access_locking,Difficult to Use,3
+US,Source A,BEV,access_locking,Likes,5
+US,Source A,BEV,access_locking,Wants,1
+US,Source A,BEV,adas_parking,Defect,2
+US,Source A,BEV,adas_parking,Likes,2
+US,Source A,BEV,adas_parking,Wants,4
+US,Source A,BEV,audio_acoustics,Defect,6
+US,Source A,BEV,audio_acoustics,Difficult to Use,2
+US,Source A,BEV,audio_acoustics,Likes,5
+US,Source A,BEV,climate,Defect,3
+US,Source A,BEV,climate,Difficult to Use,1
+US,Source A,BEV,climate,Wants,4
+US,Source A,BEV,connectivity_app_digital,Defect,8
+US,Source A,BEV,connectivity_app_digital,Difficult to Use,4
+US,Source A,BEV,connectivity_app_digital,Likes,2
+US,Source A,BEV,connectivity_app_digital,Wants,5
+US,Source A,BEV,equipment_value,Likes,4
+US,Source A,BEV,equipment_value,Wants,4
+US,Source A,BEV,exterior_design,Defect,4
+US,Source A,BEV,exterior_design,Likes,12
+US,Source A,BEV,hmi_infotainment,Defect,7
+US,Source A,BEV,hmi_infotainment,Difficult to Use,9
+US,Source A,BEV,hmi_infotainment,Likes,5
+US,Source A,BEV,hmi_infotainment,Wants,4
+US,Source A,BEV,interior_design_quality,Defect,4
+US,Source A,BEV,interior_design_quality,Difficult to Use,2
+US,Source A,BEV,interior_design_quality,Likes,9
+US,Source A,BEV,interior_design_quality,Wants,5
+US,Source A,BEV,lighting_visibility,Defect,1
+US,Source A,BEV,lighting_visibility,Likes,1
+US,Source A,BEV,overall_quality_ownership,Defect,4
+US,Source A,BEV,overall_quality_ownership,Difficult to Use,10
+US,Source A,BEV,overall_quality_ownership,Likes,2
+US,Source A,BEV,overall_quality_ownership,Wants,3
+US,Source A,BEV,powertrain_performance,Defect,1
+US,Source A,BEV,powertrain_performance,Difficult to Use,5
+US,Source A,BEV,powertrain_performance,Likes,18
+US,Source A,BEV,powertrain_performance,Wants,2
+US,Source A,BEV,range_charging_efficiency,Defect,6
+US,Source A,BEV,range_charging_efficiency,Difficult to Use,17
+US,Source A,BEV,range_charging_efficiency,Likes,8
+US,Source A,BEV,range_charging_efficiency,Wants,10
+US,Source A,BEV,ride_handling,Defect,1
+US,Source A,BEV,ride_handling,Difficult to Use,7
+US,Source A,BEV,ride_handling,Likes,56
+US,Source A,BEV,ride_handling,Wants,5
+US,Source A,BEV,safety,Defect,1
+US,Source A,BEV,safety,Difficult to Use,1
+US,Source A,BEV,safety,Likes,1
+US,Source A,BEV,seats_comfort,Defect,4
+US,Source A,BEV,seats_comfort,Difficult to Use,7
+US,Source A,BEV,seats_comfort,Likes,9
+US,Source A,BEV,seats_comfort,Wants,3
+US,Source A,BEV,space_practicality,Defect,3
+US,Source A,BEV,space_practicality,Difficult to Use,4
+US,Source A,BEV,space_practicality,Likes,5
+US,Source A,BEV,space_practicality,Wants,6
+US,Source A,BEV,unclassified,none,132
+US,Source A,ICE,access_locking,Defect,14
+US,Source A,ICE,access_locking,Difficult to Use,5
+US,Source A,ICE,access_locking,Likes,3
+US,Source A,ICE,access_locking,Wants,3
+US,Source A,ICE,adas_parking,Defect,6
+US,Source A,ICE,adas_parking,Difficult to Use,9
+US,Source A,ICE,adas_parking,Likes,7
+US,Source A,ICE,adas_parking,Wants,2
+US,Source A,ICE,audio_acoustics,Defect,4
+US,Source A,ICE,audio_acoustics,Likes,4
+US,Source A,ICE,audio_acoustics,Wants,2
+US,Source A,ICE,climate,Defect,2
+US,Source A,ICE,climate,Difficult to Use,6
+US,Source A,ICE,climate,Likes,1
+US,Source A,ICE,climate,Wants,2
+US,Source A,ICE,connectivity_app_digital,Defect,4
+US,Source A,ICE,connectivity_app_digital,Difficult to Use,12
+US,Source A,ICE,connectivity_app_digital,Likes,4
+US,Source A,ICE,connectivity_app_digital,Wants,2
+US,Source A,ICE,equipment_value,Likes,4
+US,Source A,ICE,equipment_value,Wants,2
+US,Source A,ICE,exterior_design,Defect,8
+US,Source A,ICE,exterior_design,Difficult to Use,1
+US,Source A,ICE,exterior_design,Likes,12
+US,Source A,ICE,hmi_infotainment,Defect,10
+US,Source A,ICE,hmi_infotainment,Difficult to Use,17
+US,Source A,ICE,hmi_infotainment,Likes,13
+US,Source A,ICE,hmi_infotainment,Wants,8
+US,Source A,ICE,interior_design_quality,Defect,6
+US,Source A,ICE,interior_design_quality,Difficult to Use,3
+US,Source A,ICE,interior_design_quality,Likes,8
+US,Source A,ICE,interior_design_quality,Wants,3
+US,Source A,ICE,lighting_visibility,Defect,1
+US,Source A,ICE,lighting_visibility,Difficult to Use,2
+US,Source A,ICE,lighting_visibility,Likes,1
+US,Source A,ICE,lighting_visibility,Wants,1
+US,Source A,ICE,overall_quality_ownership,Defect,1
+US,Source A,ICE,overall_quality_ownership,Difficult to Use,5
+US,Source A,ICE,overall_quality_ownership,Likes,3
+US,Source A,ICE,overall_quality_ownership,Wants,3
+US,Source A,ICE,powertrain_performance,Defect,6
+US,Source A,ICE,powertrain_performance,Difficult to Use,9
+US,Source A,ICE,powertrain_performance,Likes,43
+US,Source A,ICE,powertrain_performance,Wants,5
+US,Source A,ICE,range_charging_efficiency,Defect,2
+US,Source A,ICE,range_charging_efficiency,Difficult to Use,1
+US,Source A,ICE,range_charging_efficiency,Likes,1
+US,Source A,ICE,ride_handling,Defect,10
+US,Source A,ICE,ride_handling,Difficult to Use,12
+US,Source A,ICE,ride_handling,Likes,65
+US,Source A,ICE,ride_handling,Wants,8
+US,Source A,ICE,safety,Difficult to Use,2
+US,Source A,ICE,safety,Likes,4
+US,Source A,ICE,seats_comfort,Defect,11
+US,Source A,ICE,seats_comfort,Difficult to Use,7
+US,Source A,ICE,seats_comfort,Likes,7
+US,Source A,ICE,seats_comfort,Wants,5
+US,Source A,ICE,space_practicality,Defect,3
+US,Source A,ICE,space_practicality,Difficult to Use,8
+US,Source A,ICE,space_practicality,Likes,4
+US,Source A,ICE,space_practicality,Wants,6
+US,Source A,ICE,unclassified,none,184
+US,Source A,PHEV,access_locking,Defect,2
+US,Source A,PHEV,access_locking,Difficult to Use,1
+US,Source A,PHEV,access_locking,Wants,2
+US,Source A,PHEV,adas_parking,Difficult to Use,2
+US,Source A,PHEV,adas_parking,Wants,2
+US,Source A,PHEV,audio_acoustics,Defect,1
+US,Source A,PHEV,audio_acoustics,Wants,1
+US,Source A,PHEV,climate,Wants,1
+US,Source A,PHEV,connectivity_app_digital,Difficult to Use,2
+US,Source A,PHEV,exterior_design,Defect,1
+US,Source A,PHEV,exterior_design,Likes,1
+US,Source A,PHEV,hmi_infotainment,Defect,3
+US,Source A,PHEV,hmi_infotainment,Difficult to Use,1
+US,Source A,PHEV,hmi_infotainment,Likes,3
+US,Source A,PHEV,interior_design_quality,Defect,1
+US,Source A,PHEV,lighting_visibility,Defect,1
+US,Source A,PHEV,overall_quality_ownership,Difficult to Use,2
+US,Source A,PHEV,overall_quality_ownership,Wants,1
+US,Source A,PHEV,powertrain_performance,Defect,2
+US,Source A,PHEV,powertrain_performance,Difficult to Use,2
+US,Source A,PHEV,powertrain_performance,Likes,6
+US,Source A,PHEV,powertrain_performance,Wants,3
+US,Source A,PHEV,range_charging_efficiency,Defect,1
+US,Source A,PHEV,range_charging_efficiency,Difficult to Use,5
+US,Source A,PHEV,range_charging_efficiency,Likes,2
+US,Source A,PHEV,range_charging_efficiency,Wants,1
+US,Source A,PHEV,ride_handling,Defect,2
+US,Source A,PHEV,ride_handling,Likes,6
+US,Source A,PHEV,ride_handling,Wants,1
+US,Source A,PHEV,safety,Defect,1
+US,Source A,PHEV,safety,Difficult to Use,2
+US,Source A,PHEV,safety,Likes,1
+US,Source A,PHEV,seats_comfort,Difficult to Use,1
+US,Source A,PHEV,seats_comfort,Wants,1
+US,Source A,PHEV,space_practicality,Wants,1
+US,Source A,PHEV,unclassified,none,23
+US,Source B,BEV,access_locking,Defect,2
+US,Source B,BEV,access_locking,Difficult to Use,16
+US,Source B,BEV,access_locking,Likes,6
+US,Source B,BEV,access_locking,Wants,16
+US,Source B,BEV,adas_parking,Defect,6
+US,Source B,BEV,adas_parking,Difficult to Use,26
+US,Source B,BEV,adas_parking,Likes,33
+US,Source B,BEV,adas_parking,Wants,17
+US,Source B,BEV,audio_acoustics,Defect,2
+US,Source B,BEV,audio_acoustics,Difficult to Use,2
+US,Source B,BEV,audio_acoustics,Likes,14
+US,Source B,BEV,audio_acoustics,Wants,2
+US,Source B,BEV,climate,Defect,1
+US,Source B,BEV,climate,Difficult to Use,10
+US,Source B,BEV,climate,Likes,1
+US,Source B,BEV,climate,Wants,7
+US,Source B,BEV,connectivity_app_digital,Defect,9
+US,Source B,BEV,connectivity_app_digital,Difficult to Use,24
+US,Source B,BEV,connectivity_app_digital,Likes,3
+US,Source B,BEV,connectivity_app_digital,Wants,13
+US,Source B,BEV,equipment_value,Likes,3
+US,Source B,BEV,equipment_value,Wants,6
+US,Source B,BEV,exterior_design,Defect,2
+US,Source B,BEV,exterior_design,Difficult to Use,4
+US,Source B,BEV,exterior_design,Likes,43
+US,Source B,BEV,exterior_design,Wants,4
+US,Source B,BEV,hmi_infotainment,Defect,10
+US,Source B,BEV,hmi_infotainment,Difficult to Use,38
+US,Source B,BEV,hmi_infotainment,Likes,39
+US,Source B,BEV,hmi_infotainment,Wants,16
+US,Source B,BEV,interior_design_quality,Defect,4
+US,Source B,BEV,interior_design_quality,Difficult to Use,5
+US,Source B,BEV,interior_design_quality,Likes,36
+US,Source B,BEV,interior_design_quality,Wants,11
+US,Source B,BEV,lighting_visibility,Defect,2
+US,Source B,BEV,lighting_visibility,Difficult to Use,2
+US,Source B,BEV,lighting_visibility,Likes,3
+US,Source B,BEV,lighting_visibility,Wants,6
+US,Source B,BEV,overall_quality_ownership,Defect,1
+US,Source B,BEV,overall_quality_ownership,Difficult to Use,10
+US,Source B,BEV,overall_quality_ownership,Likes,35
+US,Source B,BEV,overall_quality_ownership,Wants,3
+US,Source B,BEV,powertrain_performance,Defect,1
+US,Source B,BEV,powertrain_performance,Difficult to Use,16
+US,Source B,BEV,powertrain_performance,Likes,75
+US,Source B,BEV,powertrain_performance,Wants,4
+US,Source B,BEV,range_charging_efficiency,Defect,6
+US,Source B,BEV,range_charging_efficiency,Difficult to Use,62
+US,Source B,BEV,range_charging_efficiency,Likes,45
+US,Source B,BEV,range_charging_efficiency,Wants,21
+US,Source B,BEV,ride_handling,Defect,6
+US,Source B,BEV,ride_handling,Difficult to Use,14
+US,Source B,BEV,ride_handling,Likes,59
+US,Source B,BEV,ride_handling,Wants,10
+US,Source B,BEV,safety,Defect,2
+US,Source B,BEV,safety,Difficult to Use,1
+US,Source B,BEV,safety,Likes,2
+US,Source B,BEV,safety,Wants,1
+US,Source B,BEV,seats_comfort,Defect,2
+US,Source B,BEV,seats_comfort,Difficult to Use,5
+US,Source B,BEV,seats_comfort,Likes,27
+US,Source B,BEV,seats_comfort,Wants,5
+US,Source B,BEV,space_practicality,Difficult to Use,13
+US,Source B,BEV,space_practicality,Likes,17
+US,Source B,BEV,space_practicality,Wants,13
+US,Source B,ICE,access_locking,Defect,9
+US,Source B,ICE,access_locking,Difficult to Use,57
+US,Source B,ICE,access_locking,Likes,18
+US,Source B,ICE,access_locking,Wants,15
+US,Source B,ICE,adas_parking,Defect,4
+US,Source B,ICE,adas_parking,Difficult to Use,51
+US,Source B,ICE,adas_parking,Likes,48
+US,Source B,ICE,adas_parking,Wants,20
+US,Source B,ICE,audio_acoustics,Difficult to Use,3
+US,Source B,ICE,audio_acoustics,Likes,18
+US,Source B,ICE,audio_acoustics,Wants,4
+US,Source B,ICE,climate,Defect,1
+US,Source B,ICE,climate,Difficult to Use,23
+US,Source B,ICE,climate,Likes,12
+US,Source B,ICE,climate,Wants,9
+US,Source B,ICE,connectivity_app_digital,Defect,7
+US,Source B,ICE,connectivity_app_digital,Difficult to Use,42
+US,Source B,ICE,connectivity_app_digital,Likes,27
+US,Source B,ICE,connectivity_app_digital,Wants,7
+US,Source B,ICE,equipment_value,Likes,3
+US,Source B,ICE,equipment_value,Wants,11
+US,Source B,ICE,exterior_design,Defect,8
+US,Source B,ICE,exterior_design,Difficult to Use,6
+US,Source B,ICE,exterior_design,Likes,86
+US,Source B,ICE,exterior_design,Wants,8
+US,Source B,ICE,hmi_infotainment,Defect,2
+US,Source B,ICE,hmi_infotainment,Difficult to Use,68
+US,Source B,ICE,hmi_infotainment,Likes,85
+US,Source B,ICE,hmi_infotainment,Wants,28
+US,Source B,ICE,interior_design_quality,Defect,5
+US,Source B,ICE,interior_design_quality,Difficult to Use,20
+US,Source B,ICE,interior_design_quality,Likes,61
+US,Source B,ICE,interior_design_quality,Wants,27
+US,Source B,ICE,lighting_visibility,Defect,6
+US,Source B,ICE,lighting_visibility,Difficult to Use,13
+US,Source B,ICE,lighting_visibility,Likes,7
+US,Source B,ICE,lighting_visibility,Wants,13
+US,Source B,ICE,overall_quality_ownership,Defect,6
+US,Source B,ICE,overall_quality_ownership,Difficult to Use,51
+US,Source B,ICE,overall_quality_ownership,Likes,69
+US,Source B,ICE,overall_quality_ownership,Wants,6
+US,Source B,ICE,powertrain_performance,Defect,7
+US,Source B,ICE,powertrain_performance,Difficult to Use,31
+US,Source B,ICE,powertrain_performance,Likes,118
+US,Source B,ICE,powertrain_performance,Wants,16
+US,Source B,ICE,range_charging_efficiency,Difficult to Use,1
+US,Source B,ICE,range_charging_efficiency,Likes,1
+US,Source B,ICE,range_charging_efficiency,Wants,2
+US,Source B,ICE,ride_handling,Defect,2
+US,Source B,ICE,ride_handling,Difficult to Use,41
+US,Source B,ICE,ride_handling,Likes,119
+US,Source B,ICE,ride_handling,Wants,16
+US,Source B,ICE,safety,Defect,2
+US,Source B,ICE,safety,Difficult to Use,5
+US,Source B,ICE,safety,Likes,10
+US,Source B,ICE,safety,Wants,1
+US,Source B,ICE,seats_comfort,Difficult to Use,10
+US,Source B,ICE,seats_comfort,Likes,55
+US,Source B,ICE,seats_comfort,Wants,14
+US,Source B,ICE,space_practicality,Defect,2
+US,Source B,ICE,space_practicality,Difficult to Use,22
+US,Source B,ICE,space_practicality,Likes,28
+US,Source B,ICE,space_practicality,Wants,12
+US,Source B,PHEV,access_locking,Defect,1
+US,Source B,PHEV,access_locking,Difficult to Use,9
+US,Source B,PHEV,access_locking,Likes,2
+US,Source B,PHEV,access_locking,Wants,2
+US,Source B,PHEV,adas_parking,Defect,1
+US,Source B,PHEV,adas_parking,Difficult to Use,14
+US,Source B,PHEV,adas_parking,Likes,9
+US,Source B,PHEV,adas_parking,Wants,1
+US,Source B,PHEV,audio_acoustics,Difficult to Use,1
+US,Source B,PHEV,audio_acoustics,Likes,5
+US,Source B,PHEV,audio_acoustics,Wants,4
+US,Source B,PHEV,climate,Difficult to Use,3
+US,Source B,PHEV,climate,Likes,1
+US,Source B,PHEV,climate,Wants,1
+US,Source B,PHEV,connectivity_app_digital,Defect,1
+US,Source B,PHEV,connectivity_app_digital,Difficult to Use,5
+US,Source B,PHEV,connectivity_app_digital,Likes,4
+US,Source B,PHEV,connectivity_app_digital,Wants,6
+US,Source B,PHEV,equipment_value,Wants,1
+US,Source B,PHEV,exterior_design,Difficult to Use,1
+US,Source B,PHEV,exterior_design,Likes,13
+US,Source B,PHEV,exterior_design,Wants,1
+US,Source B,PHEV,hmi_infotainment,Difficult to Use,12
+US,Source B,PHEV,hmi_infotainment,Likes,7
+US,Source B,PHEV,hmi_infotainment,Wants,4
+US,Source B,PHEV,interior_design_quality,Defect,1
+US,Source B,PHEV,interior_design_quality,Likes,9
+US,Source B,PHEV,interior_design_quality,Wants,7
+US,Source B,PHEV,lighting_visibility,Defect,2
+US,Source B,PHEV,overall_quality_ownership,Difficult to Use,3
+US,Source B,PHEV,overall_quality_ownership,Likes,6
+US,Source B,PHEV,overall_quality_ownership,Wants,1
+US,Source B,PHEV,powertrain_performance,Defect,2
+US,Source B,PHEV,powertrain_performance,Difficult to Use,5
+US,Source B,PHEV,powertrain_performance,Likes,29
+US,Source B,PHEV,powertrain_performance,Wants,1
+US,Source B,PHEV,range_charging_efficiency,Defect,1
+US,Source B,PHEV,range_charging_efficiency,Difficult to Use,8
+US,Source B,PHEV,range_charging_efficiency,Likes,14
+US,Source B,PHEV,range_charging_efficiency,Wants,3
+US,Source B,PHEV,ride_handling,Difficult to Use,5
+US,Source B,PHEV,ride_handling,Likes,13
+US,Source B,PHEV,ride_handling,Wants,5
+US,Source B,PHEV,safety,Defect,1
+US,Source B,PHEV,safety,Difficult to Use,2
+US,Source B,PHEV,seats_comfort,Defect,2
+US,Source B,PHEV,seats_comfort,Difficult to Use,2
+US,Source B,PHEV,seats_comfort,Likes,8
+US,Source B,PHEV,seats_comfort,Wants,2
+US,Source B,PHEV,space_practicality,Difficult to Use,1
+US,Source B,PHEV,space_practicality,Likes,3
+US,Source B,PHEV,space_practicality,Wants,3
+US,Source C,BEV,access_locking,Defect,4
+US,Source C,BEV,access_locking,Difficult to Use,18
+US,Source C,BEV,adas_parking,Defect,6
+US,Source C,BEV,adas_parking,Difficult to Use,3
+US,Source C,BEV,adas_parking,none,1
+US,Source C,BEV,audio_acoustics,Defect,2
+US,Source C,BEV,audio_acoustics,Difficult to Use,3
+US,Source C,BEV,climate,Difficult to Use,5
+US,Source C,BEV,connectivity_app_digital,Defect,2
+US,Source C,BEV,connectivity_app_digital,Difficult to Use,12
+US,Source C,BEV,hmi_infotainment,Defect,3
+US,Source C,BEV,hmi_infotainment,Difficult to Use,14
+US,Source C,BEV,interior_design_quality,Defect,1
+US,Source C,BEV,interior_design_quality,Difficult to Use,3
+US,Source C,BEV,lighting_visibility,Defect,1
+US,Source C,BEV,lighting_visibility,Difficult to Use,2
+US,Source C,BEV,powertrain_performance,Defect,1
+US,Source C,BEV,powertrain_performance,Difficult to Use,1
+US,Source C,BEV,powertrain_performance,none,1
+US,Source C,BEV,range_charging_efficiency,Defect,6
+US,Source C,BEV,range_charging_efficiency,Difficult to Use,9
+US,Source C,BEV,ride_handling,Difficult to Use,10
+US,Source C,BEV,ride_handling,none,1
+US,Source C,BEV,seats_comfort,Defect,1
+US,Source C,BEV,seats_comfort,Difficult to Use,2
+US,Source C,BEV,space_practicality,Difficult to Use,5
+US,Source C,BEV,unclassified,none,25
+US,Source C,ICE,access_locking,Defect,7
+US,Source C,ICE,access_locking,Difficult to Use,21
+US,Source C,ICE,adas_parking,Defect,2
+US,Source C,ICE,adas_parking,Difficult to Use,8
+US,Source C,ICE,audio_acoustics,Difficult to Use,1
+US,Source C,ICE,climate,Difficult to Use,15
+US,Source C,ICE,connectivity_app_digital,Defect,3
+US,Source C,ICE,connectivity_app_digital,Difficult to Use,13
+US,Source C,ICE,hmi_infotainment,Defect,4
+US,Source C,ICE,hmi_infotainment,Difficult to Use,23
+US,Source C,ICE,hmi_infotainment,none,1
+US,Source C,ICE,interior_design_quality,Defect,2
+US,Source C,ICE,interior_design_quality,Difficult to Use,10
+US,Source C,ICE,interior_design_quality,none,1
+US,Source C,ICE,lighting_visibility,Defect,3
+US,Source C,ICE,lighting_visibility,Difficult to Use,2
+US,Source C,ICE,overall_quality_ownership,Defect,1
+US,Source C,ICE,powertrain_performance,Defect,6
+US,Source C,ICE,powertrain_performance,Difficult to Use,12
+US,Source C,ICE,ride_handling,Defect,2
+US,Source C,ICE,ride_handling,Difficult to Use,7
+US,Source C,ICE,ride_handling,none,1
+US,Source C,ICE,safety,Difficult to Use,2
+US,Source C,ICE,seats_comfort,Difficult to Use,9
+US,Source C,ICE,space_practicality,Difficult to Use,24
+US,Source C,ICE,unclassified,none,30
+US,Source C,PHEV,access_locking,Difficult to Use,4
+US,Source C,PHEV,adas_parking,Difficult to Use,1
+US,Source C,PHEV,climate,Defect,1
+US,Source C,PHEV,connectivity_app_digital,Defect,1
+US,Source C,PHEV,connectivity_app_digital,Difficult to Use,5
+US,Source C,PHEV,hmi_infotainment,Difficult to Use,2
+US,Source C,PHEV,interior_design_quality,Difficult to Use,1
+US,Source C,PHEV,range_charging_efficiency,Defect,2
+US,Source C,PHEV,ride_handling,Difficult to Use,3
+US,Source C,PHEV,seats_comfort,Difficult to Use,1
+US,Source C,PHEV,space_practicality,Difficult to Use,2
+US,Source C,PHEV,unclassified,none,9
+US,Source D,BEV,unclassified,none,55
+US,Source D,ICE,unclassified,none,71
+US,Source D,PHEV,unclassified,none,10
+other,Source A,BEV,access_locking,Defect,1
+other,Source A,BEV,access_locking,Difficult to Use,1
+other,Source A,BEV,adas_parking,Defect,1
+other,Source A,BEV,adas_parking,Likes,1
+other,Source A,BEV,climate,Difficult to Use,1
+other,Source A,BEV,connectivity_app_digital,Wants,1
+other,Source A,BEV,equipment_value,Likes,1
+other,Source A,BEV,exterior_design,Defect,1
+other,Source A,BEV,hmi_infotainment,Difficult to Use,2
+other,Source A,BEV,interior_design_quality,Likes,1
+other,Source A,BEV,overall_quality_ownership,Difficult to Use,2
+other,Source A,BEV,powertrain_performance,Difficult to Use,4
+other,Source A,BEV,powertrain_performance,Likes,5
+other,Source A,BEV,range_charging_efficiency,Difficult to Use,2
+other,Source A,BEV,range_charging_efficiency,Likes,1
+other,Source A,BEV,range_charging_efficiency,Wants,1
+other,Source A,BEV,ride_handling,Likes,7
+other,Source A,BEV,ride_handling,Wants,1
+other,Source A,BEV,seats_comfort,Likes,1
+other,Source A,BEV,unclassified,none,18
+other,Source A,ICE,access_locking,Defect,1
+other,Source A,ICE,access_locking,Difficult to Use,1
+other,Source A,ICE,adas_parking,Defect,1
+other,Source A,ICE,adas_parking,Difficult to Use,1
+other,Source A,ICE,adas_parking,Likes,1
+other,Source A,ICE,adas_parking,Wants,2
+other,Source A,ICE,audio_acoustics,Defect,1
+other,Source A,ICE,climate,Defect,1
+other,Source A,ICE,climate,Difficult to Use,2
+other,Source A,ICE,connectivity_app_digital,Defect,3
+other,Source A,ICE,connectivity_app_digital,Difficult to Use,2
+other,Source A,ICE,connectivity_app_digital,Likes,3
+other,Source A,ICE,connectivity_app_digital,Wants,1
+other,Source A,ICE,equipment_value,Likes,8
+other,Source A,ICE,equipment_value,Wants,1
+other,Source A,ICE,exterior_design,Difficult to Use,2
+other,Source A,ICE,exterior_design,Likes,9
+other,Source A,ICE,hmi_infotainment,Defect,1
+other,Source A,ICE,hmi_infotainment,Difficult to Use,3
+other,Source A,ICE,hmi_infotainment,Wants,3
+other,Source A,ICE,interior_design_quality,Defect,3
+other,Source A,ICE,interior_design_quality,Difficult to Use,1
+other,Source A,ICE,interior_design_quality,Likes,12
+other,Source A,ICE,interior_design_quality,Wants,2
+other,Source A,ICE,lighting_visibility,Defect,1
+other,Source A,ICE,lighting_visibility,Difficult to Use,1
+other,Source A,ICE,lighting_visibility,Wants,2
+other,Source A,ICE,overall_quality_ownership,Defect,1
+other,Source A,ICE,overall_quality_ownership,Difficult to Use,2
+other,Source A,ICE,overall_quality_ownership,Likes,1
+other,Source A,ICE,overall_quality_ownership,Wants,1
+other,Source A,ICE,powertrain_performance,Defect,3
+other,Source A,ICE,powertrain_performance,Difficult to Use,7
+other,Source A,ICE,powertrain_performance,Likes,59
+other,Source A,ICE,powertrain_performance,Wants,5
+other,Source A,ICE,range_charging_efficiency,Wants,1
+other,Source A,ICE,ride_handling,Difficult to Use,2
+other,Source A,ICE,ride_handling,Likes,45
+other,Source A,ICE,safety,Likes,5
+other,Source A,ICE,seats_comfort,Difficult to Use,1
+other,Source A,ICE,seats_comfort,Likes,4
+other,Source A,ICE,seats_comfort,Wants,1
+other,Source A,ICE,space_practicality,Defect,1
+other,Source A,ICE,space_practicality,Difficult to Use,8
+other,Source A,ICE,space_practicality,Likes,2
+other,Source A,ICE,space_practicality,Wants,2
+other,Source A,ICE,unclassified,none,82
+other,Source A,PHEV,access_locking,Wants,1
+other,Source A,PHEV,adas_parking,Defect,1
+other,Source A,PHEV,adas_parking,Difficult to Use,2
+other,Source A,PHEV,equipment_value,Wants,1
+other,Source A,PHEV,exterior_design,Likes,1
+other,Source A,PHEV,hmi_infotainment,Defect,1
+other,Source A,PHEV,hmi_infotainment,Likes,1
+other,Source A,PHEV,overall_quality_ownership,Likes,1
+other,Source A,PHEV,powertrain_performance,Defect,1
+other,Source A,PHEV,powertrain_performance,Difficult to Use,1
+other,Source A,PHEV,powertrain_performance,Likes,6
+other,Source A,PHEV,range_charging_efficiency,Difficult to Use,2
+other,Source A,PHEV,range_charging_efficiency,Likes,1
+other,Source A,PHEV,ride_handling,Likes,6
+other,Source A,PHEV,seats_comfort,Wants,1
+other,Source A,PHEV,unclassified,none,13

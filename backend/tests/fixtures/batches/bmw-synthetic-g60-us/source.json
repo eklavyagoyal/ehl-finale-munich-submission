@@ -1,0 +1,40 @@
+{
+  "document_type": "source",
+  "schema_version": "1.0",
+  "source_id": "synthetic-bmw-g60-us",
+  "dataset_key": "synthetic:bmw-feedback:G60",
+  "stream": "bmw",
+  "channel": "bmw_feedback",
+  "title": "SYNTHETIC G60 US feedback for backend tests",
+  "locator": "tests/fixtures",
+  "collected_at": "2026-10-10T10:00:00Z",
+  "collector": "tests",
+  "is_example": true,
+  "normalized_record_count": 8,
+  "sampling": {
+    "method": "Synthetic fixture",
+    "query": null,
+    "date_start": null,
+    "date_end": null,
+    "retrieved_count": 8,
+    "complete": true,
+    "limitations": [
+      "Invented test data."
+    ]
+  },
+  "provenance": {
+    "origin": "synthetic",
+    "verification": "unverified",
+    "notes": "Backend test fixture."
+  },
+  "artifact": {
+    "path": null,
+    "sha256": null
+  },
+  "export_permissions": {
+    "git": true,
+    "external_llm": true,
+    "notes": "Synthetic."
+  },
+  "review_status": "accepted"
+}

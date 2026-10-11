@@ -1,0 +1,3976 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:nhtsa:tesla_model_s:11767911": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11764838": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11764570": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11756406": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11748878": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11737492": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety",
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11737104": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11722975": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11711634": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11706190": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11700002": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "safety",
+    "seats_comfort"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11697026": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11694506": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11692785": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11691415": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11680563": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11680711": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11678451": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11670103": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11660683": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11653427": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11652414": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11645675": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11636646": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11630460": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11629856": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11629578": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11629404": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11628853": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11625790": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11625612": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11622354": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11621864": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11620387": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11618371": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "connectivity_app_digital"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11615339": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11615154": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11609154": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11605322": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11597411": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11580942": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11579075": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11579072": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11577236": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11572290": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency",
+    "safety",
+    "access_locking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11572308": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565388": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11563661": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11562326": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11562107": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11560538": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11560406": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11556759": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11555470": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11551552": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11551459": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11545272": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11542041": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11541775": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11541564": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11541526": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11540692": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11536291": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11535327": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11535138": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11534764": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11534360": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11533847": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11532951": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11533020": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11531626": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11530541": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11526251": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11522364": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11521948": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11520934": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11520996": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11520260": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11519472": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11519299": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11518088": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11517040": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11516156": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11515519": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11512115": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11508882": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "connectivity_app_digital"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11507071": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11506840": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11506770": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11502382": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11502181": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11499743": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11497969": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11497620": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11495814": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11494709": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11493763": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11492901": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11492305": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11491043": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11489874": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11489439": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11489392": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11488122": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11487383": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11486856": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11486650": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11486503": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11486229": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11485963": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11484698": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11484540": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11483706": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11483181": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11481572": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11481264": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11481303": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11478950": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11478879": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11478343": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11477216": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11472761": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11471255": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11469222": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11469058": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency",
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11468099": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11467559": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11466586": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11463610": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11460819": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11458643": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11457411": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11457412": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11457068": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11455714": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11455277": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11453334": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11453408": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11453175": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11452802": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11452894": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11452586": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11452601": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11452331": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11452149": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11451788": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11450921": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11450079": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11450100": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11449218": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11449096": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11449097": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "seats_comfort"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11449045": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11449046": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11449048": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11448871": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11447508": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11446874": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11446567": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11446374": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11444925": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11443851": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11443479": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11440803": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11440365": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11438038": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11435271": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11435234": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11433428": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11432680": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11432561": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11432602": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11427096": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking",
+    "lighting_visibility"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11426599": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11423729": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11423327": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11404484": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11375608": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11373709": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11769232": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency",
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11764281": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11763534": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11750106": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11748845": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11747689": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11747523": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11746306": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11737697": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11737473": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11736496": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11726866": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance",
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11710217": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11707047": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11698829": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11696322": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11694520": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11694322": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11689558": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "climate"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11687128": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11681016": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11679777": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11666652": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "access_locking",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11660717": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11654763": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11654287": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11652232": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11648722": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11638686": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11638946": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11625697": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance",
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11624486": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11610870": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11599199": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11597014": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11590908": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11585652": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11584865": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11583611": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11582920": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11579491": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11572535": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11571328": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11571196": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11568799": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11567372": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565306": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565338": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565341": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565236": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11563549": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11561927": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11560301": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11559457": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11557795": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11552774": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11551967": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11547327": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11545573": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11544002": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11544008": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11543842": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11543709": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11541520": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11535757": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11534339": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11529676": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11526512": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11526515": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11515686": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "connectivity_app_digital"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11514107": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11511466": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11509924": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11509551": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11508830": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11507724": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11507215": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11505936": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11504409": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11503174": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11503070": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11502303": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11501779": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11501630": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11501698": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11500756": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency",
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11500234": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11498813": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11498087": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11498086": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11496006": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11495428": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11493857": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11493538": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11493532": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking",
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11493164": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11493174": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11492442": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11491103": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11490108": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11489894": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11489325": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11488756": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11488440": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11487924": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11486822": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11486756": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11485633": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11485612": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11484000": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11483784": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11482822": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11482104": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11481684": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11480461": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "connectivity_app_digital"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11480463": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11479846": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment",
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11477687": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11476672": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11475433": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11474849": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11474642": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11474114": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11473476": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11473077": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11467564": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11465819": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11465531": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11464430": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11463702": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11463670": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11463556": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11462603": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility",
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11459142": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11456312": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking",
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11455846": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11455948": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11447274": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11446436": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11768152": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11763208": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11760191": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11756007": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11754941": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11753375": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "seats_comfort"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11743884": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11743804": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11742158": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11737380": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11736794": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11734662": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11713173": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance",
+    "adas_parking",
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11707195": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11707197": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11706639": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11694180": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11687249": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11684245": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11681648": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11670265": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11664349": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11663627": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11661468": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11659938": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11656893": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11655056": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11647313": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11642828": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11630866": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11631033": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11631099": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11629422": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11628665": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11624641": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11620961": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11620970": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking",
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11617355": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "connectivity_app_digital"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11615854": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11615859": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11615735": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11615738": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11610142": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11609692": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11605362": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "seats_comfort"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11604825": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11604435": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11603511": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11603466": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11601284": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11600201": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11599105": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11597062": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11595940": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11595765": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11595486": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11593314": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility",
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11593197": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11593247": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "connectivity_app_digital",
+    "overall_quality_ownership",
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11592339": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11592398": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11587618": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11587733": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11586722": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11585101": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11584127": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11583445": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11583121": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11582617": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11580793": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11578911": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking",
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11577803": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11576318": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety",
+    "seats_comfort"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11574385": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11573522": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11571150": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11571165": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11570273": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11569741": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility",
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11569407": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565413": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565424": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565490": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565247": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565296": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565313": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565320": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565330": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565342": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565357": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565372": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565103": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11565242": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11562700": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11561747": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11561109": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11559916": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "lighting_visibility",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11559068": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": true,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11558073": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11557479": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11551946": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11551159": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11549374": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11547897": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11544761": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11542504": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11542250": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11540722": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11531851": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11531007": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11529447": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11521086": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11519675": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11501003": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11732580": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11709357": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "connectivity_app_digital"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11691293": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11687621": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11676291": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "safety"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11647092": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11645936": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11646100": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11645730": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11644996": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "hmi_infotainment"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11644993": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11644086": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11642295": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11642298": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11640433": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11636970": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking",
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11629236": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11626018": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11625689": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11625246": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11623017": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11623018": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11623020": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "range_charging_efficiency",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11623022": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11623023": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11623024": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11623026": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11623027": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11623035": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11623019": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11616484": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11612498": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11605696": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11596842": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "connectivity_app_digital",
+    "access_locking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11591841": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11590545": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11589894": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11587563": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11718413": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11718423": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11713304": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11704875": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11689981": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11675799": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11769091": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "lighting_visibility"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11768631": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11767931": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "powertrain_performance"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11744863": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "overall_quality_ownership",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11696712": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "ride_handling",
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  },
+  "luis:nhtsa:tesla_model_s:11693133": {
+   "vehicle_key": "tesla_model_s",
+   "themes": [
+    "adas_parking"
+   ],
+   "recall_related": false,
+   "theme_method": "rule-based mapping of NHTSA components + narrative keywords (nhtsa.themes_for)"
+  }
+ },
+ "claims": {}
+}

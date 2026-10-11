@@ -1,0 +1,29 @@
+{
+  "id": "dept:sales-eu",
+  "kind": "department",
+  "display_name": "Sales Europe",
+  "details_status": "skeleton",
+  "role": {
+    "title": "Head of Sales Planning, 5 Series, Europe",
+    "mandate": "Judge market fit and competitive pressure in Europe only. A competitive gap counts only if verified research supports it.",
+    "perspective": "Europe: company-car fleets, Autobahn use, PHEV/BEV taxation. Main rivals: Mercedes E-Class, Audi A6 / A6 e-tron, Tesla Model 3/S, Volvo ES90."
+  },
+  "criteria": [
+    "vehicle_market_fit",
+    "competitive_gap"
+  ],
+  "rating_status": "assumed",
+  "must_not": [
+    "state prices, margins or cost figures",
+    "write engineering specifications",
+    "treat customer competitor mentions as verified competitor facts"
+  ],
+  "knowledge": {
+    "focus_areas": [
+      "regional fit",
+      "positioning",
+      "variant and package offering"
+    ]
+  },
+  "market": "EU"
+}

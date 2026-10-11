@@ -1,0 +1,34 @@
+# Scrape target: one file per app. Copy this file to scrape another app or
+# market set; the code has no product- or region-specific logic.
+#
+# Find app ids for a new target with:
+#   python -m scrapers.app_reviews discover "My BMW" --countries de us cn
+
+name: my_bmw
+
+apps:
+  # Apple App Store: app_id is the numeric App Store id. One app can be listed
+  # in several country stores; each country is fetched separately.
+  - store: app_store
+    app_id: "1519034860"          # My BMW (rest of world)
+    markets: [de, gb, fr, it, es, nl, at, ch, se, jp, kr, au]
+  - store: app_store
+    app_id: "1519457734"          # My BMW (North America)
+    markets: [us, ca]
+  - store: app_store
+    app_id: "1527576076"          # My BMW (China)
+    markets: [cn]
+
+  # Google Play: app_id is the package name. Reviews are filtered mainly by
+  # language, so give each market the language its customers write in.
+  - store: google_play
+    app_id: de.bmw.connected.mobile20.row
+    markets: {de: de, gb: en, fr: fr, it: it, es: es, nl: nl, se: sv, jp: ja, kr: ko}
+  - store: google_play
+    app_id: de.bmw.connected.mobile20.na
+    markets: {us: en}
+
+scrape:
+  max_reviews_per_market: 2000   # App Store's public feed stops at ~500 anyway
+  date_from: 2024-01-01          # ignore reviews older than this (content date); remove for no limit
+

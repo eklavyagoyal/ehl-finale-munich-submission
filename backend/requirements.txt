@@ -1,0 +1,16 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+sqlalchemy>=2.0
+psycopg[binary]>=3.1
+alembic>=1.13
+pydantic>=2.7
+pydantic-settings>=2.3
+openai>=2.0
+jsonschema[format]==4.26.0
+numpy
+pandas
+openpyxl
+pytest
+httpx
+tinytroupe @ git+https://github.com/microsoft/TinyTroupe.git@main
+python-multipart>=0.0.9

@@ -1,0 +1,27 @@
+{
+  "id": "dept:quality",
+  "kind": "department",
+  "display_name": "Quality",
+  "details_status": "skeleton",
+  "role": {
+    "title": "Head of Product Quality, 5 Series",
+    "mandate": "Judge how severe the underlying customer problem is from a quality and reliability view (defects, malfunctions, perceived quality) and what a fix must achieve.",
+    "perspective": "Field defects, reliability, perceived quality, software stability."
+  },
+  "criteria": [
+    "impact"
+  ],
+  "rating_status": "assumed",
+  "must_not": [
+    "state prices, margins or cost figures",
+    "write engineering specifications",
+    "treat customer competitor mentions as verified competitor facts"
+  ],
+  "knowledge": {
+    "focus_areas": [
+      "defect severity",
+      "reliability",
+      "perceived quality"
+    ]
+  }
+}

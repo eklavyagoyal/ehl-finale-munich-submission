@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BMW hackathon research contract v1",
+  "oneOf": [
+    {"$ref": "#/$defs/source"},
+    {"$ref": "#/$defs/record"},
+    {"$ref": "#/$defs/claim"}
+  ],
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 240},
+    "text": {"type": "string", "minLength": 1},
+    "nullableText": {"type": ["string", "null"]},
+    "date": {"type": ["string", "null"], "format": "date"},
+    "datetime": {"type": ["string", "null"], "format": "date-time"},
+    "strings": {"type": "array", "items": {"$ref": "#/$defs/text"}, "uniqueItems": true},
+    "reviewStatus": {"enum": ["pending", "accepted", "rejected"]},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["document_type", "schema_version", "source_id", "dataset_key", "stream", "channel", "title", "locator", "collected_at", "collector", "is_example", "normalized_record_count", "sampling", "provenance", "artifact", "export_permissions", "review_status"],
+      "properties": {
+        "document_type": {"const": "source"},
+        "schema_version": {"const": "1.0"},
+        "source_id": {"$ref": "#/$defs/id"},
+        "dataset_key": {"$ref": "#/$defs/id"},
+        "stream": {"enum": ["bmw", "competitors", "social"]},
+        "channel": {"enum": ["bmw_feedback", "bmw_customer_study", "bmw_sales", "bmw_option_list", "manufacturer_website", "editorial_review", "app_store", "google_play", "reddit", "youtube", "forum", "other"]},
+        "title": {"$ref": "#/$defs/text"},
+        "locator": {"$ref": "#/$defs/text"},
+        "collected_at": {"type": "string", "format": "date-time"},
+        "collector": {"$ref": "#/$defs/text"},
+        "is_example": {"type": "boolean"},
+        "normalized_record_count": {"type": "integer", "minimum": 1},
+        "sampling": {
+          "type": "object", "additionalProperties": false,
+          "required": ["method", "query", "date_start", "date_end", "retrieved_count", "complete", "limitations"],
+          "properties": {
+            "method": {"$ref": "#/$defs/text"},
+            "query": {"$ref": "#/$defs/nullableText"},
+            "date_start": {"$ref": "#/$defs/date"},
+            "date_end": {"$ref": "#/$defs/date"},
+            "retrieved_count": {"type": ["integer", "null"], "minimum": 0},
+            "complete": {"type": "boolean"},
+            "limitations": {"$ref": "#/$defs/strings"}
+          }
+        },
+        "provenance": {
+          "type": "object", "additionalProperties": false,
+          "required": ["origin", "verification", "notes"],
+          "properties": {
+            "origin": {"enum": ["bmw_provided", "official", "third_party", "anonymous", "synthetic"]},
+            "verification": {"enum": ["unverified", "provenance_checked", "content_checked"]},
+            "notes": {"$ref": "#/$defs/nullableText"}
+          }
+        },
+        "artifact": {
+          "type": "object", "additionalProperties": false,
+          "required": ["path", "sha256"],
+          "properties": {
+            "path": {"$ref": "#/$defs/nullableText"},
+            "sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"}
+          }
+        },
+        "export_permissions": {
+          "type": "object", "additionalProperties": false,
+          "required": ["git", "external_llm", "notes"],
+          "properties": {
+            "git": {"type": ["boolean", "null"]},
+            "external_llm": {"type": ["boolean", "null"]},
+            "notes": {"$ref": "#/$defs/nullableText"}
+          }
+        },
+        "review_status": {"$ref": "#/$defs/reviewStatus"}
+      }
+    },
+    "locator": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "table", "native_id", "row_number"],
+          "properties": {
+            "kind": {"const": "table"},
+            "table": {"$ref": "#/$defs/text"},
+            "native_id": {"$ref": "#/$defs/text"},
+            "row_number": {"type": ["integer", "null"], "minimum": 1}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "sheet", "rows", "columns"],
+          "properties": {
+            "kind": {"const": "spreadsheet"},
+            "sheet": {"$ref": "#/$defs/text"},
+            "rows": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "integer", "minimum": 1}},
+            "columns": {"$ref": "#/$defs/strings"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "url", "native_id", "timestamp_seconds"],
+          "properties": {
+            "kind": {"const": "web"},
+            "url": {"type": "string", "format": "uri", "pattern": "^https?://"},
+            "native_id": {"$ref": "#/$defs/nullableText"},
+            "timestamp_seconds": {"type": ["number", "null"], "minimum": 0}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "page", "section"],
+          "properties": {
+            "kind": {"const": "document"},
+            "page": {"type": ["integer", "null"], "minimum": 1},
+            "section": {"$ref": "#/$defs/text"}
+          }
+        }
+      ]
+    },
+    "metric": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "value", "unit", "statistic", "period", "population", "sample_base", "scale"],
+      "properties": {
+        "name": {"$ref": "#/$defs/text"},
+        "value": {"type": "number"},
+        "unit": {"$ref": "#/$defs/text"},
+        "statistic": {"enum": ["count", "mean", "percentage", "proportion", "forecast", "other"]},
+        "period": {"$ref": "#/$defs/nullableText"},
+        "population": {"$ref": "#/$defs/nullableText"},
+        "sample_base": {"type": ["integer", "null"], "minimum": 1},
+        "scale": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "object", "additionalProperties": false, "required": ["min", "max"], "properties": {"min": {"type": "number"}, "max": {"type": "number"}}}
+          ]
+        }
+      },
+      "allOf": [
+        {"if": {"properties": {"statistic": {"const": "percentage"}}}, "then": {"properties": {"value": {"minimum": 0, "maximum": 100}}}},
+        {"if": {"properties": {"statistic": {"const": "proportion"}}}, "then": {"properties": {"value": {"minimum": 0, "maximum": 1}}}},
+        {"if": {"properties": {"statistic": {"enum": ["count", "forecast"]}}}, "then": {"properties": {"value": {"minimum": 0}}}}
+      ]
+    },
+    "availability": {
+      "type": "object", "additionalProperties": false,
+      "required": ["feature_key", "status", "model_years", "trim", "package", "price"],
+      "properties": {
+        "feature_key": {"$ref": "#/$defs/text"},
+        "status": {"enum": ["present", "optional", "absent", "unknown"]},
+        "model_years": {"type": "array", "uniqueItems": true, "items": {"type": "integer", "minimum": 1900, "maximum": 2200}},
+        "trim": {"$ref": "#/$defs/nullableText"},
+        "package": {"$ref": "#/$defs/nullableText"},
+        "price": {"oneOf": [{"type": "null"}, {"type": "object", "additionalProperties": false, "required": ["amount", "currency"], "properties": {"amount": {"type": "number", "minimum": 0}, "currency": {"type": "string", "pattern": "^[A-Z]{3}$"}}}]}
+      }
+    },
+    "sourceFields": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "DimDateID": {"$ref": "#/$defs/nullableText"},
+        "DimAppID": {"$ref": "#/$defs/nullableText"},
+        "DimAppVersionID": {"$ref": "#/$defs/nullableText"},
+        "DimOSID": {"$ref": "#/$defs/nullableText"},
+        "DimDeviceModelID": {"$ref": "#/$defs/nullableText"},
+        "DimMarketID": {"$ref": "#/$defs/nullableText"},
+        "ReviewID": {"$ref": "#/$defs/nullableText"},
+        "ContentDate": {"$ref": "#/$defs/nullableText"},
+        "ContentDateTime": {"$ref": "#/$defs/nullableText"},
+        "Rating": {"type": ["number", "null"]},
+        "Source": {"$ref": "#/$defs/nullableText"},
+        "rating_scale": {"oneOf": [{"type": "null"}, {"type": "object", "additionalProperties": false, "required": ["min", "max"], "properties": {"min": {"type": "number"}, "max": {"type": "number"}}}]},
+        "original_labels": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["name", "value"], "properties": {"name": {"$ref": "#/$defs/text"}, "value": {"$ref": "#/$defs/nullableText"}}}}
+      }
+    },
+    "record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["document_type", "schema_version", "record_id", "source_id", "dedup_key", "record_kind", "locator", "content_date", "content_datetime", "subject_ids", "markets", "text_original", "language", "translation_en", "metric", "availability", "source_fields"],
+      "properties": {
+        "document_type": {"const": "record"},
+        "schema_version": {"const": "1.0"},
+        "record_id": {"$ref": "#/$defs/id"},
+        "source_id": {"$ref": "#/$defs/id"},
+        "dedup_key": {"$ref": "#/$defs/id"},
+        "record_kind": {"enum": ["feedback", "metric", "feature_availability"]},
+        "locator": {"$ref": "#/$defs/locator"},
+        "content_date": {"$ref": "#/$defs/date"},
+        "content_datetime": {"$ref": "#/$defs/datetime"},
+        "subject_ids": {"$ref": "#/$defs/strings"},
+        "markets": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Z]{2}$"}},
+        "text_original": {"$ref": "#/$defs/nullableText"},
+        "language": {"$ref": "#/$defs/nullableText"},
+        "translation_en": {"$ref": "#/$defs/nullableText"},
+        "metric": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/metric"}]},
+        "availability": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/availability"}]},
+        "source_fields": {"$ref": "#/$defs/sourceFields"}
+      },
+      "allOf": [
+        {"if": {"properties": {"record_kind": {"const": "feedback"}}}, "then": {"properties": {"text_original": {"$ref": "#/$defs/text"}, "metric": {"type": "null"}, "availability": {"type": "null"}}}},
+        {"if": {"properties": {"record_kind": {"const": "metric"}}}, "then": {"properties": {"metric": {"$ref": "#/$defs/metric"}, "availability": {"type": "null"}}}},
+        {"if": {"properties": {"record_kind": {"const": "feature_availability"}}}, "then": {"properties": {"text_original": {"$ref": "#/$defs/text"}, "metric": {"type": "null"}, "availability": {"$ref": "#/$defs/availability"}}}}
+      ]
+    },
+    "claim": {
+      "type": "object", "additionalProperties": false,
+      "required": ["document_type", "schema_version", "claim_id", "record_id", "feature_key", "feature_label", "claim_type", "summary", "quotes", "competitors_mentioned", "producer", "review_status", "source_fields"],
+      "properties": {
+        "document_type": {"const": "claim"},
+        "schema_version": {"const": "1.0"},
+        "claim_id": {"$ref": "#/$defs/id"},
+        "record_id": {"$ref": "#/$defs/id"},
+        "feature_key": {"$ref": "#/$defs/nullableText"},
+        "feature_label": {"$ref": "#/$defs/text"},
+        "claim_type": {"enum": ["new_request", "discontinued", "competitor_parity", "defect", "praise", "feature_present", "feature_absent", "other", "unclear"]},
+        "summary": {"$ref": "#/$defs/text"},
+        "quotes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+        "competitors_mentioned": {"$ref": "#/$defs/strings"},
+        "producer": {
+          "type": "object", "additionalProperties": false,
+          "required": ["method", "name", "version", "run_id"],
+          "properties": {
+            "method": {"enum": ["human", "llm", "provided_unknown"]},
+            "name": {"$ref": "#/$defs/nullableText"},
+            "version": {"$ref": "#/$defs/nullableText"},
+            "run_id": {"$ref": "#/$defs/nullableText"}
+          },
+          "allOf": [{"if": {"properties": {"method": {"const": "llm"}}}, "then": {"properties": {"name": {"$ref": "#/$defs/text"}, "version": {"$ref": "#/$defs/text"}, "run_id": {"$ref": "#/$defs/text"}}}}]
+        },
+        "review_status": {"$ref": "#/$defs/reviewStatus"},
+        "source_fields": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "MissingFeature": {"$ref": "#/$defs/nullableText"},
+            "MissingFeatureDescription": {"$ref": "#/$defs/nullableText"},
+            "Competitors": {"$ref": "#/$defs/strings"},
+            "CompetitorName": {"$ref": "#/$defs/nullableText"},
+            "MissingFeatureType": {"$ref": "#/$defs/nullableText"},
+            "KeyDemands": {"$ref": "#/$defs/nullableText"}
+          }
+        }
+      }
+    }
+  }
+}

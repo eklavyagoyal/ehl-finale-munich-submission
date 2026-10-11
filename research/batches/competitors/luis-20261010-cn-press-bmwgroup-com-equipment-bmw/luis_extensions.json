@@ -1,0 +1,46 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:cn_german_g68-E0004": {
+   "record_id": "cn_german_g68-E0004",
+   "kind": "equipment",
+   "market": "CN",
+   "brand": "BMW",
+   "model": "5 Series Li",
+   "generation": "G68",
+   "trim_scope": "all trims",
+   "feature": "F04_voice_assistant",
+   "theme": "hmi_infotainment",
+   "availability": "unknown",
+   "value": "BMW Intelligent Personal Assistant tailored to Chinese customers; no LLM mentioned",
+   "source_type": "manufacturer",
+   "url": "https://www.press.bmwgroup.com/global/article/detail/T0439257EN/market-launch-of-new-bmw-5-series-sedan-and-new-bmw-i5-sedan-from-china-for-china",
+   "as_of": "2024-01",
+   "evidence_tier": "C",
+   "notes": "Standard/optional status not stated.",
+   "agent": "cn_german_g68",
+   "exact_excerpt": null
+  },
+  "luis:cn_german_g68-E0016": {
+   "record_id": "cn_german_g68-E0016",
+   "kind": "equipment",
+   "market": "CN",
+   "brand": "BMW",
+   "model": "5 Series Li",
+   "generation": "G68",
+   "trim_scope": "i5 eDrive35L",
+   "feature": "F16_dc_charging",
+   "theme": "range_charging_efficiency",
+   "availability": "unknown",
+   "value": "not stated in fetched sources",
+   "source_type": "manufacturer",
+   "url": "https://www.press.bmwgroup.com/global/article/detail/T0439257EN/market-launch-of-new-bmw-5-series-sedan-and-new-bmw-i5-sedan-from-china-for-china",
+   "as_of": "2024-01",
+   "evidence_tier": "C",
+   "notes": null,
+   "agent": "cn_german_g68",
+   "exact_excerpt": null
+  }
+ },
+ "claims": {}
+}

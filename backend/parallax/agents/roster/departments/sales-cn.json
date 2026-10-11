@@ -1,0 +1,29 @@
+{
+  "id": "dept:sales-cn",
+  "kind": "department",
+  "display_name": "Sales China",
+  "details_status": "skeleton",
+  "role": {
+    "title": "Head of Sales Planning, 5 Series, China",
+    "mandate": "Judge market fit and competitive pressure in China only. A competitive gap counts only if verified research supports it.",
+    "perspective": "China: long wheelbase, rear-seat comfort, smart cockpit, fast domestic EV competition. Main rivals: Mercedes E-Class L, Audi A6L, NIO ET7, Xiaomi SU7, Zeekr 007, HIMA Luxeed/Stelato."
+  },
+  "criteria": [
+    "vehicle_market_fit",
+    "competitive_gap"
+  ],
+  "rating_status": "assumed",
+  "must_not": [
+    "state prices, margins or cost figures",
+    "write engineering specifications",
+    "treat customer competitor mentions as verified competitor facts"
+  ],
+  "knowledge": {
+    "focus_areas": [
+      "regional fit",
+      "positioning",
+      "variant and package offering"
+    ]
+  },
+  "market": "CN"
+}

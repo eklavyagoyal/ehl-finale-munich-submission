@@ -1,0 +1,26 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:bmw_baseline_outlook-E0036": {
+   "record_id": "bmw_baseline_outlook-E0036",
+   "kind": "equipment",
+   "market": "US",
+   "brand": "BMW",
+   "model": "5 Series",
+   "generation": "G60",
+   "trim_scope": "i5 eDrive40 (19\" wheels), MY2027",
+   "feature": "F15_bev_range",
+   "theme": "range_charging_efficiency",
+   "availability": "standard",
+   "value": "328 mi EPA (528 km), 116 MPGe combined",
+   "source_type": "manufacturer",
+   "url": "https://www.fueleconomy.gov/feg/PowerSearch.do?action=noform&path=1&year1=2027&year2=2027&make=BMW&baseModel=i5&srchtyp=ymm&pageno=1&rowLimit=50",
+   "as_of": "2026-10",
+   "evidence_tier": "C",
+   "notes": "Official EPA/DOE rating (fueleconomy.gov; manufacturer-tested homologation value). eDrive40 20\" 299 mi, 21\" 280 mi; xDrive40 262-283 mi; M60 xDrive 259-277 mi. 2023 launch estimate was 295 mi (eDrive40).",
+   "agent": "bmw_baseline_outlook",
+   "exact_excerpt": null
+  }
+ },
+ "claims": {}
+}

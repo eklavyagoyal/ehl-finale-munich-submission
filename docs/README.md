@@ -25,9 +25,11 @@ docs/
 │       ├── F70-1-series.md
 │       ├── G60-5-series.md
 │       └── G70-7-series.md
-└── bmw-pm-interview/                  ← conversation with a BMW product manager
-    ├── conversation-with-bmw-prod-manager.md   ← raw notes
-    └── bmw-product-manager-groundwork.md       ← structured write-up
+├── bmw-pm-interview/                  ← conversation with a BMW product manager
+│   ├── conversation-with-bmw-prod-manager.md   ← raw notes
+│   └── bmw-product-manager-groundwork.md       ← structured write-up
+└── competitors/
+    └── README.md                      ← 5 Series competitor analysis (EU/US/CN), findings and caveats; data in /competitors
 ```
 
 ## Where to find what
@@ -38,6 +40,13 @@ docs/
 | Which fields does every requirement need? | [brief.md § 6.2](challenge/brief.md#62-expected-deliverables-s2-section-5) |
 | What's in or out of scope? | [brief.md § 4 Scope](challenge/brief.md#4-scope-s2-section-2) |
 | Where does BMW expect AI vs human review? | [brief.md § 9 Process](challenge/brief.md#9-bmws-requirements-process-s5) |
+| How will we be judged? | [brief.md § 12 Evaluation criteria](challenge/brief.md#12-evaluation-criteria-s6) |
+| What are PMs' real pain points? | [brief.md § 13](challenge/brief.md#13-pm-pain-points-and-the-process-timeline-s7) |
 | Which vehicle/market has which data? | [datasets/README.md](datasets/README.md#coverage-at-a-glance) |
 | How do BMW PMs actually prioritize? | [bmw-pm-interview/](bmw-pm-interview/bmw-product-manager-groundwork.md) |
 | What does the car offer today (standard vs optional)? | [datasets/option-lists/](datasets/option-lists/) |
+| Who are the 5 Series competitors and how do they compare? | [competitors/README.md](competitors/README.md) |
+
+## Research collection handoff
+
+Use [the data contract](research-data-contract.md) and [agent prompt index](../research/README.md) to prepare consistent, source-linked BMW, competitor, and social evidence batches.
