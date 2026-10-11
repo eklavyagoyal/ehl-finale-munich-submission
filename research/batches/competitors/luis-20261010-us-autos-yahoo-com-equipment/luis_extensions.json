@@ -1,0 +1,52 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:us_mercedes-E0013": {
+   "record_id": "us_mercedes-E0013",
+   "kind": "equipment",
+   "market": "US",
+   "brand": "Mercedes-Benz",
+   "model": "E-Class",
+   "generation": "W214",
+   "trim_scope": "E 450 4MATIC (MY2027)",
+   "feature": "F13_air_suspension",
+   "theme": "ride_handling",
+   "availability": "optional",
+   "value": "AIRMATIC air suspension optional",
+   "source_type": "press_review",
+   "url": "https://autos.yahoo.com/new-vehicles-and-reviews/articles/bmw-540i-vs-mercedes-benz-163100204.html",
+   "as_of": "2026-08",
+   "evidence_tier": "B",
+   "notes": "Cars.com review (2024-05): adaptive air suspension was a $3,200 option on the E350 test car.",
+   "agent": "us_mercedes",
+   "exact_excerpt": {
+    "url": "https://autos.yahoo.com/new-vehicles-and-reviews/articles/bmw-540i-vs-mercedes-benz-163100204.html",
+    "fetched_at": "2026-10-10T16:21:58Z",
+    "excerpt": "steering. It's also available with Merc's Airmatic air suspension, which provides a distinctly serene ride.",
+    "feature": "F13_air_suspension",
+    "reviewed": "keyword match checked against record by collector"
+   }
+  },
+  "luis:us_mercedes-E0014": {
+   "record_id": "us_mercedes-E0014",
+   "kind": "equipment",
+   "market": "US",
+   "brand": "Mercedes-Benz",
+   "model": "E-Class",
+   "generation": "W214",
+   "trim_scope": "E 450 4MATIC (MY2027)",
+   "feature": "F14_rear_wheel_steering",
+   "theme": "ride_handling",
+   "availability": "optional",
+   "value": "Rear-wheel steering optional",
+   "source_type": "press_review",
+   "url": "https://autos.yahoo.com/new-vehicles-and-reviews/articles/bmw-540i-vs-mercedes-benz-163100204.html",
+   "as_of": "2026-08",
+   "evidence_tier": "B",
+   "notes": "KBB news (2023-04, pre-launch) bundles rear-axle steering with AIRMATIC in a Technology package; steering angle not stated in fetched sources.",
+   "agent": "us_mercedes",
+   "exact_excerpt": null
+  }
+ },
+ "claims": {}
+}

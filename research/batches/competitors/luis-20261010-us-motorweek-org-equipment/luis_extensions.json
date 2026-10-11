@@ -1,0 +1,26 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:us_premium_others-E0053": {
+   "record_id": "us_premium_others-E0053",
+   "kind": "equipment",
+   "market": "US",
+   "brand": "Lexus",
+   "model": "ES",
+   "generation": "8th gen (MY2026+)",
+   "trim_scope": "MY2026 ES",
+   "feature": "F13_air_suspension",
+   "theme": "ride_handling",
+   "availability": "not_available",
+   "value": "No adaptive dampers on the models tested; air suspension not mentioned",
+   "source_type": "press_review",
+   "url": "https://motorweek.org/first-impressions/quick-spins/2026-lexus-es/",
+   "as_of": "2026-10",
+   "evidence_tier": "B",
+   "notes": "not_available inferred from MotorWeek's statement that the models lack adaptive dampers.",
+   "agent": "us_premium_others",
+   "exact_excerpt": null
+  }
+ },
+ "claims": {}
+}

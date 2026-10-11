@@ -1,0 +1,46 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:cn_german_g68-E0005": {
+   "record_id": "cn_german_g68-E0005",
+   "kind": "equipment",
+   "market": "CN",
+   "brand": "BMW",
+   "model": "5 Series Li",
+   "generation": "G68",
+   "trim_scope": "all trims",
+   "feature": "F05_wireless_carplay_aa",
+   "theme": "connectivity_app_digital",
+   "availability": "unknown",
+   "value": "Huawei AppGallery access and iQiyi integration; CarPlay not stated in fetched manufacturer/press sources",
+   "source_type": "press_review",
+   "url": "https://carnewschina.com/2024/01/18/bmw-set-to-launch-new-5-series-models-in-china-with-enhanced-features/",
+   "as_of": "2024-01",
+   "evidence_tier": "B",
+   "notes": "Sohu owner reviews of 2025 525Li/530Li mention wireless CarPlay (owner statements, not a spec source).",
+   "agent": "cn_german_g68",
+   "exact_excerpt": null
+  },
+  "luis:cn_german_g68-E0015": {
+   "record_id": "cn_german_g68-E0015",
+   "kind": "equipment",
+   "market": "CN",
+   "brand": "BMW",
+   "model": "5 Series Li",
+   "generation": "G68",
+   "trim_scope": "i5 eDrive35L",
+   "feature": "F15_bev_range",
+   "theme": "range_charging_efficiency",
+   "availability": "standard",
+   "value": "567 km (cycle not explicit in source, presumably CLTC)",
+   "source_type": "press_review",
+   "url": "https://carnewschina.com/2024/01/18/bmw-set-to-launch-new-5-series-models-in-china-with-enhanced-features/",
+   "as_of": "2024-01",
+   "evidence_tier": "B",
+   "notes": "BMW press release (https://www.press.bmwgroup.com/global/article/detail/T0439257EN/market-launch-of-new-bmw-5-series-sedan-and-new-bmw-i5-sedan-from-china-for-china) gives 14.8 kWh/100 km combined. eDrive40L appears in 2025/2026 owner reviews; its range was not found in a fetched spec source.",
+   "agent": "cn_german_g68",
+   "exact_excerpt": null
+  }
+ },
+ "claims": {}
+}

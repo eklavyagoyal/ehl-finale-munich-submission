@@ -1,0 +1,46 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:eu_challengers-E0025": {
+   "record_id": "eu_challengers-E0025",
+   "kind": "equipment",
+   "market": "EU",
+   "brand": "NIO",
+   "model": "ET7",
+   "generation": "ET7 1st gen (2022-; 2024 facelift)",
+   "trim_scope": "all trims",
+   "feature": "F05_wireless_carplay_aa",
+   "theme": "connectivity_app_digital",
+   "availability": "not_available",
+   "value": "No Apple CarPlay or Android Auto",
+   "source_type": "press_review",
+   "url": "https://www.auto-swiat.pl/ev/testy/nie-tego-chcieli-niemcy-wynik-porownania-bmw-mercedesa-i-nio-to-wielkie-zaskoczenie/x30zj3v",
+   "as_of": "2024-03",
+   "evidence_tier": "B",
+   "notes": "ADAC Autotest 2023 also says not available; the ADAC catalogue page lists CarPlay/AA as standard (conflict, likely catalogue error)",
+   "agent": "eu_challengers",
+   "exact_excerpt": null
+  },
+  "luis:eu_challengers-E0032": {
+   "record_id": "eu_challengers-E0032",
+   "kind": "equipment",
+   "market": "EU",
+   "brand": "NIO",
+   "model": "ET7",
+   "generation": "ET7 1st gen (2022-; 2024 facelift)",
+   "trim_scope": "all trims",
+   "feature": "F12_rear_comfort",
+   "theme": "seats_comfort",
+   "availability": "unknown",
+   "value": "Rear seat ventilation and massage; very generous rear knee room; rear seat does not fold",
+   "source_type": "press_review",
+   "url": "https://www.auto-swiat.pl/ev/testy/nie-tego-chcieli-niemcy-wynik-porownania-bmw-mercedesa-i-nio-to-wielkie-zaskoczenie/x30zj3v",
+   "as_of": "2024-03",
+   "evidence_tier": "B",
+   "notes": null,
+   "agent": "eu_challengers",
+   "exact_excerpt": null
+  }
+ },
+ "claims": {}
+}

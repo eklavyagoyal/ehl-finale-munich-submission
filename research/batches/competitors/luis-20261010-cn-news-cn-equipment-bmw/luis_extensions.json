@@ -1,0 +1,52 @@
+{
+ "description": "Fields from competitors/findings.jsonl that the contract has no place for, keyed by contract record_id / claim_id. Not read by the team validator or exporter.",
+ "records": {
+  "luis:bmw_baseline_outlook-E0046": {
+   "record_id": "bmw_baseline_outlook-E0046",
+   "kind": "equipment",
+   "market": "CN",
+   "brand": "BMW",
+   "model": "5 Series",
+   "generation": "G68",
+   "trim_scope": "5 Series Li and i5 (all trims)",
+   "feature": "F04_voice_assistant",
+   "theme": "hmi_infotainment",
+   "availability": "standard",
+   "value": "BMW Intelligent Personal Assistant ('Hello BMW') standard; DeepSeek LLM 'deep-thinking' capability announced Apr 2025 for 5 Series LWB / i5 rollout from Q3 2025 (also for existing owners), delivery not verified",
+   "source_type": "press_review",
+   "url": "https://www.news.cn/auto/20250427/7a444691d682422ca0393c88deb32195/c.html",
+   "as_of": "2025-04",
+   "evidence_tier": "B",
+   "notes": "Xinhua report of BMW China announcement (2025-04-27). Announcement only: actual rollout status in 2026 not verified by a fetched source. CarNewsChina 2026 i5 params list voice recognition ('Hello BMW') as standard. Only market where an LLM assistant has been announced for the current 5 Series.",
+   "agent": "bmw_baseline_outlook",
+   "exact_excerpt": {
+    "url": "https://www.news.cn/auto/20250427/7a444691d682422ca0393c88deb32195/c.html",
+    "fetched_at": "2026-10-10T16:19:21Z",
+    "excerpt": "宝马中国宣布DeepSeek“上车” 以AI赋能宝马人机交互体",
+    "feature": "F04_voice_assistant",
+    "reviewed": "keyword match checked against record by collector"
+   }
+  },
+  "luis:bmw_baseline_outlook-E0048": {
+   "record_id": "bmw_baseline_outlook-E0048",
+   "kind": "equipment",
+   "market": "CN",
+   "brand": "BMW",
+   "model": "5 Series",
+   "generation": "G68",
+   "trim_scope": "5 Series Li and i5",
+   "feature": "F06_ota_updates",
+   "theme": "connectivity_app_digital",
+   "availability": "unknown",
+   "value": "Not stated; BMW China said the DeepSeek function will also be pushed to existing owners (delivery method not named)",
+   "source_type": "press_review",
+   "url": "https://www.news.cn/auto/20250427/7a444691d682422ca0393c88deb32195/c.html",
+   "as_of": "2025-04",
+   "evidence_tier": "B",
+   "notes": "Implies remote software delivery but the page does not say OTA.",
+   "agent": "bmw_baseline_outlook",
+   "exact_excerpt": null
+  }
+ },
+ "claims": {}
+}
