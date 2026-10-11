@@ -11,11 +11,12 @@ const nextConfig: NextConfig = {
       { source: "/requirements", destination: `${v}/decision`, permanent: false },
       { source: "/requirements/:id", destination: `${v}/decision/:id`, permanent: false },
       { source: "/requirements/:id/:tab", destination: `${v}/decision/:id/:tab`, permanent: false },
-      { source: "/sources/:id", destination: `${v}/sources/:id`, permanent: false },
-      { source: "/data", destination: `${v}/sources`, permanent: false },
-      { source: "/history", destination: `${v}/activity`, permanent: false },
-      { source: "/:stage(sources|processing|signals|experts|tasks|activity)", destination: `${v}/:stage`, permanent: false },
-      { source: "/v/:vehicle/history", destination: "/v/:vehicle/activity", permanent: false },
+      { source: "/data", destination: "/sources", permanent: false },
+      { source: "/history", destination: "/activity", permanent: false },
+      { source: "/:stage(signals|experts|tasks)", destination: `${v}/:stage`, permanent: false },
+      // Activity is vehicle-independent now and lives at /activity.
+      { source: "/v/:vehicle/history", destination: "/activity", permanent: false },
+      { source: "/v/:vehicle/activity", destination: "/activity", permanent: false },
     ];
   },
   turbopack: {

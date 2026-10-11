@@ -33,6 +33,7 @@ import type {
   SignalMap,
   TriageSample,
   TriageSummary,
+  ProcessingFlow,
   VehiclePage,
   Version,
   Council,
@@ -290,6 +291,11 @@ export function useSignalDetail(featureKey: string | null, market: string | null
       api.GET("/api/signals/{feature_key}", { params: { path: { feature_key: featureKey! }, query: { market: market ?? undefined } } }),
     ),
   );
+}
+
+// All data before any vehicle: streams → not relevant / this vehicle / other models / competitors / brand-wide.
+export function useOverviewFlow() {
+  return useSWR("overview-flow", () => unwrap<ProcessingFlow>(api.GET("/api/overview/flow")), { revalidateOnFocus: false });
 }
 
 export function useTriageSummary() {

@@ -8,6 +8,7 @@ export const ALLOWED: ReadonlyArray<readonly [method: string, path: string]> = [
   ["GET", "meta"],
   ["GET", "vehicles"],
   ["GET", "pipeline"],
+  ["GET", "overview/flow"],
   ["GET", "signals"],
   ["GET", "signals/map"],
   ["GET", "signals/*"],

@@ -23,10 +23,21 @@ export interface MarketFilter {
 
 // The only header: "Overview › G60 › <Stage> › <Item>" at the top edge, then the market chip, page actions
 // and the tasks counter on the right. Every crumb except the last is a link. The market is a filter, not a crumb.
-export function PageHeader({ crumbs, market, children }: { crumbs: Crumb[]; market?: MarketFilter; children?: React.ReactNode }) {
+export function PageHeader({
+  crumbs,
+  market,
+  vehicle = true,
+  children,
+}: {
+  crumbs: Crumb[];
+  market?: MarketFilter;
+  // false for the data pages that are independent of a vehicle ("Overview › Sources").
+  vehicle?: boolean;
+  children?: React.ReactNode;
+}) {
   const { data: vehicles } = useVehicles();
   const code = (vehicles?.active ?? "bmw:G60").split(":").pop() ?? "G60";
-  const trail: Crumb[] = [{ label: "Overview", href: "/" }, { label: code, href: V }, ...crumbs];
+  const trail: Crumb[] = [{ label: "Overview", href: "/" }, ...(vehicle ? [{ label: code, href: V }] : []), ...crumbs];
 
   return (
     <div className="flex min-h-12 flex-wrap items-center gap-3 py-2">

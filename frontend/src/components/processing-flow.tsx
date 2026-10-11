@@ -10,15 +10,31 @@ import { cn } from "cn";
 const W = 1000;
 const H = 360;
 const NODE_W = 8;
-const GAP = 18;
+const GAP = 10;
+// Every node keeps room for its two-line label, also when its band is thin or empty.
+const MIN_SLOT = 34;
 const PAD_Y = 12;
-// Fixed columns, left to right; a node the frontend does not know yet joins the middle column.
-const COLUMNS = [["bmw", "online"], ["excluded", "bmw_labels", "ai_labeler", "no_topic"], ["signals"], ["findings"]];
-const COLUMN_X = [40, 360, 680, 900];
+const X0 = 30;
+const X1 = 880;
+// Column of a node without incoming links (sources, and empty end points such as "Change coming" before
+// anything is approved). Linked nodes sit one column right of their furthest source.
+const COLUMN_HINT: Record<string, number> = {
+  bmw: 0, online: 0, social: 0, competitors: 0,
+  excluded: 1, not_relevant: 1, bmw_labels: 1, ai_labeler: 1, no_topic: 1, target: 1, other_models: 1, competitor: 1, brand: 1,
+  signals: 2, findings: 3, requirements: 4, change_coming: 5, declined: 5, open: 5,
+};
 
 const NODE_COLOR: Record<string, string> = {
   bmw: "fill-foreground/70",
   online: "fill-foreground/70",
+  social: "fill-foreground/70",
+  competitors: "fill-foreground/70",
+  not_relevant: "fill-red-400",
+  target: "fill-foreground/80",
+  requirements: "fill-foreground/80",
+  change_coming: "fill-emerald-600",
+  declined: "fill-red-400",
+  open: "fill-muted-foreground/60",
   bmw_labels: "fill-emerald-600",
   ai_labeler: "fill-sky-600",
   no_topic: "fill-amber-500",
@@ -34,7 +50,7 @@ type Placed = FlowNode & { col: number; x: number; y: number; h: number; value: 
 export function ProcessingFlowChart({ flow }: { flow: ProcessingFlow }) {
   const [open, setOpen] = useState<string | null>(null);
   const [hoverLink, setHoverLink] = useState<number | null>(null);
-  const { nodes, links, scale } = layout(flow);
+  const { nodes, links, scale, columnCount } = layout(flow);
   const openNode = nodes.find((n) => n.key === open);
 
   return (
@@ -54,13 +70,18 @@ export function ProcessingFlowChart({ flow }: { flow: ProcessingFlow }) {
               </path>
             ))}
           </g>
-          {nodes.map((n) => (
-            <rect key={n.key} x={n.x} y={n.y} width={NODE_W} height={Math.max(n.h, 2)} rx={1.5} className={NODE_COLOR[n.key] ?? "fill-foreground/60"} />
-          ))}
+          {nodes.map((n) =>
+            n.value === 0 ? (
+              // Nothing has flowed here yet: an empty end point, still labelled.
+              <circle key={n.key} cx={n.x + NODE_W / 2} cy={n.y} r={4} className="fill-background stroke-muted-foreground/60" strokeWidth={1.2} />
+            ) : (
+              <rect key={n.key} x={n.x} y={n.y} width={NODE_W} height={Math.max(n.h, 2)} rx={1.5} className={NODE_COLOR[n.key] ?? "fill-foreground/60"} />
+            ),
+          )}
         </svg>
 
         {nodes.map((n) => {
-          const last = n.col === COLUMNS.length - 1;
+          const last = n.col === columnCount - 1;
           return (
             <HoverCard key={n.key} openDelay={100} closeDelay={60}>
               <HoverCardTrigger asChild>
@@ -77,7 +98,6 @@ export function ProcessingFlowChart({ flow }: { flow: ProcessingFlow }) {
                   <span className={cn("text-[13px] font-medium tabular-nums", open === n.key && "underline underline-offset-4")}>{fmtCount(n.count)}</span>
                   <span className="text-xs text-muted-foreground">
                     {n.label}
-                    {n.unit && n.unit !== (flow.link_unit ?? "reviews") && !n.label.toLowerCase().includes(n.unit.toLowerCase()) ? ` (${n.unit})` : ""}
                   </span>
                 </button>
               </HoverCardTrigger>
@@ -98,11 +118,22 @@ export function ProcessingFlowChart({ flow }: { flow: ProcessingFlow }) {
 }
 
 function layout(flow: ProcessingFlow) {
-  const known = new Set(COLUMNS.flat());
-  const columns = COLUMNS.map((keys, i) => [
-    ...keys.map((k) => flow.nodes.find((n) => n.key === k)).filter((n): n is FlowNode => !!n),
-    ...(i === 1 ? flow.nodes.filter((n) => !known.has(n.key)) : []),
-  ]);
+  const keys = new Set(flow.nodes.map((n) => n.key));
+  const incoming = new Map<string, string[]>();
+  for (const l of flow.links) if (keys.has(l.source) && keys.has(l.target)) incoming.set(l.target, [...(incoming.get(l.target) ?? []), l.source]);
+  const colOf = new Map<string, number>();
+  const column = (key: string, seen = new Set<string>()): number => {
+    if (colOf.has(key)) return colOf.get(key)!;
+    const sources = (incoming.get(key) ?? []).filter((k) => !seen.has(k));
+    const col = sources.length ? Math.max(...sources.map((k) => column(k, new Set([...seen, key])))) + 1 : (COLUMN_HINT[key] ?? 0);
+    colOf.set(key, col);
+    return col;
+  };
+  // The backend's explicit column wins; the longest-path depth is the fallback.
+  flow.nodes.forEach((n) => (typeof n.column === "number" ? colOf.set(n.key, n.column) : column(n.key)));
+  const columnCount = Math.max(1, ...colOf.values()) + 1;
+  const columnX = (i: number) => (columnCount === 1 ? X0 : X0 + (i * (X1 - X0)) / (columnCount - 1));
+  const columns = Array.from({ length: columnCount }, (_, i) => flow.nodes.filter((n) => colOf.get(n.key) === i));
   const inSum = new Map<string, number>();
   const outSum = new Map<string, number>();
   for (const l of flow.links) {
@@ -111,18 +142,24 @@ function layout(flow: ProcessingFlow) {
   }
   // A node is as tall as the reviews that pass through it; source nodes without links fall back to their count.
   const value = (n: FlowNode) => Math.max(inSum.get(n.key) ?? 0, outSum.get(n.key) ?? 0, n.unit === (flow.link_unit ?? "reviews") ? n.count : 0);
-  const usable = (col: FlowNode[]) => H - 2 * PAD_Y - Math.max(0, col.length - 1) * GAP;
-  const scale = Math.min(...columns.filter((c) => c.length).map((c) => usable(c) / Math.max(1, c.reduce((t, n) => t + value(n), 0))));
+  // Largest scale at which every column fits, counting the minimum slot of thin nodes.
+  const fits = (k: number) =>
+    columns.every((col) => col.reduce((t, n) => t + Math.max(value(n) * k, MIN_SLOT), 0) + Math.max(0, col.length - 1) * GAP <= H - 2 * PAD_Y);
+  let scale = Math.min(...columns.filter((c) => c.length).map((c) => (H - 2 * PAD_Y) / Math.max(1, c.reduce((t, n) => t + value(n), 0))));
+  for (let i = 0; i < 40 && !fits(scale); i++) scale *= 0.9;
 
   const placed = new Map<string, Placed>();
   columns.forEach((col, ci) => {
-    const total = col.reduce((t, n) => t + value(n) * scale, 0) + Math.max(0, col.length - 1) * GAP;
-    let y = (H - total) / 2;
-    for (const n of col) {
+    const slots = col.map((n) => Math.max(value(n) * scale, MIN_SLOT));
+    const total = slots.reduce((t, h) => t + h, 0) + Math.max(0, col.length - 1) * GAP;
+    let y = Math.max(PAD_Y, (H - total) / 2);
+    col.forEach((n, i) => {
       const h = value(n) * scale;
-      placed.set(n.key, { ...n, col: ci, x: COLUMN_X[ci], y, h, value: value(n) });
-      y += h + GAP;
-    }
+      // A thin node sits in the middle of its slot; an empty one is a point there.
+      const top = y + (slots[i] - h) / 2;
+      placed.set(n.key, { ...n, col: ci, x: columnX(ci), y: value(n) === 0 ? y + slots[i] / 2 : top, h, value: value(n) });
+      y += slots[i] + GAP;
+    });
   });
 
   // Stack bands at both ends in the order of the opposite node, so they do not cross more than needed.
@@ -144,5 +181,5 @@ function layout(flow: ProcessingFlow) {
     const d = `M ${x0} ${sy} C ${mx} ${sy}, ${mx} ${ty}, ${x1} ${ty} L ${x1} ${ty + w} C ${mx} ${ty + w}, ${mx} ${sy + w}, ${x0} ${sy + w} Z`;
     return { d, value: l.value, sourceLabel: s.label, targetLabel: t.label };
   });
-  return { nodes: [...placed.values()], links, scale };
+  return { nodes: [...placed.values()], links, scale, columnCount };
 }

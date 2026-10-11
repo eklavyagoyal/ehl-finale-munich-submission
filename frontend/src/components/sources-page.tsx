@@ -3,7 +3,7 @@
 import { ChevronDown, Plus } from "lucide-react";
 import Link from "next/link";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
-import { Fragment, Suspense, useState } from "react";
+import { createContext, Fragment, Suspense, useContext, useState } from "react";
 
 import { PageHeader } from "@/components/page-header";
 import { ChannelIcon, SourceHoverCard, SyntheticBadge } from "@/components/provenance";
@@ -30,28 +30,35 @@ type TabKey = (typeof TABS)[number]["key"];
 
 const streamOrder = (stream: string) => (STREAM_ORDER.indexOf(stream) + 99) % 99;
 
-export default function SourcesPage() {
+// Sources in two scopes: everything we have ("Data › Sources", base "") or one vehicle's own records
+// (base "/v/g60"). Links stay inside the scope they were opened in.
+const SourcesScope = createContext<{ base: string; vehicle: boolean }>({ base: V, vehicle: true });
+
+export function SourcesPage({ vehicle }: { vehicle: boolean }) {
   return (
-    <Suspense fallback={<LoadingRows />}>
-      <SourcesView />
-    </Suspense>
+    <SourcesScope.Provider value={{ base: vehicle ? V : "", vehicle }}>
+      <Suspense fallback={<LoadingRows />}>
+        <SourcesView />
+      </Suspense>
+    </SourcesScope.Provider>
   );
 }
 
 function SourcesView() {
+  const { base, vehicle } = useContext(SourcesScope);
   const router = useRouter();
   const params = useSearchParams();
   // Signals moved to their own stage page.
   if (params.get("tab") === "signals") redirect(`${V}/signals`);
   const tab = (TABS.find((t) => t.key === params.get("tab"))?.key ?? "overview") as TabKey;
   const sources = useSources();
-  const coverage = useCoverage();
+  const coverage = useCoverage(vehicle ? undefined : "all");
   const records = coverage.data?.records_by_channel.reduce((n, r) => n + r.records, 0);
   const counts: Partial<Record<TabKey, number | undefined>> = { list: sources.data?.length, records };
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "Sources" }]} />
+      <PageHeader crumbs={[{ label: "Sources" }]} vehicle={vehicle} />
       <p className="mt-1 text-[13px] text-muted-foreground">Where does the data come from?</p>
 
       <nav aria-label="Source views" className="-ml-2.5 mt-4 flex flex-wrap gap-1">
@@ -59,7 +66,7 @@ function SourcesView() {
           <button
             key={t.key}
             type="button"
-            onClick={() => router.replace(t.key === "overview" ? `${V}/sources` : `${V}/sources?tab=${t.key}`)}
+            onClick={() => router.replace(t.key === "overview" ? `${base}/sources` : `${base}/sources?tab=${t.key}`)}
             aria-current={tab === t.key ? "page" : undefined}
             className={cn(
               "flex h-8 items-center gap-2 rounded-lg px-2.5 text-[13px]",
@@ -92,13 +99,14 @@ function SourcesView() {
   );
 }
 
-function recordsHref(filter: { channel?: string; market?: string; bucket?: string; scope?: string }) {
+function recordsHref(base: string, filter: { channel?: string; market?: string; bucket?: string; scope?: string }) {
   const q = new URLSearchParams({ tab: "records", ...Object.fromEntries(Object.entries(filter).filter(([, v]) => v)) });
-  return `${V}/sources?${q.toString()}`;
+  return `${base}/sources?${q.toString()}`;
 }
 
 function Overview() {
-  const { data, error, isLoading } = useCoverage();
+  const { vehicle } = useContext(SourcesScope);
+  const { data, error, isLoading } = useCoverage(vehicle ? undefined : "all");
   const { data: sources } = useSources();
   const { data: pipeline } = usePipeline();
   const lastImport = pipeline?.stages.find((s): s is SourcesStage => s.key === "sources")?.last_import;
@@ -130,7 +138,7 @@ function Overview() {
       ) : (
         <>
           <MarketMatrix coverage={data} />
-          <OutsideScope coverage={data} code={(data.vehicle ?? "bmw:G60").split(":").pop() ?? "G60"} />
+          {vehicle && <OutsideScope coverage={data} code={(data.vehicle ?? "bmw:G60").split(":").pop() ?? "G60"} />}
         </>
       )}
     </div>
@@ -139,6 +147,7 @@ function Overview() {
 
 // One card per stream: how much, how far reviewed, what may reach OpenAI, when it last arrived.
 function StreamCard({ stream, coverage, sources }: { stream: string; coverage: Coverage; sources: Source[] }) {
+  const { base } = useContext(SourcesScope);
   const rows = coverage.records_by_channel.filter((r) => r.stream === stream);
   const records = rows.reduce((n, r) => n + r.records, 0);
   const byReview = new Map<string, number>();
@@ -150,7 +159,7 @@ function StreamCard({ stream, coverage, sources }: { stream: string; coverage: C
 
   return (
     <Link
-      href={`${V}/sources?tab=list&stream=${encodeURIComponent(stream)}`}
+      href={`${base}/sources?tab=list&stream=${encodeURIComponent(stream)}`}
       className="flex flex-col gap-3 rounded-xl border p-4 transition-colors hover:border-foreground/25"
     >
       <span className="flex items-center gap-2 text-[13px]">
@@ -224,6 +233,8 @@ const BUCKETS = ["US", "EU", "CN", "RoW"];
 // Channel x market bucket (US / EU / CN / RoW, as the signals count them) from one /coverage response.
 // A row expands to the exact country tags behind it.
 function MarketMatrix({ coverage }: { coverage: Coverage }) {
+  const { base, vehicle } = useContext(SourcesScope);
+  const scope = vehicle ? "target" : undefined;
   const [open, setOpen] = useState<Set<string>>(new Set());
   const cells = coverage.records_by_channel_bucket;
   const matrix = new Map((cells ?? []).map((c) => [`${c.channel}|${c.bucket}`, c.records]));
@@ -300,7 +311,7 @@ function MarketMatrix({ coverage }: { coverage: Coverage }) {
                               ) : n === 0 ? (
                                 <span className="text-muted-foreground/60">–</span>
                               ) : (
-                                <Link href={recordsHref({ channel, bucket, scope: "target" })} className="hover:underline">
+                                <Link href={recordsHref(base, { channel, bucket, scope })} className="hover:underline">
                                   {fmtCount(n)}
                                 </Link>
                               )}
@@ -316,7 +327,7 @@ function MarketMatrix({ coverage }: { coverage: Coverage }) {
                               : (countries.get(channel) ?? [])
                                   .sort((a, b) => b.records - a.records)
                                   .map((c) => (
-                                    <Link key={c.market} href={recordsHref({ channel, market: c.market, scope: "target" })} className="mr-3 inline-block hover:text-foreground hover:underline">
+                                    <Link key={c.market} href={recordsHref(base, { channel, market: c.market, scope })} className="mr-3 inline-block hover:text-foreground hover:underline">
                                       <span className="font-mono">{c.market}</span> {fmtCount(c.records)}
                                     </Link>
                                   ))}
@@ -394,6 +405,7 @@ function ScopeRow({ scope, label, records }: { scope: CoverageScope; label: stri
 }
 
 function SourceList({ stream }: { stream?: string }) {
+  const { base } = useContext(SourcesScope);
   const { data, error, isLoading } = useSources();
   if (error) return <ErrorState error={error} />;
   if (isLoading || !data) return <LoadingRows />;
@@ -404,7 +416,7 @@ function SourceList({ stream }: { stream?: string }) {
       {stream && (
         <p className="flex items-center gap-2 px-2 pb-2 text-xs text-muted-foreground">
           {streamLabel(stream)} only
-          <Link href={`${V}/sources?tab=list`} className="text-foreground hover:underline">
+          <Link href={`${base}/sources?tab=list`} className="text-foreground hover:underline">
             Show all
           </Link>
         </p>
@@ -426,13 +438,14 @@ function SourceList({ stream }: { stream?: string }) {
 }
 
 function SourceListRow({ source }: { source: Source }) {
+  const { base } = useContext(SourcesScope);
   return (
     <div className="border-t border-border/60 px-2 py-3 text-sm">
       <div className="grid grid-cols-[minmax(0,1fr)_170px_70px_100px_150px] items-center gap-4">
         <span className="min-w-0">
           <span className="flex items-center gap-2">
             <SourceHoverCard source={toSummary(source)}>
-              <Link href={`${V}/sources/${encodeURIComponent(source.source_id)}`} className="truncate font-medium hover:underline">
+              <Link href={`${base}/sources/${encodeURIComponent(source.source_id)}`} className="truncate font-medium hover:underline">
                 {source.title}
               </Link>
             </SourceHoverCard>
@@ -458,6 +471,7 @@ function SourceListRow({ source }: { source: Source }) {
 }
 
 function Records({ initial }: { initial: { market?: string; bucket?: string; scope?: "target"; channel?: string; ids: string[] } }) {
+  const { base } = useContext(SourcesScope);
   const router = useRouter();
   const [q, setQ] = useState("");
   const [market, setMarket] = useState<string | undefined>(initial.market);
@@ -509,7 +523,7 @@ function Records({ initial }: { initial: { market?: string; bucket?: string; sco
             {ids.length > 0
               ? `${ids.length} selected record${ids.length === 1 ? "" : "s"}`
               : [channel && channelLabel(channel), bucket && `${bucket} market`, scope === "target" && "this vehicle"].filter(Boolean).join(" · ")}
-            <Button size="xs" variant="ghost" onClick={() => router.replace(`${V}/sources?tab=records`)}>
+            <Button size="xs" variant="ghost" onClick={() => router.replace(`${base}/sources?tab=records`)}>
               Clear
             </Button>
           </span>

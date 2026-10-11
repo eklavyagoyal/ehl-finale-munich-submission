@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity } from "lucide-react";
+import { Activity, Car, Database, LayoutDashboard, Workflow } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -12,13 +12,16 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { useRequirements } from "@/lib/api/hooks";
+import { useRequirements, useVehicles } from "@/lib/api/hooks";
 import { humanize } from "@/lib/format";
 import { STAGES } from "@/lib/stages";
 import { V } from "@/lib/routes";
@@ -26,16 +29,16 @@ import { V } from "@/lib/routes";
 export function AppSidebar({ initialPm, signedIn }: { initialPm: string; signedIn: boolean }) {
   const pathname = usePathname();
   const { data: requirements } = useRequirements();
+  const { data: vehicles } = useVehicles();
   const [pm, setPm] = useState(initialPm);
 
-  // The PM's path in stage order; Activity sits apart at the bottom.
-  const path = STAGES.map((s) => ({
-    href: s.href,
-    label: s.title,
-    icon: s.icon,
-    count: s.key === "decision" ? requirements?.length : undefined,
-  }));
-  const trail = [{ href: `${V}/activity`, label: "Activity", icon: Activity, count: undefined }];
+  // Data: independent of vehicles. Vehicles: the active one opens its stages; the others are coming.
+  const data = [
+    { href: "/", label: "Overview", icon: LayoutDashboard, active: pathname === "/" },
+    { href: "/sources", label: "Sources", icon: Database, active: pathname.startsWith("/sources") },
+    { href: "/processing", label: "Processing", icon: Workflow, active: pathname.startsWith("/processing") },
+  ];
+  const cars = (vehicles?.items ?? []).filter((v) => v.entity_id !== "brand");
 
   return (
     <Sidebar collapsible="icon">
@@ -58,25 +61,82 @@ export function AppSidebar({ initialPm, signedIn }: { initialPm: string; signedI
       </SidebarHeader>
 
       <SidebarContent>
-        {[path, trail].map((items, i) => (
-          <SidebarGroup key={i} className={i === 1 ? "mt-auto" : undefined}>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {items.map((item) => (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={pathname.startsWith(item.href)} tooltip={item.label}>
-                      <Link href={item.href}>
-                        <item.icon />
-                        <span>{item.label}</span>
+        <SidebarGroup>
+          <SidebarGroupLabel>Data</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {data.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton asChild isActive={item.active} tooltip={item.label}>
+                    <Link href={item.href}>
+                      <item.icon />
+                      <span>{item.label}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarGroupLabel>Vehicles</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {cars.map((v) =>
+                v.status === "active" ? (
+                  <SidebarMenuItem key={v.entity_id}>
+                    <SidebarMenuButton asChild isActive={pathname === V} tooltip={`${v.code} · ${v.name}`}>
+                      <Link href={V}>
+                        <Car />
+                        <span className="truncate">
+                          {v.code} <span className="text-muted-foreground">· {v.name.replace(/^BMW /, "")}</span>
+                        </span>
                       </Link>
                     </SidebarMenuButton>
-                    {item.count !== undefined && <SidebarMenuBadge>{item.count}</SidebarMenuBadge>}
+                    <SidebarMenuSub>
+                      {STAGES.map((stage) => (
+                        <SidebarMenuSubItem key={stage.key}>
+                          <SidebarMenuSubButton asChild isActive={pathname.startsWith(stage.href)}>
+                            <Link href={stage.href}>
+                              <span>{stage.title}</span>
+                              {stage.key === "decision" && requirements && (
+                                <span className="ml-auto text-xs text-muted-foreground tabular-nums">{requirements.length}</span>
+                              )}
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
                   </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
+                ) : (
+                  <SidebarMenuItem key={v.entity_id}>
+                    <SidebarMenuButton disabled tooltip={`${v.name}: coming`} className="opacity-50">
+                      <Car />
+                      <span className="truncate">{v.code}</span>
+                      <span className="ml-auto text-[11px]">coming</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ),
+              )}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup className="mt-auto">
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname.startsWith("/activity")} tooltip="Activity">
+                  <Link href="/activity">
+                    <Activity />
+                    <span>Activity</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter>

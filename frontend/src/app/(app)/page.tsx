@@ -45,7 +45,7 @@ export default function OverviewPage() {
   const triage = useTriageSummary();
 
   return (
-    <main className="mx-auto flex min-h-svh max-w-5xl flex-col gap-10 px-6 py-16">
+    <div className="flex max-w-5xl flex-col gap-10 py-10">
       <header className="flex flex-col gap-3">
         <span className="flex items-center gap-2">
           <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-xs font-semibold text-primary-foreground">P</span>
@@ -69,7 +69,7 @@ export default function OverviewPage() {
           ))}
         </section>
       )}
-    </main>
+    </div>
   );
 }
 

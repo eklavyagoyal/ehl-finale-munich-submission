@@ -260,6 +260,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/overview/flow": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** All data, before any vehicle: streams -> triage -> which vehicle it belongs to */
+        get: operations["overview_flow_api_overview_flow_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/vehicles": {
         parameters: {
             query?: never;
@@ -1822,6 +1839,13 @@ export interface components {
             };
             /** Ai Recommendation */
             ai_recommendation: string | null;
+            /**
+             * Progress
+             * @default []
+             */
+            progress: {
+                [key: string]: unknown;
+            }[];
         };
         /** ResearchRequestOut */
         ResearchRequestOut: {
@@ -2629,6 +2653,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    overview_flow_api_overview_flow_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
         };

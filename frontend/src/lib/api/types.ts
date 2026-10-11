@@ -47,6 +47,16 @@ export interface Requirement {
   updated_at: string;
   gates: Record<string, GateValue>;
   ai_recommendation: string | null;
+  // Drafted → Councils → AI suggests → Your decision; only the last one is a decision.
+  progress?: RequirementProgress[];
+}
+
+export interface RequirementProgress {
+  key: "drafted" | "councils" | "recommendation" | "decision" | string;
+  label: string;
+  done: boolean;
+  at: string | null;
+  value: string | null;
 }
 
 
@@ -423,6 +433,8 @@ export interface FlowNode {
   unit: string;
   hint: string;
   detail: string;
+  // Explicit column (0..n) from the backend; without it the frontend uses the longest-path depth.
+  column?: number;
 }
 
 export interface ProcessingFlow {
@@ -430,6 +442,9 @@ export interface ProcessingFlow {
   links: { source: string; target: string; value: number }[];
   link_unit?: string;
   triage?: { triaged: number; flagged: number; filter_enabled: boolean };
+  // GET /api/overview/flow only
+  unchecked_online?: number;
+  note?: string;
 }
 
 // GET /api/triage/summary: online reviews checked for vehicle, engine, author and relevance.
@@ -550,6 +565,10 @@ export interface MapAxis {
   label: string;
   scale: "log" | "linear";
   threshold: number;
+  // Piecewise scale: the threshold sits exactly in the middle of the axis.
+  center_on_threshold?: boolean;
+  low_label?: string;
+  high_label?: string;
   hint: string;
   detail: string;
   min?: number;
@@ -563,7 +582,9 @@ export interface MapItem {
   area: string | null;
   kind: SignalKind;
   reviews: number;
+  // Smoothed toward the market average; need_share_raw is the plain share.
   need_share: number;
+  need_share_raw?: number;
   quadrant: Quadrant;
   pain: number;
   requests: number;
