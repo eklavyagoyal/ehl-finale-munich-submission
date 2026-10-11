@@ -220,6 +220,10 @@ def test_pipeline_and_signals(client, drafted):
     assert pains and all(p["kind"] == "pain" for p in pains)
     assert pains[0]["sample_quotes"]
     processing = stages["stages"][1]
+    # Keys the deployed frontend reads must stay (it crashed when they went missing).
+    assert {"feedback_records", "records_with_claims", "records_without_claims", "claims_by_status",
+            "claims_by_producer"} <= set(processing["counts"])
+    assert {"sources", "records", "pending_review", "by_stream"} <= set(stages["stages"][0]["counts"])
     assert [f["key"] for f in processing["funnel"]] == ["reviews", "tagged", "signals", "findings"]
     assert all(f["label"] and f["hint"] and f["detail"] for f in processing["funnel"])
     sources = stages["stages"][0]

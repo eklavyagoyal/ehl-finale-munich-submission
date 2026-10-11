@@ -262,15 +262,16 @@ def pipeline(vehicle: str | None = Query(None, description="e.g. G60 or bmw:G60;
     last_ingest = session.scalars(select(IngestRun).order_by(IngestRun.created_at.desc()).limit(1)).first()
     # 2 processing: the vehicle's feedback -> reviews with a topic -> signals -> findings
     by_bmw, by_ai = set(), set()
-    pending_claims = 0
-    for record_id, derived, status in session.execute(
-            select(Claim.record_id, Claim.derived, Claim.review_status).join(Record, Record.record_id == Claim.record_id)
-            .where(scope.target_filter(), Record.record_kind == "feedback", Record.superseded_by.is_(None),
-                   Claim.feature_key.is_not(None), Claim.review_status != "rejected")):
-        if status == "pending":
-            pending_claims += 1
-            continue
-        (by_bmw if derived else by_ai).add(record_id)
+    claim_status, producers = Counter(), Counter()
+    for record_id, derived, status, producer, feature_key in session.execute(
+            select(Claim.record_id, Claim.derived, Claim.review_status, Claim.producer, Claim.feature_key)
+            .join(Record, Record.record_id == Claim.record_id)
+            .where(scope.target_filter(), Record.record_kind == "feedback", Record.superseded_by.is_(None))):
+        claim_status[status] += 1
+        producers["BMW labels" if derived else (producer or {}).get("method", "unknown")] += 1
+        if status == "accepted" and feature_key:
+            (by_bmw if derived else by_ai).add(record_id)
+    pending_claims = claim_status.get("pending", 0)
     tagged = len(by_bmw | by_ai)
     by_ai -= by_bmw
     findings_count = session.scalar(select(func.count()).select_from(Finding).where(Finding.target_model == target)) or 0
@@ -324,6 +325,7 @@ def pipeline(vehicle: str | None = Query(None, description="e.g. G60 or bmw:G60;
          "status": status(tagged > 0 and not pending_claims, tagged > 0 or pending_claims > 0),
          "counts": {"feedback_records": target_feedback, "records_with_claims": tagged,
                     "records_without_claims": max(0, target_feedback - tagged), "pending_claims": pending_claims,
+                    "claims_by_status": dict(claim_status), "claims_by_producer": dict(producers),
                     "records_by_producer": {"BMW labels": len(by_bmw), "AI labeler": len(by_ai)}},
          "funnel": funnel,
          "gap": {"count": max(0, target_feedback - tagged), **_text(
