@@ -2379,6 +2379,46 @@
     }
    }
   },
+  "/api/requirements/{requirement_id}/trace": {
+   "get": {
+    "tags": [
+     "requirements"
+    ],
+    "summary": "Decision path: per step who was involved, what they got, what they concluded, why, basis and effect",
+    "operationId": "trace_api_requirements__requirement_id__trace_get",
+    "parameters": [
+     {
+      "name": "requirement_id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string",
+       "title": "Requirement Id"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/simulations": {
    "post": {
     "tags": [
@@ -3032,6 +3072,65 @@
     }
    }
   },
+  "/api/agents/council-validation": {
+   "post": {
+    "tags": [
+     "agents"
+    ],
+    "summary": "T2 reliability, T3 decoy discrimination, T4 evidence alignment (background run)",
+    "operationId": "council_validation_api_agents_council_validation_post",
+    "parameters": [
+     {
+      "name": "x-actor",
+      "in": "header",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "description": "Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`.",
+       "title": "X-Actor"
+      },
+      "description": "Who is acting, e.g. `pm:lisa`. Defaults to `pm:anonymous`."
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CouncilValidationIn"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
   "/api/agents/validate": {
    "post": {
     "tags": [
@@ -3594,6 +3693,27 @@
     },
     "type": "object",
     "title": "CondenseIn"
+   },
+   "CouncilValidationIn": {
+    "properties": {
+     "requirement_ids": {
+      "items": {
+       "type": "string"
+      },
+      "type": "array",
+      "title": "Requirement Ids"
+     },
+     "persona_engine": {
+      "type": "string",
+      "title": "Persona Engine",
+      "default": "direct"
+     }
+    },
+    "type": "object",
+    "required": [
+     "requirement_ids"
+    ],
+    "title": "CouncilValidationIn"
    },
    "CriterionOut": {
     "properties": {

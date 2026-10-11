@@ -516,7 +516,9 @@ def vote_case(run_id: uuid.UUID, requirement_id: str, package: dict, synthesis_o
     with session_scope() as session:
         for judge_id, model, out in votes:
             session.add(Vote(run_id=run_id, requirement_id=requirement_id, agent_id=judge_id, model=model, vote=out.vote,
-                             rationale=out.rationale, key_points=out.key_points))
+                             rationale=out.rationale,
+                             key_points=out.key_points + [{"drivers": [d.model_dump() for d in out.drivers],
+                                                           "what_would_change_it": out.what_would_change_it}]))
         recommendation = Recommendation(run_id=run_id, requirement_id=requirement_id, recommendation=result["recommendation"],
                                         tally={k: v for k, v in result.items() if k != "minority"},
                                         minority_report=result["minority"], challenge=challenged.model_dump(),

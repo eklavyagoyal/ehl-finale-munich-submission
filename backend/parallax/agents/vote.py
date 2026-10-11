@@ -14,16 +14,27 @@ from parallax.models import Requirement
 PROMPT_VERSION = "vote-v1"
 
 
+class Driver(BaseModel):
+    source: Literal["evidence", "customers", "company", "research", "scores", "challenger", "gates"]
+    statement: str = Field(description="What this input says, one sentence with numbers where available.")
+    effect: Literal["supports", "against", "neutral"] = Field(description="Effect on approving the requirement now.")
+    weight: Literal["high", "medium", "low"]
+
+
 class VoteOut(BaseModel):
     vote: Literal["approve", "reject", "investigate", "defer"]
     rationale: str = Field(description="3-5 sentences.")
     key_points: list[str]
+    drivers: list[Driver] = Field(description="3-6 inputs that drove the vote, most important first.")
+    what_would_change_it: str = Field(description="The evidence or decision that would flip the vote.")
 
 
 SYSTEM = f"""\
 You are one independent judge on a panel advising a BMW product manager. Vote on whether the
 requirement should be recommended for approval now (approve), dropped (reject), needs more evidence
-first (investigate), or should wait for a later cycle (defer). Base your vote on real evidence first;
+first (investigate), or should wait for a later cycle (defer). Name the drivers of your vote explicitly:
+which input (evidence counts, customer council budget/verdicts, company tensions, research, scores,
+challenger, gates) pushed in which direction, so the PM can trace the decision. Base your vote on real evidence first;
 treat simulated owner and department views as hypotheses. A challenger's strongest counter-case is
 included under "challenge": weigh it explicitly and say in your rationale whether it changes your vote.
 Your vote is advice; the PM decides.
@@ -35,7 +46,11 @@ def cast(llm: LLMClient, judge_id: str, model: str, requirement: Requirement, pa
          evidence_record_ids: list[str], run_id: uuid.UUID) -> VoteOut:
     def mock(rng):
         return VoteOut(vote=rng.choice(["approve", "approve", "investigate", "reject"]),
-                       rationale=f"[mock] {judge_id} rationale", key_points=["[mock] point"])
+                       rationale=f"[mock] {judge_id} rationale", key_points=["[mock] point"],
+                       drivers=[Driver(source="evidence", statement="[mock] 39 complaint reviews", effect="supports", weight="high"),
+                                Driver(source="customers", statement="[mock] 5/100 budget", effect="against", weight="high"),
+                                Driver(source="challenger", statement="[mock] narrow evidence", effect="against", weight="medium")],
+                       what_would_change_it="[mock] clinic result")
 
     return llm.structured(VoteOut, system=SYSTEM, user="Decision package:\n" + to_json(package), model=model,
                           purpose="vote", prompt_version=PROMPT_VERSION, agent_id=judge_id, run_id=run_id,

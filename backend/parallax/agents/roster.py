@@ -95,7 +95,8 @@ def seed_agents(session: Session, actor_id: str = "system:seed") -> dict:
         summary[outcome] += 1
     # A persona/department whose roster file was removed stops taking part (history is kept).
     in_files = {spec["id"] for spec in files}
-    for agent in session.scalars(select(Agent).where(Agent.kind.in_(["market_persona", "department"]), Agent.active.is_(True))):
+    in_files |= {j["id"] for j in judge_agents()}
+    for agent in session.scalars(select(Agent).where(Agent.kind.in_(["market_persona", "department", "judge"]), Agent.active.is_(True))):
         if agent.id not in in_files:
             agent.active = False
             summary["deactivated"] += 1

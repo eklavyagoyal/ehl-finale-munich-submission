@@ -50,8 +50,8 @@ def test_sensitivity_reports_rank_ranges():
 
 
 def test_vote_tally_majority_tie_and_gate_cap():
-    approve = VoteOut(vote="approve", rationale="", key_points=[])
-    reject = VoteOut(vote="reject", rationale="", key_points=[])
+    approve = VoteOut(vote="approve", rationale="", key_points=[], drivers=[], what_would_change_it="")
+    reject = VoteOut(vote="reject", rationale="", key_points=[], drivers=[], what_would_change_it="")
     assert tally([("j1", approve), ("j2", approve), ("j3", reject)], {})["recommendation"] == "approve"
     assert tally([("j1", approve), ("j2", reject)], {})["recommendation"] == "investigate"
     capped = tally([("j1", approve), ("j2", approve)], {"model_market_applicability": "unknown", "pm_review": "unknown"})

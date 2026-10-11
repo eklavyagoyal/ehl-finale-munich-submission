@@ -357,3 +357,14 @@ def council(requirement_id: str, session: Session = Depends(get_session, scope="
         "order": ["customer council + company council (parallel)", "research + verifier", "scoring", "synthesis",
                   "challenger", "judges", "PM decision"],
     }
+
+
+@router.get("/{requirement_id}/trace",
+            summary="Decision path: per step who was involved, what they got, what they concluded, why, basis and effect")
+def trace(requirement_id: str, session: Session = Depends(get_session, scope="function")):
+    from parallax.trace import build_trace
+
+    requirement = session.get(Requirement, requirement_id)
+    if requirement is None:
+        raise not_found("requirement", requirement_id)
+    return build_trace(session, requirement)

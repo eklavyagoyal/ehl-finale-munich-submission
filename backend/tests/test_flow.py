@@ -61,19 +61,23 @@ def test_simulation_decision_challenge_and_audit(client, drafted):
     departments = {m["agent_id"] for m in first["department_memos"]}
     assert departments == {"dept:product-management", "dept:design", "dept:engineering", "dept:quality",
                            "dept:finance", "dept:sales-us"}
-    assert first["recommendation"] and len(first["votes"]) == 3
+    assert first["recommendation"] and len(first["votes"]) == 1
     assert first["recommendation"][0]["challenge"]["counter_position"]
     talk = client.get(f"/api/simulations/{run['id']}/conversation").json()
     assert talk["question_to_owners"] and set(talk["owners_by_market"]) == {"US", "EU", "CN"}
     owner = talk["owners_by_market"]["US"][0]
     assert owner["name"] and owner["answers"][0]["reaction"] and owner["answers"][0]["requirement_title"]
-    assert talk["requirements"][drafted[0]]["challenger"] and len(talk["requirements"][drafted[0]]["judges"]) == 3
+    assert talk["requirements"][drafted[0]]["challenger"] and len(talk["requirements"][drafted[0]]["judges"]) == 1
     board = client.get(f"/api/requirements/{drafted[0]}/council").json()
     assert board["status"] == "simulated" and board["customers"]["by_market"]["US"]["summary"]["personas"] == 5
     assert all(d["verdict"] in ("for", "against", "conditional") for d in board["company"]["departments"])
     assert board["tensions"] and board["challenger"] and board["question_to_owners"]
     persona = board["customers"]["by_market"]["US"]["personas"][0]
     assert persona["verdict"] and persona["budget_points"] is not None
+    path = client.get(f"/api/requirements/{drafted[0]}/trace").json()
+    keys = [step["key"] for step in path["steps"]]
+    assert keys == ["evidence", "customers", "company", "research", "scores", "synthesis", "challenger", "judge", "decision"]
+    assert path["steps"][7]["output"]["drivers"] and all(step["basis"] for step in path["steps"])
     detail = client.get(f"/api/requirements/{drafted[0]}").json()
     assert detail["requirement"]["status"] == "in_review"
     assert detail["requirement"]["score_low"] <= detail["requirement"]["score"] <= detail["requirement"]["score_high"]

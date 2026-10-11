@@ -33,7 +33,8 @@ class Settings(BaseSettings):
     # Model roles. Confirm names with `python -m parallax.cli models` once the key is set.
     model_fast: str = "gpt-5-mini"  # personas, departments, extraction, research
     model_strong: str = "gpt-5"  # verifier, synthesis, drafting
-    judge_models: list[str] = ["gpt-5", "gpt-5-mini", "gpt-4.1"]  # heterogeneous vote panel
+    # One judge: validation showed a 3-judge panel always voted alike; the value is in the stated drivers.
+    judge_models: list[str] = ["gpt-5"]
     embedding_model: str = "text-embedding-3-small"
 
     # Market-twin engine: TinyTroupe simulates personas in a TinyWorld; "direct" uses plain
