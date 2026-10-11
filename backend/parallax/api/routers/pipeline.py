@@ -19,7 +19,8 @@ from parallax.db import get_session
 from parallax.models import Claim, Finding, IngestRun, Record, Requirement, SimRun, Source, Theme
 from parallax.policy import active_policy
 from parallax.scope import SCOPE_LABELS, SCOPES, VehicleScope
-from parallax.signals import CHANNEL_LABELS, classify, explain_kind, latest_findings, need_share, quadrant, ranked_themes
+from parallax.signals import (CHANNEL_LABELS, classify, explain_kind, finding_order, latest_findings, need_share, quadrant,
+                              ranked_themes)
 from parallax.themes import latest_snapshot_id
 
 router = APIRouter(prefix="/api", tags=["pipeline"])
@@ -40,8 +41,7 @@ def _finding(f: Finding, signal_kind: str | None = None) -> dict:
 
 def _ordered_findings(findings: list[Finding], kind: str) -> list[dict]:
     """Findings of the signal's own kind first (a pain card leads with pains, not with praise), then by size."""
-    rows = [_finding(f, kind) for f in findings]
-    return sorted(rows, key=lambda r: (not r["matches_signal"], -r["reviews"]))
+    return sorted((_finding(f, kind) for f in findings), key=finding_order(kind))
 
 
 def _signal(theme: Theme, kind: str, texts: dict[str, str], drafted: set, findings: list[Finding] | None,

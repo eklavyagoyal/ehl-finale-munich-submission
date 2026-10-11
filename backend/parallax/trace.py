@@ -30,10 +30,9 @@ from parallax.models import (
     Vote,
 )
 from parallax.policy import active_policy
-from parallax.signals import classify, latest_findings
+from parallax.signals import classify, finding_order, latest_findings
 
 EFFECT_OF_VERDICT = {"for": "supports", "against": "against", "conditional": "neutral"}
-FINDING_KIND = {"pain": "pain", "request": "request", "strength": "praise"}
 
 
 def _short(text: str | None, limit: int = 110) -> str | None:
@@ -58,8 +57,7 @@ def build_trace(session: Session, requirement: Requirement) -> dict:
     theme = themes.get(requirement.market) if requirement.market else themes.get(None)
     findings = latest_findings(session, requirement.market, [requirement.feature_key] if requirement.feature_key else [])
     findings = findings.get(requirement.feature_key, []) if requirement.feature_key else []
-    wanted = FINDING_KIND.get(classify(theme)) if theme else None
-    findings = sorted(findings, key=lambda f: (f.kind != wanted, -f.review_count))
+    findings = sorted(findings, key=finding_order(classify(theme) if theme else None))
     links = session.execute(
         select(RequirementEvidence.relation, Source.stream, Source.channel)
         .join(Record, Record.record_id == RequirementEvidence.record_id).join(Source, Source.source_id == Record.source_id)

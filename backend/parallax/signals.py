@@ -74,6 +74,22 @@ def explain_kind(theme: Theme) -> str:
             "mixed": f"Mixed: {pain} % problems, {requests} % wishes, {praise} % praise, no rule reached"}[classify(theme)]
 
 
+FINDING_PRIORITY = ("pain", "request", "mixed", "praise")
+
+
+def finding_order(kind: str | None):
+    """Sort key for findings: the signal's own kind first, then problems before wishes before praise, then size.
+    A requirement is written against problems and wishes, so a mixed signal leads with those."""
+    own = {"pain": "pain", "request": "request", "strength": "praise"}.get(kind or "")
+
+    def key(finding) -> tuple:
+        k = finding["kind"] if isinstance(finding, dict) else finding.kind
+        n = finding["reviews"] if isinstance(finding, dict) else finding.review_count
+        rank = 0 if k == own else 1 + (FINDING_PRIORITY.index(k) if k in FINDING_PRIORITY else len(FINDING_PRIORITY))
+        return rank, -n
+    return key
+
+
 CHANNEL_LABELS = {"bmw_feedback": "BMW feedback", "youtube": "YouTube", "google_play": "Google Play", "app_store": "App Store",
                   "other": "Other web", "forum": "Forum", "editorial_review": "Editorial review"}
 
