@@ -135,7 +135,8 @@ export function WhereItComesFrom({ coverage }: { coverage: Coverage }) {
   );
 }
 
-// ── About which vehicle: one thin stacked bar over the scopes, labels at the segments, numbers on hover. ──
+// ── About which vehicle: one thin stacked bar over the scopes; wide segments are labelled directly,
+// narrow ones get a dot in a legend below. Numbers on hover. ──
 
 const SCOPE_COLOR: Record<string, string> = {
   target: "bg-foreground/80",
@@ -143,34 +144,54 @@ const SCOPE_COLOR: Record<string, string> = {
   other_models: "bg-foreground/30",
   brand: "bg-foreground/15",
 };
+const MIN_LABEL_SHARE = 0.15;
 
 export function AboutBar({ coverage, code }: { coverage: Coverage; code: string }) {
   const scopes = (coverage.scopes ?? []).filter((s) => s.scope !== "all" && s.records > 0);
   const total = scopes.reduce((n, s) => n + s.records, 0);
   if (!total) return null;
   const label = (s: { scope: string; label: string }) => (s.scope === "target" ? code : s.label.replace(/ \(.*\)$/, ""));
+  const width = (s: { records: number }) => `${(s.records / total) * 100}%`;
+  const wide = (s: { records: number }) => s.records / total >= MIN_LABEL_SHARE;
+  const narrow = scopes.filter((s) => !wide(s));
+  const hover = (s: (typeof scopes)[number], trigger: React.ReactElement) => (
+    <HoverCard key={s.scope} openDelay={80} closeDelay={60}>
+      <HoverCardTrigger asChild>{trigger}</HoverCardTrigger>
+      <HoverCardContent className="w-52 text-xs">
+        {label(s)} · <span className="tabular-nums">{fmtCount(s.records)}</span> records ({Math.round((s.records / total) * 100)} %)
+      </HoverCardContent>
+    </HoverCard>
+  );
   return (
     <section className="flex flex-col gap-1.5">
       <p className="text-xs text-muted-foreground">About which vehicle</p>
       <div className="flex h-2 w-full overflow-hidden rounded-full bg-muted">
-        {scopes.map((s) => (
-          <HoverCard key={s.scope} openDelay={80} closeDelay={60}>
-            <HoverCardTrigger asChild>
-              <span className={SCOPE_COLOR[s.scope] ?? "bg-foreground/20"} style={{ width: `${(s.records / total) * 100}%` }} />
-            </HoverCardTrigger>
-            <HoverCardContent className="w-52 text-xs">
-              {label(s)} · <span className="tabular-nums">{fmtCount(s.records)}</span> records ({Math.round((s.records / total) * 100)} %)
-            </HoverCardContent>
-          </HoverCard>
-        ))}
+        {scopes.map((s) => hover(s, <span className={SCOPE_COLOR[s.scope] ?? "bg-foreground/20"} style={{ width: width(s) }} />))}
       </div>
-      <div className="flex w-full text-[11px] text-muted-foreground">
-        {scopes.map((s) => (
-          <span key={s.scope} className="truncate" style={{ width: `${(s.records / total) * 100}%`, minWidth: "fit-content" }}>
-            {label(s)}
-          </span>
-        ))}
+      <div className="flex w-full items-baseline text-[11px] text-muted-foreground">
+        {scopes.map((s) =>
+          wide(s) ? (
+            <span key={s.scope} className="truncate pr-2" style={{ width: width(s) }}>
+              {label(s)}
+            </span>
+          ) : (
+            <span key={s.scope} style={{ width: width(s) }} />
+          ),
+        )}
       </div>
+      {narrow.length > 0 && (
+        <div className="flex flex-wrap justify-end gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
+          {narrow.map((s) =>
+            hover(
+              s,
+              <span className="flex cursor-default items-center gap-1.5">
+                <span className={cn("size-1.5 rounded-full", SCOPE_COLOR[s.scope] ?? "bg-foreground/20")} />
+                {label(s)}
+              </span>,
+            ),
+          )}
+        </div>
+      )}
     </section>
   );
 }
