@@ -9,7 +9,7 @@ import { ErrorState, LoadingRows } from "@/components/states";
 import { ToneBadge } from "@/components/tone-badge";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { useRun, useTrace } from "@/lib/api/hooks";
-import type { TraceBasis, TraceDriver, TraceEffect, TraceStep, TraceTension } from "@/lib/api/types";
+import type { TraceBasis, TraceDriver, TraceEffect, TraceRound, TraceStep, TraceTension } from "@/lib/api/types";
 import { actorLabel, fmtCount, fmtDateTime, gateTone, humanize, stanceTone, type Tone } from "@/lib/format";
 import { cn } from "cn";
 
@@ -49,6 +49,7 @@ const SOURCE_LABEL: Record<string, string> = {
 // Where each step's details live in the UI; the API's drill_down text is never shown to the PM.
 const DRILL: Record<string, { tab: string; label: string }> = {
   evidence: { tab: "evidence", label: "Open evidence" },
+  challenge: { tab: "simulation", label: "Open this round's simulation" },
   customers: { tab: "councils", label: "Open councils" },
   company: { tab: "councils", label: "Open councils" },
   research: { tab: "councils", label: "Open councils" },
@@ -206,6 +207,30 @@ function StepDetail({ step }: { step: TraceStep }) {
           <RunButton />
         </div>
       );
+    case "challenge": {
+      const o = (out as { previous_round?: TraceRound | null; this_round?: TraceRound | null }) ?? {};
+      return (
+        <div className="flex flex-col gap-2 text-[13px]">
+          {typeof inputs.challenge_question === "string" && <p className="font-medium">“{inputs.challenge_question}”</p>}
+          {typeof inputs.rationale === "string" && (
+            <p>
+              <span className="text-muted-foreground">Your rationale: </span>
+              {inputs.rationale}
+            </p>
+          )}
+          <p className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+            {[o.previous_round, o.this_round]
+              .filter((r): r is TraceRound => !!r)
+              .map((r, i) => (
+                <span key={r.run_id} className="flex items-center gap-2">
+                  {i > 0 && <span aria-hidden>→</span>}
+                  Round {r.round} · AI {r.recommendation ? humanize(r.recommendation).toLowerCase() : "n/a"}
+                </span>
+              ))}
+          </p>
+        </div>
+      );
+    }
     case "evidence": {
       const findings = (out as { finding: string; kind: string; reviews: number; share: number }[]) ?? [];
       const channels = Object.entries((inputs.linked_evidence_by_channel as Record<string, number>) ?? {});

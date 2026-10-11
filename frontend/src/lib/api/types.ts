@@ -748,6 +748,18 @@ export interface Trace {
   market: string | null;
   legend: Record<string, string>;
   steps: TraceStep[];
+  // Each pipeline run of this requirement; round 2+ answers a PM challenge.
+  rounds?: TraceRound[];
+  round?: number;
+}
+
+export interface TraceRound {
+  round: number;
+  run_id: string;
+  kind: string;
+  challenge_question: string | null;
+  at: string | null;
+  recommendation: string | null;
 }
 
 // GET /api/requirements/{id}/council: customer council by market vs company council.

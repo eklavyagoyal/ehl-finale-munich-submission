@@ -10,7 +10,8 @@ import { PageHeader } from "@/components/page-header";
 import { ErrorState, LoadingRows } from "@/components/states";
 import { ToneBadge } from "@/components/tone-badge";
 import { Button } from "@/components/ui/button";
-import { refreshAll, startRun, useRequirementAudit, useRun } from "@/lib/api/hooks";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { refreshAll, startRun, useRequirementAudit, useRun, useTrace } from "@/lib/api/hooks";
 import { humanize, statusTone } from "@/lib/format";
 import { cn } from "cn";
 
@@ -51,6 +52,7 @@ export function RequirementShell({ children }: { children: React.ReactNode }) {
         <>
           <div className="mt-1 flex flex-wrap items-center gap-3">
             <h1 className="text-[22px] font-semibold tracking-tight">{requirement.title}</h1>
+            <RoundBadge id={id} />
             <ToneBadge tone={statusTone(requirement.status)}>{humanize(requirement.status)}</ToneBadge>
             <div className="ml-auto flex items-center gap-1.5">
               <RunButton />
@@ -116,5 +118,30 @@ export function RunButton() {
       <Play data-icon="inline-start" />
       {active ? (run?.run.status === "queued" ? "Waiting…" : "Running…") : busy ? "Starting…" : "Run Parallax"}
     </Button>
+  );
+}
+
+// After a challenge a second round runs; a quiet badge says which round you are looking at.
+function RoundBadge({ id }: { id: string }) {
+  const { data } = useTrace(id);
+  const rounds = data?.rounds ?? [];
+  if (rounds.length < 2) return null;
+  return (
+    <HoverCard openDelay={100} closeDelay={60}>
+      <HoverCardTrigger asChild>
+        <span className="cursor-default rounded-full border px-2 py-0.5 text-xs text-muted-foreground">Round {rounds.length}</span>
+      </HoverCardTrigger>
+      <HoverCardContent align="start" className="w-80 text-xs">
+        <ol className="flex flex-col gap-1.5">
+          {rounds.map((r) => (
+            <li key={r.run_id}>
+              <span className="font-medium">Round {r.round}</span>
+              <span className="text-muted-foreground"> · AI {r.recommendation ? humanize(r.recommendation).toLowerCase() : "n/a"}</span>
+              {r.challenge_question && <p className="text-muted-foreground">Your challenge: “{r.challenge_question}”</p>}
+            </li>
+          ))}
+        </ol>
+      </HoverCardContent>
+    </HoverCard>
   );
 }
