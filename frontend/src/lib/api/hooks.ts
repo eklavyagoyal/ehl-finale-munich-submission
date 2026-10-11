@@ -275,9 +275,10 @@ export function useCoverage(scope?: CoverageScope) {
   );
 }
 
-export function useSignalMap(market: string | null) {
-  return useSWR(["signal-map", market ?? "pooled"], () =>
-    unwrap<SignalMap>(api.GET("/api/signals/map", { params: { query: { market: market ?? undefined } } })),
+// min_reviews: the backend hides signals under 5 reviews by default (noise); 1 shows all of them.
+export function useSignalMap(market: string | null, minReviews?: number) {
+  return useSWR(["signal-map", market ?? "pooled", minReviews ?? "default"], () =>
+    unwrap<SignalMap>(api.GET("/api/signals/map", { params: { query: { market: market ?? undefined, min_reviews: minReviews } } })),
   );
 }
 

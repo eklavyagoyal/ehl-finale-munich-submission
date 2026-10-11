@@ -11,7 +11,7 @@ import { cn } from "cn";
 
 const W = 760;
 const H = 340;
-const PAD = { left: 40, right: 16, top: 16, bottom: 34 };
+const PAD = { left: 44, right: 16, top: 26, bottom: 34 };
 const LABELS_PER_QUADRANT = 5;
 
 export const KIND_DOT: Record<SignalKind, string> = {
@@ -23,18 +23,12 @@ export const KIND_DOT: Record<SignalKind, string> = {
 
 const KIND_LABEL: Record<SignalKind, string> = { pain: "Pain", request: "Wish", strength: "Strength", mixed: "Mixed" };
 
-// Corners as the contract fixes them: act top right, watch top left, protect bottom right, background bottom left.
-const CORNER: Record<Quadrant, string> = {
-  act: "top-2 right-3 text-right",
-  watch: "top-2 left-[48px]",
-  protect: "bottom-10 right-3 text-right",
-  background: "bottom-10 left-[48px]",
-};
 
 // Every signal of the market on one four-field map: reviews (x, log) against the share of problems and
 // wishes (y). Axes, thresholds and quadrants come from the API; clicking a dot opens the signal.
-export function SignalMap({ market, onOpen }: { market: string | null; onOpen: (featureKey: string) => void }) {
-  const { data, error, isLoading } = useSignalMap(market);
+export function SignalMap({ market, selected, onSelect }: { market: string | null; selected: Set<string>; onSelect: (item: MapItem) => void }) {
+  const [showAll, setShowAll] = useState(false);
+  const { data, error, isLoading } = useSignalMap(market, showAll ? 1 : undefined);
   const [hover, setHover] = useState<MapItem | null>(null);
 
   if (error) return <ErrorState error={error} />;
@@ -62,7 +56,7 @@ export function SignalMap({ market, onOpen }: { market: string | null; onOpen: (
 
   return (
     <figure className="flex flex-col gap-2">
-      <div className="relative w-full max-w-[760px]" style={{ aspectRatio: `${W} / ${H}` }}>
+      <div className="relative w-full" style={{ aspectRatio: `${W} / ${H}` }}>
         <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 size-full" aria-hidden>
           <g stroke="var(--border)" strokeWidth={1} shapeRendering="crispEdges" fill="none">
             <line x1={PAD.left} y1={H - PAD.bottom} x2={W - PAD.right} y2={H - PAD.bottom} />
@@ -85,13 +79,20 @@ export function SignalMap({ market, onOpen }: { market: string | null; onOpen: (
           </g>
         </svg>
 
-        <AxisLabel axis={ax} className="right-3 bottom-0" />
-        <AxisLabel axis={ay} className="top-0 left-0 -translate-y-full" />
+        <AxisLabel axis={ax} style={{ right: pct(PAD.right, W), bottom: 0 }} />
+        <AxisLabel axis={ay} style={{ left: pct(PAD.left, W), top: 0 }} />
 
         {data.quadrants.map((q) => (
           <HoverCard key={q.key} openDelay={100} closeDelay={60}>
             <HoverCardTrigger asChild>
-              <span className={cn("absolute cursor-default text-[11px] text-muted-foreground", CORNER[q.key])}>
+              <span
+                className={cn("absolute cursor-default text-[11px] text-muted-foreground", (q.key === "act" || q.key === "protect") && "text-right")}
+                // Corners as the contract fixes them: act top right, watch top left, protect bottom right, background bottom left.
+                style={{
+                  ...(q.key === "act" || q.key === "protect" ? { right: pct(PAD.right + 6, W) } : { left: pct(PAD.left + 8, W) }),
+                  ...(q.key === "act" || q.key === "watch" ? { top: pct(PAD.top + 4, H) } : { bottom: pct(PAD.bottom + 4, H) }),
+                }}
+              >
                 <span className="font-medium text-foreground/80">{q.label}</span> <span className="tabular-nums">{q.signals}</span>
               </span>
             </HoverCardTrigger>
@@ -103,7 +104,8 @@ export function SignalMap({ market, onOpen }: { market: string | null; onOpen: (
           <button
             key={item.feature_key}
             type="button"
-            onClick={() => onOpen(item.feature_key)}
+            onClick={() => onSelect(item)}
+            aria-pressed={selected.has(item.feature_key)}
             onMouseEnter={() => setHover(item)}
             onMouseLeave={() => setHover((h) => (h?.feature_key === item.feature_key ? null : h))}
             onFocus={() => setHover(item)}
@@ -116,7 +118,8 @@ export function SignalMap({ market, onOpen }: { market: string | null; onOpen: (
               className={cn(
                 "size-2.5 rounded-full",
                 KIND_DOT[item.kind],
-                item.requirement_ids.length > 0 && "ring-2 ring-foreground/70 ring-offset-1 ring-offset-background",
+                item.requirement_ids.length > 0 && "outline outline-1 outline-offset-2 outline-foreground/50",
+                selected.has(item.feature_key) && "ring-[3px] ring-blue-600/80 ring-offset-1 ring-offset-background",
               )}
             />
             {labelled.has(item.feature_key) && <span className="max-w-28 truncate text-[10px] text-muted-foreground">{item.label}</span>}
@@ -135,28 +138,46 @@ export function SignalMap({ market, onOpen }: { market: string | null; onOpen: (
           </div>
         )}
       </div>
-      <figcaption className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
-        {(Object.keys(KIND_DOT) as SignalKind[]).map((k) => (
-          <span key={k} className="flex items-center gap-1">
-            <span className={cn("size-2 rounded-full", KIND_DOT[k])} aria-hidden />
-            {KIND_LABEL[k]}
-          </span>
-        ))}
-        <span className="flex items-center gap-1">
-          <span className="size-2 rounded-full ring-2 ring-foreground/70 ring-offset-1 ring-offset-background" aria-hidden />
-          has a requirement
-        </span>
-        {data.hidden_below_min_reviews ? <span>· {data.hidden_below_min_reviews} signals under 5 reviews hidden</span> : null}
-      </figcaption>
+      {data.hidden_below_min_reviews || showAll ? (
+        <figcaption className="text-[11px] text-muted-foreground">
+          {showAll ? "Showing every signal, also those under 5 reviews. " : `${data.hidden_below_min_reviews} signals under 5 reviews hidden. `}
+          <button type="button" onClick={() => setShowAll((v) => !v)} className="underline-offset-2 hover:text-foreground hover:underline">
+            {showAll ? "Hide them" : "Show them"}
+          </button>
+        </figcaption>
+      ) : null}
     </figure>
   );
 }
 
-function AxisLabel({ axis, className }: { axis: MapAxis; className?: string }) {
+// Dot colours and rings, shown small at the bottom of the Signals page.
+export function MapLegend() {
+  return (
+    <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+      Dots:
+      {(Object.keys(KIND_DOT) as SignalKind[]).map((k) => (
+        <span key={k} className="flex items-center gap-1">
+          <span className={cn("size-2 rounded-full", KIND_DOT[k])} aria-hidden />
+          {KIND_LABEL[k]}
+        </span>
+      ))}
+      <span className="flex items-center gap-1">
+        <span className="size-2 rounded-full outline outline-1 outline-offset-2 outline-foreground/50" aria-hidden />
+        has a requirement
+      </span>
+      <span className="flex items-center gap-1">
+        <span className="size-2 rounded-full ring-[3px] ring-blue-600/80" aria-hidden />
+        selected
+      </span>
+    </span>
+  );
+}
+
+function AxisLabel({ axis, style }: { axis: MapAxis; style: React.CSSProperties }) {
   return (
     <HoverCard openDelay={100} closeDelay={60}>
       <HoverCardTrigger asChild>
-        <span className={cn("absolute cursor-default text-[11px] text-muted-foreground underline decoration-dotted underline-offset-2", className)}>
+        <span className="absolute cursor-default text-[11px] text-muted-foreground underline decoration-dotted underline-offset-2" style={style}>
           {axis.label}
           {axis.scale === "log" ? " (log)" : ""}
         </span>

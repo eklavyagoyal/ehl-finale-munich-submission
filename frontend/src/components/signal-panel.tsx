@@ -4,12 +4,11 @@ import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-import { DraftSelectedDialog } from "@/components/generate-dialog";
 import { KIND_DOT } from "@/components/signal-map";
 import { ErrorState, LoadingRows } from "@/components/states";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useSignalDetail } from "@/lib/api/hooks";
-import type { Finding, Signal, SignalDetail } from "@/lib/api/types";
+import type { Finding, SignalDetail } from "@/lib/api/types";
 import { fmtCount, humanize } from "@/lib/format";
 import { cn } from "cn";
 import { V } from "@/lib/routes";
@@ -22,17 +21,16 @@ export function SignalPanel({ featureKey, market, onClose }: { featureKey: strin
       <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-md">
         {error && <ErrorState error={error} />}
         {isLoading && <LoadingRows />}
-        {data && <PanelBody data={data} market={market} onDrafted={onClose} />}
+        {data && <PanelBody data={data} market={market} />}
       </SheetContent>
     </Sheet>
   );
 }
 
-function PanelBody({ data, market, onDrafted }: { data: SignalDetail; market: string | null; onDrafted: () => void }) {
+function PanelBody({ data, market }: { data: SignalDetail; market: string | null }) {
   const matching = data.findings.filter((f) => f.matches_signal !== false);
   const others = data.findings.filter((f) => f.matches_signal === false);
   const [showOthers, setShowOthers] = useState(false);
-  const asSignal = { feature_key: data.feature_key, label: data.label, reviews: data.reviews } as Signal;
 
   return (
     <div className="flex flex-col gap-6 px-4 pb-6">
@@ -72,17 +70,15 @@ function PanelBody({ data, market, onDrafted }: { data: SignalDetail; market: st
           ))}
       </section>
 
-      <section className="flex flex-wrap items-center gap-3">
-        {data.requirement_ids.length > 0 ? (
-          data.requirement_ids.map((id) => (
+      {data.requirement_ids.length > 0 && (
+        <section className="flex flex-wrap items-center gap-3">
+          {data.requirement_ids.map((id) => (
             <Link key={id} href={`${V}/decision/${encodeURIComponent(id)}`} className="text-[13px] hover:underline">
               {id} →
             </Link>
-          ))
-        ) : (
-          <DraftSelectedDialog market={market} selected={[asSignal]} onDone={onDrafted} />
-        )}
-      </section>
+          ))}
+        </section>
+      )}
     </div>
   );
 }

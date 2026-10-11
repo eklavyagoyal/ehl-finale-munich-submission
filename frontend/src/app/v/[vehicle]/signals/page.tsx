@@ -7,14 +7,14 @@ import { Suspense, useEffect, useState } from "react";
 import { CondenseButton, DraftSelectedDialog, RebuildSignalsButton } from "@/components/generate-dialog";
 import { PageHeader } from "@/components/page-header";
 import { SignalChart } from "@/components/signal-chart";
-import { SignalMap } from "@/components/signal-map";
+import { MapLegend, SignalMap } from "@/components/signal-map";
 import { SignalPanel } from "@/components/signal-panel";
 import { ChannelIcon } from "@/components/provenance";
 import { ErrorState, LoadingRows } from "@/components/states";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { useHash } from "@/hooks/use-hash";
 import { useMeta, useRequirements, useSignals } from "@/lib/api/hooks";
-import type { Finding, Requirement, Signal, SignalKind } from "@/lib/api/types";
+import type { Finding, MapItem, Requirement, Signal, SignalKind } from "@/lib/api/types";
 import { fmtCount, humanize } from "@/lib/format";
 import { channelLabel } from "@/lib/provenance";
 import { cn } from "cn";
@@ -45,32 +45,22 @@ export default function SignalsPage() {
 }
 
 // ?market=US|EU|CN|all picks the market; #sig-<feature_key> highlights one signal (links from a requirement's origin).
+// One selection feeds the map dots and the column checkboxes; "Draft requirements (n)" appears only when it is non-empty.
 function SignalsView() {
   const params = useSearchParams();
   const initial = params.get("market");
   const { data: meta } = useMeta();
-  const [market, setMarket] = useState<string | null>(initial === "all" ? null : (initial ?? "US"));
+  const [market, setMarketState] = useState<string | null>(initial === "all" ? null : (initial ?? "US"));
   const markets: (string | null)[] = [...(meta?.markets ?? ["US", "EU", "CN"]), null];
-
-  return (
-    <>
-      <PageHeader crumbs={[{ label: "Signals" }]} market={{ value: market, onChange: setMarket, options: markets }}>
-        <RebuildSignalsButton />
-        <CondenseButton />
-      </PageHeader>
-      <p className="mt-1 text-[13px] text-muted-foreground">What do customers tell us?</p>
-
-      {/* Keyed by market so the selection starts empty for every market. */}
-      <SignalBoard key={market ?? "all"} market={market} />
-    </>
-  );
-}
-
-function SignalBoard({ market }: { market: string | null }) {
   const [selected, setSelected] = useState<Map<string, Signal>>(new Map());
   const [opened, setOpened] = useState<string | null>(null);
-  const { data: requirements } = useRequirements();
-  const mixed = useSignals(market, "mixed", 100);
+
+  // A new market starts with an empty selection and no open panel.
+  function setMarket(m: string | null) {
+    setMarketState(m);
+    setSelected(new Map());
+    setOpened(null);
+  }
   const toggle = (s: Signal) =>
     setSelected((prev) => {
       const next = new Map(prev);
@@ -78,51 +68,48 @@ function SignalBoard({ market }: { market: string | null }) {
       else next.set(s.feature_key, s);
       return next;
     });
+  // Clicking a dot selects it (and opens the panel); clicking a selected dot deselects it.
+  function onDot(item: MapItem) {
+    const wasSelected = selected.has(item.feature_key);
+    toggle({ feature_key: item.feature_key, label: item.label, reviews: item.reviews, market } as Signal);
+    setOpened(wasSelected ? null : item.feature_key);
+  }
+
+  return (
+    <>
+      <PageHeader crumbs={[{ label: "Signals" }]} market={{ value: market, onChange: setMarket, options: markets }}>
+        {selected.size > 0 && (
+          <>
+            <button type="button" className="text-xs text-muted-foreground hover:text-foreground" onClick={() => setSelected(new Map())}>
+              Clear
+            </button>
+            <DraftSelectedDialog market={market} selected={[...selected.values()]} onDone={() => setSelected(new Map())} />
+          </>
+        )}
+        <RebuildSignalsButton />
+        <CondenseButton />
+      </PageHeader>
+
+      <div className="mt-2 flex flex-col gap-8">
+        <SignalMap market={market} selected={new Set(selected.keys())} onSelect={onDot} />
+        <SignalPanel featureKey={opened} market={market} onClose={() => setOpened(null)} />
+        <SignalBoard market={market} selected={selected} onToggle={toggle} />
+      </div>
+    </>
+  );
+}
+
+function SignalBoard({ market, selected, onToggle }: { market: string | null; selected: Map<string, Signal>; onToggle: (s: Signal) => void }) {
+  const { data: requirements } = useRequirements();
+  const mixed = useSignals(market, "mixed", 100);
   // Signals that already became a requirement link to it; pooled signals match requirements without a market.
   const requirementFor = (s: Signal) => requirements?.find((r) => r.feature_key === s.feature_key && (r.market ?? null) === (s.market ?? null));
 
   return (
-    <div className="mt-4 flex max-w-6xl flex-col gap-6">
-      <SignalMap market={market} onOpen={setOpened} />
-      <SignalPanel featureKey={opened} market={market} onClose={() => setOpened(null)} />
-
-      <div className="flex flex-wrap items-start justify-between gap-6 border-t pt-6">
-        <div className="flex max-w-xl flex-col gap-3 text-xs text-muted-foreground">
-          {mixed.data?.basis && (
-            <HoverCard openDelay={100}>
-              <HoverCardTrigger asChild>
-                <button type="button" className="self-start underline decoration-dotted underline-offset-4">
-                  How these are counted
-                </button>
-              </HoverCardTrigger>
-              <HoverCardContent align="start" className="w-80 text-xs">
-                {mixed.data.basis}
-              </HoverCardContent>
-            </HoverCard>
-          )}
-          <span className="flex items-center gap-3">
-            {MIX.map((m) => (
-              <span key={m.key} className="flex items-center gap-1">
-                <span className={cn("size-2 rounded-sm", m.color)} aria-hidden />
-                {m.label}
-              </span>
-            ))}
-          </span>
-          <span className="flex items-center gap-3">
-            <DraftSelectedDialog market={market} selected={[...selected.values()]} onDone={() => setSelected(new Map())} />
-            {selected.size > 0 && (
-              <button type="button" className="hover:text-foreground" onClick={() => setSelected(new Map())}>
-                Clear selection
-              </button>
-            )}
-          </span>
-        </div>
-        <SignalChart market={market} />
-      </div>
-
+    <div className="flex max-w-6xl flex-col gap-8">
       <div className="grid gap-8 lg:grid-cols-3">
         {COLUMNS.map((c) => (
-          <SignalColumn key={c.kind} market={market} kind={c.kind} title={c.title} selected={selected} onToggle={toggle} requirementFor={requirementFor} />
+          <SignalColumn key={c.kind} market={market} kind={c.kind} title={c.title} selected={selected} onToggle={onToggle} requirementFor={requirementFor} />
         ))}
       </div>
 
@@ -146,6 +133,23 @@ function SignalBoard({ market }: { market: string | null }) {
           </HoverCardContent>
         </HoverCard>
       )}
+
+      <SignalChart market={market} />
+
+      {/* Explanations and legends at the very bottom, small. */}
+      <footer className="flex flex-col gap-2 border-t pt-4 text-[11px] text-muted-foreground">
+        <MapLegend />
+        <span className="flex items-center gap-3">
+          Bars:
+          {MIX.map((m) => (
+            <span key={m.key} className="flex items-center gap-1">
+              <span className={cn("size-2 rounded-sm", m.color)} aria-hidden />
+              {m.label}
+            </span>
+          ))}
+        </span>
+        {mixed.data?.basis && <p className="max-w-3xl">{mixed.data.basis}</p>}
+      </footer>
     </div>
   );
 }
