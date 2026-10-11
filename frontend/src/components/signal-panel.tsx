@@ -113,7 +113,7 @@ function FindingRow({ finding: f }: { finding: Finding }) {
           {f.quotes.slice(0, 3).map((q) => (
             <div key={q.record_id} className="flex flex-col gap-0.5">
               <p className="line-clamp-3">“{q.text}”</p>
-              <Link href={`${V}/sources?tab=records&ids=${encodeURIComponent(q.record_id)}`} className="font-mono text-muted-foreground hover:underline">
+              <Link href={`/sources?tab=records&ids=${encodeURIComponent(q.record_id)}`} className="font-mono text-muted-foreground hover:underline">
                 {q.record_id}
               </Link>
             </div>

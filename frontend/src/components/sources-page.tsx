@@ -14,7 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useCoverage, useMeta, usePipeline, useRecords, useSources } from "@/lib/api/hooks";
+import { DataOverview, TriageOverview } from "@/components/data-overview";
+import { useCoverage, useMeta, usePipeline, useRecords, useSources, useTriageSummary, useVehicles } from "@/lib/api/hooks";
 import type { Coverage, CoverageScope, Source, SourcesStage } from "@/lib/api/types";
 import { fmtCount, fmtDateTime, humanize } from "@/lib/format";
 import { channelLabel, isSynthetic, STREAM_ORDER, streamLabel, toSummary } from "@/lib/provenance";
@@ -30,22 +31,35 @@ type TabKey = (typeof TABS)[number]["key"];
 
 const streamOrder = (stream: string) => (STREAM_ORDER.indexOf(stream) + 99) % 99;
 
-// Sources in two scopes: everything we have ("Data › Sources", base "") or one vehicle's own records
-// (base "/v/g60"). Links stay inside the scope they were opened in.
-const SourcesScope = createContext<{ base: string; vehicle: boolean }>({ base: V, vehicle: true });
+// One Sources page under Data. ?scope=target narrows it to the vehicle's own records (the G60 start page
+// links there); links keep that scope.
+const SourcesScope = createContext<{ base: string; vehicle: boolean }>({ base: "", vehicle: false });
 
-export function SourcesPage({ vehicle }: { vehicle: boolean }) {
+export function SourcesPage() {
   return (
-    <SourcesScope.Provider value={{ base: vehicle ? V : "", vehicle }}>
-      <Suspense fallback={<LoadingRows />}>
-        <SourcesView />
-      </Suspense>
+    <Suspense fallback={<LoadingRows />}>
+      <SourcesRoot />
+    </Suspense>
+  );
+}
+
+function SourcesRoot() {
+  const vehicle = useSearchParams().get("scope") === "target";
+  return (
+    <SourcesScope.Provider value={{ base: "", vehicle }}>
+      <SourcesView />
     </SourcesScope.Provider>
   );
 }
 
+// "/sources?tab=…" with the vehicle scope carried along.
+function sourcesUrl(vehicle: boolean, query: Record<string, string> = {}) {
+  const q = new URLSearchParams({ ...query, ...(vehicle ? { scope: "target" } : {}) }).toString();
+  return q ? `/sources?${q}` : "/sources";
+}
+
 function SourcesView() {
-  const { base, vehicle } = useContext(SourcesScope);
+  const { vehicle } = useContext(SourcesScope);
   const router = useRouter();
   const params = useSearchParams();
   // Signals moved to their own stage page.
@@ -58,7 +72,13 @@ function SourcesView() {
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "Sources" }]} vehicle={vehicle} />
+      <PageHeader crumbs={[{ label: "Sources" }]} vehicle={vehicle}>
+        {vehicle && (
+          <Link href="/sources" className="text-xs text-muted-foreground hover:text-foreground">
+            Show all data
+          </Link>
+        )}
+      </PageHeader>
       <p className="mt-1 text-[13px] text-muted-foreground">Where does the data come from?</p>
 
       <nav aria-label="Source views" className="-ml-2.5 mt-4 flex flex-wrap gap-1">
@@ -66,7 +86,7 @@ function SourcesView() {
           <button
             key={t.key}
             type="button"
-            onClick={() => router.replace(t.key === "overview" ? `${base}/sources` : `${base}/sources?tab=${t.key}`)}
+            onClick={() => router.replace(sourcesUrl(vehicle, t.key === "overview" ? {} : { tab: t.key }))}
             aria-current={tab === t.key ? "page" : undefined}
             className={cn(
               "flex h-8 items-center gap-2 rounded-lg px-2.5 text-[13px]",
@@ -107,6 +127,8 @@ function recordsHref(base: string, filter: { channel?: string; market?: string; 
 function Overview() {
   const { vehicle } = useContext(SourcesScope);
   const { data, error, isLoading } = useCoverage(vehicle ? undefined : "all");
+  const triage = useTriageSummary();
+  const { data: vehicles } = useVehicles();
   const { data: sources } = useSources();
   const { data: pipeline } = usePipeline();
   const lastImport = pipeline?.stages.find((s): s is SourcesStage => s.key === "sources")?.last_import;
@@ -121,13 +143,20 @@ function Overview() {
 
   return (
     <div className="flex flex-col gap-12">
+      {/* What came in, across everything: streams, what it is about, triage. Only on the unscoped page. */}
+      {!vehicle && (
+        <section className="flex flex-col gap-6">
+          <DataOverview coverage={data} active={vehicles?.active} />
+          {triage.data && <TriageOverview triage={triage.data} />}
+        </section>
+      )}
       <section className="flex flex-col gap-2">
         <p className="text-xs text-muted-foreground">Last import {lastImport ? fmtDateTime(lastImport) : "–"}</p>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {streams.map((stream) => (
-          <StreamCard key={stream} stream={stream} coverage={data} sources={(sources ?? []).filter((s) => s.stream === stream)} />
-        ))}
-        <ConnectSourceCard />
+          {streams.map((stream) => (
+            <StreamCard key={stream} stream={stream} coverage={data} sources={(sources ?? []).filter((s) => s.stream === stream)} />
+          ))}
+          {!vehicle && <ConnectSourceCard />}
         </div>
       </section>
 
@@ -147,7 +176,7 @@ function Overview() {
 
 // One card per stream: how much, how far reviewed, what may reach OpenAI, when it last arrived.
 function StreamCard({ stream, coverage, sources }: { stream: string; coverage: Coverage; sources: Source[] }) {
-  const { base } = useContext(SourcesScope);
+  const { vehicle } = useContext(SourcesScope);
   const rows = coverage.records_by_channel.filter((r) => r.stream === stream);
   const records = rows.reduce((n, r) => n + r.records, 0);
   const byReview = new Map<string, number>();
@@ -159,7 +188,7 @@ function StreamCard({ stream, coverage, sources }: { stream: string; coverage: C
 
   return (
     <Link
-      href={`${base}/sources?tab=list&stream=${encodeURIComponent(stream)}`}
+      href={sourcesUrl(vehicle, { tab: "list", stream })}
       className="flex flex-col gap-3 rounded-xl border p-4 transition-colors hover:border-foreground/25"
     >
       <span className="flex items-center gap-2 text-[13px]">
@@ -405,7 +434,7 @@ function ScopeRow({ scope, label, records }: { scope: CoverageScope; label: stri
 }
 
 function SourceList({ stream }: { stream?: string }) {
-  const { base } = useContext(SourcesScope);
+  const { vehicle } = useContext(SourcesScope);
   const { data, error, isLoading } = useSources();
   if (error) return <ErrorState error={error} />;
   if (isLoading || !data) return <LoadingRows />;
@@ -416,7 +445,7 @@ function SourceList({ stream }: { stream?: string }) {
       {stream && (
         <p className="flex items-center gap-2 px-2 pb-2 text-xs text-muted-foreground">
           {streamLabel(stream)} only
-          <Link href={`${base}/sources?tab=list`} className="text-foreground hover:underline">
+          <Link href={sourcesUrl(vehicle, { tab: "list" })} className="text-foreground hover:underline">
             Show all
           </Link>
         </p>
@@ -471,7 +500,7 @@ function SourceListRow({ source }: { source: Source }) {
 }
 
 function Records({ initial }: { initial: { market?: string; bucket?: string; scope?: "target"; channel?: string; ids: string[] } }) {
-  const { base } = useContext(SourcesScope);
+  const { vehicle } = useContext(SourcesScope);
   const router = useRouter();
   const [q, setQ] = useState("");
   const [market, setMarket] = useState<string | undefined>(initial.market);
@@ -523,7 +552,7 @@ function Records({ initial }: { initial: { market?: string; bucket?: string; sco
             {ids.length > 0
               ? `${ids.length} selected record${ids.length === 1 ? "" : "s"}`
               : [channel && channelLabel(channel), bucket && `${bucket} market`, scope === "target" && "this vehicle"].filter(Boolean).join(" · ")}
-            <Button size="xs" variant="ghost" onClick={() => router.replace(`${base}/sources?tab=records`)}>
+            <Button size="xs" variant="ghost" onClick={() => router.replace(sourcesUrl(vehicle, { tab: "records" }))}>
               Clear
             </Button>
           </span>

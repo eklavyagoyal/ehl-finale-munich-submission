@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
-import { CondenseButton, DraftSelectedDialog, RebuildSignalsButton } from "@/components/generate-dialog";
+import { DraftSelectedDialog } from "@/components/generate-dialog";
 import { PageHeader } from "@/components/page-header";
 import { SignalChart } from "@/components/signal-chart";
 import { MapLegend, SignalMap } from "@/components/signal-map";
@@ -86,8 +86,6 @@ function SignalsView() {
             <DraftSelectedDialog market={market} selected={[...selected.values()]} onDone={() => setSelected(new Map())} />
           </>
         )}
-        <RebuildSignalsButton />
-        <CondenseButton />
       </PageHeader>
 
       <div className="mt-2 flex flex-col gap-8">
@@ -249,7 +247,7 @@ function SignalRow({
                   {s.sample_quotes.map((q) => (
                     <div key={q.record_id} className="flex flex-col gap-0.5">
                       <p className="line-clamp-4">“{q.text}”</p>
-                      <Link href={`${V}/sources?tab=records&ids=${encodeURIComponent(q.record_id)}`} className="font-mono text-muted-foreground hover:underline">
+                      <Link href={`/sources?tab=records&ids=${encodeURIComponent(q.record_id)}`} className="font-mono text-muted-foreground hover:underline">
                         {q.record_id}
                       </Link>
                     </div>
@@ -326,7 +324,7 @@ function Findings({ findings, reviews }: { findings: Finding[]; reviews: number 
                 {f.quotes.slice(0, 3).map((q) => (
                   <div key={q.record_id} className="flex flex-col gap-0.5">
                     <p className="line-clamp-3">“{q.text}”</p>
-                    <Link href={`${V}/sources?tab=records&ids=${encodeURIComponent(q.record_id)}`} className="font-mono text-muted-foreground hover:underline">
+                    <Link href={`/sources?tab=records&ids=${encodeURIComponent(q.record_id)}`} className="font-mono text-muted-foreground hover:underline">
                       {q.record_id}
                     </Link>
                   </div>

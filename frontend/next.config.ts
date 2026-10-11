@@ -17,6 +17,9 @@ const nextConfig: NextConfig = {
       // Activity is vehicle-independent now and lives at /activity.
       { source: "/v/:vehicle/history", destination: "/activity", permanent: false },
       { source: "/v/:vehicle/activity", destination: "/activity", permanent: false },
+      // Sources exist once, under Data; the vehicle view is a filter.
+      { source: "/v/:vehicle/sources", destination: "/sources?scope=target", permanent: false },
+      { source: "/v/:vehicle/sources/:id", destination: "/sources/:id", permanent: false },
     ];
   },
   turbopack: {

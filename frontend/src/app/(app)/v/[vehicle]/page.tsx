@@ -13,7 +13,6 @@ import type { PipelineStage, SourcesStage } from "@/lib/api/types";
 import { fmtCount } from "@/lib/format";
 import { STAGE_HREF, STATUS_LABEL } from "@/lib/stages";
 import { cn } from "cn";
-import { V } from "@/lib/routes";
 
 const sum = (values: Record<string, number> | undefined) => Object.values(values ?? {}).reduce((n, v) => n + v, 0);
 
@@ -139,7 +138,7 @@ function OutsideScopeLine({ stage, code }: { stage?: SourcesStage; code: string 
               {o.label} <span className="tabular-nums">{fmtCount(o.records)}</span>
             </span>
           ))}
-          <Link href={`${V}/sources`} className="hover:text-foreground hover:underline">
+          <Link href="/sources" className="hover:text-foreground hover:underline">
             Open in Sources →
           </Link>
         </p>

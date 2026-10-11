@@ -34,6 +34,7 @@ import type {
   TriageSample,
   TriageSummary,
   ProcessingFlow,
+  DecisionsOverview,
   VehiclePage,
   Version,
   Council,
@@ -291,6 +292,10 @@ export function useSignalDetail(featureKey: string | null, market: string | null
       api.GET("/api/signals/{feature_key}", { params: { path: { feature_key: featureKey! }, query: { market: market ?? undefined } } }),
     ),
   );
+}
+
+export function useDecisionsOverview() {
+  return useSWR("overview-decisions", () => unwrap<DecisionsOverview>(api.GET("/api/overview/decisions")));
 }
 
 // All data before any vehicle: streams → not relevant / this vehicle / other models / competitors / brand-wide.

@@ -59,7 +59,7 @@ export function OriginTrail({ requirement }: { requirement: Requirement }) {
       <ChevronRight className="size-3 text-muted-foreground/60" aria-hidden />
       <HoverCard openDelay={100} closeDelay={60}>
         <HoverCardTrigger asChild>
-          <Link href={`${V}/sources?tab=list`} className="tabular-nums hover:text-foreground hover:underline">
+          <Link href={`/sources?tab=list&scope=target`} className="tabular-nums hover:text-foreground hover:underline">
             {fmtCount(datasets.size)} source{datasets.size === 1 ? "" : "s"}
           </Link>
         </HoverCardTrigger>

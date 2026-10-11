@@ -11,11 +11,11 @@ import { V } from "@/lib/routes";
 export function recordHref(requirementId: string, recordId: string, linked: Set<string>): string {
   return linked.has(recordId)
     ? `${V}/decision/${encodeURIComponent(requirementId)}/evidence#rec-${recordId}`
-    : `${V}/sources?tab=records&ids=${encodeURIComponent(recordId)}`;
+    : `/sources?tab=records&ids=${encodeURIComponent(recordId)}`;
 }
 
 export function allRecordsHref(ids: string[]): string {
-  return `${V}/sources?tab=records&ids=${encodeURIComponent(ids.join(","))}`;
+  return `/sources?tab=records&ids=${encodeURIComponent(ids.join(","))}`;
 }
 
 export function CallDetail({

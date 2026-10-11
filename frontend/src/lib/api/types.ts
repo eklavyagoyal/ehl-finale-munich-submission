@@ -49,6 +49,8 @@ export interface Requirement {
   ai_recommendation: string | null;
   // Drafted → Councils → AI suggests → Your decision; only the last one is a decision.
   progress?: RequirementProgress[];
+  // The signal it was drafted from; tells look-alike titles apart.
+  signal_label?: string | null;
 }
 
 export interface RequirementProgress {
@@ -839,4 +841,33 @@ export interface Conversation {
   question_to_owners: string | null;
   owners_by_market: Record<string, ConversationOwner[]>;
   departments: ConversationDepartment[];
+}
+
+// GET /api/overview/decisions: the start page, per vehicle how far it got and which decisions are open.
+export interface DecisionsOverview {
+  vehicles: {
+    entity_id: string;
+    code: string;
+    name: string;
+    detail: string;
+    status: "active" | "coming" | string;
+    signals: number;
+    requirements: number;
+    councils_run: number;
+    ai_suggests: Record<string, number>;
+    decisions: { change_coming: number; declined: number; open: number };
+    last_activity: string | null;
+  }[];
+  needs_decision: {
+    requirement_id: string;
+    title: string;
+    vehicle: string;
+    market: string | null;
+    ai_suggests: string | null;
+    score_low: number | null;
+    score_high: number | null;
+    priority_rank: number | null;
+  }[];
+  recent_decisions: { requirement_id: string; title: string | null; action: string; by: string; at: string; agreed_with_ai: boolean | null }[];
+  agreement_with_ai: { decisions: number; agreed: number };
 }

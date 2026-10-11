@@ -116,7 +116,7 @@ function TaskRow({ task }: { task: Task }) {
         )}
         {task.kind === "review_evidence" && (
           <Button size="sm" variant="outline" asChild>
-            <Link href={`${V}/sources?tab=list`}>Review</Link>
+            <Link href={`/sources?tab=list&scope=target`}>Review</Link>
           </Button>
         )}
         {task.kind === "running" &&

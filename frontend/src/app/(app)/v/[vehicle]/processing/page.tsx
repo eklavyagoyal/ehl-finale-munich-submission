@@ -3,6 +3,7 @@
 import { ChevronRight, CornerDownRight } from "lucide-react";
 import { useState } from "react";
 
+import { UpdateMenu } from "@/components/generate-dialog";
 import { PageHeader } from "@/components/page-header";
 import { ProcessingFlowChart } from "@/components/processing-flow";
 import { ErrorState, LoadingRows } from "@/components/states";
@@ -17,7 +18,9 @@ export default function ProcessingPage() {
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "Processing" }]} />
+      <PageHeader crumbs={[{ label: "Processing" }]}>
+        <UpdateMenu />
+      </PageHeader>
       <p className="mt-1 text-[13px] text-muted-foreground">What did we extract from it?</p>
       {error && <ErrorState error={error} />}
       {isLoading && <LoadingRows />}

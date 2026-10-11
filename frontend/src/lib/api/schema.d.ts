@@ -209,6 +209,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/signals/snapshots": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Signal snapshots (one per rebuild), newest first: the 'before' and 'after' points for comparisons */
+        get: operations["signal_snapshots_api_signals_snapshots_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/signals/compare": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** What changed between two signal snapshots (default: the latest against the one before) */
+        get: operations["signal_compare_api_signals_compare_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/signals/{feature_key}": {
         parameters: {
             query?: never;
@@ -269,6 +303,23 @@ export interface paths {
         };
         /** All data, before any vehicle: streams -> triage -> which vehicle it belongs to */
         get: operations["overview_flow_api_overview_flow_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/overview/decisions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Start page: per vehicle where the pipeline stands and which decisions are open or made */
+        get: operations["overview_decisions_api_overview_decisions_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1846,6 +1897,8 @@ export interface components {
             progress: {
                 [key: string]: unknown;
             }[];
+            /** Signal Label */
+            signal_label?: string | null;
         };
         /** ResearchRequestOut */
         ResearchRequestOut: {
@@ -2555,6 +2608,72 @@ export interface operations {
             };
         };
     };
+    signal_snapshots_api_signals_snapshots_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    signal_compare_api_signals_compare_get: {
+        parameters: {
+            query?: {
+                before?: string | null;
+                after?: string | null;
+                /** @description US, EU, CN or omit for pooled */
+                market?: string | null;
+                top?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     signal_detail_api_signals__feature_key__get: {
         parameters: {
             query?: {
@@ -2658,6 +2777,26 @@ export interface operations {
         };
     };
     overview_flow_api_overview_flow_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+        };
+    };
+    overview_decisions_api_overview_decisions_get: {
         parameters: {
             query?: never;
             header?: never;

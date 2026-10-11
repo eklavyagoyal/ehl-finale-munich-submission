@@ -19,7 +19,6 @@ import {
   streamLabel,
 } from "@/lib/provenance";
 import { cn } from "cn";
-import { V } from "@/lib/routes";
 
 export function SyntheticBadge({ className }: { className?: string }) {
   return (
@@ -104,7 +103,7 @@ export function SourceHoverCard({ source, children }: { source: SourceSummary | 
           {isSynthetic(source) && <SyntheticBadge className="ml-auto" />}
         </div>
         <SourceFacts source={source} />
-        <Link href={`${V}/sources/${encodeURIComponent(source.source_id)}`} className="mt-2 inline-block text-foreground underline-offset-4 hover:underline">
+        <Link href={`/sources/${encodeURIComponent(source.source_id)}`} className="mt-2 inline-block text-foreground underline-offset-4 hover:underline">
           Open source
         </Link>
       </HoverCardContent>

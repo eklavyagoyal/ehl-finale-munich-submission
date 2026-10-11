@@ -11,17 +11,16 @@ import { ToneBadge } from "@/components/tone-badge";
 import { useSource } from "@/lib/api/hooks";
 import { fmtDateTime, humanize } from "@/lib/format";
 import { isSynthetic } from "@/lib/provenance";
-import { V } from "@/lib/routes";
 
-export function SourceDetailPage({ vehicle }: { vehicle: boolean }) {
-  const base = vehicle ? V : "";
+export function SourceDetailPage() {
+  const base = "";
   const id = decodeURIComponent(useParams<{ id: string }>().id);
   const { data, error, isLoading } = useSource(id);
   const s = data?.source;
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "Sources", href: `${base}/sources?tab=list` }, { label: s?.title ?? id }]} vehicle={vehicle} />
+      <PageHeader crumbs={[{ label: "Sources", href: `${base}/sources?tab=list` }, { label: s?.title ?? id }]} vehicle={false} />
       {error && <ErrorState error={error} />}
       {isLoading && <LoadingRows />}
       {data && s && (

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -77,37 +78,16 @@ export function DraftSelectedDialog({ market, selected, onDone }: { market: stri
   );
 }
 
-// Recomputes the deterministic signals (counts per feature × market) from accepted evidence.
-export function RebuildSignalsButton() {
-  const [busy, setBusy] = useState(false);
-  async function rebuild() {
-    setBusy(true);
-    try {
-      await buildThemes();
-      toast.success("Signals rebuilt from the accepted evidence");
-      await refreshAll();
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : String(e));
-    } finally {
-      setBusy(false);
-    }
-  }
-  return (
-    <Button size="sm" variant="outline" onClick={rebuild} disabled={busy}>
-      {busy ? "Rebuilding…" : "Rebuild signals"}
-    </Button>
-  );
-}
-
-// Groups the top signals into concrete findings (LLM groups, code counts). Runs in the background;
-// the button follows the run and refreshes the signals when it is done.
-export function CondenseButton() {
-  const [open, setOpen] = useState(false);
+// "Update" on the Processing page: recount the signals (code, cheap) or condense findings (model, runs in
+// the background with a confirm step). The menu follows a running condense and refreshes when it is done.
+export function UpdateMenu() {
+  const [rebuilding, setRebuilding] = useState(false);
+  const [confirm, setConfirm] = useState(false);
   const [runId, setRunId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const run = useRun(runId);
   const status = run.data?.run.status;
-  const active = !!runId && (!status || status === "queued" || status === "running");
+  const condensing = !!runId && (!status || status === "queued" || status === "running");
   const settled = useRef<string | null>(null);
 
   useEffect(() => {
@@ -118,12 +98,25 @@ export function CondenseButton() {
     void refreshAll();
   }, [runId, status, run.data?.run.error]);
 
-  async function start() {
+  async function rebuild() {
+    setRebuilding(true);
+    try {
+      await buildThemes();
+      toast.success("Signals recounted from the accepted evidence");
+      await refreshAll();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally {
+      setRebuilding(false);
+    }
+  }
+
+  async function condense() {
     setBusy(true);
     try {
       const result = await condenseSignals(["US", "EU", "CN", null]);
       setRunId(result.run_id);
-      setOpen(false);
+      setConfirm(false);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : String(e));
     } finally {
@@ -132,26 +125,36 @@ export function CondenseButton() {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button size="sm" variant="outline" disabled={active}>
-          {active ? "Condensing…" : "Condense findings"}
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Condense findings</DialogTitle>
-          <DialogDescription>
-            A model groups the reviews behind the top 8 signals per kind into concrete findings, for the US, Europe, China and all markets. The
-            counts come from code. This uses the model budget and runs in the background.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button onClick={start} disabled={busy}>
-            {busy ? "Starting…" : "Condense"}
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size="sm" variant="outline" disabled={rebuilding}>
+            {rebuilding ? "Recounting…" : condensing ? (status === "queued" ? "Waiting…" : "Condensing…") : "Update"}
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onSelect={() => void rebuild()}>Recount signals</DropdownMenuItem>
+          <DropdownMenuItem disabled={condensing} onSelect={() => setConfirm(true)}>
+            Condense findings…
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <Dialog open={confirm} onOpenChange={setConfirm}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Condense findings</DialogTitle>
+            <DialogDescription>
+              A model groups the reviews behind the top 8 signals per kind into concrete findings, for the US, Europe, China and all markets.
+              The counts come from code. This uses the model budget and runs in the background.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={condense} disabled={busy}>
+              {busy ? "Starting…" : "Condense"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
