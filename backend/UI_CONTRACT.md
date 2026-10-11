@@ -178,6 +178,22 @@ These replace the matching points above. Do not undo them.
   - Durations instead of clock times.
   - The per-agent FlowView, lanes and answers are collapsed under "Details".
 
+## Round six (Luis, 2026-10-11): show the weights
+
+`GET /api/weights` holds every weight. Show them as small muted numbers where they act; details appear on hover.
+
+- **Signal map:** x is now `weighted_reviews` (`axes.x.key`). The hover shows "N reviews · M weighted". Plot
+  `weighted_reviews`, not `reviews`.
+- **Processing flow:** `node.weight` on the BMW feedback node ("×1.0") and the online node ("×0.5 × author"),
+  as small text under the number. Hovering the online node lists the author and text factors.
+- **Signal side panel:** `how_sorted` has a new step, "Weighted", between Counted and Classified.
+- **Expert pipeline flowchart:**
+  - Customer council: the market weights (US / EU / CN from `owners.markets`).
+  - Score: the six criteria weights (`criteria`).
+  - Company council: "arguments, no vote weight".
+- One quiet "Weights" link (e.g. at the bottom of Processing) opens all weights in one panel.
+- The run history no longer contains failed or interrupted runs; the list endpoint hides them by default.
+
 ## Part B: decided
 
 - B1 (vehicle in the URL) is part of A2.
