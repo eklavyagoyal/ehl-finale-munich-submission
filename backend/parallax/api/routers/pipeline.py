@@ -31,6 +31,8 @@ EXPERT_RUN_KINDS = ("simulation", "followup")
 
 FINDING_KINDS = {"pain": {"pain"}, "request": {"request"}, "strength": {"praise"}}
 OUTCOMES = {"approved": "change_coming", "rejected": "declined"}
+FLOW_COLUMNS = {"bmw": 0, "online": 0, "excluded": 1, "bmw_labels": 1, "ai_labeler": 1, "no_topic": 1, "signals": 2,
+                "findings": 3, "requirements": 4, "change_coming": 5, "declined": 5, "open": 5}
 
 
 def _finding(f: Finding, signal_kind: str | None = None) -> dict:
@@ -348,6 +350,8 @@ def _processing_flow(session: Session, scope: VehicleScope, by_bmw: set, by_ai: 
     links += [{"source": "requirements", "target": k, "value": len(v)} for k, v in outcome_reviews.items()]
     counts = {n["key"]: n for n in nodes}
     counts["no_topic"]["count"] = len((set(stream_of) - excluded) - tagged)
+    for node in nodes:  # left-to-right position, explicit so nodes without bands (count 0) still sit in their column
+        node["column"] = FLOW_COLUMNS[node["key"]]
     return {"nodes": nodes, "links": [l for l in links if l["value"] > 0], "link_unit": "reviews",
             "triage": {"triaged": triaged, "flagged": len(flagged), "filter_enabled": bool(excluded)}}, excluded
 
@@ -529,6 +533,8 @@ def overview_flow(session: Session = Depends(get_session, scope="function")):
     for key in SCOPES:
         nodes.append({"key": key, "label": labels[key], "count": sum(n for (st, sc), n in to_scope.items() if sc == key),
                       "unit": "records", "hint": hints[key], "detail": SCOPE_LABELS[key]})
+    for node in nodes:
+        node["column"] = 0 if node["key"] in stream_n else 1
     links = [{"source": st, "target": "not_relevant", "value": n} for st, n in dropped.items()]
     links += [{"source": st, "target": sc, "value": n} for (st, sc), n in to_scope.items()]
     return {"nodes": nodes, "links": [l for l in links if l["value"] > 0], "link_unit": "records",

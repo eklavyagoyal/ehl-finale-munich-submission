@@ -231,6 +231,8 @@ def test_pipeline_and_signals(client, drafted):
     assert {"bmw", "online", "bmw_labels", "ai_labeler", "no_topic", "signals", "findings", "requirements",
             "change_coming", "declined", "open"} <= keys
     assert all(l["source"] in keys and l["target"] in keys and l["value"] > 0 for l in flow["links"])
+    column = {n["key"]: n["column"] for n in flow["nodes"]}
+    assert column["findings"] < column["requirements"] < column["change_coming"] == column["declined"] == column["open"]
     into_labels = sum(l["value"] for l in flow["links"] if l["source"] in ("bmw", "online") and l["target"] != "excluded")
     assert into_labels == processing["counts"]["feedback_records"]
     sources = stages["stages"][0]
