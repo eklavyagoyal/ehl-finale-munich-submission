@@ -157,6 +157,27 @@ V4. **Expert pipeline = the flow view.**
 - Run / waiting stays as it is.
 - The old two-part list goes away, or moves below the flow, collapsed.
 
+## Round five (Luis directly to the frontend, live as 44c2b254)
+
+These replace the matching points above. Do not undo them.
+
+- **Signal map as a clean 2×2:**
+  - Only the cross, exactly in the middle (symmetric padding).
+  - `low_label` / `high_label` at the four arm ends.
+  - Field names large and muted in the outer corners, with "N signals".
+  - No outer axes, ticks, percentages or axis titles.
+  - The "hidden under 5 reviews · Show them" note sits in the page footer.
+- **Expert pipeline:**
+  - The main view is a generic rounded flowchart: Requirement → customer ∥ company council → Score (code) →
+    Synthesis → Judge → You.
+  - Research and Verifier form an out-and-back loop above (open questions out, verified answers into the
+    synthesis); the Challenger is a loop below.
+  - A selected run overlays calls/agents per node, with the live stage, replay, and a node click for description
+    and participants.
+  - "Send through pipeline" (dialog) and the run history (dropdown) sit top right.
+  - Durations instead of clock times.
+  - The per-agent FlowView, lanes and answers are collapsed under "Details".
+
 ## Part B: decided
 
 - B1 (vehicle in the URL) is part of A2.
