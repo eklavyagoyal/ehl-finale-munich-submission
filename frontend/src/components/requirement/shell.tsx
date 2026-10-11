@@ -39,11 +39,8 @@ export function RequirementShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <PageHeader
-        crumbs={[
-          { label: requirement ? `${requirement.target_model.replace(/^bmw:/, "")} · ${requirement.market ?? "All markets"}` : "G60" },
-          { label: "Decision", href: "/requirements" },
-          { label: id },
-        ]}
+        crumbs={[{ label: "Decision", href: "/requirements" }, { label: id }]}
+        market={requirement ? { value: requirement.market } : undefined}
       />
 
       {error && <ErrorState error={error} />}

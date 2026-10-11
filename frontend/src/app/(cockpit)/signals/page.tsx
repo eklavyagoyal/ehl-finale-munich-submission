@@ -51,28 +51,11 @@ function SignalsView() {
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "G60" }, { label: "Signals" }]}>
+      <PageHeader crumbs={[{ label: "Signals" }]} market={{ value: market, onChange: setMarket, options: markets }}>
         <RebuildSignalsButton />
         <CondenseButton />
       </PageHeader>
       <p className="mt-1 text-[13px] text-muted-foreground">What do customers tell us?</p>
-
-      <div className="-ml-2.5 mt-4 flex flex-wrap gap-1">
-        {markets.map((m) => (
-          <button
-            key={m ?? "all"}
-            type="button"
-            onClick={() => setMarket(m)}
-            aria-pressed={market === m}
-            className={cn(
-              "h-8 rounded-lg px-2.5 text-[13px]",
-              market === m ? "bg-muted font-medium text-foreground" : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {m ?? "All"}
-          </button>
-        ))}
-      </div>
 
       {/* Keyed by market so the selection starts empty for every market. */}
       <SignalBoard key={market ?? "all"} market={market} />

@@ -39,7 +39,7 @@ function ExpertsView() {
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "G60" }, { label: "Expert pipeline" }]} />
+      <PageHeader crumbs={[{ label: "Expert pipeline" }]} />
       <p className="mt-1 text-[13px] text-muted-foreground">What do owners and departments think?</p>
       <div className="mt-6 flex max-w-6xl flex-col gap-10">
         <StartRun />

@@ -39,7 +39,7 @@ export default function ProcessingPage() {
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "G60" }, { label: "Processing" }]} />
+      <PageHeader crumbs={[{ label: "Processing" }]} />
       <p className="mt-1 text-[13px] text-muted-foreground">What did we extract from it?</p>
       {error && <ErrorState error={error} />}
       {isLoading && <LoadingRows />}

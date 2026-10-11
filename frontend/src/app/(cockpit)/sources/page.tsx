@@ -50,7 +50,7 @@ function SourcesView() {
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "G60" }, { label: "Sources" }]} />
+      <PageHeader crumbs={[{ label: "Sources" }]} />
       <p className="mt-1 text-[13px] text-muted-foreground">Where does the data come from?</p>
 
       <nav aria-label="Source views" className="-ml-2.5 mt-4 flex flex-wrap gap-1">

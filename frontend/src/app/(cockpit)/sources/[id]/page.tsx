@@ -19,7 +19,7 @@ export default function SourceDetailPage() {
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "G60" }, { label: "Sources", href: "/sources?tab=list" }, { label: s?.title ?? id }]} />
+      <PageHeader crumbs={[{ label: "Sources", href: "/sources?tab=list" }, { label: s?.title ?? id }]} />
       {error && <ErrorState error={error} />}
       {isLoading && <LoadingRows />}
       {data && s && (

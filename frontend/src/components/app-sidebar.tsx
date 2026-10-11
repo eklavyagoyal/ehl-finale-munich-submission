@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity, History } from "lucide-react";
+import { Activity } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -27,17 +27,14 @@ export function AppSidebar({ initialPm, signedIn }: { initialPm: string; signedI
   const { data: requirements } = useRequirements();
   const [pm, setPm] = useState(initialPm);
 
-  // The PM's path in stage order; Activity and History sit apart at the bottom.
+  // The PM's path in stage order; Activity sits apart at the bottom.
   const path = STAGES.map((s) => ({
     href: s.href,
     label: s.title,
     icon: s.icon,
     count: s.key === "decision" ? requirements?.length : undefined,
   }));
-  const trail = [
-    { href: "/activity", label: "Activity", icon: Activity, count: undefined },
-    { href: "/history", label: "History", icon: History, count: undefined },
-  ];
+  const trail = [{ href: "/activity", label: "Activity", icon: Activity, count: undefined }];
 
   return (
     <Sidebar collapsible="icon">

@@ -32,7 +32,7 @@ export default function RequirementsPage() {
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "G60" }, { label: "Decision" }]} />
+      <PageHeader crumbs={[{ label: "Decision" }]} />
       <p className="mt-1 text-[13px] text-muted-foreground">What goes into the successor?</p>
 
       <div className="-ml-2.5 mt-2 flex flex-wrap items-center gap-1">

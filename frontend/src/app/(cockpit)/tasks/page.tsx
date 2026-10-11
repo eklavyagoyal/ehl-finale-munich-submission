@@ -24,7 +24,7 @@ export default function TasksPage() {
 
   return (
     <>
-      <PageHeader crumbs={[{ label: "G60" }, { label: "My tasks" }]} />
+      <PageHeader crumbs={[{ label: "My tasks" }]} />
       <div className="mt-4 flex max-w-5xl flex-col gap-10">
         {error && <ErrorState error={error} />}
         {isLoading && <LoadingRows />}
